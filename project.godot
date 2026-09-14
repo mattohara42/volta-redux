@@ -40,6 +40,7 @@ environment/defaults/default_clear_color=Color(0.12941177, 0.10980392, 0.2, 1)
 2d_physics/layer_3="player"
 2d_physics/layer_4="swords"
 2d_physics/layer_5="sword_ledges"
+2d_physics/layer_6="enemies"
 
 [input]
 

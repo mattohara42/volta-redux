@@ -323,6 +323,71 @@ jobs:
             echo "the hero is at $hero_x, which is short of the far bank"; exit 1; }
           echo "one death, and the respawn caught the next jet"
 
+      # M4's first bench: four of the six from SPEC.md's table, none of them
+      # painted yet. An overview first, the way room_m0 gets one, so a layout
+      # regression is a picture and not only a log line.
+      - name: Screenshot the enemy bench
+        run: |
+          xvfb-run -a ~/godot/godot --path . --resolution 1280x720 \
+            --script res://tools/capture.gd -- \
+            --scene=res://scenes/rooms/room_m4_enemies.tscn --out=room_m4_enemies.png \
+            --input="-:12" --zoom=0.34 --centre=500,220 --overwrite
+
+      # SPEC.md puts animals on the same kill list as lava and spikes: contact
+      # kills regardless of which enemy or which side of it. This walks at the
+      # scorpion and waits out its patrol, which sweeps the whole zone in
+      # under a period either way.
+      - name: Walk into an enemy and die
+        run: |
+          xvfb-run -a ~/godot/godot --path . --resolution 1280x720 \
+            --script res://tools/capture.gd -- \
+            --scene=res://scenes/rooms/room_m4_enemies.tscn \
+            --out=room_m4_touch.png \
+            --input="move_right:80;-:200" --zoom=1.0 --centre=280,300 --overwrite \
+            > touch.log 2>&1 || { cat touch.log; exit 1; }
+          cat touch.log
+          grep -qE "capture: [1-9][0-9]* death" touch.log || {
+            echo "standing in the scorpion's patrol did not kill anybody"; exit 1; }
+
+      # The scorpion is the one enemy with a side to its armour. This throws
+      # while it is still walking away from the player, which is a hit on its
+      # back: SPEC.md's "must be hit from behind" landing, both dying, the
+      # sword included.
+      - name: Kill the scorpion from behind
+        run: |
+          xvfb-run -a ~/godot/godot --path . --resolution 1280x720 \
+            --script res://tools/capture.gd -- \
+            --scene=res://scenes/rooms/room_m4_enemies.tscn \
+            --out=room_m4_scorpion_behind.png \
+            --input="move_right:45;throw:6;-:40" --zoom=1.0 --centre=280,300 --overwrite \
+            > behind.log 2>&1 || { cat behind.log; exit 1; }
+          cat behind.log
+          grep -q "capture: no deaths" behind.log || {
+            echo "the hero should not have died throwing from a safe distance"; exit 1; }
+          grep -q "scorpion alive" behind.log && {
+            echo "a hit from behind should have killed the scorpion"; exit 1; }
+          echo "the scorpion is gone, and the hero never took a hit"
+
+      # And the mistake the armour exists to punish: this waits for the
+      # scorpion's return leg, so it is walking toward the player, and throws
+      # into its front. The armour has to bounce it: the sword is still gone,
+      # but the scorpion is not.
+      - name: Bounce a sword off the scorpion's front
+        run: |
+          xvfb-run -a ~/godot/godot --path . --resolution 1280x720 \
+            --script res://tools/capture.gd -- \
+            --scene=res://scenes/rooms/room_m4_enemies.tscn \
+            --out=room_m4_scorpion_front.png \
+            --input="-:150;move_right:45;throw:6;-:30" --zoom=1.0 --centre=280,300 \
+            --overwrite \
+            > front.log 2>&1 || { cat front.log; exit 1; }
+          cat front.log
+          grep -q "scorpion alive" front.log || {
+            echo "a front hit should have bounced off the armour, not killed it"; exit 1; }
+          grep -q "capture: no deaths" front.log || {
+            echo "the hero should not have died throwing from a safe distance"; exit 1; }
+          echo "the armour held, and the scorpion is still walking its patrol"
+
       - name: Keep the screenshots
         uses: actions/upload-artifact@v4
         with:
@@ -343,3 +408,7 @@ jobs:
             room_m3_moving_crossed.png
             room_m3_geysers.png
             room_m3_geysers_respawn.png
+            room_m4_enemies.png
+            room_m4_touch.png
+            room_m4_scorpion_behind.png
+            room_m4_scorpion_front.png

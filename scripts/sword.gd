@@ -48,6 +48,7 @@ func _ready() -> void:
 	ledge_box.size = Vector2(world.sword_length, LEDGE_THICKNESS)
 	_ledge.disabled = true
 	body_entered.connect(_on_body_entered)
+	area_entered.connect(_on_area_entered)
 
 
 ## Wood is a group rather than a physics layer, because wood is ordinary solid
@@ -59,6 +60,19 @@ func _on_body_entered(body: Node2D) -> void:
 		# emitted second.
 		return
 	_contact = SwordFlight.Contact.WOOD if body.is_in_group("wood") else SwordFlight.Contact.SOLID
+
+
+## An enemy is its own physics layer rather than a body, because touching it
+## also has to kill the hero (`Enemy` extends `Hazard` for that half) and
+## `Hazard` is an `Area2D`. To the sword this is just another solid thing to
+## stop against: SPEC.md's "both die" is the enemy's own decision, made
+## independently when its area sees the sword arrive, not something the sword
+## needs to know about.
+func _on_area_entered(area: Area2D) -> void:
+	if _contact == SwordFlight.Contact.WOOD:
+		return
+	if area.is_in_group("enemies"):
+		_contact = SwordFlight.Contact.SOLID
 
 
 ## Bring it home. Only an embedded sword answers; the rest ignore it, so the

@@ -12,7 +12,7 @@ size = Vector2(16, 4)
 
 [node name="Sword" type="Area2D"]
 collision_layer = 8
-collision_mask = 1
+collision_mask = 33
 script = ExtResource("1_sword")
 config = ExtResource("2_config")
 world = ExtResource("3_world")

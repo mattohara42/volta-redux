@@ -53,6 +53,11 @@ const WOOD_FACE := Color("7a5c3e")
 const GOLD_FACE := Color("e8c25a")
 const GOLD_SHADE := Color("a37c26")
 
+# Enemies. SPEC.md puts animals on the same kill list as lava and spikes, so
+# the body is warm like a hazard, but well off lava's saturation the way
+# spikes are: this is chitin catching firelight, not molten rock.
+const ENEMY_CHITIN := Color("5c2a3a")
+
 # The backdrop a room sits against before there is a painted background.
 const BACKDROP := Color("211c33")
 
@@ -81,5 +86,6 @@ static func all() -> Dictionary:
 		"WOOD_FACE": WOOD_FACE,
 		"GOLD_FACE": GOLD_FACE,
 		"GOLD_SHADE": GOLD_SHADE,
+		"ENEMY_CHITIN": ENEMY_CHITIN,
 		"BACKDROP": BACKDROP,
 	}
