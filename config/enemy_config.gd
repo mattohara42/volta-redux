@@ -41,3 +41,18 @@ extends Resource
 ## How fast it drifts toward the hero, px/s. Slow, per SPEC.md: it is not a
 ## chase, it is a height the hero keeps finding it at.
 @export var eyeball_seek_speed: float = 45.0
+
+@export_group("Dragon")
+## Seconds of tell before a breath goes out. Read against the falling
+## platform's 0.45 s and the geyser's 0.5 s warnings: this one is a little
+## longer again, because SPEC.md's mistake is panic and the tell has to last
+## long enough to be read rather than flinched at.
+@export var dragon_charge_time: float = 0.7
+## Seconds the cone stays lethal.
+@export var dragon_breathe_time: float = 0.5
+## Seconds of quiet between breaths. Long enough that lining up a throw into
+## the wood past the dragon, and then the recall through it, both fit inside
+## one rest: BUILD_PLAN.md's M11 done-when is that the dragon is beatable
+## without spending a sword on it, and a rest too short to set up the one
+## legitimate shot would make that a matter of luck.
+@export var dragon_rest_time: float = 2.6

@@ -15,40 +15,48 @@ and nothing below is waiting on it.
 
 **M3 is unchanged and still open on the felt half.** See "Blocked on Matt".
 
-**M4 got a running start while M3 waits on a playtest**: the rest of M4 is
-grey-box work that needs no feel-testing either, and Matt asked for exactly
-that. Four of six enemies are built, tested and proven in a running build:
-bat, scorpion, giant ant, floating eyeball. `scripts/enemy.gd` is the shared
-base (extends `Hazard`: touching one kills you, the way SPEC.md's kill list
-already has animals on it beside lava and spikes); each species is a thin
-node driven by a pure logic file in `scripts/logic/`; `config/enemies.tres`
-holds the tuning. `scenes/rooms/room_m4_enemies.tscn` has all four on one
-floor, and CI proves three things in a real build: contact kills regardless
-of side, a sword thrown at the scorpion's back kills it, and one thrown at
-its front bounces off the armour instead.
+**M4 got a running start while M3 waits on a playtest**, on Matt's own ask to
+build ahead wherever the work does not need him. Five of six enemies are now
+built, tested and proven in a running build: bat, scorpion, giant ant,
+floating eyeball, and now the dragon.
 
-**Found by running it**: a scorpion 20 px tall put its centre far enough
-below a standing hero's throw height that every ground-level throw read as
-"from above", and the front/back rule was unreachable without jumping first.
-Fixed at 34 px; the arithmetic is a comment in `room_m4_enemies.gd`.
+`scripts/enemy.gd` is the shared base (extends `Hazard`: touching one kills
+you, per SPEC.md's kill list). `scenes/rooms/room_m4_enemies.tscn` holds the
+first four; CI proves contact kills regardless of side, a hit from the
+scorpion's back kills it, and one from the front bounces off its armour.
 
-**The two bosses are not built.** `BACKLOG.md` has both. The dragon has a
-cheap, concrete proposal: `SwordFlight` already makes a recalling sword
-immune to contact ("a recall cannot fail" is the docstring), so a dragon
-vulnerable only to one is nearly free. It is a design decision about how the
-fight reads, so it is waiting on Matt's go rather than half-built. The
-generator has no proposal: it needs the sword's unbuilt `conduct` state and
-Act 3's whole conductivity vocabulary, which is M12's job, not a session's.
+**The dragon shipped on Matt's go-ahead**, in `scripts/dragon.gd` +
+`scripts/logic/dragon_breath.gd`, arena in `room_m4_dragon.tscn`: a ledge,
+the dragon, wood past it. `Dragon.is_vulnerable_to` checks the sword's own
+state and nothing else: FLYING or RETURNING bounces off the body (fresh
+ammunition, SPEC.md's mistake), only RECALLING gets through, which needs one
+already embedded past the dragon and called home. The room hands out exactly
+one sword, so the only throw available is the one that has to come back,
+which is what makes M11's "without spending a sword" true by construction
+rather than by asking a player not to take a second throw. CI proves the
+bounce, the breath's kill, and the embed-then-recall kill with the sword
+back in hand.
+
+**Two geometry bugs, both found by running it, not by reasoning about it.**
+A scorpion 20 px tall put its centre far enough below a standing hero's
+throw height that every ground-level throw read as "from above"; fixed at
+34 px, comment in `room_m4_enemies.gd`. A dragon-and-ledge gap of 22 px was
+too narrow for a falling hero to land in without overshooting into the
+dragon's own body; fixed by moving the dragon out to give the landing 100 px
+of real floor, comment in `room_m4_dragon.gd`.
+
+**The generator is still not built.** `BACKLOG.md` has it: it needs the
+sword's unbuilt `conduct` state and Act 3's conductivity vocabulary, which
+is M12's job, not a session's.
 
 ## The next action
 
 **M3:** play all five benches (see "Blocked on Matt", unchanged from before).
 
-**M4:** say go or no on the dragon proposal in `BACKLOG.md`. Roughly the size
-of one of the four enemies already built, if so. The generator stays blocked
-on M12 either way.
+**M4:** the generator is what is left, and it is blocked on M12 groundwork
+rather than on anything a session here can decide.
 
-**Level design notes:** Matt has ideas, not yet typed up. Once they arrive,
+**Level design notes:** Matt has ideas, being typed up. Once they arrive,
 write them into a notes doc (rooms and pacing per act), no in-engine
 building, per his own answer on keeping this inside the M10 gate.
 
@@ -61,7 +69,10 @@ building, per his own answer on keeping this inside the M10 gate.
    geyser shaft says "way up" before you have seen one go, whether 1.6 s of
    quiet is too long when alive and late, whether a ride reads as carried or
    as a passenger, and whether `spike_grace` is a dial anybody can feel.
-2. **The dragon proposal in `BACKLOG.md`: go or no.**
+2. **Play the dragon bench once it can be felt rather than only measured**:
+   does the ledge-to-wood throw read as the intended route or as a trick you
+   have to be told; is one rest period (2.6 s) enough to line up the whole
+   embed-then-recall without feeling rushed.
 3. **Level ideas, whenever there is a minute**, for the notes doc above.
 
 ## Traps that will bite again
@@ -76,9 +87,9 @@ class", which reads like a real compile error and is not one.
 
 **A shared method cannot be overridden with extra parameters.**
 `Hazard.configure(size)` takes one argument; redeclaring `configure` with
-more breaks static resolution for every caller, not just the one that added
-them. `Platform`'s subclasses already dodge this with their own entry point
-over a shared `_build`; `Enemy`'s four species do the same with `place`.
+more breaks static resolution for every caller. `Enemy`'s five species give
+their own entry point (`place`) a different name instead, calling
+`configure` unchanged, the way `Platform`'s two subclasses do with `_build`.
 
 ## Settled, do not relitigate
 
@@ -87,6 +98,11 @@ killed enemy is `queue_free`d, not left as a corpse, and does not return on a
 respawn; only a living enemy's position or clock resets, M3's mechanisms
 bargain applied to combat. An enemy's body size is a room constant for now,
 like a spike bed's, not a species-wide config number: M14 can revisit.
+
+**The dragon:** immune to FLYING and RETURNING, vulnerable only to
+RECALLING, one hit, no health bar. The breath is a `DragonBreath` clock,
+the same shape as `GeyserCycle`, and resets to the first frame of its tell
+on respawn for the same fairness reason.
 
 **The gates:** no art before M5, no level building before M10, G1 after M5.
 `BUILD_PLAN.md` carries the reasoning, unchanged.

@@ -228,6 +228,21 @@ func _add_eyeball(rect: Rect2, roam: Rect2) -> Eyeball:
 	return eyeball
 
 
+## A dragon, its body at `rect`, breathing into `breath_size` centred
+## `breath_offset` from its own centre. All three are the room's to decide,
+## the way a ferry's span and a geyser's shaft are: what the dragon does is
+## `Dragon`'s, where it does it to is the arena's.
+func _add_dragon(rect: Rect2, breath_offset: Vector2, breath_size: Vector2) -> Dragon:
+	if enemies == null:
+		push_error("bench: a dragon needs config/enemies.tres wired into the scene")
+		return null
+	var dragon := Dragon.new()
+	dragon.place(rect.size, breath_offset, breath_size, enemies)
+	dragon.position = rect.get_center()
+	add_child(dragon)
+	return dragon
+
+
 ## A brazier standing on the floor at `base`, which is a point on a surface and
 ## not a rectangle: a brazier has no extent you can collide with, only a place
 ## it stands and a zone that notices you went past.
