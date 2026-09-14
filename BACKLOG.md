@@ -162,30 +162,11 @@ committed to.
   extension in exactly the acts where SPEC.md wants it to be the whole vocabulary.
   Worth having only if the ladders decision is being reopened with it.
 
-- **The two M4 bosses, dragon and generator, are not built.** SPEC.md gives
-  each one line and BUILD_PLAN.md's M4 done-when wants all six beatable in
-  grey box, so this is the gap between the two. Neither is a small reversible
-  detail: both decide how a whole fight reads, so both are here rather than
-  guessed at in the milestone. `HANDOFF.md` carries the current state.
-
-  **The dragon has a proposal ready to build.** SPEC.md: "beaten with recall,
-  not ammunition," and M11's done-when adds "without spending a sword on it."
-  `SwordFlight.next_state`'s RECALLING branch already ignores contact
-  entirely: "a recall cannot fail" is the docstring's own words, and reads as
-  literally true in the code today. That means a sword recalled through the
-  dragon is already immune to whatever `Sword._on_area_entered` does to a
-  flying one, for free, with nothing new in the sword's machine. The proposal
-  is to point that fact at the dragon on purpose: it is immune to a FLYING or
-  RETURNING sword (fresh ammunition bounces, per SPEC.md), a periodic
-  telegraphed fire breath is the panic-throwing punishment (a hazard cone on a
-  clock, the same shape as `GeyserCycle`), and it dies to a sword that is
-  RECALLING when it arrives, which only happens if the player has already
-  embedded one in wood somewhere past it and called it home. One hit, no
-  health bar, the same as everything else in the game. Cheap to build: one new
-  clock file for the breath, and a two-line `is_vulnerable_to` override on
-  `Enemy` checking `sword.state`. Not started, because it is still a design
-  decision about how the fight reads and not a number to tune, and CLAUDE.md
-  asks that those go through Matt first even when the code is cheap.
+- **The generator, M4's second boss, is not built.** SPEC.md gives it one
+  line and BUILD_PLAN.md's M4 done-when wants all six beatable in grey box, so
+  this is the gap the dragon (below, now built) used to share. Not a small
+  reversible detail: it decides how a whole fight reads, so it is here rather
+  than guessed at in the milestone. `HANDOFF.md` carries the current state.
 
   **The generator has no proposal.** SPEC.md: "cannot be hit by a sword at
   all," and M12's done-when is "cannot be beaten by throwing," which is the

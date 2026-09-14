@@ -388,6 +388,79 @@ jobs:
             echo "the hero should not have died throwing from a safe distance"; exit 1; }
           echo "the armour held, and the scorpion is still walking its patrol"
 
+      # The dragon: SPEC.md's mini-boss, and the one whose whole fight rests
+      # on a sword's own state rather than on anything a room can assert.
+      # An overview first, the way every other bench gets one.
+      - name: Screenshot the dragon's arena
+        run: |
+          xvfb-run -a ~/godot/godot --path . --resolution 1280x720 \
+            --script res://tools/capture.gd -- \
+            --scene=res://scenes/rooms/room_m4_dragon.tscn --out=room_m4_dragon.png \
+            --input="debug_toggle_overlay:1;-:12" --zoom=0.7 --centre=280,260 --overwrite
+
+      # SPEC.md's mistake: a fresh throw is ammunition and the dragon is
+      # immune to it. This climbs the ledge, drops to the floor in front of
+      # the dragon, and throws straight at the body: the sword has to be
+      # gone and the dragon still has to be standing there afterward.
+      - name: Bounce the only sword off the dragon's body
+        run: |
+          xvfb-run -a ~/godot/godot --path . --resolution 1280x720 \
+            --script res://tools/capture.gd -- \
+            --scene=res://scenes/rooms/room_m4_dragon.tscn \
+            --out=room_m4_dragon_bounce.png \
+            --input="move_right:18;move_right,jump:8;move_right:24;move_right:20;-:5;throw:6;-:30" \
+            --zoom=1.0 --centre=280,280 --overwrite \
+            > dragon_bounce.log 2>&1 || { cat dragon_bounce.log; exit 1; }
+          cat dragon_bounce.log
+          grep -q "capture: no deaths" dragon_bounce.log || {
+            echo "throwing from a safe distance should not have killed the hero"; exit 1; }
+          grep -q "dragon.*alive" dragon_bounce.log || {
+            echo "a fresh throw should have bounced off the dragon, not killed it"; exit 1; }
+          echo "the sword is gone and the dragon is still there"
+
+      # The breath. This climbs the ledge and drops just past it, into the
+      # one stretch of floor the cone can still reach, and waits out a full
+      # period: whichever part of the cycle the clock is in when the run
+      # starts, a breath has to come round and kill anybody still standing
+      # there by the end of it.
+      - name: Get caught by the dragon's breath
+        run: |
+          xvfb-run -a ~/godot/godot --path . --resolution 1280x720 \
+            --script res://tools/capture.gd -- \
+            --scene=res://scenes/rooms/room_m4_dragon.tscn \
+            --out=room_m4_dragon_breath.png \
+            --input="move_right:18;move_right,jump:8;move_right:25;-:3;move_right:4;-:230" \
+            --zoom=1.0 --centre=220,280 --overwrite \
+            > dragon_breath.log 2>&1 || { cat dragon_breath.log; exit 1; }
+          cat dragon_breath.log
+          grep -qE "capture: [1-9][0-9]* death" dragon_breath.log || {
+            echo "standing where the breath reaches did not kill anybody over a full period"; exit 1; }
+
+      # The one legitimate shot. SPEC.md: beaten with recall, not ammunition,
+      # and BUILD_PLAN.md's M11 done-when adds without spending a sword on
+      # it, so the room hands out exactly one. This throws it from the ledge,
+      # over the dragon's body and into the wood past it, drops to the floor
+      # clear of the body, and holds to recall: the sword has to come home
+      # through the dragon, killing it, and end up back in the hero's hand.
+      - name: Embed past the dragon and recall it home through the body
+        run: |
+          xvfb-run -a ~/godot/godot --path . --resolution 1280x720 \
+            --script res://tools/capture.gd -- \
+            --scene=res://scenes/rooms/room_m4_dragon.tscn \
+            --out=room_m4_dragon_recall.png \
+            --input="move_right:18;move_right,jump:8;move_right:24;throw:6;-:40;move_right:20;-:5;throw:25;-:20" \
+            --zoom=1.0 --centre=280,280 --overwrite \
+            > dragon_recall.log 2>&1 || { cat dragon_recall.log; exit 1; }
+          cat dragon_recall.log
+          grep -q "capture: no deaths" dragon_recall.log || {
+            echo "the hero should not have died pulling this off"; exit 1; }
+          grep -q "capture: no enemies remaining" dragon_recall.log || {
+            echo "the recall should have killed the dragon"; exit 1; }
+          grep -q "1 sword(s) held" dragon_recall.log || {
+            echo "BUILD_PLAN.md's M11 done-when is beating the dragon without spending a sword: it should have come home"
+            exit 1; }
+          echo "the dragon is dead and the sword came home"
+
       - name: Keep the screenshots
         uses: actions/upload-artifact@v4
         with:
@@ -412,3 +485,7 @@ jobs:
             room_m4_touch.png
             room_m4_scorpion_behind.png
             room_m4_scorpion_front.png
+            room_m4_dragon.png
+            room_m4_dragon_bounce.png
+            room_m4_dragon_breath.png
+            room_m4_dragon_recall.png

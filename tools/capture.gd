@@ -147,8 +147,8 @@ class CaptureAgent:
 			Input.action_release("jump")
 
 		if player != null:
-			print("capture: player at %s, peak %.1f px, checkpoint %s" % [
-				player.global_position, player.peak_height, player.spawn_point
+			print("capture: player at %s, peak %.1f px, checkpoint %s, %d sword(s) held" % [
+				player.global_position, player.peak_height, player.spawn_point, player.swords_held
 			])
 			_report_deaths(player)
 		_report_swords()

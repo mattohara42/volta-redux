@@ -10,3 +10,6 @@ scorpion_speed = 60.0
 scorpion_armor_top_fraction = 0.35
 ant_speed = 70.0
 eyeball_seek_speed = 45.0
+dragon_charge_time = 0.7
+dragon_breathe_time = 0.5
+dragon_rest_time = 2.6
