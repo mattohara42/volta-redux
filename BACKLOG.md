@@ -144,6 +144,16 @@ committed to.
   No doc has decided what a return should look like. It is the same kind of
   work `CLAUDE.md` gives M9, atmosphere as shaders and emitters rather than
   art, so it waits there rather than getting built mid-M3.
+- **The ferry's rail reads as machinery rather than as the thing it is.** Matt
+  wants gears under the slab driving it back and forth instead of a rail it
+  runs along. The rail is not an oversight: `moving_platform.gd`'s own
+  comment says it is "the only thing in the room that says where the slab
+  will be in a second," which is what a player reads before deciding to
+  jump. Gears alone would not say that unless they carry the same
+  information some other way, a housing shaped to the travel, a groove, a
+  chain, something that still traces the path. Worth doing, wants that
+  question answered first rather than losing the readability cue, and it is
+  M9's art pass regardless.
 - **Sword abilities as upgrades**, rather than all five from the first room.
   Recall, and embedding as a standable platform, become things you earn: better
   throwing, a potion, gold spent somewhere. Raised while playing M2, from the
