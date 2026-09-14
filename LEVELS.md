@@ -23,6 +23,40 @@ warns that scope killed the first attempt and that Acts 2 and 3 are where
 rooms get cut if time runs short; this file is the wishlist that warning
 exists to be checked against, not a commitment to build all of it.
 
+## The theme: difficult, modern, replayable
+
+Matt's own framing for all of this: build on the original conceptually, not
+literally, toward "a polished, difficult, modern game with a lot of
+replayability." That is not a new direction, it is `SPEC.md`'s own model
+named out loud: "faithful and hard, for an adult who wants it hard... the
+model is Celeste and Super Meat Boy: lethal, instant, retried before you
+have finished being annoyed." Both of those games are also two of the most
+replayed platformers made, for reasons this project already committed to
+before this conversation: "a puzzle you solve by understanding a verb
+replays well; a sequence you memorise does not." What follows is what that
+buys, concretely, without touching the one ruleset non-goal (`SPEC.md`: "no
+difficulty modes").
+
+- **Optional risk, not optional difficulty.** A harder path through a room
+  that skips the safe solution, worth a secret or a faster route, sitting
+  next to the one the room asks everyone to solve. This is how Celeste and
+  Super Meat Boy both get replay value from a single ruleset: the game
+  never gets easier or harder, the player chooses how much of it to attempt.
+- **Optional gems and secrets beyond the required three per act.** SPEC.md
+  keeps three gems in the final room as the critical path; nothing stops a
+  handful of extra ones tucked behind an out-of-the-way embed-and-jump
+  chain, found by mastery rather than by the story requiring them.
+- **The death count and the clock are already tracked.** `Player.deaths`
+  and `last_downtime` exist for M3's own done-when, and `BACKLOG.md`
+  already has "a speedrun timer and ghost... fits the game's shape well,"
+  filed as post-ship. Worth asking whether "a lot of replayability" moves
+  that up, or whether it stays exactly where it is. Not deciding here.
+- **New Game+ is the one idea in this list that pushes on "one ruleset."**
+  Carrying five swords or harder enemy placement into a second playthrough
+  is not a difficulty *option* a player picks before starting, but it
+  rhymes with one closely enough to be worth naming rather than assuming.
+  Flagged, not recommended either way.
+
 ## The forest
 
 A river, and trees to cross it in rather than a bridge: climb a trunk, jump
@@ -166,6 +200,12 @@ jump the limited version cannot make, or it becomes solve-the-platforming-
 first-then-come-back-for-the-torch by accident rather than by design. Worth
 deciding on purpose, not discovering while building M10.
 
+**A small addition that deepens the cost rather than adding to it**: while
+the torch is lit and carried, a bat's wander target becomes the hero
+instead of its usual path. Carrying it already means you cannot fight;
+now it also makes you the one thing in the room every bat wants to visit.
+One flag, one line in `Bat`'s own targeting, no new system.
+
 **A matching idea for Act 2**: fire is to the lava caverns what current is
 to the generator. `SPEC.md` already reserves "conduct" (an embedded sword
 carrying current) for Act 3; a torch-carry puzzle in the caverns is the same
@@ -187,6 +227,30 @@ switch. A lock needing two switches held at once, with three swords total,
 forces real sequencing (which switch first, recalled from where, with which
 sword left over) rather than only "find the switch." Same mechanism,
 arranged harder, no new code.
+
+**A circuit for the generator, concretely.** SPEC.md promises "conductive
+floors, insulated wood, switches that need current, not impact" for Act 3
+but does not yet say what a room built on that looks like. One shape: a
+gate needs current run through two embedded swords in series, and pulling
+either back to recall it breaks the circuit, so finishing the puzzle and
+getting both swords back safely needs a third sword in reserve the whole
+time. "The sword as wiring" (`SPEC.md`'s own phrase for the act) made into
+an actual decision about which one you give up last, using only embed,
+conduct and recall as they already exist.
+
+**An enemy as a switch.** `BACKLOG.md` already has an unbuilt idea sitting
+here: a floor plate that senses weight, which could be the hero's or an
+enemy's. Paired with the dormant-decoration trick above, that is a specific
+trap: trick or lure a sleeping enemy onto a plate to hold a gate open,
+because standing there yourself means not being wherever the gate leads.
+Two existing ideas, combined rather than either needing to grow.
+
+**A sword graveyard, for atmosphere and nothing else.** A room deep in the
+underground scattered with `GROUNDED` swords, dozens of them, left by
+whoever came before and did not make it back for theirs. No mechanic, no
+new art beyond what a sword already has, and it is exactly the kind of
+environmental storytelling `SPEC.md`'s non-goals already choose over
+cutscenes ("the bird in the cage is the story").
 
 ## Surprises and subverted expectations
 
@@ -284,3 +348,9 @@ things `CLAUDE.md` currently calls settled:
    already planned?
 10. **How often is too often** for the wood/stone fake-out? Recommending
     once or twice in the whole game, never more.
+11. **Does the speedrun timer and ghost move up from post-ship**, now that
+    "a lot of replayability" is a stated goal, or does `BACKLOG.md`'s
+    original placement for it still hold?
+12. **Is New Game+ (or anything like it) wanted at all?** The one idea in
+    this round that sits closest to the "no difficulty modes" line without
+    quite crossing it. Not recommending either way.
