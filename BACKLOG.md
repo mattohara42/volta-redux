@@ -175,6 +175,21 @@ committed to.
   introduces one thing the sword does, so this is level design the plan has
   asked for, not a new system.
 
+- **A solid platform riding the geyser, jumped off at its peak for extra
+  height.** Matt's idea, from playing `room_m3_geysers`. Today a geyser is a
+  current with no body in it at all: `Geyser.lift()` hands the hero a
+  vertical speed directly while they are inside the column, and stepping
+  sideways at the height you want is how you get off. A rising and falling
+  platform you time a jump off of is a different tool: height from jump
+  timing on a moving surface, not height from standing in a current.
+
+  Not the jump-upgrade question below, but close kin to it. SPEC.md already
+  has geysers as one of Act 2's two ordinary ways to gain a storey, so more
+  height from one is not new territory the way a growing jump would be, but
+  a jump-timed bonus is still a second way to answer "how do I get up there"
+  next to ladders and the embedded sword, in a game M0 settled specifically
+  to keep that question answered once. Worth having. Answer what it does to
+  that answer before building it, not after.
 - **A jump upgrade.** Same thought applied to movement. Flagged rather than
   filed neutrally, because it **contradicts the decision M0 just made**: ladders
   won on the argument that a jump which cannot reach the next storey is what
