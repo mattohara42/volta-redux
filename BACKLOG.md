@@ -133,6 +133,17 @@ committed to.
   vocabulary (SPEC.md: switches that need current and not impact), so that is
   the natural home for a second kind.
 
+- **A falling platform snaps back home instead of reforming.** Matt watched
+  one in `room_m3_falling`: the shake and the fall already work as
+  `PlatformCycle`'s doc comment describes, solid all the way down, still
+  jumpable off. What is missing is the other end. `PlatformCycle.Phase.GONE`
+  parks it at the bottom of its drop, and the moment `platform_return_time`
+  runs out it jumps straight to `STEADY` at `_home` with no animation at
+  all, which is what reads as magic rather than as a slab coming back.
+
+  No doc has decided what a return should look like. It is the same kind of
+  work `CLAUDE.md` gives M9, atmosphere as shaders and emitters rather than
+  art, so it waits there rather than getting built mid-M3.
 - **Sword abilities as upgrades**, rather than all five from the first room.
   Recall, and embedding as a standable platform, become things you earn: better
   throwing, a potion, gold spent somewhere. Raised while playing M2, from the
