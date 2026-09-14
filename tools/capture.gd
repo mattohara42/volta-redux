@@ -155,6 +155,7 @@ class CaptureAgent:
 		_report_braziers()
 		_report_hazards()
 		_report_platforms()
+		_report_geysers()
 		_report_mechanisms()
 
 		await RenderingServer.frame_post_draw
@@ -247,6 +248,24 @@ class CaptureAgent:
 			if platform != null:
 				print("capture: platform at %s %s" % [
 					platform.global_position, platform.status()
+				])
+
+
+	## What every geyser is doing, where it is, and how big its lifting box is.
+	##
+	## Three things a picture cannot say. A jet that is not up is not drawn, so
+	## the phase has to be printed or a run that never saw one and a run that
+	## rode one look identical in a still. The box has to be printed for the
+	## reason a spike bed's does: it is the part of the mechanism the player
+	## meets and the drawing is only a claim about it. And a geyser is the one
+	## mechanism whose failure is silence, because a vent that never erupts
+	## leaves a perfectly good screenshot of a room nobody can leave.
+	func _report_geysers() -> void:
+		for node in get_tree().get_nodes_in_group("geysers"):
+			var geyser := node as Geyser
+			if geyser != null:
+				print("capture: geyser at %s, column %s, %s" % [
+					geyser.global_position, geyser.column(), geyser.status()
 				])
 
 

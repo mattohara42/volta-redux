@@ -29,6 +29,13 @@ const LAVA_CORE := Color("fff0c2")
 const SPIKE_IRON := Color("7a2434")
 const SPIKE_TIP := Color("e0956f")
 
+# Steam. A geyser's column. Cool and desaturated on purpose: ART_DIRECTION.md
+# reserves warm and saturated for what kills you, and a geyser is the one hazard
+# in the game that does not. Kept well under ARC's saturation and off its hue, so
+# a jet is not read as an arc by a player who has been to Act 3.
+const STEAM_BODY := Color("7e9bb0")
+const STEAM_CORE := Color("cfe4ea")
+
 # Electricity. Act 3 and Volta, and the only cool bright.
 const ARC := Color("5fe0e8")
 const ARC_CORE := Color("eafcff")
@@ -65,6 +72,8 @@ static func all() -> Dictionary:
 		"LAVA_CORE": LAVA_CORE,
 		"SPIKE_IRON": SPIKE_IRON,
 		"SPIKE_TIP": SPIKE_TIP,
+		"STEAM_BODY": STEAM_BODY,
+		"STEAM_CORE": STEAM_CORE,
 		"ARC": ARC,
 		"ARC_CORE": ARC_CORE,
 		"ARC_RESIDUE": ARC_RESIDUE,

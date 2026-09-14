@@ -3,52 +3,58 @@
 > **Rewrite this file, never append.** State snapshot and pointers only. No
 > session narrative, that is what `git log` is for. Keep it under 80 lines.
 
-**Updated:** 2026-09-12 · **Phase:** 1, the verb · **Active milestone:** M3
+**Updated:** 2026-09-14 · **Phase:** 1, the verb · **Active milestone:** M3
 
 **M3 done-when:** death to respawn to moving again is **under one second**,
 measured, and dying twenty times in a row is annoying but not tedious.
 
 ## Where this is
 
-**Lava, spikes, the death loop, the checkpoint, falling platforms and now moving
-platforms are built**, and the loop measures 0.417 s in a real build on all four
-benches. A ferry is the falling slab's node with a different clock and no
-trigger: `scripts/logic/platform_ferry.gd` owns the clock, `scripts/platform.gd`
-what the two kinds share, `scripts/moving_platform.gd` the carrying and the rail,
-`config/hazards.tres` two numbers, `room_m3_moving` the bench.
+**Every hazard M3 names is built**: lava, spikes, the death loop, the
+checkpoint, falling platforms, ferries and now geysers. Five benches, and the
+loop measures 0.417 s in a real build on all of them.
 
-**A respawn set the ferry's numbers.** A platform put back at its dock starts its
-clock when the controls come back, not when the body is placed: before that the
-second ferry left two frames before a respawn could reach the lip, every time,
-and no assertion counting pixels saw it. CI now dies in the second moat and
-catches the ferry from the checkpoint.
+**A geyser is a clock that takes your vertical speed off you.** It does not kill
+(`SPEC.md`'s kill list is lava, water, spikes and animals), it lifts what is
+inside the column while it erupts, and you leave it by stepping sideways out.
+`scripts/logic/geyser_cycle.gd` owns the clock, `scripts/geyser.gd` the sensing
+and the picture, `config/hazards.tres` four numbers, `room_m3_geysers` the bench:
+two storeys, no ladder, and the second jet rises out of a lava moat.
 
 ## The next action
 
-**Geysers, the last M3 hazard**, and the only one whose effect is on the hero's
-velocity rather than on the floor. `SPEC.md` has them in Act 2, `BACKLOG.md` the
-argument for using one as a route.
+**The measured half of the done-when is discharged and the felt half is not**, so
+nothing here is waiting on a keyboard. M3 closes when the benches have been
+played, and M4, the six enemies, is next.
 
 ## Blocked on Matt
 
-1. **Play all four benches and answer the felt half of the done-when.** Twenty
-   deaths at each second hazard. Open: spacing on the first two benches, whether
-   0.45 s reads as a warning, whether a 0.7 s dock reads as an invitation or as
-   dead time, and whether the 2.45 s a missed ferry costs is too long (a death
-   never costs it, only being alive and late does).
-2. **Is `spike_grace` a dial you can feel?** `BACKLOG.md` has the experiment
-   and M14 can settle it.
+1. **Play all five benches and answer the felt half.** Twenty deaths at each
+   hazard that kills. Open from before: spacing on the first two, whether 0.45 s
+   reads as a warning, whether a 0.7 s dock reads as an invitation or as dead
+   time, and whether the 2.45 s a missed ferry costs is too long.
+2. **And three the geysers add.** Does a dormant shaft say "way up" before you
+   have seen one go? Is 1.6 s of quiet too long to stand there when you are alive
+   and late, which is the only time you pay it? Does a ride read as being carried
+   or as being a passenger, which is what `SPEC.md` threw 1984 away over.
+3. **Is `spike_grace` a dial you can feel?** `BACKLOG.md` has the experiment and
+   M14 can settle it.
 
 ## Traps that will bite again
 
 **Opening the project rewrites `project.godot`, and a stale editor deletes from
 it.** One save dropped `[physics]` and `[rendering]`, taking engine gravity from
 0 to 980. Close the editor, read `git diff project.godot`, restore it, then pull.
-`tests/test_project_settings.gd` catches that one loss.
+`tests/test_project_settings.gd` catches that one.
 
-**CI fails on what the log says** for the spike, falling and ferry steps, not
-only on keeping the picture (the older ones do not: `BACKLOG.md`). No screenshot
-shows a clock, so `tools/capture.gd` prints each platform's phase and position.
+**A free-running clock has to sit out the respawn freeze, and no assertion sees
+it.** The ferry left two frames before a respawn could reach the lip. A geyser
+left running dies a second time in the same moat, measured. One line in `reset`
+each, and neither was visible from anywhere but a running build.
+
+**CI fails on what the log says** for the spike, falling, ferry and geyser steps,
+not only on keeping the picture (the older ones do not: `BACKLOG.md`). No
+screenshot shows a clock, so `tools/capture.gd` prints every mechanism's phase.
 
 **Docs go stale silently.** `.claude/hooks/` warns on a checkout behind
 `origin/main`, and on a branch committing code without touching this file.
@@ -56,27 +62,21 @@ shows a clock, so `tools/capture.gd` prints each platform's phase and position.
 ## Settled, do not relitigate
 
 **M3:** the loop is 0.25 s hold plus 0.15 s freeze, measured at 0.417 s, and the
-death messages outlast it. A brazier lights once and has no way back out, so
-"the last lit brazier" is the furthest one you reached. Spikes and lava kill
-identically and neither kind of platform kills at all, it puts you in something
-that does. Every bench keeps a brazier between its two hazards, and a respawn
-puts every platform back at the start of its clock.
+death messages outlast it. A brazier lights once, so "the last lit brazier" is
+the furthest one you reached. Every bench keeps a brazier between its two
+hazards, and a respawn puts every mechanism back at the start of its clock.
 
-**The ferry** docks at each end rather than turning round, because the dock is
-the window you board in, and crosses at a constant speed, so halfway along is
-halfway through. The first moat's docks flush and the second's reaches neither
-bank, which is one new thing at a time.
-
-**Colour**, to `ART_DIRECTION.md`'s own rules: wood is warm in hue and matte in
-saturation, spikes are `#7a2434` iron and `#e0956f` tip, both platforms are
-stone, and the tell between them is shape: a falling slab is bitten off and
-cracked, a ferry is intact on a rail that reaches both its docks.
+**Geysers:** a jet does not kill, its cycle starts at the swell rather than the
+quiet (so a respawn lands on the tell), the lift replaces gravity outright while
+you are in the column, and a shaft's size belongs to the room the way a ferry's
+span does. Steam is new in `ART_DIRECTION.md`: cool and desaturated, because warm
+and saturated is reserved for what kills you.
 
 **Closed milestones.** M2: standing on a thrown sword and recall-on-hold both
 feel right, and a 16 px ledge against an 18 px hero is a fine margin. M1: you
 miss by changing height, a catch beats a solid hit in the same frame, and only
-flight destroys a sword. M0: a storey is climbed and never jumped (`SPEC.md`
-carries why), and **Lothar of the Hill People** is the name M5 paints.
+flight destroys a sword. M0: a storey is climbed and never jumped, and **Lothar
+of the Hill People** is the name M5 paints.
 
 **The gates:** no art before M5, no level building before M10, G1 after M5.
 `BUILD_PLAN.md` carries the reasoning, unchanged.

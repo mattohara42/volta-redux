@@ -49,6 +49,15 @@ deep clotted red crust with orange fissures and a yellow-white core where it
 bubbles.
 `#6b1f14` crust, `#d94f1e` flow, `#ffb64a` fissure, `#fff0c2` core.
 
+**Steam.** A geyser's column, and the only pale thing in the game. Cool and
+desaturated, because a geyser is the one hazard in the game that does not kill
+you: the rule below reserves warm and saturated for what does, and a jet painted
+in it would be a lie told at a glance. It must not be taken for the arc either,
+which is cool but saturated and hard-edged where this is soft and low in chroma.
+Lit from the lava it rises out of, so it keeps a little warmth at the vent and
+loses it going up.
+`#7e9bb0` body, `#cfe4ea` core.
+
 **Spikes.** Iron, not rock. Warm and saturated, because the rule below says
 anything that can kill you is, but held clearly under lava at the bright end:
 lava is the one saturated thing in the game and a spike bed must not compete

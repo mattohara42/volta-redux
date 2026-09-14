@@ -69,6 +69,17 @@ var message_index := -1
 var _message_bag: PackedInt32Array = []
 var _message_timer := 0.0
 
+## How fast something is carrying the hero upward this physics step, px/s, or
+## zero for the usual arrangement where gravity decides. Written by whatever is
+## doing the lifting and spent in the same step.
+##
+## Nothing here counts entering or leaving anything, unlike the ladder probe
+## below. A geyser is a column you are inside rather than a fixture you take hold
+## of, and the honest way to say that is that it has to keep saying so: one frame
+## without a lift and the hero is falling again, which is what stepping sideways
+## out of a jet is.
+var _lift_speed := 0.0
+
 # Ladders currently overlapping the body.
 var _ladders_touched := 0
 ## Read by the debug overlay.
@@ -132,6 +143,9 @@ func _physics_process(delta: float) -> void:
 		_step_airborne(input_dir, climb_dir, on_floor, delta)
 
 	move_and_slide()
+	# Spent. Whatever was lifting has to say so again next frame or the hero is
+	# falling, which is the whole of how you get out of a jet.
+	_lift_speed = 0.0
 	# After the move, so the apex is the position the body actually reached and
 	# not the one it held a frame earlier.
 	_track_peak()
@@ -157,12 +171,24 @@ func _step_airborne(input_dir: float, climb_dir: float, on_floor: bool, delta: f
 		velocity = Vector2.ZERO
 		return
 
-	var gravity := Motion.gravity_for(config.jump_height, config.time_to_apex)
-	velocity.y = Motion.step_vertical(
-		velocity.y, gravity, config.fall_gravity_multiplier, config.max_fall_speed, delta
-	)
-	if Input.is_action_just_released("jump"):
-		velocity.y = Motion.damp_on_release(velocity.y, config.jump_release_damping)
+	if _lift_speed > 0.0:
+		# A column owns your vertical speed for as long as you are in it, gravity
+		# and the jump's release damping included. Rising at a fixed speed is what
+		# makes the drawn jet a promise about where it puts you, and it is what
+		# makes leaving one a decision rather than a thing that happens to you.
+		velocity.y = -_lift_speed
+		# A ride is not a jump, and the overlay's apex reading is about jumps.
+		# Held at the body's own height while the column has hold of it, so what
+		# it reports afterwards is how far you coasted above the top of the jet.
+		_takeoff_y = global_position.y
+		peak_height = 0.0
+	else:
+		var gravity := Motion.gravity_for(config.jump_height, config.time_to_apex)
+		velocity.y = Motion.step_vertical(
+			velocity.y, gravity, config.fall_gravity_multiplier, config.max_fall_speed, delta
+		)
+		if Input.is_action_just_released("jump"):
+			velocity.y = Motion.damp_on_release(velocity.y, config.jump_release_damping)
 
 	velocity.x = Motion.step_horizontal(
 		velocity.x,
@@ -222,6 +248,23 @@ func die() -> void:
 	queue_redraw()
 
 
+## Carried upward at `speed` px/s for this physics step. Called by a geyser, and
+## by nothing else.
+##
+## The hero does not know what a geyser is. It knows that something has taken
+## over its vertical speed, which is the same arrangement `Hazard` has with
+## `die`: the mechanism owns the rule and the hero owns the body. The strongest
+## claim wins, so two jets that overlap is a room's oddity and not a bug here.
+##
+## A dead body is not lifted. The death loop deliberately stops calling
+## `move_and_slide`, so a lift arriving mid-death would be spent on nothing and
+## then be waiting in the field when the respawn put the hero down somewhere else.
+func lift(speed: float) -> void:
+	if _dead:
+		return
+	_lift_speed = maxf(_lift_speed, speed)
+
+
 ## Takes one line from the bag, refilling it when it runs dry. The message
 ## outlasts the loop on purpose: it is still on screen once you have the
 ## controls back, so reading it costs none of SPEC.md's one second.
@@ -267,24 +310,26 @@ func _place_at_checkpoint(restore_swords: bool) -> void:
 	global_position = spawn_point
 	velocity = Vector2.ZERO
 	peak_height = 0.0
+	# Whatever was carrying you is not carrying you any more, and it is about to
+	# be put back at the start of its own clock a few lines below.
+	_lift_speed = 0.0
 	if restore_swords:
 		swords_held = swords_at_spawn
 	for node in get_tree().get_nodes_in_group("swords"):
 		node.queue_free()
-	# Every platform back at the start of its clock, now: a slab that let go
-	# back at home, a ferry back at the dock you respawn beside. M3's bargain is
-	# that a death costs you the jump you missed and nothing else, and arriving
-	# to find the route still missing two of its steps, or the only way across
-	# still out in the middle of the moat, is a second cost. It is the wait that
-	# turns dying twenty times from annoying into tedious.
+	# Every mechanism with a clock in it back at the start of that clock, now: a
+	# slab that let go back at home, a ferry back at the dock you respawn beside,
+	# a geyser back at the first frame of its swell. M3's bargain is that a death
+	# costs you the jump you missed and nothing else, and arriving to find the
+	# route still missing two of its steps, the only way across still out in the
+	# middle of the moat, or the vent you need just gone quiet, is a second cost.
+	# It is the wait that turns dying twenty times from annoying into tedious.
 	#
-	# The hero reaching into a room's mechanisms is the same shape as the line
-	# above it, and `BACKLOG.md` says what to do about both when there is a
-	# third one.
-	for node in get_tree().get_nodes_in_group("platforms"):
-		var platform := node as Platform
-		if platform != null:
-			platform.reset(death_config.respawn_freeze)
+	# One group and one call, because the third kind of mechanism arrived and
+	# `BACKLOG.md` said a third one was the point at which walking a list per kind
+	# stopped paying. It is still the hero reaching into the room, which is the
+	# smell that entry is really about, and the entry says what the fix is.
+	get_tree().call_group("mechanisms", "reset", death_config.respawn_freeze)
 
 
 func is_dead() -> bool:

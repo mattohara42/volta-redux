@@ -37,6 +37,9 @@ func _build(size: Vector2, hazards: HazardConfig) -> void:
 	_shape.shape = box
 	add_child(_shape)
 	add_to_group("platforms")
+	# Everything a respawn puts back at the start of its clock, geysers included.
+	# See `Player._place_at_checkpoint`.
+	add_to_group("mechanisms")
 
 
 func _ready() -> void:

@@ -14,3 +14,7 @@ platform_shake = 1.5
 platform_shake_hz = 16.0
 platform_travel_speed = 110.0
 platform_wait_time = 0.7
+geyser_swell_time = 0.5
+geyser_erupt_time = 1.4
+geyser_dormant_time = 1.1
+geyser_lift_speed = 170.0

@@ -7,8 +7,13 @@
 ## to hold.
 ##
 ## Lava is not here. Lava is a rectangle a room hands to `Hazard` and it has no
-## shape of its own to tune. Geysers will want a row of their own and they can
-## be added when they exist.
+## shape of its own to tune.
+##
+## Geysers are here, and unlike spikes they are not a shape at all: every number
+## one has is a duration or a speed, because a geyser is a clock that takes the
+## hero's vertical speed off him and hands it back. How tall and how wide the
+## column is belongs to the room that dug the shaft, for the same reason a
+## ferry's span does.
 ##
 ## Platforms are not hazards either, in the sense that neither kind has a
 ## killing box and neither ever touches `Hazard`: they are the things that put
@@ -80,3 +85,32 @@ extends Resource
 ## window waits is one trip out and one back, which is the number to keep an eye
 ## on if this grows.
 @export var platform_wait_time: float = 0.7
+
+@export_group("Geysers")
+## Seconds of warning before a geyser lifts anything, and the one number in the
+## group that is purely about fairness. A column that arrived with no tell would
+## be a thing you learn by dying, which is the 1984 complaint SPEC.md exists to
+## throw away.
+##
+## Read against the falling platform's warning, which is the other tell in M3 and
+## sits at 0.45. This one is a little longer because what it is warning you about
+## is worth crossing a room for rather than worth stepping off, and because a
+## respawn lands in the first frame of it: see `GeyserCycle`.
+@export var geyser_swell_time: float = 0.5
+## Seconds the column stays up. The window, and therefore the whole hazard: it
+## has to outlast a ride by enough that arriving part of the way through one is
+## still worth doing, or the only boarding anybody makes is from a standing start
+## at the vent.
+@export var geyser_erupt_time: float = 1.4
+## Seconds of quiet between eruptions. What missing one costs, along with the
+## swell that follows it, and therefore the number to watch if this grows: M3's
+## second done-when is that dying twenty times is annoying rather than tedious,
+## and a wait you did not choose is how that goes wrong.
+@export var geyser_dormant_time: float = 1.1
+## How fast the column carries you, px/s.
+##
+## Deliberately well under the hero's own takeoff speed, so a ride reads as being
+## carried rather than as a jump somebody else is doing for you. It is the number
+## that decides how much of an eruption a storey costs, and the room's ledges are
+## laid out against what it buys.
+@export var geyser_lift_speed: float = 170.0
