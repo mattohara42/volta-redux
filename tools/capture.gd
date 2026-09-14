@@ -156,6 +156,7 @@ class CaptureAgent:
 		_report_hazards()
 		_report_platforms()
 		_report_geysers()
+		_report_enemies()
 		_report_mechanisms()
 
 		await RenderingServer.frame_post_draw
@@ -267,6 +268,21 @@ class CaptureAgent:
 				print("capture: geyser at %s, column %s, %s" % [
 					geyser.global_position, geyser.column(), geyser.status()
 				])
+
+
+	## Which enemies are still alive, and where. A killed one is `queue_free`d
+	## rather than drawn dead, so a picture with fewer enemies in it and a log
+	## with fewer lines in it are the same claim, and this is the one that a
+	## grep can check.
+	func _report_enemies() -> void:
+		var enemies := get_tree().get_nodes_in_group("enemies")
+		if enemies.is_empty():
+			print("capture: no enemies remaining")
+			return
+		for node in enemies:
+			var enemy := node as Enemy
+			if enemy != null:
+				print("capture: %s alive at %s" % [enemy.status(), enemy.global_position])
 
 
 	## Whether the switches are held and the gates are open.

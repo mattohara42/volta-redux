@@ -162,6 +162,42 @@ committed to.
   extension in exactly the acts where SPEC.md wants it to be the whole vocabulary.
   Worth having only if the ladders decision is being reopened with it.
 
+- **The two M4 bosses, dragon and generator, are not built.** SPEC.md gives
+  each one line and BUILD_PLAN.md's M4 done-when wants all six beatable in
+  grey box, so this is the gap between the two. Neither is a small reversible
+  detail: both decide how a whole fight reads, so both are here rather than
+  guessed at in the milestone. `HANDOFF.md` carries the current state.
+
+  **The dragon has a proposal ready to build.** SPEC.md: "beaten with recall,
+  not ammunition," and M11's done-when adds "without spending a sword on it."
+  `SwordFlight.next_state`'s RECALLING branch already ignores contact
+  entirely: "a recall cannot fail" is the docstring's own words, and reads as
+  literally true in the code today. That means a sword recalled through the
+  dragon is already immune to whatever `Sword._on_area_entered` does to a
+  flying one, for free, with nothing new in the sword's machine. The proposal
+  is to point that fact at the dragon on purpose: it is immune to a FLYING or
+  RETURNING sword (fresh ammunition bounces, per SPEC.md), a periodic
+  telegraphed fire breath is the panic-throwing punishment (a hazard cone on a
+  clock, the same shape as `GeyserCycle`), and it dies to a sword that is
+  RECALLING when it arrives, which only happens if the player has already
+  embedded one in wood somewhere past it and called it home. One hit, no
+  health bar, the same as everything else in the game. Cheap to build: one new
+  clock file for the breath, and a two-line `is_vulnerable_to` override on
+  `Enemy` checking `sword.state`. Not started, because it is still a design
+  decision about how the fight reads and not a number to tune, and CLAUDE.md
+  asks that those go through Matt first even when the code is cheap.
+
+  **The generator has no proposal.** SPEC.md: "cannot be hit by a sword at
+  all," and M12's done-when is "cannot be beaten by throwing," which is the
+  whole vocabulary problem: this boss is not beaten by a variant of throwing,
+  it needs the sword's sixth state. CLAUDE.md names it directly: "fly, return,
+  catch, embed, recall, **conduct**" is the sword's whole machine, and conduct
+  is the one state M3 did not build. `BACKLOG.md`'s own switches-that-need-
+  current entry is the closest thing to a spec for what conduct even does, and
+  it is not close. This one waits for M12 rather than for a session: it is Act
+  3's whole vocabulary, not a fight that can be prototyped in a corner of M4's
+  grey room.
+
 - **Volta's dialogue.** The original had none worth keeping. A wizard who
   comments on your deaths is either very good or very bad and there is no middle.
 - **Desktop builds signed and on itch.io**, beyond the web export in M16.

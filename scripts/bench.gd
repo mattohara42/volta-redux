@@ -11,6 +11,8 @@ extends Node2D
 ## Only the benches that place a spike bed wire this. Lava needs no shape
 ## tuning, so most rooms leave it null and never ask for it.
 @export var hazards: HazardConfig
+## Only the benches that place an enemy wire this.
+@export var enemies: EnemyConfig
 
 const ROOM_HEIGHT: float = 360.0
 const FLOOR_TOP: float = 320.0
@@ -164,6 +166,66 @@ func _add_geyser(column: Rect2) -> Geyser:
 	# capsule, a column hides the thing the player is steering.
 	move_child(geyser, 0)
 	return geyser
+
+
+## A bat, tumbling a Lissajous path inside a box centred on `rect`. `rect`'s
+## size is the killing box and `half_extents` is how far it is allowed to roam
+## either side of that centre, which is a fact about the room the way a
+## ferry's span is.
+func _add_bat(rect: Rect2, half_extents: Vector2) -> Bat:
+	if enemies == null:
+		# A bench copied without the resource would place a bat with no path,
+		# which stands still, which is not a bat.
+		push_error("bench: a bat needs config/enemies.tres wired into the scene")
+		return null
+	var bat := Bat.new()
+	bat.place(rect.size, half_extents, enemies)
+	bat.position = rect.get_center()
+	add_child(bat)
+	return bat
+
+
+## A scorpion, walking from `rect`'s centre out to `range` and back. `rect`'s
+## size is its killing box, and the room owns `range` for the same reason it
+## owns a ferry's span: how far a patrol goes is a fact about the floor it is
+## walking, not about what a scorpion does.
+func _add_scorpion(rect: Rect2, range: float) -> Scorpion:
+	if enemies == null:
+		push_error("bench: a scorpion needs config/enemies.tres wired into the scene")
+		return null
+	var scorpion := Scorpion.new()
+	scorpion.place(rect.size, range, enemies)
+	scorpion.position = rect.get_center()
+	add_child(scorpion)
+	return scorpion
+
+
+## A giant ant, walking the inside of `track` forever. `size` is its killing
+## box; `track` is the loop itself, already pulled in from the walls by
+## however far the ant's own body sits off them, the same way a spike bed's
+## lethal box is inset from the drawn teeth.
+func _add_ant(size: Vector2, track: Rect2) -> GiantAnt:
+	if enemies == null:
+		push_error("bench: an ant needs config/enemies.tres wired into the scene")
+		return null
+	var ant := GiantAnt.new()
+	ant.place(size, track, enemies)
+	add_child(ant)
+	return ant
+
+
+## A floating eyeball, starting at `rect`'s centre and drifting to stay level
+## with the hero for as long as it is inside `roam`. `rect`'s size is its
+## killing box.
+func _add_eyeball(rect: Rect2, roam: Rect2) -> Eyeball:
+	if enemies == null:
+		push_error("bench: an eyeball needs config/enemies.tres wired into the scene")
+		return null
+	var eyeball := Eyeball.new()
+	eyeball.place(rect.size, roam, enemies)
+	eyeball.position = rect.get_center()
+	add_child(eyeball)
+	return eyeball
 
 
 ## A brazier standing on the floor at `base`, which is a point on a surface and
