@@ -264,6 +264,65 @@ jobs:
           grep -q "capture: no deaths" ferried.log || {
             echo "the crossing killed a run that should have made it"; exit 1; }
 
+      # A geyser is the only mechanism in M3 whose failure is silence: a vent
+      # that never goes off draws a perfectly good picture of a room nobody can
+      # get out of. So both of these steps read the log rather than only keeping
+      # the image.
+      #
+      # This one crosses. The pause in the middle is the whole point of the
+      # room: the hero rides the first jet, walks to the lip of the moat, and
+      # then waits there rather than walking into a moat with nothing coming up.
+      # It has to finish on the far bank, which is a storey above the lip and
+      # only reachable by being carried.
+      - name: Ride a jet out of a lava moat
+        run: |
+          xvfb-run -a ~/godot/godot --path . --resolution 1280x720 \
+            --script res://tools/capture.gd -- \
+            --scene=res://scenes/rooms/room_m3_geysers.tscn \
+            --out=room_m3_geysers.png \
+            --input="move_right:110;-:75;move_right:90" \
+            --zoom=1.0 --centre=430,200 --overwrite \
+            > geysers.log 2>&1 || { cat geysers.log; exit 1; }
+          cat geysers.log
+          grep -q "capture: no deaths" geysers.log || {
+            echo "the crossing killed a run that should have made it"; exit 1; }
+          hero_y=$(sed -n 's/^capture: player at ([0-9.]*, \([0-9.]*\).*/\1/p' geysers.log)
+          hero_x=$(sed -n 's/^capture: player at (\([0-9.]*\).*/\1/p' geysers.log)
+          # 508 is RoomM3Geysers.FAR_BANK_START and 224 is the lip it was reached
+          # from. Past one and above the other is the far bank and nowhere else.
+          awk -v x="$hero_x" -v y="$hero_y" 'BEGIN { exit !(x > 508 && y < 224) }' || {
+            echo "the hero is at $hero_x, $hero_y, which is not up on the far bank"
+            exit 1; }
+          echo "the hero is at $hero_x, $hero_y, a storey above the lip it started from"
+
+      # And the half that dies. This one walks the room without reading the
+      # clock, steps off the lip while the vent is quiet, and falls in.
+      #
+      # What it is really testing is the respawn. A geyser's clock was running
+      # before the player arrived and keeps running after they die, so a respawn
+      # puts every vent back at the first frame of its swell: the run out of the
+      # mid brazier then always meets a jet that is already up. Left running
+      # instead, this exact script dies a second time in the same moat and ends
+      # back on the ledge, which is what makes one death the assertion rather
+      # than any death.
+      - name: Step off the lip with nothing coming up
+        run: |
+          xvfb-run -a ~/godot/godot --path . --resolution 1280x720 \
+            --script res://tools/capture.gd -- \
+            --scene=res://scenes/rooms/room_m3_geysers.tscn \
+            --out=room_m3_geysers_respawn.png \
+            --input="move_right:110;-:157;move_right:170" \
+            --zoom=1.0 --centre=500,180 --overwrite \
+            > geysers_respawn.log 2>&1 || { cat geysers_respawn.log; exit 1; }
+          cat geysers_respawn.log
+          grep -qE "capture: 1 death\(s\)" geysers_respawn.log || {
+            echo "either the quiet moat did not kill anybody, or the respawn missed the jet"
+            exit 1; }
+          hero_x=$(sed -n 's/^capture: player at (\([0-9.]*\).*/\1/p' geysers_respawn.log)
+          awk -v x="$hero_x" 'BEGIN { exit !(x > 508) }' || {
+            echo "the hero is at $hero_x, which is short of the far bank"; exit 1; }
+          echo "one death, and the respawn caught the next jet"
+
       - name: Keep the screenshots
         uses: actions/upload-artifact@v4
         with:
@@ -282,3 +341,5 @@ jobs:
             room_m3_moving.png
             room_m3_moving_respawn.png
             room_m3_moving_crossed.png
+            room_m3_geysers.png
+            room_m3_geysers_respawn.png

@@ -224,3 +224,62 @@ func test_the_platform_warning_outlasts_the_forgiveness_windows() -> void:
 		% [hazards.platform_warn_time, climb.jump_buffer_time + climb.coyote_time]
 		+ " be answered through"
 	)
+
+
+## The geyser's numbers. Every one is a duration or a speed, because a geyser has
+## no shape of its own: how tall and how wide a shaft is belongs to the room that
+## dug it. What is worth asserting here is that the thing warns you, that it
+## stays up long enough to be a way up rather than a trick, and that a ride does
+## not read as a jump somebody else is doing for you.
+func test_the_geyser_numbers_hold_together() -> void:
+	var hazards: HazardConfig = load(HAZARDS)
+	check(hazards.geyser_swell_time > 0.0, "a geyser warns you before it goes")
+	check(hazards.geyser_erupt_time > 0.0, "and then it actually comes up")
+	check(hazards.geyser_dormant_time > 0.0, "and goes quiet again, or it is a fountain")
+	check(hazards.geyser_lift_speed > 0.0, "and it carries you somewhere while it is up")
+	check(
+		hazards.geyser_erupt_time > hazards.geyser_swell_time,
+		"a jet is up for longer than it spends warning you, or the warning is the event"
+	)
+
+
+## SPEC.md makes geysers one of the two ordinary ways to gain a storey in Act 2.
+## That is a claim about these numbers and not about any one room: a jet that
+## subsides before it has carried anybody a storey is scenery wherever it is put.
+func test_an_eruption_lasts_long_enough_to_carry_a_storey() -> void:
+	var hazards: HazardConfig = load(HAZARDS)
+	var world: WorldConfig = load(WORLD)
+	var storey := GeyserCycle.ride_seconds(world.tier_height, hazards.geyser_lift_speed)
+	check(
+		hazards.geyser_erupt_time > storey,
+		"a storey takes %.2f s to ride and an eruption lasts %.2f s"
+		% [storey, hazards.geyser_erupt_time]
+	)
+
+
+## The warning has to be a thing a person can act on, which is the same claim the
+## falling platform's tell is held to and for the same reason.
+func test_the_geyser_warning_outlasts_the_forgiveness_windows() -> void:
+	var hazards: HazardConfig = load(HAZARDS)
+	var climb: MovementConfig = load(CLIMB)
+	check(
+		hazards.geyser_swell_time > climb.jump_buffer_time + climb.coyote_time,
+		"the %.2f s swell outlasts the %.2f s of buffer and coyote time it has to be"
+		% [hazards.geyser_swell_time, climb.jump_buffer_time + climb.coyote_time]
+		+ " answered through"
+	)
+
+
+## A ride reads as being carried rather than as a jump. It is the difference
+## between a mechanism moving you and a mechanism playing the game for you, and
+## the tell is that a geyser is plainly slower than you can leave the ground on
+## your own.
+func test_a_jet_is_slower_than_the_hero_can_jump() -> void:
+	var hazards: HazardConfig = load(HAZARDS)
+	var climb: MovementConfig = load(CLIMB)
+	var takeoff := Motion.jump_speed_for(climb.jump_height, climb.time_to_apex)
+	check(
+		hazards.geyser_lift_speed < takeoff,
+		"a jet lifts at %.0f px/s against a %.0f px/s takeoff"
+		% [hazards.geyser_lift_speed, takeoff]
+	)

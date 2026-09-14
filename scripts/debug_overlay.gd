@@ -21,6 +21,7 @@ const BENCHES: PackedStringArray = [
 	"res://scenes/rooms/room_m3_spikes.tscn",
 	"res://scenes/rooms/room_m3_falling.tscn",
 	"res://scenes/rooms/room_m3_moving.tscn",
+	"res://scenes/rooms/room_m3_geysers.tscn",
 ]
 
 @onready var _panel: PanelContainer = $Panel
@@ -68,6 +69,27 @@ func _platforms_in_play() -> String:
 		if platform == null:
 			continue
 		var label := platform.status()
+		counts[label] = int(counts.get(label, 0)) + 1
+	var parts: PackedStringArray = []
+	for label in counts:
+		parts.append("%d %s" % [counts[label], label])
+	return ", ".join(parts)
+
+
+## What the geysers are doing. Same reason as the platforms: the whole content
+## of one is a clock, and a vent about to go and a vent that has just gone quiet
+## are the same picture. The one difference is that this clock is also the room's
+## way up, so "dormant" is the answer to "why can I not get out of here".
+func _geysers_in_play() -> String:
+	var geysers := get_tree().get_nodes_in_group("geysers")
+	if geysers.is_empty():
+		return "no geysers here"
+	var counts := {}
+	for node in geysers:
+		var geyser := node as Geyser
+		if geyser == null:
+			continue
+		var label := geyser.status()
 		counts[label] = int(counts.get(label, 0)) + 1
 	var parts: PackedStringArray = []
 	for label in counts:
@@ -140,6 +162,7 @@ func _process(_delta: float) -> void:
 		"last jump   %.0f px apex   %s" % [_player.peak_height, cleared],
 		"swords      %d held   %s" % [_player.swords_held, _swords_in_play()],
 		"platforms   %s" % _platforms_in_play(),
+		"geysers     %s" % _geysers_in_play(),
 		"checkpoint  %.0f, %.0f   %s" % [
 			_player.spawn_point.x, _player.spawn_point.y, _braziers_lit()
 		],

@@ -142,6 +142,30 @@ func _add_moving_platform(rect: Rect2, travel: Vector2) -> MovingPlatform:
 	return platform
 
 
+## A geyser filling the shaft `column`. Its bottom face is the surface the jet
+## comes out of and its top face is as high as the jet can carry anything.
+##
+## The room owns both, for the same reason it owns a ferry's span and a falling
+## slab's drop: how far a mechanism moves you is a fact about the place it was
+## put, and `Geyser` knows what it does rather than where it is.
+func _add_geyser(column: Rect2) -> Geyser:
+	if hazards == null:
+		# A bench copied without the resource would place a shaft with no clock in
+		# it, which is a way up that never comes and a room nobody can finish.
+		push_error("bench: a geyser needs config/hazards.tres wired into the scene")
+		return null
+	var geyser := Geyser.new()
+	geyser.configure(column.size, hazards)
+	geyser.position = column.get_center()
+	add_child(geyser)
+	# Behind the hero, like a brazier and for the same reason. A jet is the one
+	# mechanism in M3 that the hero is inside rather than on top of, and
+	# ART_DIRECTION.md makes silhouette a rule rather than a taste: drawn over the
+	# capsule, a column hides the thing the player is steering.
+	move_child(geyser, 0)
+	return geyser
+
+
 ## A brazier standing on the floor at `base`, which is a point on a surface and
 ## not a rectangle: a brazier has no extent you can collide with, only a place
 ## it stands and a zone that notices you went past.
