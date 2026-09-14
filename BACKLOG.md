@@ -183,6 +183,27 @@ committed to.
   comments on your deaths is either very good or very bad and there is no middle.
 - **Desktop builds signed and on itch.io**, beyond the web export in M16.
 
+## Bugs found while playing
+
+- **The ladder in `room_m2_gap` does not hold you at the top.** Matt climbed
+  it, and releasing the climb button near the top made the hero fall rather
+  than stop and hover at that height, the way `player.gd`'s `_step_climbing`
+  reads like it should (`velocity.y = climb_dir * config.climb_speed`, which
+  is zero with no input held).
+
+  Not diagnosed yet, flagged rather than guessed at. Two live suspects: the
+  ladder's `LADDER_OVERSHOOT` (28 px) climbs the probe above the ladder
+  `Area2D`'s own top edge if `up` is held past the usable height, silently
+  dropping `_ladders_touched` to zero and starting a fall that the player
+  only notices when they let go and the ascent stops masking it; or the near
+  floor in `room_m2_gap` ends at x 400 while the ladder sits at x 404-420, so
+  there is no solid ground under the ladder column at all and reaching the
+  top always requires stepping left onto the floor rather than just
+  releasing the button. Either is a real fix (cap the climb, or teach the
+  player they must step off sideways); telling them apart needs playing it
+  with the debug overlay's height reading on, not reading the physics code.
+  Out of scope for tonight, M3 is the active milestone, not M2.
+
 ## Tooling friction
 
 - **A session branch is invisible to a local pull until it is pushed.** Matt
