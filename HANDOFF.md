@@ -56,9 +56,10 @@ is M12's job, not a session's.
 **M4:** the generator is what is left, and it is blocked on M12 groundwork
 rather than on anything a session here can decide.
 
-**Level design notes:** Matt has ideas, being typed up. Once they arrive,
-write them into a notes doc (rooms and pacing per act), no in-engine
-building, per his own answer on keeping this inside the M10 gate.
+**Level design notes:** written up in `LEVELS.md`. The biggest of the ideas
+in it (a caged dragon rather than a caged bird, freed rather than fought, as
+the ending) touches something `CLAUDE.md` currently calls settled, so it is
+a question there rather than a decision made in this file.
 
 ## Blocked on Matt
 
@@ -73,7 +74,8 @@ building, per his own answer on keeping this inside the M10 gate.
    does the ledge-to-wood throw read as the intended route or as a trick you
    have to be told; is one rest period (2.6 s) enough to line up the whole
    embed-then-recall without feeling rushed.
-3. **Level ideas, whenever there is a minute**, for the notes doc above.
+3. **The six open questions in `LEVELS.md`**, the ending swap chief among
+   them.
 
 ## Traps that will bite again
 
@@ -112,5 +114,6 @@ on respawn for the same fairness reason.
 `SPEC.md` what the game is · `BUILD_PLAN.md` what to build next ·
 `ART_DIRECTION.md` how it looks · `ANIMATION.md` what moves ·
 `ART.md` and `GEMINI_NOTES.md` before any art · `CLAUDE.md` how to work here ·
-`README.md` running it · `BACKLOG.md` raised and not judged · `assets/reference/`
-the original.
+`README.md` running it · `BACKLOG.md` raised and not judged ·
+`LEVELS.md` Matt's expanded level vision, not yet decided ·
+`assets/reference/` the original.
