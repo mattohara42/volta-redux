@@ -182,3 +182,16 @@ committed to.
 - **Volta's dialogue.** The original had none worth keeping. A wizard who
   comments on your deaths is either very good or very bad and there is no middle.
 - **Desktop builds signed and on itch.io**, beyond the web export in M16.
+
+## Tooling friction
+
+- **A session branch is invisible to a local pull until it is pushed.** Matt
+  hit `couldn't find remote ref` because the branch existed only in the
+  session sandbox. Fix going forward is pushing as soon as a session branch
+  has commits rather than waiting until the session is done.
+- **Godot auto-writes a `.uid` sidecar the moment it opens a script that
+  lacks one.** If the editor runs locally before a branch that already
+  tracks `.uid` files for those same paths is pulled, `git checkout` refuses
+  to overwrite the untracked duplicates. Fetching and pulling before opening
+  the editor each session avoids it. Worth a `tools/dev.sh` step to clear the
+  duplicates automatically only if this recurs; one instance isn't a pattern.
