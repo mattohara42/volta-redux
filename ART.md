@@ -129,6 +129,18 @@ him into `assets/art_raw/`, one file per generation, untouched. Pipeline output
 never meant to ship, stays under `assets/art_raw/_experiments/` and is never
 promoted into `assets/art/`.
 
+**The background and the tileset carry different jobs, and only one of them
+is the player's path.** Found the hard way on M5's background: `SPEC.md`
+rooms scroll, "a room you move through, not a screen you memorise," so a
+background that paints one specific, unrepeatable view (a torch here, a
+bridge there) has nothing to its left or right for the camera to pan into.
+**The background is atmosphere only, designed to repeat.** The floor, the
+ledge, the causeway, whatever the hero actually stands on, is tileset
+geometry, placed as real Godot tiles with collision wherever a room needs
+one, independent of what the background painting shows underneath it. A
+background prompt should never describe a piece of walkable geometry; that
+question belongs to the tileset and to room design (M10).
+
 ### M5's room: the moat and the outer wall
 
 `SPEC.md`'s Act 1 is still "the moat and the outer wall" as of this writing.
@@ -176,31 +188,44 @@ not, and anchor the wall and the waterline to the canvas edges rather than to
 a fraction of the frame. `background-stream-far.png` in that repo is the
 worked example this borrows from almost verbatim.
 
-**Attempt 2, current:**
+**Attempt 2, rejected.** The camera framing landed: a flat plane, no more
+three-quarter corner. Measured clean against `ART_DIRECTION.md`'s
+neutral-dark rule too (`palette-check.py`, 0.01% of opaque pixels). But
+Matt's question cut deeper than the picture: "how is the player going to
+move across the scene?" The prompt had painted a specific causeway crossing
+the moat and a specific torch bracket, a single fixed view of one spot, with
+nothing either side of it for a scrolling camera to pan into. That is the
+mistake the new subsection above names: the background had taken on a job
+that belongs to the tileset. A crenellated top edge with sky showing above
+it, contradicting "rising out of frame," was a second, smaller miss in the
+same delivery.
 
-> [preamble] A wide painted background for a side-scrolling platformer: the
-> base of a castle's outer wall, as seen standing on the near bank of the
-> moat looking straight at the wall. This is a flat side view like a stage
-> backdrop, camera perpendicular to the wall, with no vanishing point. It is
-> NOT a three-quarter view, NOT a corner or turret where two wall faces meet
-> at an angle, and NOT seen from above. The wall is a single unbroken run of
-> flat stonework spanning the full width of the canvas edge to edge, rising
-> out of frame at the top. The moat's water occupies a band along the bottom
-> of the canvas; the water's edge is a straight horizontal line running the
-> full width of the canvas, not a diagonal band and not a curve. A stone
-> causeway crosses the moat, entering the frame at the bottom-left corner and
-> running toward the wall. Two or three narrow arrow-slit windows are set
-> into the wall at the same height, evenly spaced along its width, each lit
-> faintly from within by warm firelight. One iron torch bracket is mounted on
-> the wall near where the causeway meets it, lit. No characters, no
-> creatures, no foreground platform geometry, and no second building or
-> gatehouse visible behind this wall: a single background layer only, painted
-> with atmospheric depth, coldest and least detailed at the canvas's left and
-> right edges, warmest and most detailed nearest the lit torch bracket. Cold
-> stone areas are blue-violet grey, damp and slightly green near the water,
-> drier and more purple higher up the wall. Firelight is amber going to a
-> honey-cream at its hottest point, never to white. The image is 2560 by 1440
-> pixels, aspect ratio 16:9.
+**Attempt 3, current.** Drops the causeway and the torch (both become
+tileset or level-design decisions, not atmosphere), and asks for the same
+wall bay to repeat three times across the canvas so the strip already reads
+as a continuous run rather than one place, which is also what removes the
+single-vignette framing that invited a corner view in attempt 1:
+
+> [preamble] A wide painted background for a side-scrolling platformer: a
+> long horizontal strip of a castle's outer wall, in flat side view like a
+> stage backdrop, camera perpendicular to the wall, with no vanishing point.
+> It is NOT a three-quarter view and NOT seen from above. The same bay of
+> masonry repeats three times across the width of the canvas: a stretch of
+> plain wall-face, then a narrow arrow-slit window lit faintly from within by
+> warm firelight, then plain wall-face again, evenly spaced, so the whole
+> strip reads as a continuous run of wall rather than one unique view of one
+> spot. The wall spans the full width of the canvas and rises out of frame at
+> the top: no crenellations, no visible roofline, no sky anywhere in the
+> frame. A band along the very bottom of the canvas is the moat's water, its
+> edge a straight horizontal line running the full width of the canvas, not
+> a diagonal band and not a curve. No characters, no creatures, no causeway,
+> no bridge, no torch bracket, no foreground platform geometry, no second
+> building or gatehouse: this is pure atmosphere meant to repeat, not a
+> picture of one specific place. Cold stone areas are blue-violet grey, damp
+> and slightly green near the water, drier and more purple higher up the
+> wall. Firelight in the windows is amber going to a honey-cream at its
+> hottest point, never to white. The image is 2560 by 1440 pixels, aspect
+> ratio 16:9.
 
 **2. Tileset**, `assets/art_raw/act1_wall_tileset.png`:
 
@@ -266,7 +291,7 @@ worked example this borrows from almost verbatim.
 > colour beyond the wood itself. The image is 2048 by 1365 pixels, aspect
 > ratio 3:2.
 
-**Status:** background on attempt 2, prompts 2 to 5 not yet sent. Reading
+**Status:** background on attempt 3, prompts 2 to 5 not yet sent. Reading
 `hook-line-and-sentence` (read access, not attached, cloned locally to check
 against) confirmed the fix above and turned up no other reusable technique
 this project's `GEMINI_NOTES.md` didn't already carry. Prompts 2 to 5 are all
