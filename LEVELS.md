@@ -37,6 +37,13 @@ replays well; a sequence you memorise does not." What follows is what that
 buys, concretely, without touching the one ruleset non-goal (`SPEC.md`: "no
 difficulty modes").
 
+**Named directly, the original's two failures**: it was short, and once you
+beat it there was no reason to go back. The goal is not just to fix the
+first one with bigger rooms; a longer game nobody replays is still short in
+the way that matters. Everything below is aimed at the second failure, and
+at depth, wanting the game to reward getting good at it rather than only
+being gotten through.
+
 - **Optional risk, not optional difficulty.** A harder path through a room
   that skips the safe solution, worth a secret or a faster route, sitting
   next to the one the room asks everyone to solve. This is how Celeste and
@@ -46,15 +53,40 @@ difficulty modes").
   keeps three gems in the final room as the critical path; nothing stops a
   handful of extra ones tucked behind an out-of-the-way embed-and-jump
   chain, found by mastery rather than by the story requiring them.
+- **Level select, with every cleared room replayable on its own.** The
+  cheapest possible enabler of "a lot of replayability": once a room is
+  beaten it stays available from a menu, no walk back through the act to
+  reach it. M16 territory (menus and saves), not a new gameplay system,
+  and it turns every room already built into standalone replay content for
+  free the moment it exists.
+- **A rating, in place of the original's score.** `assets/reference/`'s own
+  screenshots show a literal arcade score in the corner. Bringing that back
+  as a number would sit strangely next to no health and no lives, but a
+  per-room rating built from `Player.deaths` and `last_downtime` (already
+  tracked for M3) at the exit is the same idea, aimed at a game that
+  respawns instantly rather than one that spends lives. Exact shape not
+  decided: a number, a letter grade, or just the two figures shown plainly.
 - **The death count and the clock are already tracked.** `Player.deaths`
   and `last_downtime` exist for M3's own done-when, and `BACKLOG.md`
   already has "a speedrun timer and ghost... fits the game's shape well,"
   filed as post-ship. Worth asking whether "a lot of replayability" moves
   that up, or whether it stays exactly where it is. Not deciding here.
+- **Don't patch out emergent technique.** Celeste and Super Meat Boy both
+  got real replay depth from things nobody explicitly designed (wavedashing,
+  corner-boosts), kept once players found them rather than fixed as bugs.
+  Worth writing down as a stance before M14's tuning pass: if something
+  skill-expressive falls out of coyote time, the catch radius and air
+  control together, the first question is whether it is fun to have found,
+  not whether it was intended.
 - **New Game+ is the one idea in this list that pushes on "one ruleset."**
   Carrying five swords or harder enemy placement into a second playthrough
   is not a difficulty *option* a player picks before starting, but it
   rhymes with one closely enough to be worth naming rather than assuming.
+  A lighter alternative that does not push on it at all: one or two early
+  rooms get an authored, harder "remix" (the armour-flipped enemy variant,
+  tighter timing) that unlocks after the credits, which is more authored
+  content rather than a second playthrough, and stays inside the
+  procedural-generation non-goal the same way the rest of the game does.
   Flagged, not recommended either way.
 
 ## The forest
