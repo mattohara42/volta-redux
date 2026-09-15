@@ -369,6 +369,44 @@ rather than anything about how it was sent) and `assets/art/hero/
 lothar_idle.png` (keyed, decontamination verified clean at the cut edge
 by hand).
 
+**`tools/cut-rig.py` is built**, against this real painting, and it is a
+different shape of tool from `cut-sheet.py`. A sheet has a backdrop between
+every module for connected-components to find; a character painting is one
+continuous shape with no seam between an arm and a torso, so a part is a
+named rectangle read off the painting by eye, not detected. Five parts cut
+clean: `head`, `torso`, `arm_near`, `leg_near`, `leg_far` (`assets/art/hero/
+rig/`), matching `ANIMATION.md`'s own rig granularity for a run cycle,
+"hips, two legs, two arms, head", minus the far arm, which this true
+profile hides entirely.
+
+**The sword is not one of the rig parts, on purpose.** `CLAUDE.md`: "the
+sword is one scene and one script." The blade in this painting was there so
+the hand would come back actually gripping something (`GEMINI_NOTES.md`:
+"a hand gripping nothing will not come back gripping... give it the object,
+then cut"), not to be a reusable sword asset. That mattered for the box
+shapes too: the blade crosses diagonally in front of the legs, so any
+rectangle wide enough to hold the grip *and* the tip also swept in both
+boots, since a crop is axis-aligned and can't tell a blade pixel from a
+boot pixel sitting in the same rectangle. Stopping `arm_near`'s box at the
+fist and never trying to hold the blade in any box sidesteps the problem
+entirely. One tiny cosmetic miss survives it anyway: a sub-20px sliver of
+blade edge in the top corner of `leg_far`, left rather than chased further
+in a first-pass spike.
+
+**Boxes are allowed to overlap where two parts meet**, deliberately: the
+torso's box and the arm's box both contain some of the same shoulder
+pixels, and that's fine, because a keyed crop's untouched area is
+transparent, not blank. Draw the parts back to front in Godot in the order
+they're layered in the source painting, torso, then legs, then the arm on
+top, and the overlap is invisible: only the topmost part's pixels show
+where two boxes cover the same spot.
+
+**Actually assembling these into a `Skeleton2D` scene, placing `Bone2D`
+pivots and parenting each sprite, is still the manual step `ART.md` always
+said it would be.** This tool gets to "the rig parts exist, offset-preserved
+and ready," not to "the hero is rigged in Godot." That is M6's `BUILD_PLAN.md`
+line, or a follow-up here if M5 wants to prove the whole chain end to end.
+
 **4. The bat**, `assets/art_raw/enemy_bat.png`:
 
 > [preamble] A single creature painting of a large cave bat for a
@@ -406,11 +444,15 @@ carry, and that same fix, restated for a character rather than a scene, is
 what landed the hero. `tools/key.py` and `tools/palette-check.py` are built
 and proven against three real deliveries now, not just synthetic ones;
 `key.py`'s decontamination got a real fix along the way (see the tileset
-write-up above). `tools/cut-sheet.py` is built and proven against the real
-tileset sheet. `tools/cut-rig.py` and `tools/pose-sheet.py` are still not
-built: the hero delivery is what will tell us `cut-rig.py`'s real shape,
-next up once Matt's ready. Porting from `hook-line-and-sentence` needs that
-repo attached to this session with push access, which this session's own
-permissions denied; Matt can grant it directly if porting is worth doing,
-though the tools built fresh so far have
+write-up above). `tools/cut-sheet.py` and `tools/cut-rig.py` are both built
+and proven, against the real tileset sheet and the real hero painting
+respectively. The hero's rig parts exist (`assets/art/hero/rig/`), but
+turning them into an actual `Skeleton2D` scene in Godot, `ART.md`'s own
+manual step, has not happened yet: M5's "one rigged hero" isn't there until
+that does, whether as part of this milestone or M6's. `tools/pose-sheet.py`
+is still not built: the pose-sheet test delivery is what will tell us its
+real shape. Porting from `hook-line-and-sentence` needs that repo attached
+to this session with push access, which this session's own permissions
+denied; Matt can grant it directly if porting is worth doing, though the
+tools built fresh so far have
 each worked first try against a real delivery.

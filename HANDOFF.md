@@ -10,32 +10,37 @@ is M12's. See git log for the reasoning if it needs re-reading.
 
 ## Where this is
 
-**M5's background, tileset and hero have all landed.** Background on its
-third attempt (`assets/art/act1/wall_moat_bg.png`); tileset first attempt,
-with a bonus, 8 modules instead of 5 (`assets/art/act1/tiles/`); hero on its
-second (`assets/art/hero/lothar_idle.png`, raw at `assets/art_raw/
-Lothar1.jpeg`, Matt's own filename, uploaded straight to the branch after
-this session's own file-attachment path failed twice). Four real lessons
-paid for and folded into `ART.md`/`GEMINI_NOTES.md`: a scene (or a
-character) has a strong compositional prior a hedged instruction barely
-moves, state the framing positively and rule out the default by name
-instead; the background is atmosphere only, designed to repeat, the tileset
-carries whatever the hero actually stands on; `key.py`'s despill was too
-weak, a real magenta halo survived a 3px partial pull when the true
-contamination band ran 6 to 7px, fixed with a nearest-clean-neighbour fill;
-and the hero's first attempt read three-quarter rather than a true side
-view, which `ANIMATION.md` says matters for real: a cutout rig needs flat
-parts seen edge-on, not foreshortened ones.
+**M5's background, tileset and hero have all landed**, and the hero is now
+cut into rig parts too (`assets/art/hero/rig/`: `head`, `torso`, `arm_near`,
+`leg_near`, `leg_far`, matching `ANIMATION.md`'s own "hips, two legs, two
+arms, head", minus the far arm this true profile hides entirely). The sword
+in the painting was deliberately not cut as a rig part: `CLAUDE.md` says the
+sword is its own scene, and the blade was only there so the hand would come
+back gripping something. Five lessons paid for and folded into `ART.md`/
+`GEMINI_NOTES.md` along the way, the compositional-prior fix (state framing
+positively, rule out the default by name) landing twice, once for a scene
+and once for a character; `key.py`'s despill needed a real fix, a 3px pull
+was not enough against a real 6-7px contamination band; and a character
+painting has no backdrop between its parts for a script to find, so
+`cut-rig.py`'s boxes are read off the source by eye, sized to avoid an
+axis-aligned rectangle sweeping in a distant, unrelated part (the sword's
+diagonal blade very nearly pulled both boots into the arm's crop).
+
+**M5's done-when isn't fully met yet.** `BUILD_PLAN.md` wants "one rigged
+hero," and what exists is the rig's *parts*, offset-preserved and ready.
+Assembling them into an actual `Skeleton2D` scene in Godot, placing `Bone2D`
+pivots and parenting each sprite, is still open: always the manual step
+`ART.md` said it would be, not something `cut-rig.py` was ever meant to do.
 
 **6 generations spent, 3 of 5 M5 assets landed.** Past `ART.md`'s own
-budget-rule ceiling of 5 for the whole room now, not treated as a hard stop
-since every miss bought a real lesson, but worth naming plainly. Bat and the
+budget-rule ceiling of 5 for the whole room now, not a hard stop since every
+miss bought a real lesson, but worth naming plainly. Bat and the
 pose-sheet test remain.
 
-**`tools/key.py`, `tools/palette-check.py` and `tools/cut-sheet.py`** are
-built and proven against real deliveries now. `tools/cut-rig.py` and
-`tools/pose-sheet.py` are still not built: the hero delivery is in hand and
-is what will tell us `cut-rig.py`'s real shape, next up.
+**`tools/key.py`, `tools/palette-check.py`, `tools/cut-sheet.py` and
+`tools/cut-rig.py`** are all built and proven against real deliveries now.
+`tools/pose-sheet.py` is still not built: the pose-sheet test delivery is
+what will tell us its real shape.
 
 **Porting from `hook-line-and-sentence`** needs that repo attached with push
 access; this session's own permissions denied attaching it, though reading
@@ -45,10 +50,11 @@ first try against a real delivery.
 
 ## The next action
 
-**`tools/cut-rig.py`**, against the hero delivery now in hand. Then the bat
-and the pose-sheet test prompts, mindful of the generation count above.
-M5's done-when (`BUILD_PLAN.md`): the room is in the game at final quality,
-and `ART.md` carries the real generation count.
+**Either the `Skeleton2D` assembly in Godot** (turning the rig parts now in
+hand into something that actually runs), **or the bat and pose-sheet test
+prompts**, mindful of the generation count above. Matt's call which comes
+first. M5's done-when (`BUILD_PLAN.md`): the room is in the game at final
+quality, and `ART.md` carries the real generation count.
 
 ## Blocked on Matt
 
@@ -62,7 +68,7 @@ and `ART.md` carries the real generation count.
    a catch on purpose feels discoverable, the dormant scorpion's
    wake-to-danger gap.
 3. **Whether to keep spending generations at this rate**, per the flag above.
-4. **The remaining two Gemini generations**, whenever he's ready.
+4. **Skeleton2D assembly vs. the remaining two prompts**, which comes first.
 5. **Whether to attach `hook-line-and-sentence` with push access** for the
    tool ports `ART.md` names, or let this project's versions stand as written.
 
@@ -95,6 +101,12 @@ instruction will not reliably move it.
 glance.** Measured 6 to 7px on a real delivery. A despill radius has to be
 generous (`key.py` defaults to 10px now) or verified against real pixels,
 not assumed from how clean the edge looks zoomed out.
+
+**A held prop crossing the body can drag an unrelated part into a rig
+box.** A diagonal sword reaching from the hand to past the far boot means
+no axis-aligned rectangle can hold the whole blade without also holding
+whatever else sits in that rectangle. Keep a part's box to just that part;
+don't fold a crossing prop into it.
 
 ## Settled, do not relitigate
 
