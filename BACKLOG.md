@@ -15,9 +15,32 @@ committed to.
   together. Both are real design space and both would dilute a single clean verb
   before that verb has proved itself.
 - **A speedrun timer and ghost.** Fits the game's shape well. Post-ship.
+  **Already possible without changing how anything moves**: the only random
+  call in `scripts/` is the death-message pick in `player.gd`, and every
+  enemy and mechanism is a deterministic clock keyed off elapsed time, per
+  `CLAUDE.md`'s own rule that this lives in `scripts/logic/` as pure
+  functions. A 100% run has a provably perfect time to chase the day this
+  gets built, nothing to fix first.
+- **"Punishing Mode": unlocked by beating the game once, harder enemies and
+  a harsher death.** Matt's idea, from the M3 playtest. v1 ships with what
+  M3 tested tonight and nothing else: checkpoint braziers, near-instant
+  respawn, judged "not tedious." This is a separate, later mode: restart
+  the level on death rather than the last brazier (room or act, still
+  undecided, whichever it is decides how long a clean run has to be),
+  meaner enemies, and the hard-to-find extra-chance mechanic from the same
+  conversation lives here, in its late levels, not in the base game. Same
+  shelf as the forgiving mode above: built after the base game is tuned,
+  not before, for the same reason.
 
 ## Ideas not yet judged
 
+- **Matt is not in love with checkpoint braziers**, from the same M3
+  conversation, even though tonight's playtest called the current loop "not
+  tedious." His own caveat: a brazier system wants a level big and complex
+  enough to need mid-level checkpoints at all, and the M3 benches are short
+  grey boxes built to be died in twenty times, not real rooms. Watch this
+  once actual Act 1 rooms exist rather than judging it off a bench built for
+  a different question.
 - **Ricochet off metal surfaces**, for angle puzzles. Listed in `SPEC.md` as one
   of the sword's five behaviours but cut down to four for v1. Add it only if Act
   3 turns out thin.
