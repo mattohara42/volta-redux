@@ -92,6 +92,29 @@ inversion clause a colour to work with as well as a shape. **Rejecting a good
 generation costs exactly as much as accepting a bad one and is much harder to
 notice afterwards.**
 
+## A scene has a compositional prior; a subject on a flat field does not
+
+Paid for on M5's first background. Asked for a castle wall rising from a
+moat "seen from outside at ground level," the wall's stonework "filling the
+right two-thirds of the frame," what came back was a well-painted but
+dramatic three-quarter view of a castle corner, two turrets receding into
+depth, a second gatehouse behind them. Right palette, right mood, unusable
+for a side scroller: nothing in it reads as a flat plane a camera can pan
+along. This is `hook-line-and-sentence`'s finding again, sharper: **a scene
+has a strong compositional prior, and hedged fractions of the frame barely
+move it.** A subject alone on a flat backdrop has nothing for the prior to
+push against; the moment there is a scene to compose, expect the prior to
+win unless the camera angle is pinned down explicitly.
+
+**What fixed it:** state the framing positively as a concrete, seeable
+thing, then name what it is not. "A flat side view like a stage backdrop,
+camera perpendicular to the wall, with no vanishing point. NOT a
+three-quarter view, NOT a corner where two faces meet at an angle." Anchor
+the horizon or waterline to the canvas edges ("the water's edge is a
+straight horizontal line running the full width of the canvas, not a
+diagonal band"), not to a fraction of the frame. `ART.md`'s background
+prompt, attempt 2, is the worked example.
+
 ## Editing an attached painting
 
 Attach the painting, name the one thing that changes, and the return is a
