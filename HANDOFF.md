@@ -10,41 +10,45 @@ is M12's. See git log for the reasoning if it needs re-reading.
 
 ## Where this is
 
-**M5's background and tileset have both landed.** Background on its third
-attempt (`assets/art/act1/wall_moat_bg.png`); tileset first attempt, with a
-bonus, 8 modules instead of the 5 asked for (`assets/art/act1/tiles/
-wall_tile_1.png` through `_8.png`). Three real lessons paid for on the way,
-all folded into `ART.md`/`GEMINI_NOTES.md`: a scene has a strong
-compositional prior a hedged fraction barely moves, state the camera framing
-positively instead; the background is atmosphere only, designed to repeat,
-the tileset carries whatever the hero actually stands on; and `key.py`'s
-despill was too weak, a real magenta halo survived a 3px partial pull when
-the true contamination band ran 6 to 7px. Fixed with a nearest-clean-neighbour
-fill instead of a partial pull, verified against both the synthetic test and
-the real delivery.
+**M5's background, tileset and hero have all landed.** Background on its
+third attempt (`assets/art/act1/wall_moat_bg.png`); tileset first attempt,
+with a bonus, 8 modules instead of 5 (`assets/art/act1/tiles/`); hero on its
+second (`assets/art/hero/lothar_idle.png`, raw at `assets/art_raw/
+Lothar1.jpeg`, Matt's own filename, uploaded straight to the branch after
+this session's own file-attachment path failed twice). Four real lessons
+paid for and folded into `ART.md`/`GEMINI_NOTES.md`: a scene (or a
+character) has a strong compositional prior a hedged instruction barely
+moves, state the framing positively and rule out the default by name
+instead; the background is atmosphere only, designed to repeat, the tileset
+carries whatever the hero actually stands on; `key.py`'s despill was too
+weak, a real magenta halo survived a 3px partial pull when the true
+contamination band ran 6 to 7px, fixed with a nearest-clean-neighbour fill;
+and the hero's first attempt read three-quarter rather than a true side
+view, which `ANIMATION.md` says matters for real: a cutout rig needs flat
+parts seen edge-on, not foreshortened ones.
 
-**4 generations spent, 2 of 5 M5 assets landed.** `ART.md`'s own budget rule
-flags more than 5 for the whole room; hero, bat and the pose-sheet test
-remain. Still open, not a hard stop, Matt's call each time.
+**6 generations spent, 3 of 5 M5 assets landed.** Past `ART.md`'s own
+budget-rule ceiling of 5 for the whole room now, not treated as a hard stop
+since every miss bought a real lesson, but worth naming plainly. Bat and the
+pose-sheet test remain.
 
 **`tools/key.py`, `tools/palette-check.py` and `tools/cut-sheet.py`** are
 built and proven against real deliveries now. `tools/cut-rig.py` and
-`tools/pose-sheet.py` are still not built: the hero and pose-sheet
-deliveries will be what tells us their real shape.
+`tools/pose-sheet.py` are still not built: the hero delivery is in hand and
+is what will tell us `cut-rig.py`'s real shape, next up.
 
 **Porting from `hook-line-and-sentence`** needs that repo attached with push
 access; this session's own permissions denied attaching it, though reading
 it (public, unattached) was allowed and is what found the compositional
-prior fix. Not blocking: every tool built fresh so far has worked first try
-against a real delivery.
+prior fix, twice. Not blocking: every tool built fresh so far has worked
+first try against a real delivery.
 
 ## The next action
 
-**The hero prompt**, whenever Matt's ready, mindful of the generation count
-above. `assets/art_raw/hero_lothar_idle.png` is the target; `tools/
-cut-rig.py` doesn't exist yet and this delivery is what will tell us its
-real shape. M5's done-when (`BUILD_PLAN.md`): the room is in the game at
-final quality, and `ART.md` carries the real generation count.
+**`tools/cut-rig.py`**, against the hero delivery now in hand. Then the bat
+and the pose-sheet test prompts, mindful of the generation count above.
+M5's done-when (`BUILD_PLAN.md`): the room is in the game at final quality,
+and `ART.md` carries the real generation count.
 
 ## Blocked on Matt
 
@@ -58,7 +62,7 @@ final quality, and `ART.md` carries the real generation count.
    a catch on purpose feels discoverable, the dormant scorpion's
    wake-to-danger gap.
 3. **Whether to keep spending generations at this rate**, per the flag above.
-4. **The remaining three Gemini generations**, whenever he's ready.
+4. **The remaining two Gemini generations**, whenever he's ready.
 5. **Whether to attach `hook-line-and-sentence` with push access** for the
    tool ports `ART.md` names, or let this project's versions stand as written.
 
@@ -82,10 +86,10 @@ unmoving target converges to zero offset and stops there, no overshoot, no
 position to keep changing during the return, not just their height.
 `room_m4_plate.gd`'s comment has a sequence that reliably produces a miss.
 
-**A scene has a compositional prior; a subject on a flat field does not.**
-Full details in `GEMINI_NOTES.md`. State camera framing positively and
-explicitly for any full-scene painting; a hedged fraction of the frame will
-not reliably move it.
+**A scene, or a character, has a compositional prior; a subject on a flat
+field does not.** Full details in `GEMINI_NOTES.md`. State framing
+positively and explicitly, then rule out the default by name; a hedged
+instruction will not reliably move it.
 
 **A cut edge's backdrop contamination runs wider than it looks at a
 glance.** Measured 6 to 7px on a real delivery. A despill radius has to be
