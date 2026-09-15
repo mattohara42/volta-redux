@@ -3,50 +3,57 @@
 > **Rewrite this file, never append.** State snapshot and pointers only. No
 > session narrative, that is what `git log` is for. Keep it under 80 lines.
 
-**Updated:** 2026-09-15 · **Phase:** 1 closing, 2 opening · **Active
-milestone:** M5
+**Updated:** 2026-09-15 · **Phase:** 2, the look · **Active milestone:** M5
 
-**M4 is closed** on Matt's word. Its done-when is rescoped in `BUILD_PLAN.md`:
-five of the six enemies, not six. The generator, the sixth, is Act 3's boss
-and needs the sword's unbuilt `conduct` state and the conductivity vocabulary
-that don't exist until M12; it was never M4's to build, and the old done-when
-conflated "grey-box the verb against a hazard" with "build a mechanic that
-doesn't exist yet." It ships with M12.
+**M4 is closed**, rescoped to five enemies in `BUILD_PLAN.md`; the generator
+is M12's. See git log for the reasoning if it needs re-reading.
 
 ## Where this is
 
-**M4, as closed:** bat, scorpion, giant ant, floating eyeball, dragon, each
-proven in a running build. `scripts/enemy.gd` is the shared base (extends
-`Hazard`: touching one kills you). `room_m4_enemies.tscn` holds the first
-four; `room_m4_dragon.tscn` is the boss arena, beaten only by recalling the
-sword through the body. `FloorPlate` and dormant-until-approached enemies are
-both built and proven (`room_m4_plate.tscn`, `room_m4_dormant.tscn`).
+**M5 has five prompts written and logged in `ART.md`**, not yet sent: a
+background and a tileset for Act 1's moat and outer wall (`SPEC.md`'s
+description, still the settled one), the hero (Lothar, per `SPEC.md`: "M5
+paints him"), the bat as M5's one enemy, and a throwaway pose-sheet
+consistency test per `GEMINI_NOTES.md`'s open question. Each prompt is a
+self-contained block in `ART.md` → *Open requests*, ready to paste into the
+Gemini UI.
 
-**`LEVELS.md` is several rounds deep**, Matt's expanded level vision, sorted
-into what reuses existing mechanics, what is new scope, what conflicts with
-something settled. It carries its own open-questions list; this file does not
-duplicate it.
+**`tools/key.py` and `tools/palette-check.py` are built and smoke-tested**
+against synthetic images (a magenta-backdrop test subject with a soft edge,
+and a planted neutral-grey patch), not yet against a real delivery.
+`tools/cut-sheet.py`, `tools/cut-rig.py` and `tools/pose-sheet.py` are not
+built: their shape depends on what a real sheet looks like, so building them
+against a guess risks getting it wrong twice.
+
+**Porting from `hook-line-and-sentence`** (the source `ART.md` names for
+these tools) needs that repo attached to this session; this session's own
+permissions denied attaching it. Not blocking: the pipeline works without the
+port, and the port is a nice-to-have Matt can unblock directly if he wants it
+before a real delivery forces the question anyway.
 
 ## The next action
 
-**M5: the art spike, one room end to end.** Done-when (`BUILD_PLAN.md`): that
-room is in the game at final quality, and `ART.md` carries the real number of
-generations it took. Not started. `GEMINI_NOTES.md` is required reading
-before the first art prompt; `ART_DIRECTION.md` governs every visual choice
-made along the way.
+**Matt runs the five prompts in the Gemini UI**, saves each delivery to the
+path named in `ART.md`, and the session picks up from there: key each
+delivery, run `palette-check.py`, cut the tileset and the bat out of their
+sheets, and write up what came back against what was asked, per `ART.md`'s
+own record-keeping convention. M5's done-when (`BUILD_PLAN.md`): the room is
+in the game at final quality, and `ART.md` carries the real generation count.
 
 ## Blocked on Matt
 
 1. **The open questions in `LEVELS.md`**, the ending swap (caged dragon vs.
    caged bird) chief among them, touching a decision `CLAUDE.md` currently
-   marks "do not relitigate."
+   marks "do not relitigate." Includes whether a forest sits before or
+   replaces Act 1, which is why M5 painted to `SPEC.md`'s still-settled
+   description rather than waiting on that question.
 2. **M4 playtest feedback, not blocking, reopen if it bothers him:** the
-   dragon's one-rest-period pacing, whether the ledge-to-wood throw reads as
-   the intended route, whether missing a catch on purpose feels discoverable
-   or feels like a trick, whether the dormant scorpion's wake-to-danger gap is
-   fair.
-3. **M5 itself**: which room, which enemy, is the one to spend the pipeline
-   run on.
+   dragon's one-rest-period pacing, the ledge-to-wood throw, whether missing
+   a catch on purpose feels discoverable, the dormant scorpion's
+   wake-to-danger gap.
+3. **The five Gemini generations above**, the actual next step.
+4. **Whether to attach `hook-line-and-sentence`** for the tool ports `ART.md`
+   names, or let this project's versions stand as written fresh.
 
 ## Traps that will bite again
 
@@ -73,8 +80,7 @@ position to keep changing during the return, not just their height.
 **M4:** contact with any enemy kills the hero, unconditionally. A killed
 enemy is `queue_free`d, not left as a corpse, and does not return on respawn.
 The dragon is immune to FLYING and RETURNING, vulnerable only to RECALLING,
-one hit, no health bar; its breath is a `DragonBreath` clock, the same shape
-as `GeyserCycle`. **The generator is M12's**, not M4's.
+one hit, no health bar. **The generator is M12's**, not M4's.
 
 **The gates:** no art before M5, no level building before M10, G1 after M5.
 `BUILD_PLAN.md` carries the reasoning, unchanged.
