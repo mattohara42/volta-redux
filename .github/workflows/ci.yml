@@ -461,6 +461,53 @@ jobs:
             exit 1; }
           echo "the dragon is dead and the sword came home"
 
+      # The floor plate: BACKLOG.md's floor-switch idea, finally buildable now
+      # that M4 has enemies to weigh one down. An overview first, the way
+      # every bench gets one.
+      - name: Screenshot the floor plate bench
+        run: |
+          xvfb-run -a ~/godot/godot --path . --resolution 1280x720 \
+            --script res://tools/capture.gd -- \
+            --scene=res://scenes/rooms/room_m4_plate.tscn --out=room_m4_plate.png \
+            --input="-:5" --zoom=1.0 --centre=250,260 --overwrite
+
+      # The honest case: the hero's own weight opens the gate.
+      - name: Stand on the plate and open the gate
+        run: |
+          xvfb-run -a ~/godot/godot --path . --resolution 1280x720 \
+            --script res://tools/capture.gd -- \
+            --scene=res://scenes/rooms/room_m4_plate.tscn \
+            --out=room_m4_plate_open.png \
+            --input="move_right:65;-:10" --zoom=1.0 --centre=250,260 --overwrite \
+            > plate_open.log 2>&1 || { cat plate_open.log; exit 1; }
+          cat plate_open.log
+          grep -q "plate at .* HELD" plate_open.log || {
+            echo "standing on the plate should have held it down"; exit 1; }
+          grep -q "gate at .* OPEN" plate_open.log || {
+            echo "the gate should have opened with the plate held"; exit 1; }
+
+      # The puzzle BACKLOG.md actually wanted: miss the catch on purpose (a
+      # ladder breaks the flat return, per SwordFlight's own "you miss by
+      # changing height" rule), leaving the sword grounded on the plate so
+      # the gate stays open with nobody standing on it.
+      - name: Leave a sword on the plate and walk away
+        run: |
+          xvfb-run -a ~/godot/godot --path . --resolution 1280x720 \
+            --script res://tools/capture.gd -- \
+            --scene=res://scenes/rooms/room_m4_plate.tscn \
+            --out=room_m4_plate_sword.png \
+            --input="move_right:65;move_left:2;-:5;throw:6;-:5;climb_up:80;climb_up,move_right:20;climb_up,move_left:20;-:30" \
+            --zoom=1.0 --centre=250,260 --overwrite \
+            > plate_sword.log 2>&1 || { cat plate_sword.log; exit 1; }
+          cat plate_sword.log
+          grep -q "sword grounded" plate_sword.log || {
+            echo "the missed throw should have landed grounded, not caught or destroyed"; exit 1; }
+          grep -q "plate at .* HELD" plate_sword.log || {
+            echo "the grounded sword should have held the plate down"; exit 1; }
+          grep -q "gate at .* OPEN" plate_sword.log || {
+            echo "the gate should be open with the sword weighing the plate"; exit 1; }
+          echo "the sword is holding the gate open with nobody standing on the plate"
+
       - name: Keep the screenshots
         uses: actions/upload-artifact@v4
         with:
@@ -489,3 +536,6 @@ jobs:
             room_m4_dragon_bounce.png
             room_m4_dragon_breath.png
             room_m4_dragon_recall.png
+            room_m4_plate.png
+            room_m4_plate_open.png
+            room_m4_plate_sword.png

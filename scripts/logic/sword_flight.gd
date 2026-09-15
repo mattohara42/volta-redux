@@ -177,6 +177,17 @@ static func holds_a_switch(state: State) -> bool:
 	return state == State.EMBEDDED
 
 
+## Whether a sword in this state is weight on a floor plate.
+##
+## The opposite bias from `holds_a_switch`, and for a matching reason: a plate
+## is a floor, not a socket, so what rests on it is a spent sword lying flat,
+## never one still moving and never one biting a wall. A player who misses a
+## catch on purpose, or gives up chasing a throw, can leave a sword behind to
+## hold a plate down at the cost of the sword.
+static func rests_on_a_plate(state: State) -> bool:
+	return state == State.GROUNDED
+
+
 ## Hold-to-recall, per SPEC.md. The throw leaves on the press so that throwing
 ## never feels laggy, and the recall fires later on the same button, once it has
 ## been held longer than any tap could last. `already_fired` keeps one hold from

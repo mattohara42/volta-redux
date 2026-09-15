@@ -298,6 +298,12 @@ class CaptureAgent:
 				print("capture: switch at %s %s" % [
 					switch.global_position, "HELD" if switch.is_held else "free"
 				])
+		for node in get_tree().get_nodes_in_group("plates"):
+			var plate := node as FloorPlate
+			if plate != null:
+				print("capture: plate at %s %s" % [
+					plate.global_position, "HELD" if plate.is_held else "free"
+				])
 		for node in get_tree().get_nodes_in_group("gates"):
 			var gate := node as Gate
 			if gate != null:

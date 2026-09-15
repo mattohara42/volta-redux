@@ -270,6 +270,18 @@ func _add_switch(rect: Rect2) -> SwordSwitch:
 	return switch
 
 
+## A floor plate, sized to `rect` and sitting flush with the floor at
+## `rect.position.y`. Not wood and not a hazard: whatever solid it sits on is
+## the room's own floor, drawn underneath it same as any other patch of
+## ground.
+func _add_plate(rect: Rect2) -> FloorPlate:
+	var plate := FloorPlate.new()
+	plate.configure(rect.size)
+	plate.position = rect.get_center()
+	add_child(plate)
+	return plate
+
+
 ## A gate. Solid until something opens it, and it is the room that decides what.
 func _add_gate(rect: Rect2) -> Gate:
 	var gate := Gate.new()

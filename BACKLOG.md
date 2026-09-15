@@ -111,27 +111,29 @@ committed to.
 
 - **The avian ally as a mid-game traversal tool** rather than only the ending.
   Risk: it is a second verb, and the game is about having one.
-- **Two kinds of switch: floor plates and wall switches.** A plate you stand on,
-  or shove something onto, or leave an enemy on; and a wall switch you push or
-  throw a blade into. Raised while playing M2, right after its switch turned out
-  to read as a crate.
+- **The floor plate is built.** `FloorPlate` + `scenes/rooms/room_m4_plate.tscn`,
+  wired to `Gate` the same way M2's wall switch is: a room connects the two
+  signals and neither mechanism knows the other exists. It senses the hero's
+  own weight, an enemy's, or a spent sword left lying on it (`SwordFlight.
+  rests_on_a_plate`, the deliberate opposite bias from `holds_a_switch`), which
+  is the third leg this entry originally asked for ("leave an enemy on it...
+  an enemy as a tool rather than an obstacle").
 
-  **A floor plate is self-teaching in a way a wall fixture never is.** Weight on
-  a plate is a thing every player already understands, and it needs no gold
-  paint to say so. That alone is a strong argument for it.
+  **The enemy case is wired in and not yet demonstrated.** None of M4's five
+  built enemies can hold still: all five either patrol without stopping or
+  chase the hero without stopping, so there is nothing today that would sit on
+  a plate on purpose. That is the dormant-until-approached idea in `LEVELS.md`
+  (raised for the skeleton), not this entry's to build.
 
-  M2's switch is the wall kind, and it is the kind that milestone needs: its
-  puzzle is a blade held in a socket and then recalled out of it, which a plate
-  cannot do. What would make the existing one read better today is **mounting it
-  in a wall** rather than standing it on the floor, which is a room change and
-  not a mechanic change.
+  **What is demonstrated**: standing on it yourself, and the puzzle worth
+  having, missing a catch on purpose (climb a ladder mid-return, which
+  `SwordFlight`'s own docstring already names as the way to miss: "you miss
+  by changing height, not by being in the wrong place") to leave a sword
+  weighing the plate down while you walk through what it opens.
 
-  Plates want things M2 does not have. "Move something onto it" means pushable
-  objects, which are nowhere in SPEC.md. "Leave an enemy on it" means M4, and it
-  is a genuinely good idea: an enemy as a tool rather than an obstacle is the
-  sort of thing that makes a roster earn its place. Act 3 already owns a switch
-  vocabulary (SPEC.md: switches that need current and not impact), so that is
-  the natural home for a second kind.
+  **Mounting M2's own switch in a wall**, so it reads as a fixture rather than
+  furniture, is still just a room change and still unbuilt. Left for whoever
+  next touches that room.
 
 - **Sword abilities as upgrades**, rather than all five from the first room.
   Recall, and embedding as a standable platform, become things you earn: better
