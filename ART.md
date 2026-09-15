@@ -243,6 +243,10 @@ Flagging this now rather than after the fact: whether to keep going and
 treat the trigger as informative-not-a-hard-stop, or pause here and think
 about it, is Matt's call.
 
+**Running total after the tileset: 4 generations, 2 of 5 assets landed.**
+The tileset landed first attempt, so it added exactly 1. Two assets in, at
+an average of 2 generations each; hero, bat and the pose-sheet test remain.
+
 **2. Tileset**, `assets/art_raw/act1_wall_tileset.png`:
 
 > [preamble] A tileset sheet for a side-scrolling platformer: a flat grid of
@@ -259,6 +263,38 @@ about it, is Matt's call.
 > texture: flat, even light on every module so they tile predictably in
 > engine. Cold stone areas are blue-violet grey, drier and more purple than
 > the moat's edge. The image is 2560 by 1440 pixels, aspect ratio 16:9.
+
+**Landed first attempt, with a bonus.** Eight modules came back instead of
+the five asked for (an extra plain wall-face, an extra window wall, and the
+narrower floor module reads closer to the same width as the first than
+"about half"), all consistent stonework, all clean on a flat magenta
+backdrop with generous gutters. `palette-check.py` on the keyed sheet: 0.01%
+neutral-dark. Saved as `assets/art_raw/act1_wall_tileset.jpg` (raw) and, once
+cut, `assets/art/act1/tiles/wall_tile_1.png` through `_8.png`, in reading
+order (top row left to right, then the next row).
+
+**Found a real bug in `key.py` cutting this one.** The despill from M5's
+first build only pulled colour back within a 3px ring, on the theory that
+the antialiased seam was a thin fringe. It is not: measured on this real
+delivery, backdrop colour was still visibly present 6 to 7px into the kept
+pixels (pixel-by-pixel: `(169,5,146)` a single pixel in, still
+unmistakably magenta at 6px, clean stone by 8 to 9px). A partial pull that
+close to the seam left an obvious magenta halo around every module, visible
+at a glance, exactly the "noisy backdrop bled into the subject" failure
+`GEMINI_NOTES.md` calls the one kind of miss that is never fixable
+downstream. Rewrote `key.py`'s decontamination: every kept pixel within
+`--ring` (default 10px) of the cut is now replaced outright with its
+nearest clean neighbour's colour, via `scipy.ndimage.distance_transform_edt`,
+rather than partially corrected. Re-verified against both the original
+synthetic test and this real delivery: zero backdrop colour remains in
+either.
+
+**`tools/cut-sheet.py` is built**, to the shape `ART.md` guessed at before a
+real sheet existed: connected components of the keyed alpha channel, sorted
+into reading order by vertical-span overlap (robust to whatever the actual
+grid spacing turns out to be, rather than a fixed pixel bucket), each
+cropped tight and numbered. Worked first run against this delivery: 8
+components in, 8 modules out, in the right order.
 
 **3. Hero**, `assets/art_raw/hero_lothar_idle.png`:
 
@@ -307,22 +343,18 @@ about it, is Matt's call.
 > colour beyond the wood itself. The image is 2048 by 1365 pixels, aspect
 > ratio 3:2.
 
-**Status:** background landed on attempt 3 (3 generations spent), prompts 2
-to 5 not yet sent. Reading
+**Status:** background and tileset landed (attempts 3 and 1 respectively, 4
+generations total), hero, bat and the pose-sheet test not yet sent. Reading
 `hook-line-and-sentence` (read access, not attached, cloned locally to check
-against) confirmed the fix above and turned up no other reusable technique
-this project's `GEMINI_NOTES.md` didn't already carry. Prompts 2 to 5 are all
-a single subject or a set of discrete modules on a flat backdrop rather than
-a scene, which is the case that doc says the compositional prior has nothing
-to push against, so they were left as written. Matt runs each in the Gemini
-UI, saves the delivery to the path named above, and this section gets filled
-in with what came back, what was measured, and whether it landed first
-attempt, per generation. `tools/key.py` and `tools/palette-check.py` exist
-and are smoke tested against synthetic images, ready for the first real
-delivery. `tools/cut-sheet.py`, `tools/cut-rig.py` and `tools/pose-sheet.py`
-are not built yet: their exact shape depends on what a real sheet actually
-looks like, and building them against a guess risks getting it wrong twice.
-Porting from `hook-line-and-sentence` needs that repo attached to this
-session with push access, which this session's own permissions denied; Matt
-can grant it directly if porting
-is worth doing before a real delivery forces the question anyway.
+against) confirmed the camera-framing fix and turned up no other reusable
+technique this project's `GEMINI_NOTES.md` didn't already carry. `tools/
+key.py` and `tools/palette-check.py` are built and proven against real
+deliveries now, not just synthetic ones; `key.py`'s decontamination got a
+real fix along the way (see the tileset write-up above). `tools/
+cut-sheet.py` is built and proven against the real tileset sheet.
+`tools/cut-rig.py` and `tools/pose-sheet.py` are still not built: their
+shape depends on what those specific deliveries look like. Porting from
+`hook-line-and-sentence` needs that repo attached to this session with push
+access, which this session's own permissions denied; Matt can grant it
+directly if porting is worth doing, though the tools built fresh so far have
+each worked first try against a real delivery.
