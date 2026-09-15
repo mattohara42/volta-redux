@@ -53,13 +53,22 @@ jobs:
       # The M2 ledge is a position, and CLAUDE.md says draw a position before
       # believing it. This throws a sword into wood and photographs where the
       # ledge actually landed, which no assertion in the suite can do.
+      #
+      # This step now reads its own log rather than only keeping it, per
+      # BACKLOG.md's note that it predated the spike steps' habit of doing so.
       - name: Screenshot an embedded sword
         run: |
           xvfb-run -a ~/godot/godot --path . --resolution 1280x720 \
             --script res://tools/capture.gd -- \
             --scene=res://scenes/rooms/room_m2.tscn --out=room_m2_embed.png \
             --input="move_left:10;throw:6;-:45" --zoom=0.5 --centre=250,240 \
-            --overwrite
+            --overwrite \
+            > embed.log 2>&1 || { cat embed.log; exit 1; }
+          cat embed.log
+          grep -q "capture: no deaths" embed.log || {
+            echo "throwing into wood from a safe distance should not have killed the hero"; exit 1; }
+          grep -q "sword embedded" embed.log || {
+            echo "the throw should have embedded in the wood, not bounced or fallen"; exit 1; }
 
       # M2's first room claims it cannot be crossed without standing on your
       # own sword. tests/test_room_m2_gap.gd asserts that against the config;
@@ -75,26 +84,42 @@ jobs:
       # The switch room's chain is sword embeds -> switch senses -> gate opens.
       # Only the first link is arithmetic; the other two are an area overlap and
       # a signal, and running it is the only honest way to know they fire.
+      #
+      # This step now reads its own log rather than only keeping it, per
+      # BACKLOG.md's note that it predated the spike steps' habit of doing so.
       - name: Screenshot the gate a sword opened
         run: |
           xvfb-run -a ~/godot/godot --path . --resolution 1280x720 \
             --script res://tools/capture.gd -- \
             --scene=res://scenes/rooms/room_m2_switch.tscn --out=room_m2_switch.png \
             --input="move_left:10;throw:6;-:40" --zoom=0.55 --centre=220,250 \
-            --overwrite
+            --overwrite \
+            > switch.log 2>&1 || { cat switch.log; exit 1; }
+          cat switch.log
+          grep -q "switch at .* HELD" switch.log || {
+            echo "the embedded sword should be holding the switch down"; exit 1; }
+          grep -q "gate at .* OPEN" switch.log || {
+            echo "the switch being held should have opened the gate"; exit 1; }
 
       # M3's claim is a measurement: under a second from death to moving again.
       # This runs the player off the first ledge into lava and waits out the
       # whole loop, so the log line says how many deaths happened and what the
       # loop actually cost in a running build. It also draws the lava, which was
       # written without anybody seeing it.
+      #
+      # This step now reads its own log rather than only keeping it, per
+      # BACKLOG.md's note that it predated the spike steps' habit of doing so.
       - name: Screenshot lava, and time a death
         run: |
           xvfb-run -a ~/godot/godot --path . --resolution 1280x720 \
             --script res://tools/capture.gd -- \
             --scene=res://scenes/rooms/room_m3.tscn --out=room_m3.png \
             --input="move_right:100;-:60" --zoom=0.55 --centre=350,220 \
-            --overwrite
+            --overwrite \
+            > lava.log 2>&1 || { cat lava.log; exit 1; }
+          cat lava.log
+          grep -qE "capture: [1-9][0-9]* death" lava.log || {
+            echo "walking off the ledge into lava did not kill anybody"; exit 1; }
 
       # The checkpoint is the one thing in M3 that changes what a death means,
       # and whether a brazier lit is an area overlap: no assertion can reach it.
@@ -102,13 +127,22 @@ jobs:
       # marginal gap and waits out the loop, so the log says which braziers are
       # lit and where the respawn actually put the player. A checkpoint line
       # reading 60 rather than 470 is the bug this step exists to catch.
+      #
+      # This step now reads its own log rather than only keeping it, per
+      # BACKLOG.md's note that it predated the spike steps' habit of doing so.
       - name: Screenshot a respawn at a brazier
         run: |
           xvfb-run -a ~/godot/godot --path . --resolution 1280x720 \
             --script res://tools/capture.gd -- \
             --scene=res://scenes/rooms/room_m3.tscn --out=room_m3_brazier.png \
             --input="move_right:86;move_right,jump:20;move_right:120;-:45" \
-            --zoom=1.0 --centre=470,250 --overwrite
+            --zoom=1.0 --centre=470,250 --overwrite \
+            > brazier.log 2>&1 || { cat brazier.log; exit 1; }
+          cat brazier.log
+          grep -q "brazier at (470.0, 320.0) LIT" brazier.log || {
+            echo "walking past the second brazier should have lit it"; exit 1; }
+          grep -q "checkpoint (470.0, 300.0)" brazier.log || {
+            echo "the respawn should have used the second brazier, not the first"; exit 1; }
 
       # Spikes are the one hazard whose drawing and whose killing box are
       # different rectangles, and a screenshot can only show the first. This

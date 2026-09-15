@@ -20,10 +20,6 @@ func _hazards() -> HazardConfig:
 	return load(HAZARDS)
 
 
-func _death() -> DeathConfig:
-	return load("res://config/death.tres")
-
-
 ## How long a full-speed jump is in the air. The number every boarding is
 ## measured against, because a ferry keeps moving while you are in it.
 func _flight() -> float:
@@ -113,11 +109,12 @@ func test_a_ferry_is_long_enough_to_take_off_from_standing() -> void:
 	)
 
 
-## The window a respawn gets. A ferry is parked at its dock and held there for
-## the freeze the respawn still owes the player, so this is how long it is there
-## for once anybody can actually run at it.
+## The window a respawn gets, measured from the moment the player has the
+## controls back. `MovingPlatform.reset` starts its clock at minus the freeze,
+## so the freeze itself is already spent at the dock by the time this window
+## opens: what is left is the wait, in full.
 func _boarding_window() -> float:
-	return _hazards().platform_wait_time + _death().respawn_freeze
+	return _hazards().platform_wait_time
 
 
 ## These next two are the only checks in the file that are about the death loop

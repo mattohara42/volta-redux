@@ -89,26 +89,6 @@ committed to.
   like. A ferry's rail is the same thing standing still: it is drawn over the
   moat it spans rather than into it.
 
-- **`test_room_m3_moving.gd` counts the respawn freeze twice.** Its
-  `_boarding_window` is `platform_wait_time + respawn_freeze`, but the freeze is
-  already spent by the time the window opens: `Platform.reset` parks the clock at
-  minus the freeze precisely so that a ferry is at its dock for the whole wait
-  once the player has the controls. The window from control is the wait, and the
-  assertion is 0.15 s looser than the room it is checking. It passes today and
-  the CI step that rides the ferry out of a respawn proves the room really works,
-  so this is a test that overstates its case rather than a bug in the game.
-  Found while writing the same arithmetic for geysers, which does not carry the
-  term. **Checked: the suite is still green with the term removed**, so the fix
-  is one line and costs the ferry bench nothing. It is filed rather than taken
-  only because it belongs to a bench this change was not otherwise touching.
-
-- **The older CI screenshot steps keep their log without reading it.** The two
-  spike steps grep for the outcome they claim, so a bed that stops killing or
-  stops being jumpable fails the build. The lava, brazier, sword and gate steps
-  predate that and only upload the picture, so the same class of regression is
-  caught only if somebody looks. Cheap to retrofit, and it was left alone on
-  purpose rather than widening a spikes change.
-
 - **The avian ally as a mid-game traversal tool** rather than only the ending.
   Risk: it is a second verb, and the game is about having one.
 - **The floor plate is built.** `FloorPlate` + `scenes/rooms/room_m4_plate.tscn`,
