@@ -4,17 +4,27 @@
 ART.md, pipeline step 2. The generator does not return the exact backdrop
 colour it was asked for (GEMINI_NOTES.md), so this samples the delivery's own
 border pixels for the backdrop colour instead of assuming one, then floods
-inward from the border. Pixels the flood reaches become transparent;
-everything else is despilled near the cut edge, so a soft antialiased border
-does not carry a fringe of backdrop colour into the game.
+inward from the border. Pixels the flood reaches become transparent.
+
+The antialiased seam around a cut subject carries real backdrop colour
+blended in, not just a faint tint: measured on a real delivery, a magenta
+backdrop bled visibly 6 to 7px into the kept pixels. A partial pull only
+softens that; it does not remove it, and GEMINI_NOTES.md is explicit that a
+noisy backdrop bled into the subject is the one thing that isn't fixable
+downstream. So every kept pixel within --ring of the cut is replaced outright
+with its nearest clean neighbour's colour (the same "unmix" idea
+GEMINI_NOTES.md names, implemented here as a nearest-neighbour fill via
+scipy's distance transform), rather than partially corrected. It trades a
+few pixels of texture detail right at the silhouette edge for a hard
+guarantee of zero backdrop bleed.
 
 CLAUDE.md: the destructive mode is the flag. Writing over an existing OUT
 needs --overwrite; the default refuses.
 
 Usage:
-    tools/key.py DELIVERY.png OUT.png [--tolerance N] [--overwrite]
+    tools/key.py DELIVERY.png OUT.png [--tolerance N] [--ring N] [--overwrite]
 
-Requires pillow and numpy (tools/requirements.txt).
+Requires pillow, numpy and scipy (tools/requirements.txt).
 """
 from __future__ import annotations
 
@@ -24,13 +34,12 @@ from pathlib import Path
 
 import numpy as np
 from PIL import Image, ImageDraw
+from scipy import ndimage
 
 # A colour the delivered art is asked never to use, so it is safe as a flood
 # marker: floodfill.py paints matched backdrop pixels this colour internally,
 # then the mask below is wherever the working copy equals it.
 _SENTINEL = (0, 255, 0)
-_DESPILL_RING_PX = 3
-_DESPILL_STRENGTH = 0.6
 
 
 def _detect_backdrop(rgb: np.ndarray) -> tuple[int, int, int]:
@@ -75,19 +84,23 @@ def _dilate(mask: np.ndarray, iterations: int) -> np.ndarray:
     return out
 
 
-def _despill(rgba: np.ndarray, backdrop: tuple[int, int, int], ring: np.ndarray) -> None:
-    """Mutates rgba in place: pulls each channel's lean toward the backdrop
-    hue back out, only within `ring` (the kept pixels nearest the cut)."""
-    backdrop_arr = np.array(backdrop, dtype=np.float64)
-    for i in range(3):
-        others = [j for j in range(3) if j != i]
-        lean = backdrop_arr[i] - rgba[..., others].mean(axis=-1)
-        pull = np.clip(lean, 0, None) * _DESPILL_STRENGTH
-        pull = np.where(ring, pull, 0.0)
-        rgba[..., i] = np.clip(rgba[..., i] - pull, 0, 255)
+def _decontaminate(rgb: np.ndarray, mask: np.ndarray, ring_px: int) -> np.ndarray:
+    """Every kept pixel within `ring_px` of the backdrop is replaced with its
+    nearest clean neighbour's colour (nearest kept pixel outside the ring),
+    via scipy's distance transform. Kept pixels further from the cut than
+    that are untouched."""
+    ring = _dilate(mask, ring_px) & ~mask
+    clean = ~mask & ~ring
+    if not clean.any():
+        return rgb.copy()
+    _, indices = ndimage.distance_transform_edt(~clean, return_indices=True)
+    nearest = rgb[indices[0], indices[1]]
+    out = rgb.copy()
+    out[ring] = nearest[ring]
+    return out
 
 
-def key(delivery: Path, out: Path, tolerance: int, overwrite: bool) -> None:
+def key(delivery: Path, out: Path, tolerance: int, ring_px: int, overwrite: bool) -> None:
     if out.exists() and not overwrite:
         raise SystemExit(f"{out} already exists; pass --overwrite to replace it.")
 
@@ -95,11 +108,10 @@ def key(delivery: Path, out: Path, tolerance: int, overwrite: bool) -> None:
     rgb = np.asarray(image)
     backdrop = _detect_backdrop(rgb)
     mask = _flood_backdrop_mask(image, backdrop, tolerance)
-    ring = _dilate(mask, _DESPILL_RING_PX) & ~mask
+    clean_rgb = _decontaminate(rgb, mask, ring_px)
 
-    rgba = np.dstack([rgb, np.full(rgb.shape[:2], 255, dtype=np.uint8)]).astype(np.float64)
+    rgba = np.dstack([clean_rgb, np.full(rgb.shape[:2], 255, dtype=np.uint8)])
     rgba[..., 3] = np.where(mask, 0, 255)
-    _despill(rgba, backdrop, ring)
 
     out.parent.mkdir(parents=True, exist_ok=True)
     Image.fromarray(rgba.astype(np.uint8), mode="RGBA").save(out)
@@ -115,9 +127,13 @@ def main(argv: list[str] | None = None) -> int:
         "--tolerance", type=int, default=24,
         help="Per-channel match tolerance against the detected backdrop (default 24).",
     )
+    parser.add_argument(
+        "--ring", type=int, default=10,
+        help="Width in px of the contamination band to decontaminate around the cut (default 10).",
+    )
     parser.add_argument("--overwrite", action="store_true", help="Replace OUT if it already exists.")
     args = parser.parse_args(argv)
-    key(args.delivery, args.out, args.tolerance, args.overwrite)
+    key(args.delivery, args.out, args.tolerance, args.ring, args.overwrite)
     return 0
 
 
