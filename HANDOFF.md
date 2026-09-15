@@ -10,35 +10,39 @@ is M12's. See git log for the reasoning if it needs re-reading.
 
 ## Where this is
 
-**M5's background, tileset and hero have all landed**, and the hero is now
-cut into rig parts too (`assets/art/hero/rig/`: `head`, `torso`, `arm_near`,
-`leg_near`, `leg_far`, matching `ANIMATION.md`'s own "hips, two legs, two
-arms, head", minus the far arm this true profile hides entirely). The sword
-in the painting was deliberately not cut as a rig part: `CLAUDE.md` says the
-sword is its own scene, and the blade was only there so the hand would come
-back gripping something. Five lessons paid for and folded into `ART.md`/
-`GEMINI_NOTES.md` along the way, the compositional-prior fix (state framing
-positively, rule out the default by name) landing twice, once for a scene
-and once for a character; `key.py`'s despill needed a real fix, a 3px pull
-was not enough against a real 6-7px contamination band; and a character
-painting has no backdrop between its parts for a script to find, so
-`cut-rig.py`'s boxes are read off the source by eye, sized to avoid an
-axis-aligned rectangle sweeping in a distant, unrelated part (the sword's
-diagonal blade very nearly pulled both boots into the arm's crop).
+**M5's "one rigged hero" is done.** Background, tileset and hero landed;
+the hero is cut into rig parts (`assets/art/hero/rig/`) and assembled into
+a real `Skeleton2D` (`scenes/hero_rig.tscn`, framed for screenshots by
+`scenes/hero_rig_test.tscn`), verified against an actual running build, not
+just written and assumed correct. Bat and the pose-sheet test are what's
+left of M5's five prompts.
 
-**M5's done-when isn't fully met yet.** `BUILD_PLAN.md` wants "one rigged
-hero," and what exists is the rig's *parts*, offset-preserved and ready.
-Assembling them into an actual `Skeleton2D` scene in Godot, placing `Bone2D`
-pivots and parenting each sprite, is still open: always the manual step
-`ART.md` said it would be, not something `cut-rig.py` was ever meant to do.
+**No Godot was installed in this session's environment.** The official
+4.7.2 Linux binary (matching `README.md`'s pinned version) was downloaded to
+`/tmp` to run `import`/`test`/`shot` for real. That does not persist: a
+future session here starts the same way, no `$GODOT` until it fetches one.
+`tools/dev.sh test` passes clean, 221 tests, 1572 checks, after all of this.
+
+**Six lessons paid for and folded into `ART.md`/`GEMINI_NOTES.md`/here:**
+a scene or a character has a compositional prior a hedged instruction
+barely moves, state framing positively and rule out the default by name;
+the background is atmosphere only, the tileset carries the path; `key.py`'s
+despill needed a real fix, three-px was not enough against a real 6-7px
+contamination band; a character painting has no backdrop between its parts,
+so `cut-rig.py`'s boxes are read off by eye, and a prop crossing the body
+(the held sword) can drag an unrelated part into a box that holds both
+ends of it; **reassembling cut parts on one canvas before trusting them
+catches gaps a part-by-part look never will** (the leg boxes left a real
+gap between torso and legs, invisible until composited); and a Godot 4.7.2
+`Skeleton2D` logs a harmless but alarming `det == 0` error for every leaf
+`Bone2D`, confirmed by a three-line reproduction, not a sign of a rig bug.
 
 **6 generations spent, 3 of 5 M5 assets landed.** Past `ART.md`'s own
 budget-rule ceiling of 5 for the whole room now, not a hard stop since every
-miss bought a real lesson, but worth naming plainly. Bat and the
-pose-sheet test remain.
+miss bought a real lesson, but worth naming plainly.
 
 **`tools/key.py`, `tools/palette-check.py`, `tools/cut-sheet.py` and
-`tools/cut-rig.py`** are all built and proven against real deliveries now.
+`tools/cut-rig.py`** are all built and proven against real deliveries.
 `tools/pose-sheet.py` is still not built: the pose-sheet test delivery is
 what will tell us its real shape.
 
@@ -50,11 +54,10 @@ first try against a real delivery.
 
 ## The next action
 
-**Either the `Skeleton2D` assembly in Godot** (turning the rig parts now in
-hand into something that actually runs), **or the bat and pose-sheet test
-prompts**, mindful of the generation count above. Matt's call which comes
-first. M5's done-when (`BUILD_PLAN.md`): the room is in the game at final
-quality, and `ART.md` carries the real generation count.
+**The bat and pose-sheet test prompts**, mindful of the generation count
+above, are what's left of M5's five. Once they land, M5's remaining
+done-when is `ART.md` carrying the real generation count, which it already
+does as it goes.
 
 ## Blocked on Matt
 
@@ -68,7 +71,7 @@ quality, and `ART.md` carries the real generation count.
    a catch on purpose feels discoverable, the dormant scorpion's
    wake-to-danger gap.
 3. **Whether to keep spending generations at this rate**, per the flag above.
-4. **Skeleton2D assembly vs. the remaining two prompts**, which comes first.
+4. **The remaining two Gemini generations**, whenever he's ready.
 5. **Whether to attach `hook-line-and-sentence` with push access** for the
    tool ports `ART.md` names, or let this project's versions stand as written.
 
@@ -103,10 +106,17 @@ generous (`key.py` defaults to 10px now) or verified against real pixels,
 not assumed from how clean the edge looks zoomed out.
 
 **A held prop crossing the body can drag an unrelated part into a rig
-box.** A diagonal sword reaching from the hand to past the far boot means
-no axis-aligned rectangle can hold the whole blade without also holding
-whatever else sits in that rectangle. Keep a part's box to just that part;
-don't fold a crossing prop into it.
+box, or leave a gap when you fix that by moving the box instead of masking
+the prop.** Full write-up in `ART.md`'s cut-rig section. Reassemble cut
+parts on one canvas at their recorded offsets before trusting them; a gap
+between two parts is invisible looking at either one alone.
+
+**A Godot 4.7.2 `Skeleton2D` errors on every leaf `Bone2D`, harmlessly.**
+"No Bone2D children... cannot calculate bone length" then `ERROR: Condition
+"det == 0" is true` from `affine_invert`, on load, every time, regardless of
+`rest`/`length`/`bone_angle`/`autocalculate_length_and_angle`. Reproduced in
+a three-line scene. The render is correct and `capture.gd` still exits 0;
+it's engine log noise, not a rig bug, confirmed rather than assumed.
 
 ## Settled, do not relitigate
 

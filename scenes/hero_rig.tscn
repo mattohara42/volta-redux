@@ -1,0 +1,51 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/art/hero/rig/torso.png" id="1_torso"]
+[ext_resource type="Texture2D" path="res://assets/art/hero/rig/head.png" id="2_head"]
+[ext_resource type="Texture2D" path="res://assets/art/hero/rig/arm_near.png" id="3_arm"]
+[ext_resource type="Texture2D" path="res://assets/art/hero/rig/leg_near.png" id="4_leg_near"]
+[ext_resource type="Texture2D" path="res://assets/art/hero/rig/leg_far.png" id="5_leg_far"]
+
+[node name="HeroRig" type="Node2D"]
+
+[node name="Skeleton2D" type="Skeleton2D" parent="."]
+
+[node name="Hip" type="Bone2D" parent="Skeleton2D"]
+position = Vector2(400, 600)
+
+[node name="Torso" type="Sprite2D" parent="Skeleton2D/Hip"]
+position = Vector2(-100, -370)
+centered = false
+texture = ExtResource("1_torso")
+
+[node name="HipFar" type="Bone2D" parent="Skeleton2D/Hip"]
+position = Vector2(90, 100)
+
+[node name="LegFar" type="Sprite2D" parent="Skeleton2D/Hip/HipFar"]
+position = Vector2(-70, 0)
+centered = false
+texture = ExtResource("5_leg_far")
+
+[node name="HipNear" type="Bone2D" parent="Skeleton2D/Hip"]
+position = Vector2(-20, 100)
+
+[node name="LegNear" type="Sprite2D" parent="Skeleton2D/Hip/HipNear"]
+position = Vector2(-80, 0)
+centered = false
+texture = ExtResource("4_leg_near")
+
+[node name="Shoulder" type="Bone2D" parent="Skeleton2D/Hip"]
+position = Vector2(-5, -300)
+
+[node name="ArmNear" type="Sprite2D" parent="Skeleton2D/Hip/Shoulder"]
+position = Vector2(-60, -45)
+centered = false
+texture = ExtResource("3_arm")
+
+[node name="Neck" type="Bone2D" parent="Skeleton2D/Hip"]
+position = Vector2(30, -310)
+
+[node name="Head" type="Sprite2D" parent="Skeleton2D/Hip/Neck"]
+position = Vector2(-85, -210)
+centered = false
+texture = ExtResource("2_head")
