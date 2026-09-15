@@ -61,12 +61,15 @@ by walking past. Instant respawn with swords restored.
 **Done when**: death to respawn to moving again is **under one second**, measured,
 and dying twenty times in a row is annoying but not tedious.
 
-### M4: the six enemies
-All six from `SPEC.md`, as coloured shapes with real behaviour. The eyeball has
-to actually eat a returning sword.
+### M4: the enemies
+Five of `SPEC.md`'s six, as coloured shapes with real behaviour: bat, scorpion,
+giant ant, floating eyeball, dragon. The eyeball has to actually eat a returning
+sword. The sixth, the generator, is Act 3's boss and needs the sword's `conduct`
+state and the conductivity vocabulary that don't exist until M12. It ships
+there, not here: building it now would mean doing M12's work under M4's name.
 
-**Done when**: each of the six is beatable, each punishes the mistake its row
-names, and a grey room containing all six is survivable with three swords.
+**Done when**: each of the five is beatable, each punishes the mistake its row
+names, and the grey rooms proving them are survivable with three swords.
 
 ---
 
