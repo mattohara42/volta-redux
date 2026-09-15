@@ -10,35 +10,43 @@ is M12's. See git log for the reasoning if it needs re-reading.
 
 ## Where this is
 
-**M5 has five prompts written and logged in `ART.md`**, not yet sent: a
-background and a tileset for Act 1's moat and outer wall (`SPEC.md`'s
-description, still the settled one), the hero (Lothar, per `SPEC.md`: "M5
-paints him"), the bat as M5's one enemy, and a throwaway pose-sheet
-consistency test per `GEMINI_NOTES.md`'s open question. Each prompt is a
-self-contained block in `ART.md` → *Open requests*, ready to paste into the
-Gemini UI.
+**M5's background has landed**, on its third attempt: `assets/art_raw/
+act1_wall_moat_bg.jpg` (raw) and `assets/art/act1/wall_moat_bg.png`
+(imported, no keying needed, it's a full opaque painting). Two real lessons
+paid for on the way, both folded into `ART.md`/`GEMINI_NOTES.md` so they
+don't get repaid: a scene has a strong compositional prior a hedged fraction
+barely moves, state the camera framing positively instead; and the
+background is atmosphere only, designed to repeat, the tileset carries
+whatever the hero actually stands on, not the background.
 
-**`tools/key.py` and `tools/palette-check.py` are built and smoke-tested**
-against synthetic images (a magenta-backdrop test subject with a soft edge,
-and a planted neutral-grey patch), not yet against a real delivery.
-`tools/cut-sheet.py`, `tools/cut-rig.py` and `tools/pose-sheet.py` are not
-built: their shape depends on what a real sheet looks like, so building them
-against a guess risks getting it wrong twice.
+**Worth a look before going further: three generations for one asset.**
+`ART.md`'s own budget rule says more than five generations for the whole
+room is the signal to stop and revise the plan, not push through. Background
+alone took three; tileset, hero, bat and the pose-sheet test are still
+unsent, so even a clean run on all four puts M5 at 7. Not treated as a hard
+stop, flagged in `ART.md`'s *Open requests* and here so it isn't missed.
 
-**Porting from `hook-line-and-sentence`** (the source `ART.md` names for
-these tools) needs that repo attached to this session; this session's own
-permissions denied attaching it. Not blocking: the pipeline works without the
-port, and the port is a nice-to-have Matt can unblock directly if he wants it
-before a real delivery forces the question anyway.
+**Tileset, hero, bat and the pose-sheet test prompts are written**, logged
+in `ART.md` → *Open requests*, not yet sent.
+
+**`tools/key.py` and `tools/palette-check.py` are built and proven** against
+both synthetic images and this real delivery (0.01% neutral-dark pixels,
+clean). `tools/cut-sheet.py`, `tools/cut-rig.py` and `tools/pose-sheet.py`
+are still not built: their shape depends on what a real sheet looks like,
+and the tileset delivery will be the first one that needs `cut-sheet.py`.
+
+**Porting from `hook-line-and-sentence`** needs that repo attached with push
+access; this session's own permissions denied attaching it, though reading
+it (public, unattached) was allowed and is what found the compositional
+prior fix. Not blocking.
 
 ## The next action
 
-**Matt runs the five prompts in the Gemini UI**, saves each delivery to the
-path named in `ART.md`, and the session picks up from there: key each
-delivery, run `palette-check.py`, cut the tileset and the bat out of their
-sheets, and write up what came back against what was asked, per `ART.md`'s
-own record-keeping convention. M5's done-when (`BUILD_PLAN.md`): the room is
-in the game at final quality, and `ART.md` carries the real generation count.
+**Matt's call on the generation count**, then the tileset prompt, whenever
+he's ready: same round trip, `tools/key.py` and `cut-sheet.py` (not built
+yet) turn it into individual tile pieces. M5's done-when (`BUILD_PLAN.md`):
+the room is in the game at final quality, and `ART.md` carries the real
+generation count.
 
 ## Blocked on Matt
 
@@ -51,9 +59,10 @@ in the game at final quality, and `ART.md` carries the real generation count.
    dragon's one-rest-period pacing, the ledge-to-wood throw, whether missing
    a catch on purpose feels discoverable, the dormant scorpion's
    wake-to-danger gap.
-3. **The five Gemini generations above**, the actual next step.
-4. **Whether to attach `hook-line-and-sentence`** for the tool ports `ART.md`
-   names, or let this project's versions stand as written fresh.
+3. **Whether to keep spending generations at this rate**, per the flag above.
+4. **The remaining four Gemini generations**, whenever he's ready.
+5. **Whether to attach `hook-line-and-sentence` with push access** for the
+   tool ports `ART.md` names, or let this project's versions stand as written.
 
 ## Traps that will bite again
 
@@ -74,6 +83,11 @@ unmoving target converges to zero offset and stops there, no overshoot, no
 `return_spent`: a genuinely missed, `GROUNDED` sword needs the player's
 position to keep changing during the return, not just their height.
 `room_m4_plate.gd`'s comment has a sequence that reliably produces a miss.
+
+**A scene has a compositional prior; a subject on a flat field does not.**
+Full details in `GEMINI_NOTES.md`. State camera framing positively and
+explicitly for any full-scene painting; a hedged fraction of the frame will
+not reliably move it.
 
 ## Settled, do not relitigate
 

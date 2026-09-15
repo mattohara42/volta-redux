@@ -227,6 +227,22 @@ single-vignette framing that invited a corner view in attempt 1:
 > hottest point, never to white. The image is 2560 by 1440 pixels, aspect
 > ratio 16:9.
 
+**Landed.** Three even bays, flat plane, no vanishing point, no crenellations,
+no sky, no causeway, no torch. `palette-check.py`: 0.01% of opaque pixels
+neutral-dark, clean. Delivered 1376x768 (ratio 1.792 against the requested
+1.778), the usual pixel-dimensions-ignored-ratio-held pattern. Saved as
+`assets/art_raw/act1_wall_moat_bg.jpg` (the raw delivery) and
+`assets/art/act1/wall_moat_bg.png` (converted, no keying needed since it's a
+full opaque painting, nothing else to do to it).
+
+**Generation count, this asset: 3.** That is three of the five `ART.md`'s
+own budget rule allows for the *whole room* before it says stop and revise
+the plan rather than push on. Tileset, hero, bat and the pose-sheet test are
+still unsent; even a clean first-attempt landing on all four puts M5 at 7.
+Flagging this now rather than after the fact: whether to keep going and
+treat the trigger as informative-not-a-hard-stop, or pause here and think
+about it, is Matt's call.
+
 **2. Tileset**, `assets/art_raw/act1_wall_tileset.png`:
 
 > [preamble] A tileset sheet for a side-scrolling platformer: a flat grid of
@@ -291,7 +307,8 @@ single-vignette framing that invited a corner view in attempt 1:
 > colour beyond the wood itself. The image is 2048 by 1365 pixels, aspect
 > ratio 3:2.
 
-**Status:** background on attempt 3, prompts 2 to 5 not yet sent. Reading
+**Status:** background landed on attempt 3 (3 generations spent), prompts 2
+to 5 not yet sent. Reading
 `hook-line-and-sentence` (read access, not attached, cloned locally to check
 against) confirmed the fix above and turned up no other reusable technique
 this project's `GEMINI_NOTES.md` didn't already carry. Prompts 2 to 5 are all
