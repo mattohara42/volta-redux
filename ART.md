@@ -388,10 +388,26 @@ shapes too: the blade crosses diagonally in front of the legs, so any
 rectangle wide enough to hold the grip *and* the tip also swept in both
 boots, since a crop is axis-aligned and can't tell a blade pixel from a
 boot pixel sitting in the same rectangle. Stopping `arm_near`'s box at the
-fist and never trying to hold the blade in any box sidesteps the problem
-entirely. One tiny cosmetic miss survives it anyway: a sub-20px sliver of
-blade edge in the top corner of `leg_far`, left rather than chased further
-in a first-pass spike.
+fist sidesteps the worst of it. A small blade sliver still landed inside
+`leg_far`'s box regardless, the same geometry problem at a smaller scale;
+cleared by colour rather than chased with tighter geometry, since the blade
+reads as a distinctly low-saturation, mid-to-high-value grey against warm
+brown leather, easy to threshold and mask without touching the boot under
+it. Checked by eye against a red-marked preview before applying, so the
+mask wasn't trusted blind.
+
+**`draw the thing you measured` caught a real bug here, not just the
+sliver.** The first attempt at avoiding the blade problem pushed `leg_near`
+and `leg_far`'s top edge down to clear it, and it worked, no more blade in
+either crop. What it also did was leave a gap: the torso's box ends where
+its own content does, and the legs' new top edge started below that, so a
+band of hip and upper thigh that belongs to neither box was never cut at
+all. Invisible in each part looked at alone; obvious the moment all five
+parts were composited back onto one canvas at their recorded offsets, which
+is exactly why that reassembly check is worth doing before trusting a set
+of rig parts, not after. Fixed by moving the legs' top edge back up to meet
+the torso's bottom edge exactly, and clearing the blade sliver by colour
+instead of by geometry.
 
 **Boxes are allowed to overlap where two parts meet**, deliberately: the
 torso's box and the arm's box both contain some of the same shoulder
@@ -401,11 +417,50 @@ they're layered in the source painting, torso, then legs, then the arm on
 top, and the overlap is invisible: only the topmost part's pixels show
 where two boxes cover the same spot.
 
-**Actually assembling these into a `Skeleton2D` scene, placing `Bone2D`
-pivots and parenting each sprite, is still the manual step `ART.md` always
-said it would be.** This tool gets to "the rig parts exist, offset-preserved
-and ready," not to "the hero is rigged in Godot." That is M6's `BUILD_PLAN.md`
-line, or a follow-up here if M5 wants to prove the whole chain end to end.
+**That manual step happened too: `scenes/hero_rig.tscn` is a real
+`Skeleton2D`.** `Hip` is the root `Bone2D`, with `Torso` as its direct
+`Sprite2D` child; `HipFar`, `HipNear`, `Shoulder` and `Neck` are child bones
+each carrying one more part. Every bone's position and every sprite's
+position (`centered = false` throughout) is set so the rest pose reproduces
+the source painting exactly: a bone at absolute canvas point `P`, a sprite
+whose crop offset is `Q`, gets local position `Q - P`. `scenes/
+hero_rig_test.tscn` wraps it with a `Camera2D` for `tools/dev.sh shot` to
+frame, since `capture.gd`'s `--zoom`/`--centre` only drive a camera it finds
+under something in the "player" group, and this scene has no player.
+
+**Caught a real bug before it reached Godot, not after.** The first
+attempt at the leg boxes (see above) left a gap between the torso's bottom
+edge and the legs' new top edge, invisible looking at any one part alone.
+Compositing all five parts back onto one canvas at their recorded offsets
+in plain PIL, before touching Godot at all, showed it immediately: a band
+of missing hip and thigh. `CLAUDE.md`'s "draw the thing you measured" is
+the reason this check happened before the scene was built rather than
+after, and it is worth doing every time a set of rig parts is cut, not just
+this once.
+
+**A real Godot 4.7.2 engine quirk showed up too, confirmed harmless.**
+Every leaf `Bone2D` (one with no `Bone2D` child of its own, `HipFar`,
+`HipNear`, `Shoulder` and `Neck` here) logs "cannot calculate bone length or
+angle reliably" followed by an `ERROR: Condition "det == 0" is true" from
+`affine_invert`, on load, every time, regardless of `position`, `rest`,
+`length`, `bone_angle` or `autocalculate_length_and_angle`. Reproduced in a
+three-line scene with nothing but a `Skeleton2D`, one root bone and one leaf
+bone, so it is not this rig's structure at fault: `Bone2D.rest` defaults to
+`Transform2D(0, 0, 0, 0, 0, 0)`, a degenerate transform, and Godot's own
+internal bone-length auto-calculation tries to invert it for any bone with
+no child bone to infer a length from. The picture renders correctly despite
+it (verified: `tools/dev.sh shot` output, byte-identical figure to the PIL
+reassembly), and `capture.gd` still exits 0 and writes the PNG, so it is
+log noise, not a functional break. Worth knowing before someone spends an
+hour on it thinking it's a rig bug.
+
+**This was run against a real Godot, not just written and hoped for.** No
+Godot was installed in this session's environment; the official 4.7.2 Linux
+binary (matching `README.md`'s pinned version) was downloaded to `/tmp` to
+actually run `tools/dev.sh import`, `test`, and `shot`. That download does
+not persist between sessions in this kind of environment, so a future
+session here starts the same way: no `$GODOT`, fetch the binary before
+trusting anything Godot-shaped it writes.
 
 **4. The bat**, `assets/art_raw/enemy_bat.png`:
 
@@ -446,10 +501,10 @@ and proven against three real deliveries now, not just synthetic ones;
 `key.py`'s decontamination got a real fix along the way (see the tileset
 write-up above). `tools/cut-sheet.py` and `tools/cut-rig.py` are both built
 and proven, against the real tileset sheet and the real hero painting
-respectively. The hero's rig parts exist (`assets/art/hero/rig/`), but
-turning them into an actual `Skeleton2D` scene in Godot, `ART.md`'s own
-manual step, has not happened yet: M5's "one rigged hero" isn't there until
-that does, whether as part of this milestone or M6's. `tools/pose-sheet.py`
+respectively. **The hero is rigged in Godot now too**: `scenes/
+hero_rig.tscn`, a real `Skeleton2D`, verified by an actual screenshot
+against a real build, not just written and assumed correct. M5's "one
+rigged hero" is done. `tools/pose-sheet.py`
 is still not built: the pose-sheet test delivery is what will tell us its
 real shape. Porting from `hook-line-and-sentence` needs that repo attached
 to this session with push access, which this session's own permissions
