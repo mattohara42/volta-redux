@@ -56,3 +56,10 @@ extends Resource
 ## without spending a sword on it, and a rest too short to set up the one
 ## legitimate shot would make that a matter of luck.
 @export var dragon_rest_time: float = 2.6
+
+@export_group("Dormant")
+## How close the hero has to come to wake a dormant enemy, px. Bigger than a
+## catch radius or a switch's reach: this is a warning distance, not a
+## precise trigger, and LEVELS.md's whole point is that the hero finds out by
+## something moving, not by reading a hitbox.
+@export var dormant_wake_range: float = 40.0

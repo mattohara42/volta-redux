@@ -13,3 +13,4 @@ eyeball_seek_speed = 45.0
 dragon_charge_time = 0.7
 dragon_breathe_time = 0.5
 dragon_rest_time = 2.6
+dormant_wake_range = 40.0

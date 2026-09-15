@@ -178,13 +178,15 @@ What it needs:
 - **Skeletons, resolved**: background art in the early rooms, and in the
   lower dungeon the identical-looking prop is alive. That fixes the "not one
   of SPEC.md's six" problem without a seventh enemy: it is a reskin of the
-  scorpion or the ant (still to be picked, see "Open questions") with one
-  small, genuinely reusable addition to `Enemy`, a dormant state that does
-  not patrol or track until the hero comes close. Cheap, and it is not only
-  for skeletons: the same trick covers a suit of armour, a gargoyle, a
-  weapon rack that turns out to be a bat roost. One mechanism, a whole
-  vocabulary of "is this decoration or is it alive" moments across every
-  later act. See "Surprises" below.
+  scorpion or the ant (still to be picked, see "Open questions"). **The
+  underlying mechanism is now built**: `Enemy.start_dormant` and
+  `dormant_wake_range` (`config/enemies.tres`) give any species a state that
+  does not patrol or track until the hero comes close, still killable by a
+  sword the whole time, demonstrated in `room_m4_dormant.tscn`. Not only for
+  skeletons: the same trick covers a suit of armour, a gargoyle, a weapon
+  rack that turns out to be a bat roost. One mechanism, a whole vocabulary of
+  "is this decoration or is it alive" moments across every later act. See
+  "Surprises" below.
 
 ## The inner castle and the throne room
 
@@ -292,7 +294,7 @@ one:
 
 - **Decoration that turns out to be alive** (skeletons, above) generalises:
   a suit of armour, a gargoyle, a weapon rack. One dormant-until-approached
-  state on `Enemy`, reused as art changes.
+  state on `Enemy`, built and demonstrated, reused as art changes.
 - **A reskinned enemy with the armour rule flipped.** The scorpion teaches
   "hit it from behind or above." A castle-guard version of the same
   `ScorpionPatrol`-derived logic with the vulnerable side reversed punishes

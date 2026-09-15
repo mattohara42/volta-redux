@@ -8,7 +8,6 @@
 class_name GiantAnt
 extends Enemy
 
-var _config: EnemyConfig
 var _track := Rect2()
 var _elapsed: float = 0.0
 
@@ -22,6 +21,8 @@ func place(size: Vector2, track: Rect2, enemy_config: EnemyConfig) -> void:
 
 
 func _physics_process(delta: float) -> void:
+	if _step_dormancy(delta):
+		return
 	_elapsed += delta
 	_update()
 
@@ -40,7 +41,7 @@ func reset(frozen_for: float) -> void:
 
 
 func status() -> String:
-	return "ant"
+	return "ant" + _status_suffix()
 
 
 ## Drawn in the node's own frame, where "down" is always toward whatever
