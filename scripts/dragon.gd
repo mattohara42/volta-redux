@@ -19,7 +19,6 @@
 class_name Dragon
 extends Enemy
 
-var _config: EnemyConfig
 var _elapsed: float = 0.0
 var _breath_offset := Vector2.ZERO
 var _breath_size := Vector2.ZERO
@@ -61,6 +60,8 @@ func _make_breath_area() -> Area2D:
 
 
 func _physics_process(delta: float) -> void:
+	if _step_dormancy(delta):
+		return
 	_elapsed += delta
 	_update()
 
@@ -88,7 +89,7 @@ func reset(frozen_for: float) -> void:
 
 
 func status() -> String:
-	return "dragon %s" % DragonBreath.phase_name(phase)
+	return "dragon %s%s" % [DragonBreath.phase_name(phase), _status_suffix()]
 
 
 ## The one override that makes this a boss rather than a fifth animal: a

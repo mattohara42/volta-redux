@@ -8,7 +8,6 @@
 class_name Bat
 extends Enemy
 
-var _config: EnemyConfig
 var _half_extents := Vector2.ZERO
 var _centre := Vector2.ZERO
 var _elapsed: float = 0.0
@@ -32,6 +31,8 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
+	if _step_dormancy(delta):
+		return
 	_elapsed += delta
 	_update()
 
@@ -56,7 +57,7 @@ func reset(frozen_for: float) -> void:
 
 
 func status() -> String:
-	return "bat"
+	return "bat" + _status_suffix()
 
 
 ## A narrow diamond, wings out. Reads as small and quick against the hero's

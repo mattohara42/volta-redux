@@ -508,6 +508,43 @@ jobs:
             echo "the gate should be open with the sword weighing the plate"; exit 1; }
           echo "the sword is holding the gate open with nobody standing on the plate"
 
+      # The dormant enemy: LEVELS.md's skeleton idea, generalised, and the
+      # other half of the plate proof above. An overview first, the way every
+      # bench gets one: a scorpion sitting motionless on the plate, already
+      # holding the gate open, before the hero has done anything at all.
+      - name: Screenshot the dormant bench
+        run: |
+          xvfb-run -a ~/godot/godot --path . --resolution 1280x720 \
+            --script res://tools/capture.gd -- \
+            --scene=res://scenes/rooms/room_m4_dormant.tscn --out=room_m4_dormant.png \
+            --input="-:10" --zoom=1.0 --centre=200,260 --overwrite \
+            > dormant_overview.log 2>&1 || { cat dormant_overview.log; exit 1; }
+          cat dormant_overview.log
+          grep -q "scorpion (dormant) alive" dormant_overview.log || {
+            echo "the scorpion should start dormant"; exit 1; }
+          grep -q "plate at .* HELD" dormant_overview.log || {
+            echo "the dormant scorpion's own weight should hold the plate down"; exit 1; }
+          grep -q "gate at .* OPEN" dormant_overview.log || {
+            echo "the gate should already be open before the hero arrives"; exit 1; }
+
+      # The surprise: decoration that turns out to be alive. This walks close
+      # enough to cross `dormant_wake_range` but stops short of contact, so
+      # the proof is the wake itself and not the death waking it up can cause.
+      - name: Wake the dormant scorpion by approaching it
+        run: |
+          xvfb-run -a ~/godot/godot --path . --resolution 1280x720 \
+            --script res://tools/capture.gd -- \
+            --scene=res://scenes/rooms/room_m4_dormant.tscn \
+            --out=room_m4_dormant_wake.png \
+            --input="move_right:50" --zoom=1.0 --centre=220,260 --overwrite \
+            > dormant_wake.log 2>&1 || { cat dormant_wake.log; exit 1; }
+          cat dormant_wake.log
+          grep -q "capture: no deaths" dormant_wake.log || {
+            echo "approaching alone should not have killed the hero"; exit 1; }
+          grep -q "scorpion alive" dormant_wake.log || {
+            echo "getting this close should have woken the scorpion"; exit 1; }
+          echo "the scorpion woke up before it was ever touched"
+
       - name: Keep the screenshots
         uses: actions/upload-artifact@v4
         with:
@@ -539,3 +576,5 @@ jobs:
             room_m4_plate.png
             room_m4_plate_open.png
             room_m4_plate_sword.png
+            room_m4_dormant.png
+            room_m4_dormant_wake.png

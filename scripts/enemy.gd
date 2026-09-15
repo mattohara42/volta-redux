@@ -23,6 +23,19 @@ extends Hazard
 ## needs to see it can see.
 const ENEMY_LAYER: int = 1 << 5
 
+## Every species stores the same resource under the same name, so it lives
+## here once rather than five times: `place` sets it, `_step_dormancy` reads
+## it, and a species reads it for whatever numbers its own patrol needs.
+var _config: EnemyConfig
+
+## True while decoration rather than an enemy: no patrol, no seeking, no
+## killing on touch, until the hero comes within `_wake_range`. SPEC.md's
+## six do not include this on their own; it is LEVELS.md's "is this
+## decoration or is it alive" trick, built once here so any species can use
+## it rather than once per costume.
+var is_dormant := false
+var _wake_range := 0.0
+
 
 func configure(size: Vector2) -> void:
 	super.configure(size)
@@ -50,6 +63,16 @@ func _on_area_entered(area: Area2D) -> void:
 		queue_free()
 
 
+## Dormant decoration does not kill on touch. `Hazard`'s own signal calls
+## this; overridden rather than left alone so "asleep" means asleep, not
+## merely still. A sword can still test it early: `_on_area_entered` above
+## is untouched, so a suspicious player gets to be right about a statue.
+func _on_body_entered(body: Node2D) -> void:
+	if is_dormant:
+		return
+	super._on_body_entered(body)
+
+
 ## True for every enemy but the scorpion. Takes the sword's node rather than
 ## just its position, because a species that cares about more than position
 ## (a sword's state, say) should be able to ask without a second signal.
@@ -57,6 +80,34 @@ func is_vulnerable_to(_sword: Node2D) -> bool:
 	return true
 
 
-## For the debug overlay and `tools/capture.gd`. Every species overrides this.
+## Opts an already-placed enemy into starting dormant. Called by whoever
+## placed it, after `place`, because "does this one start asleep" is a room
+## decision the way a patrol's range is, not a fact about the species.
+func start_dormant() -> void:
+	is_dormant = true
+	_wake_range = _config.dormant_wake_range
+
+
+## The one thing every species calls first in its own `_physics_process`.
+## Returns true while still dormant, which is a species' cue to do nothing
+## else this frame: a sleeping scorpion does not patrol, a sleeping bat does
+## not tumble. Waking has no tell beyond starting to move, which is the
+## point: the surprise is that decoration moves at all.
+func _step_dormancy(_delta: float) -> bool:
+	if not is_dormant:
+		return false
+	var player := get_tree().get_first_node_in_group("player") as Node2D
+	if player != null and global_position.distance_to(player.global_position) <= _wake_range:
+		is_dormant = false
+		return false
+	return true
+
+
+## For the debug overlay and `tools/capture.gd`. Every species overrides this,
+## appending `_status_suffix` so a sleeping one says so in the log.
 func status() -> String:
-	return "enemy"
+	return "enemy" + _status_suffix()
+
+
+func _status_suffix() -> String:
+	return " (dormant)" if is_dormant else ""

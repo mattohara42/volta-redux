@@ -8,7 +8,6 @@
 class_name Scorpion
 extends Enemy
 
-var _config: EnemyConfig
 var _range: float = 0.0
 var _home := Vector2.ZERO
 var _elapsed: float = 0.0
@@ -28,6 +27,8 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
+	if _step_dormancy(delta):
+		return
 	_elapsed += delta
 	_update()
 
@@ -44,7 +45,7 @@ func reset(frozen_for: float) -> void:
 
 
 func status() -> String:
-	return "scorpion"
+	return "scorpion" + _status_suffix()
 
 
 ## Armour only stops a hit within `is_vulnerable_to`'s geometry, computed from

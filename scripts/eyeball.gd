@@ -9,7 +9,6 @@
 class_name Eyeball
 extends Enemy
 
-var _config: EnemyConfig
 var _roam := Rect2()
 var _start := Vector2.ZERO
 
@@ -27,6 +26,8 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
+	if _step_dormancy(delta):
+		return
 	var player := get_tree().get_first_node_in_group("player") as Node2D
 	if player == null:
 		return
@@ -44,7 +45,7 @@ func reset(_frozen_for: float) -> void:
 
 
 func status() -> String:
-	return "eyeball"
+	return "eyeball" + _status_suffix()
 
 
 ## A ring around a slit pupil, aimed at whatever it is tracking. The one enemy

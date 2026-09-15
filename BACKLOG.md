@@ -119,17 +119,18 @@ committed to.
   is the third leg this entry originally asked for ("leave an enemy on it...
   an enemy as a tool rather than an obstacle").
 
-  **The enemy case is wired in and not yet demonstrated.** None of M4's five
-  built enemies can hold still: all five either patrol without stopping or
-  chase the hero without stopping, so there is nothing today that would sit on
-  a plate on purpose. That is the dormant-until-approached idea in `LEVELS.md`
-  (raised for the skeleton), not this entry's to build.
+  **The enemy case is now demonstrated too**, via the dormant-until-approached
+  idea in `LEVELS.md` (raised for the skeleton, generalised to any species):
+  `room_m4_dormant.tscn` sits a dormant scorpion exactly on a plate, so its
+  stillness holds a gate open for free until the hero gets close enough to
+  wake it.
 
-  **What is demonstrated**: standing on it yourself, and the puzzle worth
-  having, missing a catch on purpose (climb a ladder mid-return, which
-  `SwordFlight`'s own docstring already names as the way to miss: "you miss
-  by changing height, not by being in the wrong place") to leave a sword
-  weighing the plate down while you walk through what it opens.
+  **What is demonstrated**: standing on it yourself, missing a catch on
+  purpose (climb a ladder mid-return, which `SwordFlight`'s own docstring
+  already names as the way to miss: "you miss by changing height, not by
+  being in the wrong place") to leave a sword weighing the plate down while
+  you walk through what it opens, and a dormant enemy sitting on it before
+  the hero ever arrives.
 
   **Mounting M2's own switch in a wall**, so it reads as a fixture rather than
   furniture, is still just a room change and still unbuilt. Left for whoever
