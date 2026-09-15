@@ -247,6 +247,13 @@ about it, is Matt's call.
 The tileset landed first attempt, so it added exactly 1. Two assets in, at
 an average of 2 generations each; hero, bat and the pose-sheet test remain.
 
+**Running total after the hero: 6 generations, 3 of 5 assets landed.** The
+hero took 2 (one rejected on pose, one landed). That's past the budget
+rule's own ceiling of 5 for the whole room, with the bat and the
+pose-sheet test still to come. Still not treated as a hard stop, each of the
+three misses so far bought a real, reusable lesson rather than being wasted,
+but it's worth naming plainly rather than letting the count go unremarked.
+
 **2. Tileset**, `assets/art_raw/act1_wall_tileset.png`:
 
 > [preamble] A tileset sheet for a side-scrolling platformer: a flat grid of
@@ -315,6 +322,53 @@ components in, 8 modules out, in the right order.
 > four sides, nothing cropped by the frame. The image is 1536 by 2048
 > pixels, aspect ratio 3:4.
 
+**Attempt 1, rejected.** Palette measured clean, but the pose did not read
+as a true side view: both shoulders and most of the chest were visible, and
+the near leg overlapped the far leg the way it does in a three-quarter
+stance. "Viewed straight on from the side" alone was not enough to beat the
+generator's default toward a three-quarter fantasy-portrait stance, the same
+compositional-prior problem the background hit, showing up on a character
+instead of a scene. This one mattered more than the earlier misses:
+`ANIMATION.md` is explicit that "a cutout rig cannot sell a full-body
+rotation, flat parts seen edge-on are flat parts," so a foreshortened limb
+in the source painting would have looked wrong the moment `Bone2D` rotated
+it, not just in a still.
+
+**Attempt 2, landed.** Same fix as the background: state the side view
+positively and concretely, then rule out the three-quarter default by name.
+
+> [preamble] A single full-body character painting of a lone warrior for a
+> side-scrolling platformer, standing in a relaxed idle pose. This is a true
+> side view, an orthogonal profile as if traced from directly beside him:
+> his whole body faces right, shoulders stacked directly in line with his
+> hips, one flank of his body fully hidden behind the other. It is NOT a
+> three-quarter view: his chest, both shoulders and both legs must NOT be
+> visible at once, only the near side of his body reads at all. He is a
+> lean, broad-shouldered adult man in his early thirties, ordinary human
+> proportions rather than an exaggerated musclebound giant or a lanky youth:
+> a practical fighter's build, not a bodybuilder's. He wears simple,
+> weathered leather and fur clothing in warm umber and dark hide tones, a
+> plain rather than a heroic silhouette, dark shoulder-length hair, no
+> helmet, no cape, no ornamentation beyond a leather belt. He holds a
+> straight double-edged sword with a plain crossguard, gripped naturally in
+> his near hand, blade pointing down and slightly back, exactly as someone
+> actually holds a sword at rest, not presented to camera. A warm rim light
+> catches his far side. Painted on a flat solid magenta (#FF00FF) backdrop,
+> full body visible with a small even margin of backdrop on all four sides,
+> nothing cropped by the frame. The image is 1536 by 2048 pixels, aspect
+> ratio 3:4.
+
+Landed a true profile: shoulders stacked, one leg mostly hidden behind the
+other, the flat side view a cutout rig needs. `palette-check.py`: 0.00%
+neutral-dark. Two small extras beyond the brief, a chest strap and a second
+hilt or pouch at the hip, when the prompt said "no ornamentation beyond a
+leather belt": not worth a third generation over. Saved as `assets/art_raw/
+Lothar1.jpeg` (Matt's own filename, uploaded directly to the branch after
+this session's file-attachment path failed twice, an environment issue
+rather than anything about how it was sent) and `assets/art/hero/
+lothar_idle.png` (keyed, decontamination verified clean at the cut edge
+by hand).
+
 **4. The bat**, `assets/art_raw/enemy_bat.png`:
 
 > [preamble] A single creature painting of a large cave bat for a
@@ -343,18 +397,20 @@ components in, 8 modules out, in the right order.
 > colour beyond the wood itself. The image is 2048 by 1365 pixels, aspect
 > ratio 3:2.
 
-**Status:** background and tileset landed (attempts 3 and 1 respectively, 4
-generations total), hero, bat and the pose-sheet test not yet sent. Reading
-`hook-line-and-sentence` (read access, not attached, cloned locally to check
-against) confirmed the camera-framing fix and turned up no other reusable
-technique this project's `GEMINI_NOTES.md` didn't already carry. `tools/
-key.py` and `tools/palette-check.py` are built and proven against real
-deliveries now, not just synthetic ones; `key.py`'s decontamination got a
-real fix along the way (see the tileset write-up above). `tools/
-cut-sheet.py` is built and proven against the real tileset sheet.
-`tools/cut-rig.py` and `tools/pose-sheet.py` are still not built: their
-shape depends on what those specific deliveries look like. Porting from
-`hook-line-and-sentence` needs that repo attached to this session with push
-access, which this session's own permissions denied; Matt can grant it
-directly if porting is worth doing, though the tools built fresh so far have
+**Status:** background, tileset and hero landed (attempts 3, 1 and 2
+respectively, 6 generations total), bat and the pose-sheet test not yet
+sent. Reading `hook-line-and-sentence` (read access, not attached, cloned
+locally to check against) confirmed the camera-framing fix and turned up no
+other reusable technique this project's `GEMINI_NOTES.md` didn't already
+carry, and that same fix, restated for a character rather than a scene, is
+what landed the hero. `tools/key.py` and `tools/palette-check.py` are built
+and proven against three real deliveries now, not just synthetic ones;
+`key.py`'s decontamination got a real fix along the way (see the tileset
+write-up above). `tools/cut-sheet.py` is built and proven against the real
+tileset sheet. `tools/cut-rig.py` and `tools/pose-sheet.py` are still not
+built: the hero delivery is what will tell us `cut-rig.py`'s real shape,
+next up once Matt's ready. Porting from `hook-line-and-sentence` needs that
+repo attached to this session with push access, which this session's own
+permissions denied; Matt can grant it directly if porting is worth doing,
+though the tools built fresh so far have
 each worked first try against a real delivery.
