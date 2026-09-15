@@ -160,21 +160,47 @@ Shared preamble, prefixed to every prompt below:
 
 **1. Background**, `assets/art_raw/act1_wall_moat_bg.png`:
 
-> [preamble] A wide painted background for a side-scrolling platformer,
-> showing the base of a castle's outer wall rising from a moat, seen from
-> outside at ground level. The wall's stonework fills the right two-thirds of
-> the frame and rises out of frame at the top; dark, still moat water with a
-> faint green tinge occupies the bottom third of the frame at the left and
-> centre. A stone causeway crosses the moat from the lower-left corner toward
-> the wall's base. Two or three narrow arrow-slit windows sit high on the
-> wall, each lit faintly from within by warm firelight. No characters, no
-> creatures, no foreground platform geometry: this is a background layer
-> only, painted with atmospheric depth, coldest and least detailed furthest
-> from the viewer, warmest and most detailed nearest a torch bracket at the
-> wall's base. Cold stone areas are blue-violet grey, damp and slightly green
-> near the water, drier and more purple higher up. Firelight is amber going
-> to a honey-cream at its hottest point, never to white. The image is 2560 by
-> 1440 pixels, aspect ratio 16:9.
+**Attempt 1, rejected.** The prompt described the wall as filling "the right
+two-thirds of the frame," which is the hedged-fraction phrasing
+`hook-line-and-sentence`'s `GEMINI_NOTES.md` already found unreliable for a
+full scene: **"expect the prior to win on scenes."** It also never stated a
+camera angle. What came back was a well-painted but dramatic three-quarter
+view of a castle corner, two turrets receding into depth, a second gatehouse
+visible behind them. Right palette, right mood, wrong shot for a side
+scroller: nothing here reads as a flat plane a camera can pan along. A miss
+in drawn content, per that same doc's rule 5, is a reroll, not a salvage.
+
+The fix that repo already paid for: state the camera framing positively and
+explicitly, "a flat side view like a stage backdrop," then name what it is
+not, and anchor the wall and the waterline to the canvas edges rather than to
+a fraction of the frame. `background-stream-far.png` in that repo is the
+worked example this borrows from almost verbatim.
+
+**Attempt 2, current:**
+
+> [preamble] A wide painted background for a side-scrolling platformer: the
+> base of a castle's outer wall, as seen standing on the near bank of the
+> moat looking straight at the wall. This is a flat side view like a stage
+> backdrop, camera perpendicular to the wall, with no vanishing point. It is
+> NOT a three-quarter view, NOT a corner or turret where two wall faces meet
+> at an angle, and NOT seen from above. The wall is a single unbroken run of
+> flat stonework spanning the full width of the canvas edge to edge, rising
+> out of frame at the top. The moat's water occupies a band along the bottom
+> of the canvas; the water's edge is a straight horizontal line running the
+> full width of the canvas, not a diagonal band and not a curve. A stone
+> causeway crosses the moat, entering the frame at the bottom-left corner and
+> running toward the wall. Two or three narrow arrow-slit windows are set
+> into the wall at the same height, evenly spaced along its width, each lit
+> faintly from within by warm firelight. One iron torch bracket is mounted on
+> the wall near where the causeway meets it, lit. No characters, no
+> creatures, no foreground platform geometry, and no second building or
+> gatehouse visible behind this wall: a single background layer only, painted
+> with atmospheric depth, coldest and least detailed at the canvas's left and
+> right edges, warmest and most detailed nearest the lit torch bracket. Cold
+> stone areas are blue-violet grey, damp and slightly green near the water,
+> drier and more purple higher up the wall. Firelight is amber going to a
+> honey-cream at its hottest point, never to white. The image is 2560 by 1440
+> pixels, aspect ratio 16:9.
 
 **2. Tileset**, `assets/art_raw/act1_wall_tileset.png`:
 
@@ -240,14 +266,21 @@ Shared preamble, prefixed to every prompt below:
 > colour beyond the wood itself. The image is 2048 by 1365 pixels, aspect
 > ratio 3:2.
 
-**Status:** written, not yet sent. Matt runs these in the Gemini UI, saves
-each delivery to the path named above, and this section gets filled in with
-what came back, what was measured, and whether it landed first attempt, per
-generation. `tools/key.py` and `tools/palette-check.py` exist and are smoke
-tested against synthetic images, ready for the first real delivery.
-`tools/cut-sheet.py`, `tools/cut-rig.py` and `tools/pose-sheet.py` are not
-built yet: their exact shape depends on what a real sheet actually looks
-like, and building them against a guess risks getting it wrong twice. Porting
-from `hook-line-and-sentence` needs that repo attached to this session, which
-this session's own permissions denied; Matt can grant it directly if porting
+**Status:** background on attempt 2, prompts 2 to 5 not yet sent. Reading
+`hook-line-and-sentence` (read access, not attached, cloned locally to check
+against) confirmed the fix above and turned up no other reusable technique
+this project's `GEMINI_NOTES.md` didn't already carry. Prompts 2 to 5 are all
+a single subject or a set of discrete modules on a flat backdrop rather than
+a scene, which is the case that doc says the compositional prior has nothing
+to push against, so they were left as written. Matt runs each in the Gemini
+UI, saves the delivery to the path named above, and this section gets filled
+in with what came back, what was measured, and whether it landed first
+attempt, per generation. `tools/key.py` and `tools/palette-check.py` exist
+and are smoke tested against synthetic images, ready for the first real
+delivery. `tools/cut-sheet.py`, `tools/cut-rig.py` and `tools/pose-sheet.py`
+are not built yet: their exact shape depends on what a real sheet actually
+looks like, and building them against a guess risks getting it wrong twice.
+Porting from `hook-line-and-sentence` needs that repo attached to this
+session with push access, which this session's own permissions denied; Matt
+can grant it directly if porting
 is worth doing before a real delivery forces the question anyway.
