@@ -464,17 +464,29 @@ trusting anything Godot-shaped it writes.
 
 **4. The bat**, `assets/art_raw/enemy_bat.png`:
 
+**Revised before sending, not after a miss.** The original wording said
+"viewed straight on from the side" once and left it at that, the same
+hedge that cost the background one reroll and the hero another: a subject
+description without an explicit positive-plus-negation framing barely
+moves the generator's default. "Mid-flight, both wings spread wide" is
+exactly the kind of dynamic pose that invites a dramatic angle the way the
+hero's idle stance did. Applying the fix that already worked twice, before
+paying for a third rejection to relearn it:
+
 > [preamble] A single creature painting of a large cave bat for a
-> side-scrolling platformer, shown mid-flight with both wings spread wide,
-> viewed straight on from the side, facing right. Larger than a real bat,
-> roughly the size of a human torso, with a lean leathery body, clawed
-> wingtips, and small sharp teeth bared. Because this creature kills on
-> contact in the game, it is warm-toned and saturated rather than cold and
-> matte: dark, matte, warm reddish-brown fur and a warm-brown wing membrane,
-> not black, not grey. Painted on a flat solid magenta (#FF00FF) backdrop,
-> full body and both wingtips visible with a small even margin of backdrop
-> on all sides, nothing cropped by the frame. The image is 1536 by 1152
-> pixels, aspect ratio 4:3.
+> side-scrolling platformer, shown mid-flight with both wings spread wide.
+> This is a true side view, an orthogonal profile: the bat's body faces
+> right and both wings spread within the picture plane, seen edge-on and
+> flat, not foreshortened by any tilt toward or away from the camera. It is
+> NOT a three-quarter view and NOT seen from above or below. Larger than a
+> real bat, roughly the size of a human torso, with a lean leathery body,
+> clawed wingtips, and small sharp teeth bared. Because this creature kills
+> on contact in the game, it is warm-toned and saturated rather than cold
+> and matte: dark, matte, warm reddish-brown fur and a warm-brown wing
+> membrane, not black, not grey. Painted on a flat solid magenta (#FF00FF)
+> backdrop, full body and both wingtips visible with a small even margin of
+> backdrop on all sides, nothing cropped by the frame. The image is 1536 by
+> 1152 pixels, aspect ratio 4:3.
 
 **5. Pose-sheet test, throwaway**,
 `assets/art_raw/_experiments/pose_sheet_test_mannequin.png`:
