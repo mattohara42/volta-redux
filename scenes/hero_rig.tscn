@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3]
+[gd_scene load_steps=20 format=3]
 
 [ext_resource type="Texture2D" path="res://assets/art/hero/rig/torso.png" id="1_torso"]
 [ext_resource type="Texture2D" path="res://assets/art/hero/rig/head.png" id="2_head"]
@@ -70,6 +70,18 @@ tracks/4/keys = {
 "update": 0,
 "values": [0.0, 0.0]
 }
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Skeleton2D/Hip:rotation")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 2.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 0.0]
+}
 
 [sub_resource type="Animation" id="Animation_run"]
 resource_name = "run"
@@ -135,6 +147,18 @@ tracks/4/keys = {
 "update": 0,
 "values": [0.0, 0.0]
 }
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Skeleton2D/Hip:rotation")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.28),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 0.0]
+}
 
 [sub_resource type="Animation" id="Animation_jump"]
 resource_name = "jump"
@@ -150,7 +174,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.15),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [-0.8, -0.8]
+"values": [-0.5, -0.5]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -162,7 +186,161 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0, 0.15),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
+"values": [0.35, 0.35]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Skeleton2D/Hip/Shoulder:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
 "values": [0.6, 0.6]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Skeleton2D/Hip:position:y")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [588.0, 588.0]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Skeleton2D/Hip/Neck:rotation")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [-0.1, -0.1]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Skeleton2D/Hip:rotation")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [-0.15, -0.15]
+}
+
+[sub_resource type="Animation" id="Animation_fall"]
+resource_name = "fall"
+length = 0.15
+loop_mode = 0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Skeleton2D/Hip/HipNear:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [-0.1, -0.1]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Skeleton2D/Hip/HipFar:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [-0.2, -0.2]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Skeleton2D/Hip/Shoulder:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [-0.05, -0.05]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Skeleton2D/Hip:position:y")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [603.0, 603.0]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Skeleton2D/Hip/Neck:rotation")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.05, 0.05]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Skeleton2D/Hip:rotation")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.08, 0.08]
+}
+
+[sub_resource type="Animation" id="Animation_land"]
+resource_name = "land"
+length = 0.15
+loop_mode = 0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Skeleton2D/Hip/HipNear:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.4, 0.4]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Skeleton2D/Hip/HipFar:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [-0.25, -0.25]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -186,7 +364,7 @@ tracks/3/keys = {
 "times": PackedFloat32Array(0, 0.15),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [590.0, 590.0]
+"values": [630.0, 630.0]
 }
 tracks/4/type = "value"
 tracks/4/imported = false
@@ -198,137 +376,19 @@ tracks/4/keys = {
 "times": PackedFloat32Array(0, 0.15),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [-0.05, -0.05]
+"values": [0.15, 0.15]
 }
-
-[sub_resource type="Animation" id="Animation_fall"]
-resource_name = "fall"
-length = 0.15
-loop_mode = 0
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Skeleton2D/Hip/HipNear:rotation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Skeleton2D/Hip:rotation")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
 "times": PackedFloat32Array(0, 0.15),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [-0.25, -0.25]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Skeleton2D/Hip/HipFar:rotation")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.15),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [-0.15, -0.15]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Skeleton2D/Hip/Shoulder:rotation")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.15),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [-0.1, -0.1]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("Skeleton2D/Hip:position:y")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.15),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [605.0, 605.0]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("Skeleton2D/Hip/Neck:rotation")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0, 0.15),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [0.03, 0.03]
-}
-
-[sub_resource type="Animation" id="Animation_land"]
-resource_name = "land"
-length = 0.15
-loop_mode = 0
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Skeleton2D/Hip/HipNear:rotation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.15),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [0.35, 0.35]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Skeleton2D/Hip/HipFar:rotation")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.15),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [-0.35, -0.35]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Skeleton2D/Hip/Shoulder:rotation")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.15),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [0.2, 0.2]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("Skeleton2D/Hip:position:y")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.15),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [625.0, 625.0]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("Skeleton2D/Hip/Neck:rotation")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0, 0.15),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [0.08, 0.08]
+"values": [0.15, 0.15]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_hero"]
@@ -355,8 +415,11 @@ animation = &"fall"
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_land"]
 animation = &"land"
 
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_default"]
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_fluid"]
 xfade_time = 0.12
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_snap"]
+xfade_time = 0.05
 
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_hero"]
 states/idle/node = SubResource("AnimationNodeAnimation_idle")
@@ -369,7 +432,7 @@ states/fall/node = SubResource("AnimationNodeAnimation_fall")
 states/fall/position = Vector2(500, 260)
 states/land/node = SubResource("AnimationNodeAnimation_land")
 states/land/position = Vector2(400, 400)
-transitions = ["idle", "run", SubResource("AnimationNodeStateMachineTransition_default"), "run", "idle", SubResource("AnimationNodeStateMachineTransition_default"), "idle", "jump", SubResource("AnimationNodeStateMachineTransition_default"), "run", "jump", SubResource("AnimationNodeStateMachineTransition_default"), "idle", "fall", SubResource("AnimationNodeStateMachineTransition_default"), "run", "fall", SubResource("AnimationNodeStateMachineTransition_default"), "jump", "fall", SubResource("AnimationNodeStateMachineTransition_default"), "jump", "land", SubResource("AnimationNodeStateMachineTransition_default"), "fall", "land", SubResource("AnimationNodeStateMachineTransition_default"), "land", "idle", SubResource("AnimationNodeStateMachineTransition_default"), "land", "run", SubResource("AnimationNodeStateMachineTransition_default")]
+transitions = ["idle", "run", SubResource("AnimationNodeStateMachineTransition_fluid"), "run", "idle", SubResource("AnimationNodeStateMachineTransition_fluid"), "idle", "jump", SubResource("AnimationNodeStateMachineTransition_snap"), "run", "jump", SubResource("AnimationNodeStateMachineTransition_snap"), "idle", "fall", SubResource("AnimationNodeStateMachineTransition_snap"), "run", "fall", SubResource("AnimationNodeStateMachineTransition_snap"), "jump", "fall", SubResource("AnimationNodeStateMachineTransition_snap"), "jump", "land", SubResource("AnimationNodeStateMachineTransition_snap"), "fall", "land", SubResource("AnimationNodeStateMachineTransition_snap"), "land", "idle", SubResource("AnimationNodeStateMachineTransition_snap"), "land", "run", SubResource("AnimationNodeStateMachineTransition_snap")]
 
 [node name="HeroRig" type="Node2D"]
 
