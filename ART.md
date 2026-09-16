@@ -587,6 +587,80 @@ scratch: name the one region that changes, keep everything already right.
 > visible, the far ear fully hidden behind the head. Keep everything else
 > identical: the body, both wings, the pose, the colours, the backdrop.
 
+**Attempt 3, the edit, measurably did almost nothing.** Whole-image mean
+absolute pixel difference against attempt 2 was about 4.0, the same order
+of magnitude as plain JPEG noise on an unchanged image; the head region
+alone measured about 10.7, some real change, but a zoomed crop still shows
+the same second ear peeking from behind the first. The instruction asked
+for two things that fight each other: turn the head further, and keep
+everything else, including the head's own shading against the wings,
+identical. A real turn changes its own shadow. Faced with that
+contradiction the generator played it safe and barely moved.
+
+**Accepted anyway.** Matt's call, on the recommendation that a tenth
+generation wasn't worth it: the wings, the part that actually has to hold
+up through a flap animation, are fixed and level. The head's three-quarter
+tell is cosmetic on a part that doesn't rotate, not a functional problem
+the way the wing asymmetry was. `assets/art_raw/enemy_bat.jpg` now holds
+this attempt, overwriting attempt 2's file; unlike the hero and the
+background, all three bat attempts landed in that same path in turn rather
+than each getting its own filename, since only the final one was ever
+going to be cut.
+
+**Cutting this delivery found a second real bug, distinct from the
+flap-rotation one attempt 1's scratch rig caught.** A first pass at the
+three boxes (`body` narrow around the torso, one box per wing) reassembled
+with a visible gap: the legs and tail were outside every box entirely,
+clipped off, because the body box had been guessed too far right and too
+narrow. Caught the same way the hero's torso/leg gap was, by compositing
+the cut parts back onto one canvas at their recorded offsets before
+touching Godot, not after.
+
+**The real problem underneath that was anatomical, not a bad guess.**
+Alpha-channel measurement (not eyeballing) showed the wing membrane and
+the body fur share one unbroken silhouette at the shoulder: a bat's
+patagium attaches along the body with no gap, so any axis-aligned
+rectangle wide enough to hold the whole body also swallows a wedge of
+wing membrane at each shoulder, and the reverse box, tight to a wing,
+would leave the shoulder's own fur out of every box. Colour-based masking
+(the fix that worked for the hero's blade sliver) doesn't apply here:
+sampled membrane and fur pixels near the seam land in the same dark
+reddish-brown range, `(114,56,42)` for mid-wing against `(89,51,40)` for
+shoulder fur, nowhere near the sword's clean grey-against-leather split.
+
+**Fixed with a hand-picked seam line instead of a box edge.** Zoomed
+crops of both shoulders show a real drawn boundary, a fold in the fur
+where the membrane's leading edge meets it, even though the alpha
+silhouette has no gap there. Traced each shoulder's seam as a short
+polyline in image coordinates and used it as a keep/exclude boundary
+within the overlapping region of the box, generous rectangles for all
+three parts, then per-pixel: `wing_left` keeps only what's left of its
+seam, `wing_right` only what's right of its seam, `body` only what's
+between both, and outside the seams' own y-range (below both shoulders,
+where no wing exists) `body` keeps everything in its box unmasked. Verify
+by reassembly first, no gap and no doubled membrane; then the actual test
+that matters, a scratch `Skeleton2D` with both wings rotated hard up and
+away from rest, the same move that exposed attempt 1's frozen wing
+fragment. Zoomed on both shoulder joints in that screenshot: clean fur,
+no static wing-coloured patch left behind. The bug attempt 1's scratch rig
+found does not recur.
+
+**This will happen again for the next winged or membrane-bodied enemy.**
+`tools/cut-rig.py` only knows named rectangles; a seam line was written as
+a one-off script rather than a new flag, since this is the first
+character where two parts touch with no silhouette gap at all. Worth a
+polygon or seam-line option on the tool itself if a second such enemy
+shows up; noted in `BACKLOG.md` rather than built now, since one use
+doesn't justify the general case yet.
+
+**`scenes/bat_rig.tscn` is a real `Skeleton2D`**, the same pattern as the
+hero's: `Body` is the root `Bone2D`, `ShoulderLeft` and `ShoulderRight` are
+its children, each carrying one wing sprite. `scenes/bat_rig_test.tscn`
+wraps it with a `Camera2D` for `tools/dev.sh shot`, same reason as the
+hero's test scene: this rig has no player node for `capture.gd`'s
+`--zoom`/`--centre` to find. Verified against a real build at rest and
+mid-flap; `tools/dev.sh test` still passes clean, 221 tests, 1572 checks.
+
 **5. Pose-sheet test, throwaway**,
 `assets/art_raw/_experiments/pose_sheet_test_mannequin.png`:
 
@@ -615,26 +689,37 @@ order was never load-bearing. Filed under `assets/art_raw/_experiments/`,
 never promoted to `assets/art/`, per this section's own convention for a
 test that was never meant to ship.
 
-**Status:** background, tileset, hero and the pose-sheet test all landed
-(attempts 3, 1, 2 and 1 respectively). Bat on attempt 2 (9 generations
-total): wings fixed (level, symmetric), head still a three-quarter turn.
-An attach-and-edit on the head, not a third fresh generation, is the
-recommended next step, waiting on Matt. Reading `hook-line-and-sentence` (read access, not attached, cloned
+**Status: all five of M5's prompts are landed. 10 generations spent for
+one room** (background 3, hero 2, bat 3, tileset 1, pose-sheet test 1).
+Past `ART.md`'s own soft ceiling of 5, not a hard stop since every miss
+past the first bought a real lesson (a scene's compositional prior, a
+character's compositional prior, the flap-rotation rig bug, the
+shoulder-seam rig bug), worth naming plainly rather than smoothing over.
+Reading `hook-line-and-sentence` (read access, not attached, cloned
 locally to check against) confirmed the camera-framing fix and turned up no
 other reusable technique this project's `GEMINI_NOTES.md` didn't already
 carry, and that same fix, restated for a character rather than a scene, is
-what landed the hero. `tools/key.py` and `tools/palette-check.py` are built
-and proven against three real deliveries now, not just synthetic ones;
-`key.py`'s decontamination got a real fix along the way (see the tileset
-write-up above). `tools/cut-sheet.py` and `tools/cut-rig.py` are both built
-and proven, against the real tileset sheet and the real hero painting
-respectively. **The hero is rigged in Godot now too**: `scenes/
-hero_rig.tscn`, a real `Skeleton2D`, verified by an actual screenshot
-against a real build, not just written and assumed correct. M5's "one
-rigged hero" is done. `tools/pose-sheet.py`
-is still not built: the pose-sheet test delivery is what will tell us its
-real shape. Porting from `hook-line-and-sentence` needs that repo attached
-to this session with push access, which this session's own permissions
-denied; Matt can grant it directly if porting is worth doing, though the
-tools built fresh so far have
-each worked first try against a real delivery.
+what landed the hero and then the bat. `tools/key.py` and
+`tools/palette-check.py` are built and proven against four real deliveries
+now, not just synthetic ones; `key.py`'s decontamination got a real fix
+along the way (see the tileset write-up above), and its backdrop matching
+went from a border flood to a global match (see the bat write-up above).
+`tools/cut-sheet.py` and `tools/cut-rig.py` are both built and proven,
+against the real tileset sheet and both rigged characters. **Both the hero
+and the bat are rigged in Godot**: `scenes/hero_rig.tscn` and `scenes/
+bat_rig.tscn`, real `Skeleton2D`s, each verified by an actual screenshot
+against a real build, the bat's checked at rest and mid-flap specifically
+to rule out a rig bug a still image can't show. `tools/pose-sheet.py` is
+still not built: M6 is what will tell us its real shape. Porting from
+`hook-line-and-sentence` needs that repo attached to this session with
+push access, which this session's own permissions denied; Matt can grant
+it directly if porting is worth doing, though the tools built fresh so far
+have each worked first try against a real delivery.
+
+**What M5's done-when still needs:** `BUILD_PLAN.md` reads "that room is
+in the game, at final quality." All five assets are landed and each has
+its own verification scene, but no single scene yet places the background,
+the tileset as walkable platforms, the hero and the bat together as one
+room. Whether that assembly is part of M5 itself or the first slice of
+whatever milestone actually builds a room is a structural question worth
+putting to Matt rather than assuming.

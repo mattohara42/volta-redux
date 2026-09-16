@@ -165,3 +165,11 @@ committed to.
 - **Volta's dialogue.** The original had none worth keeping. A wizard who
   comments on your deaths is either very good or very bad and there is no middle.
 - **Desktop builds signed and on itch.io**, beyond the web export in M16.
+- **`tools/cut-rig.py` only knows named rectangles.** Fine for the hero,
+  where every part has a gap or a clean colour split from its neighbour.
+  The bat's wing meets its body with no silhouette gap at all, a real
+  drawn seam rather than an edge a box or a colour threshold can find, so
+  cutting it needed a one-off hand-picked polyline written outside the
+  tool (`ART.md`'s bat section has the write-up). Worth a seam-line or
+  polygon option on the tool itself if a second winged or membrane-bodied
+  enemy needs the same trick; one use doesn't justify building it yet.
