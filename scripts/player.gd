@@ -41,6 +41,14 @@ var _rig: Node2D = null
 ## `_rig`'s own `AnimationTree`. Null under the same condition as `_rig`, or if
 ## a future rig scene drops the node; `_update_animation` no-ops either way.
 var _anim_tree: AnimationTree = null
+## How long the landing pose holds, read once from the rig's own "land"
+## animation length rather than duplicated as a number here, so retiming the
+## pose in `hero_rig.tscn` is the only place that has to change. Zero (no
+## hold at all) if the rig or the animation is missing.
+var _land_pose_duration := 0.0
+## Counts down from `_land_pose_duration` after a landing; `Locomotion` reads
+## it to hold the LAND state for that long before falling back to idle/run.
+var _landing_timer := 0.0
 ## Where the next death puts you. Starts as wherever the room placed you and
 ## moves only when a brazier is lit, which is the only thing in the game that
 ## touches it.
@@ -127,6 +135,9 @@ func _ready() -> void:
 		_rig = RIG_SCENE.instantiate()
 		add_child(_rig)
 		_anim_tree = _rig.get_node_or_null("AnimationTree")
+		var anim_player := _rig.get_node_or_null("AnimationPlayer") as AnimationPlayer
+		if anim_player != null and anim_player.has_animation("land"):
+			_land_pose_duration = anim_player.get_animation("land").length
 	_apply_hero_size(world.hero_height)
 	_message_label.add_theme_font_size_override("font_size", death_config.message_font_size)
 	_message_label.add_theme_color_override("font_color", Palette.FIRE_HOT)
@@ -174,8 +185,16 @@ func _physics_process(delta: float) -> void:
 	# After the move, so the apex is the position the body actually reached and
 	# not the one it held a frame earlier.
 	_track_peak()
+	# Checked again after the move: `on_floor` above is where the body ended
+	# last frame, this is where it ended this one, and the edge between the
+	# two is a landing.
+	var grounded_now := is_on_floor()
+	if grounded_now and not on_floor:
+		_landing_timer = _land_pose_duration
+	else:
+		_landing_timer = maxf(_landing_timer - delta, 0.0)
 	_update_rig()
-	_update_animation()
+	_update_animation(grounded_now)
 	queue_redraw()
 
 
@@ -463,15 +482,16 @@ func _update_rig() -> void:
 
 
 ## Travels the rig's `AnimationTree` state machine to whatever `Locomotion`
-## says the current horizontal speed reads as. The only thing this script does
-## with the tree: `hero_rig.tscn` owns the states and how they animate.
+## says the current ground contact, vertical speed and landing hold read as.
+## The only thing this script does with the tree: `hero_rig.tscn` owns the
+## states and how they animate.
 ##
 ## Not called during `_step_death`, so the rig freezes on whatever pose it was
 ## in the moment the hero died, matching the body staying where it fell.
-func _update_animation() -> void:
+func _update_animation(grounded: bool) -> void:
 	if _anim_tree == null:
 		return
-	var state := Locomotion.state_for(velocity.x)
+	var state := Locomotion.state_for(grounded, velocity.y, _landing_timer, velocity.x)
 	_anim_tree["parameters/playback"].travel(Locomotion.state_name(state))
 
 
