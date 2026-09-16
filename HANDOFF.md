@@ -11,16 +11,21 @@ is M12's. See git log for the reasoning if it needs re-reading.
 ## Where this is
 
 **M5's "one rigged hero" is done**, verified against a real running build.
-Background, tileset, hero and the pose-sheet test have all landed; the bat
-is rerolling (attempt 2 sent, not yet delivered) after a scratch rig test
-of attempt 1 showed the real problem in motion, not in the still: the
-wings' asymmetry left no clean neutral point to flap from. That test also
-found a rig defect independent of the pose question, a rectangular chunk of
-wing content baked statically into the body sprite, exposed the moment the
-wing rotated away from covering it, worth remembering whichever delivery
-gets cut for real: keep a part's box tight to that part, don't rely on
-another part's rest-pose position to hide an overlap that won't survive
-animation.
+Background, tileset, hero and the pose-sheet test have all landed. The bat
+is on attempt 2, partial: the wing fix held, level and symmetric, the
+neutral flap point attempt 1 lacked. The head fix did not, zoomed in, two
+ears are visible, the plainest three-quarter tell, confirming Matt's
+at-a-glance read once measured up close. Recommended next step is an
+attach-and-edit naming just the head, not a third fresh generation,
+`GEMINI_NOTES.md`'s own proven technique for a single regional fix on an
+otherwise-good delivery; waiting on Matt.
+
+A scratch rig test of attempt 1 also found a rig defect independent of the
+pose question, a rectangular chunk of wing content baked statically into
+the body sprite, exposed the moment the wing rotated away from covering it,
+worth remembering whichever delivery gets cut for real: keep a part's box
+tight to that part, don't rely on another part's rest-pose position to hide
+an overlap that won't survive animation.
 
 **`GEMINI_NOTES.md`'s open question about pose sheets is answered: yes.**
 The throwaway mannequin sheet's six cut frames measured within a few points
@@ -48,7 +53,7 @@ the one delivery that exposed it.
 future session here starts the same way. `tools/dev.sh test` passes clean,
 221 tests, 1572 checks.
 
-**8 generations spent, 4 of 5 M5 assets landed clean, the bat pending.**
+**9 generations spent, 4 of 5 M5 assets landed clean, the bat pending.**
 Past `ART.md`'s own budget-rule ceiling of 5 for the whole room, not a hard
 stop since every miss bought a real lesson, but worth naming plainly.
 
@@ -63,13 +68,13 @@ twice. Not blocking.
 
 ## The next action
 
-**The bat's attempt 2 delivery**, whenever Matt has it: symmetric level
-wings and a true head profile this time. Once it lands and cuts clean,
-M5's five prompts are all done.
+**Matt's call on the attach-and-edit for the bat's head**, `ART.md` has
+the exact instruction ready to paste. Once that lands and cuts clean, M5's
+five prompts are all done.
 
 ## Blocked on Matt
 
-1. **The bat, attempt 2**, in flight in the Gemini UI.
+1. **The bat's head fix**, attach-and-edit instruction ready in `ART.md`.
 2. **The open questions in `LEVELS.md`**, the ending swap (caged dragon vs.
    caged bird) chief among them, touching a decision `CLAUDE.md` currently
    marks "do not relitigate." Includes whether a forest sits before or
