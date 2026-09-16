@@ -542,10 +542,24 @@ usable shapes regardless of the dynamic overall pose.
 > colour beyond the wood itself. The image is 2048 by 1365 pixels, aspect
 > ratio 3:2.
 
-**Status:** background, tileset and hero landed (attempts 3, 1 and 2
-respectively), bat delivered but not yet accepted (7 generations total),
-pose-sheet test not yet sent. The bat's pose is a genuine judgment call
-flagged above for Matt rather than decided here. Reading `hook-line-and-sentence` (read access, not attached, cloned
+**Landed first attempt, and the question it was for is answered: yes.**
+`cut-sheet.py` found six clean connected components. Measured per-frame
+mean RGB and luminance across all six landed within a few points of each
+other (full numbers and the write-up of what this means for M6 are in
+`GEMINI_NOTES.md`, since that's where the generator-behaviour finding
+belongs, not here). One soft miss: the "rotating through a full tumble" ask
+didn't land as one clean monotonic sequence in reading order, two poses
+read as similarly deep inversions rather than a single peak either side of
+a symmetric recovery. Doesn't matter for M6's actual use: a human picks the
+poses that work as key frames and orders them, the sheet's own left-to-right
+order was never load-bearing. Filed under `assets/art_raw/_experiments/`,
+never promoted to `assets/art/`, per this section's own convention for a
+test that was never meant to ship.
+
+**Status:** background, tileset, hero and the pose-sheet test all landed
+(attempts 3, 1, 2 and 1 respectively, 8 generations total). Bat delivered
+but not yet accepted, the only open item: its pose is a genuine judgment
+call flagged above for Matt rather than decided here. Reading `hook-line-and-sentence` (read access, not attached, cloned
 locally to check against) confirmed the camera-framing fix and turned up no
 other reusable technique this project's `GEMINI_NOTES.md` didn't already
 carry, and that same fix, restated for a character rather than a scene, is
