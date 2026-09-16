@@ -1,10 +1,21 @@
 #!/usr/bin/env python3
-"""Flood the backdrop out of a Gemini delivery and write a transparent PNG.
+"""Key the backdrop out of a Gemini delivery and write a transparent PNG.
 
 ART.md, pipeline step 2. The generator does not return the exact backdrop
 colour it was asked for (GEMINI_NOTES.md), so this samples the delivery's own
-border pixels for the backdrop colour instead of assuming one, then floods
-inward from the border. Pixels the flood reaches become transparent.
+border pixels for the backdrop colour instead of assuming one, then matches
+that colour everywhere in the image, not just what a flood from the border
+would reach.
+
+That last part is not a hypothetical: a bat delivery's backdrop showed up
+trapped in enclosed gaps a border-seeded flood never touches, between a
+wing's finger-bones, inside an open mouth. Those pockets measured
+indistinguishable from the border's own backdrop colour and were kept
+fully opaque by an earlier, flood-based version of this tool, because
+they were never connected to a border seed. A global colour match has no
+such blind spot: this project's palette (ART_DIRECTION.md) has nothing
+naturally near a saturated magenta or green, so matching the backdrop
+colour by value alone, anywhere in the frame, is safe.
 
 The antialiased seam around a cut subject carries real backdrop colour
 blended in, not just a faint tint: measured on a real delivery, a magenta
@@ -33,13 +44,8 @@ import sys
 from pathlib import Path
 
 import numpy as np
-from PIL import Image, ImageDraw
+from PIL import Image
 from scipy import ndimage
-
-# A colour the delivered art is asked never to use, so it is safe as a flood
-# marker: floodfill.py paints matched backdrop pixels this colour internally,
-# then the mask below is wherever the working copy equals it.
-_SENTINEL = (0, 255, 0)
 
 
 def _detect_backdrop(rgb: np.ndarray) -> tuple[int, int, int]:
@@ -48,27 +54,12 @@ def _detect_backdrop(rgb: np.ndarray) -> tuple[int, int, int]:
     return tuple(int(c) for c in values[counts.argmax()])
 
 
-def _flood_backdrop_mask(image: Image.Image, backdrop: tuple[int, int, int], tolerance: int) -> np.ndarray:
-    width, height = image.size
-    working = image.convert("RGB").copy()
-    original = np.asarray(working)
-    matches_backdrop = np.all(np.abs(original.astype(int) - np.array(backdrop)) <= tolerance, axis=-1)
-
-    seeds: set[tuple[int, int]] = set()
-    for x in range(width):
-        seeds.add((x, 0))
-        seeds.add((x, height - 1))
-    for y in range(height):
-        seeds.add((0, y))
-        seeds.add((width - 1, y))
-
-    filled = np.zeros((height, width), dtype=bool)
-    for x, y in seeds:
-        if filled[y, x] or not matches_backdrop[y, x]:
-            continue
-        ImageDraw.floodfill(working, (x, y), _SENTINEL, thresh=tolerance)
-        filled = np.all(np.asarray(working) == np.array(_SENTINEL), axis=-1)
-    return filled
+def _backdrop_mask(rgb: np.ndarray, backdrop: tuple[int, int, int], tolerance: int) -> np.ndarray:
+    """Every pixel within `tolerance` of the backdrop colour, anywhere in the
+    image. See the module docstring for why this is a global match rather
+    than a flood from the border: an enclosed pocket of backdrop colour is
+    still backdrop even when nothing connects it to the edge of the frame."""
+    return np.all(np.abs(rgb.astype(int) - np.array(backdrop)) <= tolerance, axis=-1)
 
 
 def _dilate(mask: np.ndarray, iterations: int) -> np.ndarray:
@@ -107,7 +98,7 @@ def key(delivery: Path, out: Path, tolerance: int, ring_px: int, overwrite: bool
     image = Image.open(delivery).convert("RGB")
     rgb = np.asarray(image)
     backdrop = _detect_backdrop(rgb)
-    mask = _flood_backdrop_mask(image, backdrop, tolerance)
+    mask = _backdrop_mask(rgb, backdrop, tolerance)
     clean_rgb = _decontaminate(rgb, mask, ring_px)
 
     rgba = np.dstack([clean_rgb, np.full(rgb.shape[:2], 255, dtype=np.uint8)])

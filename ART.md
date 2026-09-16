@@ -488,6 +488,46 @@ paying for a third rejection to relearn it:
 > backdrop on all sides, nothing cropped by the frame. The image is 1536 by
 > 1152 pixels, aspect ratio 4:3.
 
+**Delivered, palette clean, and the pre-emptive fix didn't fully hold.**
+`palette-check.py`: 0.00% neutral-dark. But the pose is still a dynamic
+swoop, not the flat orthogonal profile asked for: the head shows both ears
+and a near-frontal muzzle, the body's long axis is diagonal, and the two
+wings are spread at different angles rather than symmetrically in-plane.
+The explicit "NOT a three-quarter view" that landed the hero on its second
+attempt didn't fully override the generator's default here; a creature
+"mid-flight, wings spread" carries an even stronger prior toward a dynamic
+action shot than a standing human idle pose did.
+
+**Found and fixed a real bug in `key.py` cutting this one, more serious
+than the tileset's.** The bat's wing membranes have thin gaps between the
+finger-bones, and its bared teeth leave gaps in the mouth: backdrop colour
+trapped in those enclosed pockets measured `(239, 36, 240)` against a
+detected backdrop of `(243, 46, 248)`, indistinguishable from the real
+thing, and `key.py`'s border-seeded flood fill never reached it, because
+nothing connects an enclosed pocket to a border seed. The result was solid
+magenta patches baked into every rig-part crop as fully opaque "subject"
+pixels. Rewrote `key.py` to match the backdrop colour globally, anywhere in
+the frame, rather than flooding from the border: this project's palette
+(`ART_DIRECTION.md`) has nothing naturally near a saturated magenta, so a
+global match has no real subject to false-positive on. Re-checked every
+already-committed asset (the hero's rig parts, the tileset tiles, the
+hero's full painting) against the new tool: all clean, the bug's actual
+damage was confined to this one delivery. A last few sub-pixel specks
+remain at extremities (claw tips, an ear notch, under 50px total across the
+whole image) where the antialiasing never produces a pixel close enough to
+either colour to classify cleanly; noted rather than chased, since no
+reasonable tolerance fixes a gap smaller than a pixel's own blend.
+
+**Not cut into final rig parts or committed as a finished asset yet.** The
+pose question is a judgment call this file shouldn't make alone: whether
+the dynamic swoop actually matters for a creature whose own behaviour is
+erratic flight (`SPEC.md`'s bat row), given its rig is only a body and two
+independently-rotating wings rather than the hero's limb chain, or whether
+it's worth a third generation to get a calmer profile. Test-cut into
+`body`/`wing_left`/`wing_right` in scratch to check the question is
+answerable at all: individually, both wings read as reasonably flat,
+usable shapes regardless of the dynamic overall pose.
+
 **5. Pose-sheet test, throwaway**,
 `assets/art_raw/_experiments/pose_sheet_test_mannequin.png`:
 
@@ -503,8 +543,9 @@ paying for a third rejection to relearn it:
 > ratio 3:2.
 
 **Status:** background, tileset and hero landed (attempts 3, 1 and 2
-respectively, 6 generations total), bat and the pose-sheet test not yet
-sent. Reading `hook-line-and-sentence` (read access, not attached, cloned
+respectively), bat delivered but not yet accepted (7 generations total),
+pose-sheet test not yet sent. The bat's pose is a genuine judgment call
+flagged above for Matt rather than decided here. Reading `hook-line-and-sentence` (read access, not attached, cloned
 locally to check against) confirmed the camera-framing fix and turned up no
 other reusable technique this project's `GEMINI_NOTES.md` didn't already
 carry, and that same fix, restated for a character rather than a scene, is
