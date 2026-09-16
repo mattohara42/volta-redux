@@ -173,3 +173,22 @@ committed to.
   tool (`ART.md`'s bat section has the write-up). Worth a seam-line or
   polygon option on the tool itself if a second winged or membrane-bodied
   enemy needs the same trick; one use doesn't justify building it yet.
+
+- **No tool measures where a tileset module's own art meets its collision
+  line.** `room_m5_wall.gd`'s floor tile needed the pale ledge lip's exact
+  pixel row so the hero's feet would read as standing on it, found with a
+  one-off Python scan of the PNG (`ART.md`'s M5 write-up has the numbers).
+  M10 is building real rooms on a real tileset from here on, and every
+  floor and ledge module will need the same measurement. Worth a small
+  `tools/` script (brightest-row or a hand-marked line, saved once per
+  module) if M10 turns out to need it more than once or twice by hand.
+
+- **`scripts/debug_overlay.gd`'s `BENCHES` list (F2's cycle) does not
+  include any of the M4 rooms.** `room_m4_enemies.tscn`, `room_m4_dragon.
+  tscn`, `room_m4_plate.tscn` and `room_m4_dormant.tscn` all exist, are all
+  covered by CI screenshots, and none of them are reachable by pressing F2
+  from another bench; only `tools/dev.sh play res://scenes/rooms/room_m4_
+  ....tscn` reaches them directly. `room_m5_wall.tscn` was added to the list
+  when it was built; the M4 gap predates this session and looks like an
+  oversight rather than a decision, noted here rather than fixed as a
+  drive-by change to unrelated rooms.

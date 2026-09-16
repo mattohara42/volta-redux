@@ -19,7 +19,25 @@ extends CharacterBody2D
 ## Hero heights to cycle with [ and ], around ART_DIRECTION.md's estimate of 40.
 const HERO_HEIGHT_STEPS: PackedFloat32Array = [28.0, 34.0, 40.0, 46.0, 54.0]
 
+## The rig this species is built from, painted once for the whole game.
+## `assets/art/hero/rig/`, cut from the M5 delivery `ART.md` records.
+const RIG_SCENE: PackedScene = preload("res://scenes/hero_rig.tscn")
+## `scenes/hero_rig.tscn`'s own bone and sprite offsets, composited: top of the
+## head to the sole of the boot, and the horizontal centreline through the
+## standing figure. Read off the rig's recorded numbers, not measured from a
+## screenshot, so a redraw of the rig is the only thing that moves them.
+const RIG_SOURCE_TOP: float = 80.0
+const RIG_SOURCE_BOTTOM: float = 1140.0
+const RIG_SOURCE_CENTRE_X: float = 440.0
+## `assets/art/hero/rig/torso.png`'s own height, in the same source pixels as
+## the three constants above. `Bat.RIG_TARGET_BODY_LENGTH` sizes against this.
+const RIG_SOURCE_TORSO_LENGTH: float = 470.0
+
 var config: MovementConfig
+## The painted rig, standing in for the drawn capsule wherever one is
+## available. Null only if `RIG_SCENE` fails to load, in which case `_draw`
+## falls back to the capsule rather than showing nothing.
+var _rig: Node2D = null
 ## Where the next death puts you. Starts as wherever the room placed you and
 ## moves only when a brazier is lit, which is the only thing in the game that
 ## touches it.
@@ -102,6 +120,9 @@ func _ready() -> void:
 	spawn_point = global_position
 	swords_at_spawn = sword_config.starting_swords
 	swords_held = swords_at_spawn
+	if RIG_SCENE != null:
+		_rig = RIG_SCENE.instantiate()
+		add_child(_rig)
 	_apply_hero_size(world.hero_height)
 	_message_label.add_theme_font_size_override("font_size", death_config.message_font_size)
 	_message_label.add_theme_color_override("font_color", Palette.FIRE_HOT)
@@ -149,6 +170,7 @@ func _physics_process(delta: float) -> void:
 	# After the move, so the apex is the position the body actually reached and
 	# not the one it held a frame earlier.
 	_track_peak()
+	_update_rig()
 	queue_redraw()
 
 
@@ -301,6 +323,7 @@ func _step_death(delta: float) -> void:
 		last_downtime = _death_elapsed
 		_dead = false
 		_death_elapsed = 0.0
+	_update_rig()
 	queue_redraw()
 
 
@@ -405,7 +428,33 @@ func _apply_hero_size(height: float) -> void:
 	capsule.radius = world.hero_width * 0.5
 	var probe := _probe_shape.shape as RectangleShape2D
 	probe.size = Vector2(world.hero_width * 0.5, height * 0.8)
+	_update_rig()
 	queue_redraw()
+
+
+## Scales and positions the rig so its own feet land on the capsule's own
+## floor contact point, whatever `world.hero_height` currently is (M0's [ and
+## ] keys included), and mirrors it around its own centreline rather than the
+## origin, since the painted figure is not centred on (0, 0) in its own scene.
+## Tints it the same cue the capsule drew: dead borrows lava's darkest value
+## rather than going grey, ART_DIRECTION.md's darkest colour reserved for what
+## it already reserves darkness for; climbing a warm gold, same as before.
+func _update_rig() -> void:
+	if _rig == null:
+		return
+	var rig_scale := world.hero_height / (RIG_SOURCE_BOTTOM - RIG_SOURCE_TOP)
+	var signed_scale := rig_scale * facing
+	_rig.scale = Vector2(signed_scale, rig_scale)
+	_rig.position = Vector2(
+		-RIG_SOURCE_CENTRE_X * signed_scale,
+		world.hero_height * 0.5 - RIG_SOURCE_BOTTOM * rig_scale
+	)
+	if _dead:
+		_rig.modulate = Palette.LAVA_CRUST
+	elif climbing:
+		_rig.modulate = Color(Palette.GOLD_FACE, 0.95)
+	else:
+		_rig.modulate = Color.WHITE
 
 
 func _handle_debug_keys() -> void:
@@ -437,9 +486,12 @@ func _nearest_size_index(height: float) -> int:
 	return best
 
 
-## A capsule, drawn rather than imported, because no PNG enters the repo before
-## M5 and the shape of this thing is the point of the milestone.
+## A capsule, drawn rather than imported. M5 painted the real thing
+## (`_update_rig`), so this only runs as the fallback for a scene that somehow
+## has no rig, and the shape it draws is still the one M0 settled on.
 func _draw() -> void:
+	if _rig != null:
+		return
 	var h := world.hero_height
 	var r := world.hero_width * 0.5
 	var top := -h * 0.5 + r
