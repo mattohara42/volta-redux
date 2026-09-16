@@ -1,10 +1,105 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=14 format=3]
 
 [ext_resource type="Texture2D" path="res://assets/art/hero/rig/torso.png" id="1_torso"]
 [ext_resource type="Texture2D" path="res://assets/art/hero/rig/head.png" id="2_head"]
 [ext_resource type="Texture2D" path="res://assets/art/hero/rig/arm_near.png" id="3_arm"]
 [ext_resource type="Texture2D" path="res://assets/art/hero/rig/leg_near.png" id="4_leg_near"]
 [ext_resource type="Texture2D" path="res://assets/art/hero/rig/leg_far.png" id="5_leg_far"]
+
+[sub_resource type="Animation" id="Animation_idle"]
+resource_name = "idle"
+length = 2.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Skeleton2D/Hip:position:y")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.2, 2.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [600.0, 585.0, 600.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Skeleton2D/Hip/Neck:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1.2, 2.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [0.0, -0.035, 0.0]
+}
+
+[sub_resource type="Animation" id="Animation_run"]
+resource_name = "run"
+length = 0.5
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Skeleton2D/Hip/HipNear:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [0.45, -0.45, 0.45]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Skeleton2D/Hip/HipFar:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [-0.45, 0.45, -0.45]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Skeleton2D/Hip/Shoulder:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [-0.35, 0.35, -0.35]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_hero"]
+_data = {
+"idle": SubResource("Animation_idle"),
+"run": SubResource("Animation_run")
+}
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_idle"]
+animation = &"idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_run"]
+animation = &"run"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_to_run"]
+xfade_time = 0.15
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_to_idle"]
+xfade_time = 0.15
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_hero"]
+states/idle/node = SubResource("AnimationNodeAnimation_idle")
+states/idle/position = Vector2(300, 100)
+states/run/node = SubResource("AnimationNodeAnimation_run")
+states/run/position = Vector2(500, 100)
+transitions = ["idle", "run", SubResource("AnimationNodeStateMachineTransition_to_run"), "run", "idle", SubResource("AnimationNodeStateMachineTransition_to_idle")]
 
 [node name="HeroRig" type="Node2D"]
 
@@ -49,3 +144,13 @@ position = Vector2(30, -310)
 position = Vector2(-85, -210)
 centered = false
 texture = ExtResource("2_head")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_hero")
+}
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+tree_root = SubResource("AnimationNodeStateMachine_hero")
+anim_player = NodePath("../AnimationPlayer")
+active = true
