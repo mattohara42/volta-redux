@@ -567,6 +567,26 @@ a side view), on top of the same fixes already in place:
 > nothing cropped by the frame. The image is 1536 by 1152 pixels, aspect
 > ratio 4:3.
 
+**Attempt 2, partial landing.** `palette-check.py`: 0.00% neutral-dark. The
+wing fix held: level, symmetric, the same angle on both sides, exactly the
+neutral flap-cycle point attempt 1 lacked. The head fix did not: zoomed in,
+two ears are visible, one facing the camera and a second peeking out from
+behind it, the plainest possible three-quarter tell, confirming Matt's read
+against a still that looked closer to a profile at a glance than it
+measured up close. Body and wings are worth keeping; only the head needs
+another pass.
+
+**Recommended next step: attach-and-edit, not a third fresh generation.**
+`GEMINI_NOTES.md`'s own finding on editing a delivered painting ("nine hat
+deliveries came back as faithful edits, nine times out of nine") is a
+better fit here than fighting the compositional prior over again from
+scratch: name the one region that changes, keep everything already right.
+
+> Using this exact image, change only the head: turn it further so it
+> reads as a true side profile, only the near ear and the near eye
+> visible, the far ear fully hidden behind the head. Keep everything else
+> identical: the body, both wings, the pose, the colours, the backdrop.
+
 **5. Pose-sheet test, throwaway**,
 `assets/art_raw/_experiments/pose_sheet_test_mannequin.png`:
 
@@ -596,10 +616,10 @@ never promoted to `assets/art/`, per this section's own convention for a
 test that was never meant to ship.
 
 **Status:** background, tileset, hero and the pose-sheet test all landed
-(attempts 3, 1, 2 and 1 respectively, 8 generations total). Bat rerolling
-on attempt 2, Matt's call after seeing a scratch rig test of attempt 1 in
-motion: the asymmetric wings, not the three-quarter framing, were the real
-problem, no clean neutral point to flap from. Reading `hook-line-and-sentence` (read access, not attached, cloned
+(attempts 3, 1, 2 and 1 respectively). Bat on attempt 2 (9 generations
+total): wings fixed (level, symmetric), head still a three-quarter turn.
+An attach-and-edit on the head, not a third fresh generation, is the
+recommended next step, waiting on Matt. Reading `hook-line-and-sentence` (read access, not attached, cloned
 locally to check against) confirmed the camera-framing fix and turned up no
 other reusable technique this project's `GEMINI_NOTES.md` didn't already
 carry, and that same fix, restated for a character rather than a scene, is
