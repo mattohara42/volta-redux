@@ -12,8 +12,15 @@ is M12's. See git log for the reasoning if it needs re-reading.
 
 **M5's "one rigged hero" is done**, verified against a real running build.
 Background, tileset, hero and the pose-sheet test have all landed; the bat
-is delivered but its pose is the one open question for Matt (below), not
-yet cut into final rig parts or committed.
+is rerolling (attempt 2 sent, not yet delivered) after a scratch rig test
+of attempt 1 showed the real problem in motion, not in the still: the
+wings' asymmetry left no clean neutral point to flap from. That test also
+found a rig defect independent of the pose question, a rectangular chunk of
+wing content baked statically into the body sprite, exposed the moment the
+wing rotated away from covering it, worth remembering whichever delivery
+gets cut for real: keep a part's box tight to that part, don't rely on
+another part's rest-pose position to hide an overlap that won't survive
+animation.
 
 **`GEMINI_NOTES.md`'s open question about pose sheets is answered: yes.**
 The throwaway mannequin sheet's six cut frames measured within a few points
@@ -56,23 +63,13 @@ twice. Not blocking.
 
 ## The next action
 
-**Matt's call on the bat's pose** (see *Blocked on Matt* below), then
-whichever of "reroll" or "cut it as delivered" follows from that. That's
-the last open item in M5's five.
+**The bat's attempt 2 delivery**, whenever Matt has it: symmetric level
+wings and a true head profile this time. Once it lands and cuts clean,
+M5's five prompts are all done.
 
 ## Blocked on Matt
 
-1. **The bat's pose.** Delivered as a dynamic mid-flight swoop (both ears
-   and a near-frontal muzzle visible, body on a diagonal axis, wings spread
-   at different angles) rather than the flat orthogonal profile asked for,
-   the same compositional-prior default that hit the hero, not fully beaten
-   by the same explicit negation this time. `ART.md`'s bat write-up has the
-   detail. Test-cut in scratch: both wings individually read as flat, usable
-   shapes despite the dynamic overall pose, and `SPEC.md` calls the bat's
-   own behaviour "erratic flight," so a dynamic reference pose may suit it
-   better than it would a standing hero. Whether that's good enough or
-   worth a third generation for a calmer profile is a call this file
-   shouldn't make alone.
+1. **The bat, attempt 2**, in flight in the Gemini UI.
 2. **The open questions in `LEVELS.md`**, the ending swap (caged dragon vs.
    caged bird) chief among them, touching a decision `CLAUDE.md` currently
    marks "do not relitigate." Includes whether a forest sits before or
@@ -124,6 +121,13 @@ box, or leave a gap when you fix that by moving the box instead of masking
 the prop.** Full write-up in `ART.md`'s cut-rig section. Reassemble cut
 parts on one canvas at their recorded offsets before trusting them; a gap
 between two parts is invisible looking at either one alone.
+
+**A rig looks right sitting still and wrong the moment something moves.**
+Two overlapping boxes composite fine at rest, since only the topmost
+part's pixels show where they cover the same spot, but if the covering
+part ever rotates away (a wing, not a static torso), whatever the other
+box baked in underneath is now visible and stuck in place. Test a cut rig
+by moving something in it, not only by reassembling it at rest.
 
 **A Godot 4.7.2 `Skeleton2D` errors on every leaf `Bone2D`, harmlessly.**
 "No Bone2D children... cannot calculate bone length" then `ERROR: Condition

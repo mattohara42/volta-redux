@@ -518,15 +518,54 @@ whole image) where the antialiasing never produces a pixel close enough to
 either colour to classify cleanly; noted rather than chased, since no
 reasonable tolerance fixes a gap smaller than a pixel's own blend.
 
-**Not cut into final rig parts or committed as a finished asset yet.** The
-pose question is a judgment call this file shouldn't make alone: whether
-the dynamic swoop actually matters for a creature whose own behaviour is
-erratic flight (`SPEC.md`'s bat row), given its rig is only a body and two
-independently-rotating wings rather than the hero's limb chain, or whether
-it's worth a third generation to get a calmer profile. Test-cut into
-`body`/`wing_left`/`wing_right` in scratch to check the question is
-answerable at all: individually, both wings read as reasonably flat,
-usable shapes regardless of the dynamic overall pose.
+**Test-rigged in scratch (never committed) to make the pose call with real
+information instead of guessing from a still.** Cut into `body`/
+`wing_left`/`wing_right`, reassembled to confirm the cut held, then dropped
+into a real `Skeleton2D` next to the hero and screenshotted. Two things the
+static painting couldn't have told us:
+
+- **A raw side-by-side against the hero is not a valid size comparison.**
+  `GEMINI_NOTES.md` already carries this ("scale comes from a body part,
+  never from the figure"): each generation fills its own canvas
+  independently, so the bat's painted pixels and the hero's painted pixels
+  carry no shared world scale until something deliberately corrects for
+  it. Noted so nobody re-learns it from this screenshot.
+- **Rotating the wings away from their rest pose exposed a real rig defect,
+  independent of the pose question.** A rectangular chunk of wing-shaped
+  content stayed fixed in place while the wing sprite rotated away from it,
+  because the `body` box's bounds happened to overlap the wing's rest
+  position, the same "boxes can overlap, z-order hides it" move that held
+  fine for the static hero but breaks the moment something actually
+  animates away from what was covering it. This needs fixing in whatever
+  delivery gets cut for real, a tighter `body` box or a wing split closer
+  to the shoulder joint, regardless of which pose is used.
+
+**Rerolled.** The wings' asymmetry (one raised higher than the other) was
+the harder problem than the three-quarter framing: it leaves no clean
+neutral point to animate a flap cycle from. Attempt 2 asks for the wings
+level and symmetric and the head in a true profile (attempt 1 showed both
+ears, a three-quarter tell on the head even though the body mostly read as
+a side view), on top of the same fixes already in place:
+
+> [preamble] A single creature painting of a large cave bat for a
+> side-scrolling platformer, in a calm gliding reference pose rather than a
+> dive or a swoop: body level and horizontal, not tilted on a diagonal
+> axis. This is a true side view, an orthogonal profile: the bat's body
+> faces right, and only the near side of the head is visible, one eye and
+> one ear, not both, the same way a person's profile shows only one side of
+> their face. Both wings are spread symmetrically, at the same angle on
+> either side of the body, seen edge-on and flat within the picture plane,
+> not foreshortened by any tilt toward or away from the camera and not
+> staggered at different heights. It is NOT a three-quarter view and NOT
+> seen from above or below. Larger than a real bat, roughly the size of a
+> human torso, with a lean leathery body, clawed wingtips, and small sharp
+> teeth bared. Because this creature kills on contact in the game, it is
+> warm-toned and saturated rather than cold and matte: dark, matte, warm
+> reddish-brown fur and a warm-brown wing membrane, not black, not grey.
+> Painted on a flat solid magenta (#FF00FF) backdrop, full body and both
+> wingtips visible with a small even margin of backdrop on all sides,
+> nothing cropped by the frame. The image is 1536 by 1152 pixels, aspect
+> ratio 4:3.
 
 **5. Pose-sheet test, throwaway**,
 `assets/art_raw/_experiments/pose_sheet_test_mannequin.png`:
@@ -557,9 +596,10 @@ never promoted to `assets/art/`, per this section's own convention for a
 test that was never meant to ship.
 
 **Status:** background, tileset, hero and the pose-sheet test all landed
-(attempts 3, 1, 2 and 1 respectively, 8 generations total). Bat delivered
-but not yet accepted, the only open item: its pose is a genuine judgment
-call flagged above for Matt rather than decided here. Reading `hook-line-and-sentence` (read access, not attached, cloned
+(attempts 3, 1, 2 and 1 respectively, 8 generations total). Bat rerolling
+on attempt 2, Matt's call after seeing a scratch rig test of attempt 1 in
+motion: the asymmetric wings, not the three-quarter framing, were the real
+problem, no clean neutral point to flap from. Reading `hook-line-and-sentence` (read access, not attached, cloned
 locally to check against) confirmed the camera-framing fix and turned up no
 other reusable technique this project's `GEMINI_NOTES.md` didn't already
 carry, and that same fix, restated for a character rather than a scene, is
