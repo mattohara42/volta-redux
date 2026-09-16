@@ -38,6 +38,9 @@ var config: MovementConfig
 ## available. Null only if `RIG_SCENE` fails to load, in which case `_draw`
 ## falls back to the capsule rather than showing nothing.
 var _rig: Node2D = null
+## `_rig`'s own `AnimationTree`. Null under the same condition as `_rig`, or if
+## a future rig scene drops the node; `_update_animation` no-ops either way.
+var _anim_tree: AnimationTree = null
 ## Where the next death puts you. Starts as wherever the room placed you and
 ## moves only when a brazier is lit, which is the only thing in the game that
 ## touches it.
@@ -123,6 +126,7 @@ func _ready() -> void:
 	if RIG_SCENE != null:
 		_rig = RIG_SCENE.instantiate()
 		add_child(_rig)
+		_anim_tree = _rig.get_node_or_null("AnimationTree")
 	_apply_hero_size(world.hero_height)
 	_message_label.add_theme_font_size_override("font_size", death_config.message_font_size)
 	_message_label.add_theme_color_override("font_color", Palette.FIRE_HOT)
@@ -171,6 +175,7 @@ func _physics_process(delta: float) -> void:
 	# not the one it held a frame earlier.
 	_track_peak()
 	_update_rig()
+	_update_animation()
 	queue_redraw()
 
 
@@ -455,6 +460,19 @@ func _update_rig() -> void:
 		_rig.modulate = Color(Palette.GOLD_FACE, 0.95)
 	else:
 		_rig.modulate = Color.WHITE
+
+
+## Travels the rig's `AnimationTree` state machine to whatever `Locomotion`
+## says the current horizontal speed reads as. The only thing this script does
+## with the tree: `hero_rig.tscn` owns the states and how they animate.
+##
+## Not called during `_step_death`, so the rig freezes on whatever pose it was
+## in the moment the hero died, matching the body staying where it fell.
+func _update_animation() -> void:
+	if _anim_tree == null:
+		return
+	var state := Locomotion.state_for(velocity.x)
+	_anim_tree["parameters/playback"].travel(Locomotion.state_name(state))
 
 
 func _handle_debug_keys() -> void:
