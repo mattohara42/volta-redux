@@ -10,71 +10,36 @@ is M12's. See git log for the reasoning if it needs re-reading.
 
 ## Where this is
 
-**M5's "one rigged hero" is done**, verified against a real running build.
-Background, tileset, hero and the pose-sheet test have all landed. The bat
-is on attempt 2, partial: the wing fix held, level and symmetric, the
-neutral flap point attempt 1 lacked. The head fix did not, zoomed in, two
-ears are visible, the plainest three-quarter tell, confirming Matt's
-at-a-glance read once measured up close. Recommended next step is an
-attach-and-edit naming just the head, not a third fresh generation,
-`GEMINI_NOTES.md`'s own proven technique for a single regional fix on an
-otherwise-good delivery; waiting on Matt.
+**All five of M5's prompts are landed and rigged**, in 10 generations
+against the plan's soft ceiling of 5, each miss past the first buying a
+real lesson (below, under Traps). Background, tileset, hero, bat and the
+pose-sheet test are all in `assets/art/`; both the hero and the bat are
+real `Skeleton2D`s (`scenes/hero_rig.tscn`, `scenes/bat_rig.tscn`), each
+verified by an actual screenshot against a real build. `tools/key.py`,
+`tools/palette-check.py`, `tools/cut-sheet.py` and `tools/cut-rig.py` are
+built and proven; `tools/pose-sheet.py` is still not, M6 will tell us its
+real shape.
 
-A scratch rig test of attempt 1 also found a rig defect independent of the
-pose question, a rectangular chunk of wing content baked statically into
-the body sprite, exposed the moment the wing rotated away from covering it,
-worth remembering whichever delivery gets cut for real: keep a part's box
-tight to that part, don't rely on another part's rest-pose position to hide
-an overlap that won't survive animation.
+**What's not done: `BUILD_PLAN.md`'s literal M5 done-when**, "that room is
+in the game, at final quality." Every asset has its own verification
+scene; nothing yet places the background, tileset-as-platforms, hero and
+bat together in one assembled room. Whether that assembly is M5's own
+remaining work or the next milestone's first slice is worth asking Matt.
 
-**`GEMINI_NOTES.md`'s open question about pose sheets is answered: yes.**
-The throwaway mannequin sheet's six cut frames measured within a few points
-of each other in mean RGB and luminance, real numbers, not an eyeball call.
-Consistency across poses of the same subject on one sheet holds, the same
-as the fishing game's sheets-of-different-subjects finding. One soft miss,
-not load-bearing: the six poses didn't land as one clean monotonic tumble
-in reading order, which doesn't matter since a human picks and orders the
-key frames for M6 regardless of the sheet's own order.
-
-**Two real bugs found in `key.py` this session, both fixed.** The despill
-was too weak against real contamination width (3px assumed, 6-7px measured).
-Then the bat's wing membranes and bared teeth left gaps in the painting that
-trap backdrop colour where nothing connects it to the image border, so the
-old border-seeded flood fill left solid opaque magenta patches baked into
-every rig-part crop. Rewrote it to match the backdrop colour globally
-instead: this project's palette has nothing naturally near a saturated
-magenta, so a global match is safe. Every already-committed asset
-re-checked clean against the new tool; the bug's damage was confined to
-the one delivery that exposed it.
-
-**No Godot was installed in this session's environment.** The official
-4.7.2 Linux binary (matching `README.md`'s pinned version) was downloaded to
-`/tmp` to run `import`/`test`/`shot` for real. That does not persist: a
-future session here starts the same way. `tools/dev.sh test` passes clean,
-221 tests, 1572 checks.
-
-**9 generations spent, 4 of 5 M5 assets landed clean, the bat pending.**
-Past `ART.md`'s own budget-rule ceiling of 5 for the whole room, not a hard
-stop since every miss bought a real lesson, but worth naming plainly.
-
-**`tools/key.py`, `tools/palette-check.py`, `tools/cut-sheet.py` and
-`tools/cut-rig.py`** are all built and proven against real deliveries.
-`tools/pose-sheet.py` is still not built.
-
-**Porting from `hook-line-and-sentence`** needs that repo attached with push
-access; this session's own permissions denied attaching it, though reading
-it (public, unattached) was allowed and found the compositional prior fix,
-twice. Not blocking.
+**No Godot is preinstalled here.** The official 4.7.2 Linux binary
+(matching `README.md`'s pinned version) has to be fetched fresh each
+session to run `tools/dev.sh import`/`test`/`shot` for real; it does not
+persist. `tools/dev.sh test` passes clean right now, 221 tests, 1572
+checks.
 
 ## The next action
 
-**Matt's call on the attach-and-edit for the bat's head**, `ART.md` has
-the exact instruction ready to paste. Once that lands and cuts clean, M5's
-five prompts are all done.
+**Whether M5's done-when needs an assembled room, or is satisfied by five
+landed, verified assets.** Matt's call, per the flag above.
 
 ## Blocked on Matt
 
-1. **The bat's head fix**, attach-and-edit instruction ready in `ART.md`.
+1. **M5's done-when**, per the flag above.
 2. **The open questions in `LEVELS.md`**, the ending swap (caged dragon vs.
    caged bird) chief among them, touching a decision `CLAUDE.md` currently
    marks "do not relitigate." Includes whether a forest sits before or
@@ -84,9 +49,12 @@ five prompts are all done.
    dragon's one-rest-period pacing, the ledge-to-wood throw, whether missing
    a catch on purpose feels discoverable, the dormant scorpion's
    wake-to-danger gap.
-4. **Whether to keep spending generations at this rate**, per the flag above.
-5. **Whether to attach `hook-line-and-sentence` with push access** for the
-   tool ports `ART.md` names, or let this project's versions stand as written.
+4. **Whether to keep spending generations at this rate**, 10 for one room
+   against a soft ceiling of 5.
+5. **Whether to attach `hook-line-and-sentence` with push access**, for the
+   tool ports `ART.md` names. Read access (public, unattached) was enough to
+   confirm its camera-framing fix and find nothing else `GEMINI_NOTES.md`
+   didn't already carry. Not blocking.
 
 ## Traps that will bite again
 
@@ -133,6 +101,15 @@ part's pixels show where they cover the same spot, but if the covering
 part ever rotates away (a wing, not a static torso), whatever the other
 box baked in underneath is now visible and stuck in place. Test a cut rig
 by moving something in it, not only by reassembling it at rest.
+
+**Some part boundaries have no silhouette gap and no colour split to find
+them by.** A bat's wing membrane attaches to its body directly, one
+continuous shape; a box edge always cuts wrong and the two parts' colours
+land too close together for a threshold. Only fix found: trace the
+artwork's own drawn seam (a fold, a change in line weight) as a hand-picked
+polyline and use it as a per-pixel keep/exclude boundary instead of a box
+edge. `ART.md`'s bat section has the full method; `BACKLOG.md` has the
+tool-generalisation note.
 
 **A Godot 4.7.2 `Skeleton2D` errors on every leaf `Bone2D`, harmlessly.**
 "No Bone2D children... cannot calculate bone length" then `ERROR: Condition
