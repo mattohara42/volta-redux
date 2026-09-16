@@ -716,10 +716,51 @@ push access, which this session's own permissions denied; Matt can grant
 it directly if porting is worth doing, though the tools built fresh so far
 have each worked first try against a real delivery.
 
-**What M5's done-when still needs:** `BUILD_PLAN.md` reads "that room is
-in the game, at final quality." All five assets are landed and each has
-its own verification scene, but no single scene yet places the background,
-the tileset as walkable platforms, the hero and the bat together as one
-room. Whether that assembly is part of M5 itself or the first slice of
-whatever milestone actually builds a room is a structural question worth
-putting to Matt rather than assuming.
+**M5's done-when is met.** Matt's call on the open structural question above:
+the assembly is M5's own remaining work, not M6's first slice.
+`scenes/rooms/room_m5_wall.tscn` (`scripts/room_m5_wall.gd`) places all five
+assets in one `Bench`: the background fills the room's own height rather
+than the tileset's shared 4x scale (a background that stopped short would
+put sky where the prompt asked for none), the wide floor-and-ledge tileset
+module (`wall_tile_1.png`) is repeated as the walkable floor and a raised
+ledge, the ladder module connects them, and the hero and the bat are the
+real rigs, not the grey capsule and diamond.
+
+**The rig swap went in globally, not scoped to this one room.** `Player` and
+`Bat` now instantiate their rig (`Player.RIG_SCENE`, `Bat.RIG_SCENE`) in
+`_ready` and hide their old grey draw whenever one is present, so every
+Phase 1 bench picked up the real art for free rather than carrying two
+visual paths into M6. Matt's call, weighed against scoping it to the new
+room alone: one path to maintain, and nothing in `BUILD_PLAN.md`'s milestone
+gates says a grey-box bench has to stay grey once the art it would show
+exists.
+
+**The floor art had to register with the collision line, not just look
+close.** `wall_tile_1.png`'s pale ledge lip, the row a hero's feet actually
+read as standing on, was measured as the tile's own brightest image row
+(`FLOOR_LIP_FRACTION` in `room_m5_wall.gd`) rather than eyeballed, the same
+"draw the thing you measured" discipline the rig's own offsets already used.
+`tools/` has no general pixel-measuring tool yet; this was a one-off scan of
+the delivered PNG, noted in `BACKLOG.md` rather than built into a script for
+one use.
+
+**The hero and the bat's rig scale is a fact read off `scenes/hero_rig.tscn`
+and `scenes/bat_rig.tscn`'s own recorded offsets, not a second guess at
+their size.** `Player.RIG_SOURCE_TOP`/`RIG_SOURCE_BOTTOM`/
+`RIG_SOURCE_CENTRE_X` composite the hero rig's bone and sprite positions
+into the figure's own bounding box, so the rig now renders at
+`world.hero_height` exactly, mirrored around its own centreline rather than
+the origin. The bat's scale (`Bat.RIG_TARGET_BODY_LENGTH`) is the one number
+in this pass that is a judgement call rather than a measurement: 18 design
+px, picked to land roughly at Lothar's own torso height per the prompt's
+"roughly the size of a human torso," checked by rendering it and looking
+rather than derived from anything else the game already draws.
+
+**Verified against a real build**, not just written and trusted:
+`tools/dev.sh test` still passes clean, 221 tests, 1572 checks, and
+`tools/dev.sh shot` on `room_m5_wall.tscn` shows the hero standing on the
+tile lip at the right scale next to a lit brazier, the bat flying a legible
+size against the wall, and the ladder connecting the floor to the ledge with
+no gap. The same tool against `room_m4_enemies.tscn` confirms the global rig
+swap costs nothing there: the hero and the bat now show real art, the
+scorpion, ant and eyeball are unchanged.
