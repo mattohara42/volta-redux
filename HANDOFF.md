@@ -11,9 +11,18 @@ is M12's. See git log for the reasoning if it needs re-reading.
 ## Where this is
 
 **M5's "one rigged hero" is done**, verified against a real running build.
-Background, tileset and hero all landed; the bat is delivered but its pose
-is an open question for Matt (below), not yet cut into final rig parts or
-committed. Pose-sheet test is the one prompt still unsent.
+Background, tileset, hero and the pose-sheet test have all landed; the bat
+is delivered but its pose is the one open question for Matt (below), not
+yet cut into final rig parts or committed.
+
+**`GEMINI_NOTES.md`'s open question about pose sheets is answered: yes.**
+The throwaway mannequin sheet's six cut frames measured within a few points
+of each other in mean RGB and luminance, real numbers, not an eyeball call.
+Consistency across poses of the same subject on one sheet holds, the same
+as the fishing game's sheets-of-different-subjects finding. One soft miss,
+not load-bearing: the six poses didn't land as one clean monotonic tumble
+in reading order, which doesn't matter since a human picks and orders the
+key frames for M6 regardless of the sheet's own order.
 
 **Two real bugs found in `key.py` this session, both fixed.** The despill
 was too weak against real contamination width (3px assumed, 6-7px measured).
@@ -32,10 +41,9 @@ the one delivery that exposed it.
 future session here starts the same way. `tools/dev.sh test` passes clean,
 221 tests, 1572 checks.
 
-**7 generations spent, 3 of 5 M5 assets landed** (the bat pending Matt's
-call makes it 3 clean, 1 pending). Past `ART.md`'s own budget-rule ceiling
-of 5 for the whole room, not a hard stop since every miss bought a real
-lesson, but worth naming plainly.
+**8 generations spent, 4 of 5 M5 assets landed clean, the bat pending.**
+Past `ART.md`'s own budget-rule ceiling of 5 for the whole room, not a hard
+stop since every miss bought a real lesson, but worth naming plainly.
 
 **`tools/key.py`, `tools/palette-check.py`, `tools/cut-sheet.py` and
 `tools/cut-rig.py`** are all built and proven against real deliveries.
@@ -49,8 +57,8 @@ twice. Not blocking.
 ## The next action
 
 **Matt's call on the bat's pose** (see *Blocked on Matt* below), then
-whichever of "reroll" or "cut it as delivered" follows from that, then the
-pose-sheet test prompt.
+whichever of "reroll" or "cut it as delivered" follows from that. That's
+the last open item in M5's five.
 
 ## Blocked on Matt
 

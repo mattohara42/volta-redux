@@ -192,16 +192,27 @@ you have before deciding what a reroll is worth.
 ## What this project will have to learn on its own
 
 Everything above came from a game with no animation and no sheets of the same
-subject. Two open questions, to be answered by the first deliveries and written
-up here:
+subject. One of the two open questions this project needed to answer for
+itself is settled now; the other is still open.
 
-1. **Does the pose-sheet trick hold?** Six poses of one character on one canvas
-   is a six-subject sheet in every respect except that the six subjects are meant
-   to be the *same*. The sheet finding says consistency comes free. The
-   competing prior says the generator differentiates subjects it puts on one
-   canvas, which is the opposite of what a pose sheet needs. **Test this in M5
-   with a throwaway sheet before anything depends on it.**
+1. **Does the pose-sheet trick hold? Yes, tested in M5.** A throwaway sheet
+   asked for one wooden practice mannequin in six rotated poses, 3x2 on a
+   magenta backdrop, no scenery. `cut-sheet.py` found six clean connected
+   components, and their measured stats, mean RGB and luminance per cut
+   frame, landed within a few points of each other across all six: mean RGB
+   channels within `(189-194, 146-151, 112-118)`, luminance mean 155-160,
+   comparable to the fishing game's own four-fish-sheet finding
+   (tonal stdev 26-36 across a set that measurably held). **The sheet
+   finding generalises**: consistency comes free even when the six subjects
+   are meant to be the same figure, not six different ones. What did not
+   fully hold: "rotating through a full tumble" as a single monotonic
+   sequence in reading order, two of the six poses landed as similarly deep
+   inversions rather than one clean peak and a symmetric recovery either
+   side of it. Doesn't matter in practice: a human curator picks the poses
+   that read as the right key frames and orders them for the animation,
+   the sheet's own left-to-right order was never load-bearing.
 2. **How well does it hold a character across separate generations?** The last
    project never needed this: each angler was one painting. Here the hero appears
    on a rig sheet, three pose sheets and possibly a portrait. If attach-and-edit
-   is the answer, every sheet after the first is an edit of the first.
+   is the answer, every sheet after the first is an edit of the first. Still
+   open: M5's rig sheet was the hero's only painting so far.
