@@ -3,75 +3,78 @@
 > **Rewrite this file, never append.** State snapshot and pointers only. No
 > session narrative, that is what `git log` is for. Keep it under 80 lines.
 
-**Updated:** 2026-09-15 · **Phase:** 2, the look · **Active milestone:** M5
+**Updated:** 2026-09-16 · **Phase:** 2, the look · **Active milestone:** M5
 
 **M4 is closed**, rescoped to five enemies in `BUILD_PLAN.md`; the generator
 is M12's. See git log for the reasoning if it needs re-reading.
 
 ## Where this is
 
-**M5's "one rigged hero" is done.** Background, tileset and hero landed;
-the hero is cut into rig parts (`assets/art/hero/rig/`) and assembled into
-a real `Skeleton2D` (`scenes/hero_rig.tscn`, framed for screenshots by
-`scenes/hero_rig_test.tscn`), verified against an actual running build, not
-just written and assumed correct. Bat and the pose-sheet test are what's
-left of M5's five prompts.
+**M5's "one rigged hero" is done**, verified against a real running build.
+Background, tileset and hero all landed; the bat is delivered but its pose
+is an open question for Matt (below), not yet cut into final rig parts or
+committed. Pose-sheet test is the one prompt still unsent.
+
+**Two real bugs found in `key.py` this session, both fixed.** The despill
+was too weak against real contamination width (3px assumed, 6-7px measured).
+Then the bat's wing membranes and bared teeth left gaps in the painting that
+trap backdrop colour where nothing connects it to the image border, so the
+old border-seeded flood fill left solid opaque magenta patches baked into
+every rig-part crop. Rewrote it to match the backdrop colour globally
+instead: this project's palette has nothing naturally near a saturated
+magenta, so a global match is safe. Every already-committed asset
+re-checked clean against the new tool; the bug's damage was confined to
+the one delivery that exposed it.
 
 **No Godot was installed in this session's environment.** The official
 4.7.2 Linux binary (matching `README.md`'s pinned version) was downloaded to
 `/tmp` to run `import`/`test`/`shot` for real. That does not persist: a
-future session here starts the same way, no `$GODOT` until it fetches one.
-`tools/dev.sh test` passes clean, 221 tests, 1572 checks, after all of this.
+future session here starts the same way. `tools/dev.sh test` passes clean,
+221 tests, 1572 checks.
 
-**Six lessons paid for and folded into `ART.md`/`GEMINI_NOTES.md`/here:**
-a scene or a character has a compositional prior a hedged instruction
-barely moves, state framing positively and rule out the default by name;
-the background is atmosphere only, the tileset carries the path; `key.py`'s
-despill needed a real fix, three-px was not enough against a real 6-7px
-contamination band; a character painting has no backdrop between its parts,
-so `cut-rig.py`'s boxes are read off by eye, and a prop crossing the body
-(the held sword) can drag an unrelated part into a box that holds both
-ends of it; **reassembling cut parts on one canvas before trusting them
-catches gaps a part-by-part look never will** (the leg boxes left a real
-gap between torso and legs, invisible until composited); and a Godot 4.7.2
-`Skeleton2D` logs a harmless but alarming `det == 0` error for every leaf
-`Bone2D`, confirmed by a three-line reproduction, not a sign of a rig bug.
-
-**6 generations spent, 3 of 5 M5 assets landed.** Past `ART.md`'s own
-budget-rule ceiling of 5 for the whole room now, not a hard stop since every
-miss bought a real lesson, but worth naming plainly.
+**7 generations spent, 3 of 5 M5 assets landed** (the bat pending Matt's
+call makes it 3 clean, 1 pending). Past `ART.md`'s own budget-rule ceiling
+of 5 for the whole room, not a hard stop since every miss bought a real
+lesson, but worth naming plainly.
 
 **`tools/key.py`, `tools/palette-check.py`, `tools/cut-sheet.py` and
 `tools/cut-rig.py`** are all built and proven against real deliveries.
-`tools/pose-sheet.py` is still not built: the pose-sheet test delivery is
-what will tell us its real shape.
+`tools/pose-sheet.py` is still not built.
 
 **Porting from `hook-line-and-sentence`** needs that repo attached with push
 access; this session's own permissions denied attaching it, though reading
-it (public, unattached) was allowed and is what found the compositional
-prior fix, twice. Not blocking: every tool built fresh so far has worked
-first try against a real delivery.
+it (public, unattached) was allowed and found the compositional prior fix,
+twice. Not blocking.
 
 ## The next action
 
-**The bat and pose-sheet test prompts**, mindful of the generation count
-above, are what's left of M5's five. Once they land, M5's remaining
-done-when is `ART.md` carrying the real generation count, which it already
-does as it goes.
+**Matt's call on the bat's pose** (see *Blocked on Matt* below), then
+whichever of "reroll" or "cut it as delivered" follows from that, then the
+pose-sheet test prompt.
 
 ## Blocked on Matt
 
-1. **The open questions in `LEVELS.md`**, the ending swap (caged dragon vs.
+1. **The bat's pose.** Delivered as a dynamic mid-flight swoop (both ears
+   and a near-frontal muzzle visible, body on a diagonal axis, wings spread
+   at different angles) rather than the flat orthogonal profile asked for,
+   the same compositional-prior default that hit the hero, not fully beaten
+   by the same explicit negation this time. `ART.md`'s bat write-up has the
+   detail. Test-cut in scratch: both wings individually read as flat, usable
+   shapes despite the dynamic overall pose, and `SPEC.md` calls the bat's
+   own behaviour "erratic flight," so a dynamic reference pose may suit it
+   better than it would a standing hero. Whether that's good enough or
+   worth a third generation for a calmer profile is a call this file
+   shouldn't make alone.
+2. **The open questions in `LEVELS.md`**, the ending swap (caged dragon vs.
    caged bird) chief among them, touching a decision `CLAUDE.md` currently
    marks "do not relitigate." Includes whether a forest sits before or
    replaces Act 1, which is why M5 painted to `SPEC.md`'s still-settled
    description rather than waiting on that question.
-2. **M4 playtest feedback, not blocking, reopen if it bothers him:** the
+3. **M4 playtest feedback, not blocking, reopen if it bothers him:** the
    dragon's one-rest-period pacing, the ledge-to-wood throw, whether missing
    a catch on purpose feels discoverable, the dormant scorpion's
    wake-to-danger gap.
-3. **Whether to keep spending generations at this rate**, per the flag above.
-4. **The remaining two Gemini generations**, whenever he's ready.
+4. **Whether to keep spending generations at this rate**, per the flag above.
 5. **Whether to attach `hook-line-and-sentence` with push access** for the
    tool ports `ART.md` names, or let this project's versions stand as written.
 
@@ -96,14 +99,17 @@ position to keep changing during the return, not just their height.
 `room_m4_plate.gd`'s comment has a sequence that reliably produces a miss.
 
 **A scene, or a character, has a compositional prior; a subject on a flat
-field does not.** Full details in `GEMINI_NOTES.md`. State framing
-positively and explicitly, then rule out the default by name; a hedged
-instruction will not reliably move it.
+field does not, and it can still win even after the fix that beat it once.**
+Full details in `GEMINI_NOTES.md`. State framing positively and explicitly,
+rule out the default by name; a dynamic-action subject (mid-flight, wings
+spread) carries an even stronger prior than a standing pose did.
 
 **A cut edge's backdrop contamination runs wider than it looks at a
-glance.** Measured 6 to 7px on a real delivery. A despill radius has to be
-generous (`key.py` defaults to 10px now) or verified against real pixels,
-not assumed from how clean the edge looks zoomed out.
+glance, and it hides inside enclosed gaps a border flood never reaches.**
+`key.py` now matches the backdrop colour globally rather than flooding from
+the border, and decontaminates a generous ring (10px default) around every
+match. Re-verify against real pixels, not how clean an edge looks zoomed
+out; a wing's finger-gaps or an open mouth are exactly where this bites.
 
 **A held prop crossing the body can drag an unrelated part into a rig
 box, or leave a gap when you fix that by moving the box instead of masking
