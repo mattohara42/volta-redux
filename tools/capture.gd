@@ -23,6 +23,16 @@
 ## lets go while the sword flies. Letting go matters, because an action held too
 ## long is a different action: a held throw is a recall.
 ##
+## `--filmstrip=N` captures N frames spread evenly across the whole `--input`
+## sequence (after the initial settle) and composites them into one wide strip
+## image at `--out`, instead of the single end-of-run frame. This is how a
+## transition gets reviewed as a sequence rather than a single still: PR #51's
+## bug (a property floating across the idle/run crossfade) and PR #55's
+## (jump, fall and land all reading as the same pose) were both found by Matt
+## playing, because a single screenshot cannot show a blend in progress. Not
+## combined with `--until-apex`, which is ignored when a filmstrip is asked
+## for: a filmstrip already covers the arc the input describes.
+##
 ## Writing over an existing file is the flag, not the default.
 extends SceneTree
 
@@ -37,6 +47,7 @@ var _until_apex := false
 var _overwrite := false
 var _zoom := 0.0
 var _centre := Vector2.INF
+var _filmstrip_count := 0
 
 
 func _initialize() -> void:
@@ -58,7 +69,7 @@ func _initialize() -> void:
 
 	root.add_child(packed.instantiate())
 	var agent := CaptureAgent.new()
-	agent.configure(_out_path, _phases, _until_apex, _zoom, _centre)
+	agent.configure(_out_path, _phases, _until_apex, _zoom, _centre, _filmstrip_count)
 	root.add_child(agent)
 
 
@@ -81,6 +92,8 @@ func _parse_arguments() -> void:
 			_until_apex = true
 		elif argument == "--overwrite":
 			_overwrite = true
+		elif argument.begins_with("--filmstrip="):
+			_filmstrip_count = value.to_int()
 
 
 ## "move_right:70;climb_up:80" becomes two phases of held actions and durations.
@@ -112,27 +125,34 @@ class CaptureAgent:
 	var _until_apex := false
 	var _zoom := 0.0
 	var _centre := Vector2.INF
+	var _filmstrip_count := 0
 
 	func configure(
 		out_path: String, phases: Array[Dictionary], until_apex: bool, zoom: float,
-		centre: Vector2
+		centre: Vector2, filmstrip_count: int
 	) -> void:
 		_out_path = out_path
 		_phases = phases
 		_until_apex = until_apex
 		_zoom = zoom
 		_centre = centre
+		_filmstrip_count = filmstrip_count
 
 	func _ready() -> void:
 		if _zoom > 0.0 or _centre.is_finite():
 			_pull_the_camera_back()
 		await _wait(SETTLE_FRAMES)
-		for phase in _phases:
-			_hold_exactly(phase["actions"])
-			await _wait(phase["frames"])
+
+		var frames: Array[Image] = []
+		if _filmstrip_count > 0:
+			frames = await _run_phases_capturing_filmstrip()
+		else:
+			for phase in _phases:
+				_hold_exactly(phase["actions"])
+				await _wait(phase["frames"])
 
 		var player := get_tree().get_first_node_in_group("player")
-		if _until_apex and player != null:
+		if _until_apex and _filmstrip_count <= 0 and player != null:
 			# Held, not tapped. Releasing early is what variable jump height
 			# means, and it produces a hop rather than the jump being measured.
 			Input.action_press("jump")
@@ -159,16 +179,85 @@ class CaptureAgent:
 		_report_enemies()
 		_report_mechanisms()
 
-		await RenderingServer.frame_post_draw
-		var image := get_viewport().get_texture().get_image()
-		var error := image.save_png(_out_path)
 		_hold_exactly(PackedStringArray())
+		var error: int
+		if _filmstrip_count > 0:
+			error = _save_filmstrip(frames)
+		else:
+			await RenderingServer.frame_post_draw
+			var image := get_viewport().get_texture().get_image()
+			error = image.save_png(_out_path)
+			if error == OK:
+				print("capture: wrote %s at %dx%d" % [_out_path, image.get_width(), image.get_height()])
 		if error != OK:
 			printerr("capture: could not write %s (%d)" % [_out_path, error])
 			get_tree().quit(1)
 			return
-		print("capture: wrote %s at %dx%d" % [_out_path, image.get_width(), image.get_height()])
 		get_tree().quit(0)
+
+	## Walks every phase one physics frame at a time, capturing a rendered
+	## image at `_filmstrip_count` points spread evenly across the whole
+	## sequence. Frame 0 (right after the settle) and the very last frame are
+	## always included, so the strip always shows where the sequence started
+	## and where it ended, not just the middle of it.
+	func _run_phases_capturing_filmstrip() -> Array[Image]:
+		var total := 0
+		for phase in _phases:
+			total += int(phase["frames"])
+		var wanted := _spread(_filmstrip_count, total)
+
+		var frames: Array[Image] = []
+		var index := 0
+		for phase in _phases:
+			_hold_exactly(phase["actions"])
+			for i in int(phase["frames"]):
+				if wanted.has(index):
+					frames.append(await _capture_frame())
+				await get_tree().physics_frame
+				index += 1
+		# The loop above only ever captures a frame *before* a physics step, so
+		# its last possible capture is the state before the sequence's final
+		# step, one step short of the true end. This closes that gap: the
+		# strip's last panel is always the sequence's actual end state, even
+		# though that means one panel can sit very close to its neighbour when
+		# `_filmstrip_count` already picked the second-to-last frame.
+		frames.append(await _capture_frame())
+		return frames
+
+	## `count` indices, spread as evenly as integer rounding allows across
+	## `[0, total - 1]`, always including both ends. `count` clamped to
+	## `total`: asking for more panels than frames exist would just repeat some.
+	func _spread(count: int, total: int) -> Dictionary:
+		var picked: Dictionary = {}
+		if total <= 0:
+			return picked
+		var n: int = maxi(1, mini(count, total))
+		for i in n:
+			var index: int = 0 if n <= 1 else roundi(float(i) * (total - 1) / float(n - 1))
+			picked[index] = true
+		return picked
+
+	func _capture_frame() -> Image:
+		await RenderingServer.frame_post_draw
+		return get_viewport().get_texture().get_image()
+
+	## Every captured frame laid side by side into one wide image, so a
+	## transition is one file to open rather than several to flip between.
+	func _save_filmstrip(frames: Array[Image]) -> int:
+		if frames.is_empty():
+			printerr("capture: filmstrip requested but no frames were captured")
+			return ERR_INVALID_DATA
+		var w := frames[0].get_width()
+		var h := frames[0].get_height()
+		var strip := Image.create(w * frames.size(), h, false, frames[0].get_format())
+		for i in frames.size():
+			strip.blit_rect(frames[i], Rect2i(Vector2i.ZERO, Vector2i(w, h)), Vector2i(w * i, 0))
+		var error := strip.save_png(_out_path)
+		if error == OK:
+			print("capture: wrote a %d-frame filmstrip to %s at %dx%d" % [
+				frames.size(), _out_path, strip.get_width(), strip.get_height()
+			])
+		return error
 
 	## Whether the run died, and what the loop actually cost.
 	##

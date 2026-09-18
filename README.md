@@ -70,6 +70,20 @@ tools/dev.sh shot res://scenes/rooms/room_m0.tscn room.png --zoom=0.38 --centre=
 through `xvfb-run`, on macOS it does not, and `tools/capture.gd` documents
 `--input` and `--until-apex` for capturing a pose mid-motion.
 
+`--filmstrip=N` captures a transition as N frames side by side in one image,
+instead of the usual single frame at the end of `--input`:
+
+```
+tools/dev.sh shot res://scenes/rooms/room_m5_wall.tscn run_to_jump.png \
+  --input="move_right:40;move_right,jump:6;move_right:34" --filmstrip=8 \
+  --zoom=1.2 --centre=220,290
+```
+
+This is how a crossfade or a pose transition gets reviewed without a Godot
+editor session: a single screenshot cannot show a blend in progress, which is
+exactly how PR #51's floating hero and PR #55's indistinct jump/fall/land got
+past every earlier screenshot and were only caught by Matt playing.
+
 ## Working on it with Claude
 
 `.claude/` carries the local workflow: `/milestone`, `/shot` and `/handoff`, a
