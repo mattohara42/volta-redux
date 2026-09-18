@@ -95,3 +95,34 @@ jobs:
             room_m4_dormant.png
             room_m4_dormant_wake.png
           if-no-files-found: ignore
+
+  # HANDOFF.md's own docstring: "the first thing the next session reads."
+  # .claude/hooks/docs-check.sh already warns about this locally, at the end
+  # of a Claude Code turn, and it is advisory there for a reason: not every
+  # code change moves the milestone or the next action HANDOFF.md exists to
+  # name, and a hard CI gate on "code changed, HANDOFF did not" would force a
+  # hollow touch-up edit on a PR that has nothing worth rewriting it for,
+  # which cheapens the file CLAUDE.md asks to keep cheap. This is the same
+  # check, surfaced as a visible warning on the PR instead: the local hook
+  # only fires inside a live session and still let the snapshot drift within
+  # two days of M6 starting, so the failure mode worth closing is invisible
+  # drift, not an unwritten rewrite. It never fails the build.
+  docs-drift:
+    name: HANDOFF.md drift check
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Compare HANDOFF.md against the code this PR touches
+        run: |
+          code="$(git diff --name-only "${{ github.event.pull_request.base.sha }}"..HEAD --             scripts config scenes tests tools project.godot .github || true)"
+          docs="$(git diff --name-only "${{ github.event.pull_request.base.sha }}"..HEAD --             HANDOFF.md || true)"
+          if [[ -n "$code" && -z "$docs" ]]; then
+            count="$(printf '%s\n' "$code" | grep -c . || true)"
+            echo "::warning::HANDOFF.md is behind: $count file(s) of code changed on this PR and the snapshot did not. It is the first thing the next session reads. Run /handoff before merging, or this is fine as is if nothing about the active milestone or next action changed."
+          else
+            echo "HANDOFF.md moved with the code, or nothing that would go stale changed."
+          fi
