@@ -52,6 +52,8 @@ SCENARIOS: list[dict] = [
 				"message": "throwing into wood from a safe distance should not have killed the hero"},
 			{"type": "contains", "pattern": "sword embedded",
 				"message": "the throw should have embedded in the wood, not bounced or fallen"},
+			{"type": "contains", "pattern": "sound played embed.wav",
+				"message": "embedding should have played the embed cue, not stayed quiet"},
 		],
 	},
 	{

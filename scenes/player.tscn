@@ -48,6 +48,9 @@ grow_vertical = 2
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="Sound" type="AudioStreamPlayer2D" parent="."]
+volume_db = -6.0
+
 [node name="Camera2D" type="Camera2D" parent="."]
 position_smoothing_enabled = true
 position_smoothing_speed = 8.0

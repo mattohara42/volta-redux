@@ -123,6 +123,10 @@ var _takeoff_y := 0.0
 @onready var _shape: CollisionShape2D = $CollisionShape2D
 @onready var _ladder_probe: Area2D = $LadderProbe
 @onready var _probe_shape: CollisionShape2D = $LadderProbe/CollisionShape2D
+## ANIMATION.md: "an actor and its sound are one event off one tick, never
+## two schedules." The throw sound belongs to the hero, not the sword: a
+## thrown sword's own life starts a frame later than the press that spends it.
+@onready var _sound: AudioStreamPlayer2D = $Sound
 
 
 func _ready() -> void:
@@ -419,6 +423,9 @@ func _throw() -> void:
 	sword.recovered.connect(_on_sword_recovered)
 	swords_held -= 1
 	_throw_cooldown = sword_config.throw_cooldown
+	if sword_config.throw_sound != null:
+		_sound.stream = sword_config.throw_sound
+		_sound.play()
 
 
 func _on_sword_recovered() -> void:

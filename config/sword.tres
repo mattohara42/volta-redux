@@ -1,6 +1,10 @@
-[gd_resource type="Resource" script_class="SwordConfig" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="SwordConfig" load_steps=6 format=3]
 
 [ext_resource type="Script" path="res://config/sword_config.gd" id="1_sword"]
+[ext_resource type="AudioStream" path="res://assets/audio/sword/throw.wav" id="2_throw"]
+[ext_resource type="AudioStream" path="res://assets/audio/sword/catch.wav" id="3_catch"]
+[ext_resource type="AudioStream" path="res://assets/audio/sword/embed.wav" id="4_embed"]
+[ext_resource type="AudioStream" path="res://assets/audio/sword/recall.wav" id="5_recall"]
 
 [resource]
 script = ExtResource("1_sword")
@@ -18,3 +22,7 @@ fall_drag = 600.0
 max_fall_speed = 500.0
 starting_swords = 3
 max_swords = 5
+throw_sound = ExtResource("2_throw")
+catch_sound = ExtResource("3_catch")
+embed_sound = ExtResource("4_embed")
+recall_sound = ExtResource("5_recall")

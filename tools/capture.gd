@@ -290,8 +290,9 @@ class CaptureAgent:
 		for node in swords:
 			var sword := node as Sword
 			if sword != null:
-				print("capture: sword %s at %s" % [
-					SwordFlight.state_name(sword.state), sword.global_position
+				print("capture: sword %s at %s, sound %s" % [
+					SwordFlight.state_name(sword.state), sword.global_position,
+					sword.sound_status()
 				])
 
 
