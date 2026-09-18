@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3]
+[gd_scene load_steps=24 format=3]
 
 [ext_resource type="Texture2D" path="res://assets/art/hero/rig/torso.png" id="1_torso"]
 [ext_resource type="Texture2D" path="res://assets/art/hero/rig/head.png" id="2_head"]
@@ -391,13 +391,169 @@ tracks/5/keys = {
 "values": [0.15, 0.15]
 }
 
+[sub_resource type="Animation" id="Animation_throw"]
+resource_name = "throw"
+length = 0.2
+loop_mode = 0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Skeleton2D/Hip/HipNear:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [-0.55, -0.55]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Skeleton2D/Hip/HipFar:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.5, 0.5]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Skeleton2D/Hip/Shoulder:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [-1.0, -1.0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Skeleton2D/Hip:position:y")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [594.0, 594.0]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Skeleton2D/Hip/Neck:rotation")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [-0.15, -0.15]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Skeleton2D/Hip:rotation")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.3, 0.3]
+}
+
+[sub_resource type="Animation" id="Animation_catch"]
+resource_name = "catch"
+length = 0.15
+loop_mode = 0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Skeleton2D/Hip/HipNear:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.35, 0.35]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Skeleton2D/Hip/HipFar:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [-0.3, -0.3]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Skeleton2D/Hip/Shoulder:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [-0.7, -0.7]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Skeleton2D/Hip:position:y")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [606.0, 606.0]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Skeleton2D/Hip/Neck:rotation")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [-0.1, -0.1]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Skeleton2D/Hip:rotation")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [-0.1, -0.1]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_hero"]
 _data = {
+"catch": SubResource("Animation_catch"),
 "fall": SubResource("Animation_fall"),
 "idle": SubResource("Animation_idle"),
 "jump": SubResource("Animation_jump"),
 "land": SubResource("Animation_land"),
-"run": SubResource("Animation_run")
+"run": SubResource("Animation_run"),
+"throw": SubResource("Animation_throw")
 }
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_idle"]
@@ -414,6 +570,12 @@ animation = &"fall"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_land"]
 animation = &"land"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_throw"]
+animation = &"throw"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_catch"]
+animation = &"catch"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_fluid"]
 xfade_time = 0.12
@@ -432,7 +594,11 @@ states/fall/node = SubResource("AnimationNodeAnimation_fall")
 states/fall/position = Vector2(500, 260)
 states/land/node = SubResource("AnimationNodeAnimation_land")
 states/land/position = Vector2(400, 400)
-transitions = ["idle", "run", SubResource("AnimationNodeStateMachineTransition_fluid"), "run", "idle", SubResource("AnimationNodeStateMachineTransition_fluid"), "idle", "jump", SubResource("AnimationNodeStateMachineTransition_snap"), "run", "jump", SubResource("AnimationNodeStateMachineTransition_snap"), "idle", "fall", SubResource("AnimationNodeStateMachineTransition_snap"), "run", "fall", SubResource("AnimationNodeStateMachineTransition_snap"), "jump", "fall", SubResource("AnimationNodeStateMachineTransition_snap"), "jump", "land", SubResource("AnimationNodeStateMachineTransition_snap"), "fall", "land", SubResource("AnimationNodeStateMachineTransition_snap"), "land", "idle", SubResource("AnimationNodeStateMachineTransition_snap"), "land", "run", SubResource("AnimationNodeStateMachineTransition_snap")]
+states/throw/node = SubResource("AnimationNodeAnimation_throw")
+states/throw/position = Vector2(700, 100)
+states/catch/node = SubResource("AnimationNodeAnimation_catch")
+states/catch/position = Vector2(700, 260)
+transitions = ["idle", "run", SubResource("AnimationNodeStateMachineTransition_fluid"), "run", "idle", SubResource("AnimationNodeStateMachineTransition_fluid"), "idle", "jump", SubResource("AnimationNodeStateMachineTransition_snap"), "run", "jump", SubResource("AnimationNodeStateMachineTransition_snap"), "idle", "fall", SubResource("AnimationNodeStateMachineTransition_snap"), "run", "fall", SubResource("AnimationNodeStateMachineTransition_snap"), "jump", "fall", SubResource("AnimationNodeStateMachineTransition_snap"), "jump", "land", SubResource("AnimationNodeStateMachineTransition_snap"), "fall", "land", SubResource("AnimationNodeStateMachineTransition_snap"), "land", "idle", SubResource("AnimationNodeStateMachineTransition_snap"), "land", "run", SubResource("AnimationNodeStateMachineTransition_snap"), "idle", "throw", SubResource("AnimationNodeStateMachineTransition_snap"), "throw", "idle", SubResource("AnimationNodeStateMachineTransition_snap"), "run", "throw", SubResource("AnimationNodeStateMachineTransition_snap"), "throw", "run", SubResource("AnimationNodeStateMachineTransition_snap"), "jump", "throw", SubResource("AnimationNodeStateMachineTransition_snap"), "throw", "jump", SubResource("AnimationNodeStateMachineTransition_snap"), "fall", "throw", SubResource("AnimationNodeStateMachineTransition_snap"), "throw", "fall", SubResource("AnimationNodeStateMachineTransition_snap"), "land", "throw", SubResource("AnimationNodeStateMachineTransition_snap"), "throw", "land", SubResource("AnimationNodeStateMachineTransition_snap"), "idle", "catch", SubResource("AnimationNodeStateMachineTransition_snap"), "catch", "idle", SubResource("AnimationNodeStateMachineTransition_snap"), "run", "catch", SubResource("AnimationNodeStateMachineTransition_snap"), "catch", "run", SubResource("AnimationNodeStateMachineTransition_snap"), "jump", "catch", SubResource("AnimationNodeStateMachineTransition_snap"), "catch", "jump", SubResource("AnimationNodeStateMachineTransition_snap"), "fall", "catch", SubResource("AnimationNodeStateMachineTransition_snap"), "catch", "fall", SubResource("AnimationNodeStateMachineTransition_snap"), "land", "catch", SubResource("AnimationNodeStateMachineTransition_snap"), "catch", "land", SubResource("AnimationNodeStateMachineTransition_snap"), "throw", "catch", SubResource("AnimationNodeStateMachineTransition_snap"), "catch", "throw", SubResource("AnimationNodeStateMachineTransition_snap")]
 
 [node name="HeroRig" type="Node2D"]
 

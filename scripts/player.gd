@@ -49,6 +49,16 @@ var _land_pose_duration := 0.0
 ## Counts down from `_land_pose_duration` after a landing; `Locomotion` reads
 ## it to hold the LAND state for that long before falling back to idle/run.
 var _landing_timer := 0.0
+## The throw and catch pose holds, read the same way `_land_pose_duration` is:
+## off the rig's own "throw" and "catch" animation lengths, so retiming either
+## pose in `hero_rig.tscn` is again the only place that has to change.
+var _throw_pose_duration := 0.0
+var _catch_pose_duration := 0.0
+## Count down after a throw fires or an in-flight catch lands; `Locomotion`
+## reads them the way it reads `_landing_timer`, except these two win even
+## while airborne. See `Locomotion.state_for`'s own comment for why.
+var _throw_timer := 0.0
+var _catch_timer := 0.0
 ## Where the next death puts you. Starts as wherever the room placed you and
 ## moves only when a brazier is lit, which is the only thing in the game that
 ## touches it.
@@ -142,6 +152,10 @@ func _ready() -> void:
 		var anim_player := _rig.get_node_or_null("AnimationPlayer") as AnimationPlayer
 		if anim_player != null and anim_player.has_animation("land"):
 			_land_pose_duration = anim_player.get_animation("land").length
+		if anim_player != null and anim_player.has_animation("throw"):
+			_throw_pose_duration = anim_player.get_animation("throw").length
+		if anim_player != null and anim_player.has_animation("catch"):
+			_catch_pose_duration = anim_player.get_animation("catch").length
 	_apply_hero_size(world.hero_height)
 	_message_label.add_theme_font_size_override("font_size", death_config.message_font_size)
 	_message_label.add_theme_color_override("font_color", Palette.FIRE_HOT)
@@ -170,6 +184,8 @@ func _physics_process(delta: float) -> void:
 	if not is_zero_approx(input_dir):
 		facing = signf(input_dir)
 	_throw_cooldown = maxf(_throw_cooldown - delta, 0.0)
+	_throw_timer = maxf(_throw_timer - delta, 0.0)
+	_catch_timer = maxf(_catch_timer - delta, 0.0)
 	_step_throw_button(delta)
 
 	_coyote_timer = JumpGate.coyote_next(on_floor, _coyote_timer, config.coyote_time, delta)
@@ -423,13 +439,20 @@ func _throw() -> void:
 	sword.recovered.connect(_on_sword_recovered)
 	swords_held -= 1
 	_throw_cooldown = sword_config.throw_cooldown
+	_throw_timer = _throw_pose_duration
 	if sword_config.throw_sound != null:
 		_sound.stream = sword_config.throw_sound
 		_sound.play()
 
 
-func _on_sword_recovered() -> void:
+## A picked-up sword refills the count exactly the same as a caught one; the
+## rig only cares about the difference. `caught_in_flight` is false for a
+## sword walked over off the floor, and that never sets the catch pose: there
+## is nothing to brace for, you just walked into it.
+func _on_sword_recovered(caught_in_flight: bool) -> void:
 	swords_held = mini(swords_held + 1, sword_config.max_swords)
+	if caught_in_flight:
+		_catch_timer = _catch_pose_duration
 
 
 func _jump(delta: float) -> void:
@@ -498,7 +521,9 @@ func _update_rig() -> void:
 func _update_animation(grounded: bool) -> void:
 	if _anim_tree == null:
 		return
-	var state := Locomotion.state_for(grounded, velocity.y, _landing_timer, velocity.x)
+	var state := Locomotion.state_for(
+		grounded, velocity.y, _landing_timer, velocity.x, _throw_timer, _catch_timer
+	)
 	_anim_tree["parameters/playback"].travel(Locomotion.state_name(state))
 
 
