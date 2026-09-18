@@ -10,28 +10,30 @@ game size in a screenshot, not just in the editor (`BUILD_PLAN.md`).
 
 ## Where this is
 
-**Five of M6's rig states are in**: idle, run, jump, fall and land, on
-`hero_rig.tscn`'s real `AnimationTree`. Two real bugs shipped (a property
-one animation keyed and another did not; a hand edit left a dead duplicate
-track block behind), both caught by Matt playing rather than by anything
-automated, and both now have a headless test proven against the real
-regression. `tools/dev.sh test`: 246 tests, 1611 checks. `tools/dev.sh
-scenarios` now also runs CI's 28 capture-and-check rooms locally.
+**Seven of M6's rig states are in**: idle, run, jump, fall, land, throw and
+catch, on `hero_rig.tscn`'s real `AnimationTree`. Throw and catch are held
+poses timed like `land`, but they beat "airborne always wins" on purpose: a
+throw or catch is something the player just did, not a byproduct of ground
+contact (`Locomotion.state_for`'s comment says why). `Sword.recovered` now
+carries `caught_in_flight`, so the catch pose fires only for a sword caught
+in the air, never one walked over off the floor. Checked against a real
+build: `tools/capture.gd`'s zoomed single-frame and filmstrip shots show
+both poses hold clearly and cross-fade cleanly, no PR #51-style float.
+`tools/dev.sh test`: 249 tests, 1619 checks. `scenarios`: still 28, 0 failed.
 
-**Still to pick up**: throw, catch, climb and die as rig states, plus
-painted pose sheets for the somersault and dive (`ANIMATION.md`). Claude
-cannot drive the Godot editor from this session, so animation stays
-text-authored; `ANIMATION.md` records that as settled. `tools/capture.gd
---filmstrip=N` reviews a transition as a frame sequence in one image, for
-the next pose that only reads as wrong in motion. The sword itself now
-plays a placeholder sound on throw, catch, embed and recall
-(`assets/audio/sword/`), so M15 is an asset swap rather than new wiring.
+**Still to pick up**: climb and die as rig states, plus painted pose sheets
+for the somersault and dive (`ANIMATION.md`). Animation stays text-authored,
+which `ANIMATION.md` records as settled, since Claude cannot drive the
+Godot editor here. The sword now plays a placeholder sound on throw, catch,
+embed and recall (`assets/audio/sword/`), so M15 is an asset swap only.
 
 ## The next action
 
-**Continue M6**: throw and catch are the natural next rig states, since the
-sword already exists as a mechanic and only needs a wind-up and a readable
-catch pose on the hero. Climb and die can follow independently.
+**Continue M6**: climb and die are the natural next states. Climb has
+movement code (`_step_climbing`) to hang a state off; die may be one held
+pose, since `_update_rig` already freezes on death. Throw beating airborne
+priority (above) is an assumption made without Matt watching it played:
+worth a look on `tools/dev.sh play`, in case mid-jump throws read as wrong.
 
 ## Blocked on Matt
 
@@ -45,7 +47,7 @@ catch pose on the hero. Climb and die can follow independently.
 session. **Opening the project rewrites `project.godot`**, and a stale
 editor deletes from it: close the editor, `git diff project.godot`, restore,
 then pull. **A new `class_name` script fails every caller with "Could not
-resolve class" until a reimport**, which reads like a compile error and is not.
+resolve class" until a reimport**, which reads like a compile error and isn't.
 
 **A cut rig looks right at rest and wrong the moment something moves**, test
 by moving it: `tools/capture.gd --filmstrip=N` now does that without a
@@ -55,9 +57,7 @@ painted line will not land on the collision line by construction**: measure
 the pixel row. **A compositional prior matters more for a dynamic pose**
 (`GEMINI_NOTES.md`), relevant again for the somersault. **Godot's
 `debug/gdscript/warnings/*` settings do not surface through this headless
-pipeline**, tried several ways on the fetched 4.7.2 binary;
-`tests/test_repo_typing.gd` substitutes a text scan instead.
-
+pipeline**; `tests/test_repo_typing.gd` substitutes a text scan instead.
 **Reading a public repo of Matt's needs no permission grant**: anonymous
 clone through this session's proxy already works, `add_repo` with `push` is
 only for write access.

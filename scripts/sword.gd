@@ -8,7 +8,12 @@ class_name Sword
 extends Area2D
 
 ## Back in the player's hand, caught in the air or picked up off the floor.
-signal recovered
+## `caught_in_flight` is true only for the first of those: SPEC.md and M1's
+## done-when both already treat a catch and a walk-over pick-up as different
+## things ("a missed catch leaves a sword on the floor you can walk over to
+## pick up"), and the hero's own catch pose is specifically about the first
+## one. Nothing brace for a sword that was just lying there.
+signal recovered(caught_in_flight: bool)
 ## Hit something solid mid-flight. That sword is gone.
 signal destroyed
 
@@ -127,7 +132,7 @@ func _physics_process(delta: float) -> void:
 	_recalled = false
 
 	if next != state:
-		_enter(next)
+		_enter(next, caught)
 	queue_redraw()
 
 
@@ -234,7 +239,12 @@ func _settle_against_the_surface(direction: float) -> void:
 	)
 
 
-func _enter(next: SwordFlight.State) -> void:
+## `caught_in_flight` only means anything on the transition into CAUGHT; every
+## other state ignores the argument. Passed in from `_physics_process` rather
+## than recomputed here, since by the time `_enter` runs the two conditions
+## that could have produced CAUGHT (`caught` and `picked_up`) have already
+## been collapsed into a single `next`.
+func _enter(next: SwordFlight.State, caught_in_flight: bool = false) -> void:
 	state = next
 	match state:
 		SwordFlight.State.RETURNING:
@@ -271,7 +281,7 @@ func _enter(next: SwordFlight.State) -> void:
 			_sound.global_position = at
 			_sound.finished.connect(_sound.queue_free)
 			_sound.play()
-			recovered.emit()
+			recovered.emit(caught_in_flight)
 			queue_free()
 		SwordFlight.State.DESTROYED:
 			destroyed.emit()

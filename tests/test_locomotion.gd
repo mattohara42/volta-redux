@@ -42,3 +42,38 @@ func test_state_names_match_the_state_machine_nodes() -> void:
 	check_eq(Locomotion.state_name(Locomotion.State.JUMP), "jump", "jump state name")
 	check_eq(Locomotion.state_name(Locomotion.State.FALL), "fall", "fall state name")
 	check_eq(Locomotion.state_name(Locomotion.State.LAND), "land", "land state name")
+	check_eq(Locomotion.state_name(Locomotion.State.THROW), "throw", "throw state name")
+	check_eq(Locomotion.state_name(Locomotion.State.CATCH), "catch", "catch state name")
+
+
+func test_a_throw_timer_wins_over_ground_and_air_alike() -> void:
+	check_eq(
+		Locomotion.state_for(true, 0.0, 0.0, 0.0, 0.1, 0.0), Locomotion.State.THROW,
+		"grounded and standing still, but a throw just fired"
+	)
+	check_eq(
+		Locomotion.state_for(false, -400.0, 0.0, 0.0, 0.1, 0.0), Locomotion.State.THROW,
+		"mid-jump, but a throw just fired: the wind-up still has to read"
+	)
+	check_eq(
+		Locomotion.state_for(true, 0.0, 0.1, 0.0, 0.1, 0.0), Locomotion.State.THROW,
+		"a throw fired mid-landing-hold takes over from LAND"
+	)
+
+
+func test_a_catch_timer_wins_over_a_throw_timer() -> void:
+	check_eq(
+		Locomotion.state_for(true, 0.0, 0.0, 0.0, 0.1, 0.1), Locomotion.State.CATCH,
+		"both timers running at once: the catch is the one that has to be legible"
+	)
+
+
+func test_throw_and_catch_lapse_back_to_whatever_state_for_says_next() -> void:
+	check_eq(
+		Locomotion.state_for(true, 0.0, 0.0, 0.0, 0.0, 0.0), Locomotion.State.IDLE,
+		"timer lapsed, standing"
+	)
+	check_eq(
+		Locomotion.state_for(false, -400.0, 0.0, 0.0, 0.0, 0.0), Locomotion.State.JUMP,
+		"timer lapsed, still rising"
+	)
