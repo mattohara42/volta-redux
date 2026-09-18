@@ -50,3 +50,16 @@ extends Resource
 ## no single throw mattered there.
 @export var starting_swords: int = 3
 @export var max_swords: int = 5
+
+@export_group("Sound")
+## BUILD_PLAN.md M15: "The throw, the catch, the embed and the recall need
+## four distinguishable sounds, because the sword's state is information the
+## player needs without looking." Placeholder synthesized tones for now
+## (`tools/` has no audio pipeline yet; ANIMATION.md's rule that a sound and
+## its frame come off the same signal can be true architecturally well before
+## M15 supplies the real assets, so it is wired here rather than waiting).
+## `assets/audio/sword/` documents how each one was generated.
+@export var throw_sound: AudioStream
+@export var catch_sound: AudioStream
+@export var embed_sound: AudioStream
+@export var recall_sound: AudioStream

@@ -7,6 +7,7 @@
 #   tools/dev.sh test                headless assertions
 #   tools/dev.sh play [scene]        run it, F2 cycles the benches
 #   tools/dev.sh shot SCENE OUT ...  a screenshot from a real running build
+#   tools/dev.sh scenarios [filter]  the capture-and-check scenarios CI runs
 #
 # CLAUDE.md: the destructive mode is the flag. `shot` does not pass
 # --overwrite, so replacing an existing image is something you ask for.
@@ -81,6 +82,12 @@ shot)
 		--script res://tools/capture.gd -- \
 		--scene="$scene" --out="$out" "$@"
 	echo "wrote $out"
+	;;
+scenarios)
+	# Ported from ci.yml, not wrapped in with_display here: scenarios.py does
+	# its own xvfb-run wrapping per invocation, one Godot process per
+	# scenario rather than one for the whole command.
+	python3 tools/scenarios.py "$GODOT_BIN" "${1:-}"
 	;;
 *)
 	sed -n '3,10p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'

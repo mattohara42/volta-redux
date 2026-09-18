@@ -38,6 +38,10 @@ var _recalled := false
 ## Area2D cannot be stood on, on its own layer so the sword's own detection
 ## never sees it, and disabled everywhere except EMBEDDED.
 @onready var _ledge: CollisionShape2D = $Ledge/CollisionShape2D
+## ANIMATION.md: "an actor and its sound are one event off one tick, never
+## two schedules." Played directly from `_enter()`, the one place a state
+## change happens, rather than from a timer or an animation callback.
+@onready var _sound: AudioStreamPlayer2D = $Sound
 
 
 func _ready() -> void:
@@ -178,6 +182,32 @@ func _fall_by(step: Vector2) -> void:
 	_landed = true
 
 
+## Plays a sound at the sword's own position, or does nothing if `config`
+## has none set for this cue yet. A null stream is a real state (M15 has not
+## landed, or a bench scene skipped SwordConfig's sound fields) rather than a
+## bug, so this never errors on one.
+func _play(stream: AudioStream) -> void:
+	if stream == null:
+		return
+	_sound.stream = stream
+	_sound.play()
+
+
+## For tools/capture.gd. Whether a sword actually played a sound is a node's
+## own runtime state, not arithmetic: the same reason a switch's sensing or a
+## gate's opening (`_report_mechanisms`) is reported here rather than
+## asserted. Reports the last cue this sword's own Sound node was set to,
+## rather than whether it is still audibly playing this exact frame: these
+## are short placeholder clips (under 150 ms), and a room can easily hold a
+## scene for longer than that before a screenshot is taken, so "still
+## playing" would report false on a cue that fired and finished exactly as
+## asked.
+func sound_status() -> String:
+	if _sound == null or _sound.stream == null:
+		return "quiet"
+	return "played %s" % _sound.stream.resource_path.get_file()
+
+
 ## Finds the face the sword just went through and sits half a blade clear of it.
 ##
 ## Asking the world where the surface is, rather than inferring it from where
@@ -216,11 +246,13 @@ func _enter(next: SwordFlight.State) -> void:
 			rotation = 0.0 if _velocity.x >= 0.0 else PI
 			_velocity = Vector2.ZERO
 			_ledge.set_deferred("disabled", false)
+			_play(config.embed_sound)
 		SwordFlight.State.RECALLING:
 			# The ledge goes before the sword does. Standing on the one you are
 			# recalling is a legitimate and bad idea, per SPEC.md, and this is
 			# the line that makes it bad.
 			_ledge.set_deferred("disabled", true)
+			_play(config.recall_sound)
 		SwordFlight.State.FALLING:
 			# Keeps whatever horizontal speed it had, so a sword that sailed
 			# past you lands past you.
@@ -229,6 +261,16 @@ func _enter(next: SwordFlight.State) -> void:
 			_velocity = Vector2.ZERO
 			rotation = 0.0
 		SwordFlight.State.CAUGHT:
+			# The sword frees itself this frame, which would cut the sound off
+			# mid-play if it stayed a child of this node: `_sound` is handed to
+			# the room instead, and frees itself once the clip finishes.
+			_sound.stream = config.catch_sound
+			var at := _sound.global_position
+			remove_child(_sound)
+			get_parent().add_child(_sound)
+			_sound.global_position = at
+			_sound.finished.connect(_sound.queue_free)
+			_sound.play()
 			recovered.emit()
 			queue_free()
 		SwordFlight.State.DESTROYED:

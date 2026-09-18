@@ -117,3 +117,35 @@ have.
 catch sound and the catch frame come off the same signal. If the sound is
 scheduled by a timer and the animation by the state machine, they will drift, and
 a catch that sounds a frame late feels like a catch you did not earn.
+
+## Who authors a keyframe, settled
+
+Every rig animation so far (`hero_rig.tscn`'s idle, run, jump, fall, land) was
+authored as text: bone rotations and positions written directly into the
+`.tscn`'s `Animation` resources, not keyed in the Godot editor's timeline. That
+produced two real bugs, PR #51 (a property one animation keyed and another did
+not, floating the hero mid-crossfade) and PR #53 (a hand edit left an orphaned
+duplicate track block behind), both caught by Matt playing rather than by
+anything in the suite.
+
+**Text authoring stays**, for a concrete reason rather than convenience: Claude
+cannot drive the Godot editor's GUI from this session, so the choice is not
+"editor or text," it is "text, or Matt hand-keyframes," and Matt has no Godot
+experience and does not want to spend time acquiring it right now. The
+correction is automated guardrails instead of a workflow change:
+`tests/test_rig_track_parity.gd` holds every rig to the rule behind #51 (every
+animation on a rig keys the same set of tracks), and
+`tests/test_repo_tscn_hygiene.gd` holds every resource file to the rule behind
+#53 (no key declared twice in one block). Both are proven against the real
+bugs they are named for, not just plausible in the abstract: reintroducing
+each defect fails the relevant test with the exact message, restoring it
+passes again.
+
+This does not close the gap for free. What the editor gives that these tests
+do not is fast visual iteration on a timeline, and #52 and #55 (both genuine
+feel problems: the run cycle's pace, jump/fall/land reading as the same pose)
+were caught by playing, which no test closes either way. `tools/capture.gd`'s
+`--filmstrip=N` mode narrows that gap without an editor session: N frames
+across a transition composited into one image, reviewable directly, which is
+how #51 and #55's class of bug (a blend or a pose that only reads as wrong in
+motion) gets checked before a build is played rather than only after.

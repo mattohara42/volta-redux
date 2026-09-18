@@ -12,6 +12,9 @@
 # project, so a local run of what CI runs leaves a dozen of them in git status.
 /*.png
 
+# Python, from tools/scenarios.py importing tools/scenarios_data.py
+__pycache__/
+
 # Editor and OS
 .DS_Store
 *.log
