@@ -38,9 +38,10 @@ design back toward the trace. `assets/reference/` is the part worth keeping.
 - **Rooms are scenes, and a room never reaches into another room.** Act state
   lives in an autoload. A room that knows what room comes next cannot be tested
   or reordered.
-- **Continuous motion is rigged, discrete acrobatics are painted frames**
-  (`ANIMATION.md`). Frame-by-frame generated animation is off the table and the
-  reasons are measured, not aesthetic.
+- **Characters animate in pixel-art frames, objects move by transform**
+  (`ANIMATION.md`). This replaced the cutout rig on 2026-09-26, with the switch
+  to pixel art. Boiling between generated frames is the known risk: filmstrip
+  every animated delivery before building on it.
 - **`ART_DIRECTION.md` governs every visual choice**, including shaders,
   particles and UI. Coloured darks only, no neutral black or grey anywhere.
   Automate the check the way the last project did.
@@ -83,6 +84,10 @@ design back toward the trace. `assets/reference/` is the part worth keeping.
   It finds Godot on macOS and Linux, and it is what CI runs, so a command that
   works there works here. `README.md` has the detail.
 - **`GEMINI_NOTES.md` is required reading before writing any art prompt.**
+  Art now comes from the Sprite Fusion API (`ART.md`), so treat its findings as
+  hypotheses until each is tried there.
+- **`SPRITE_FUSION_API_KEY` lives in the environment, never in the repo.** Not
+  in a file, a commit, a log line, a URL or a test fixture.
 - **An assertion proves the code ran, not that the picture is right, so draw the
   thing you measured.** The last project shipped four bugs past green assertions
   and every one was obvious the moment something was rendered. When a number

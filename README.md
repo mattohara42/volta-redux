@@ -36,9 +36,9 @@ first thing to read at the start of a session.
 | `HANDOFF.md` | where the project is right now, and what is blocked |
 | `CLAUDE.md` | how to work in this repo |
 | `ART_DIRECTION.md` | palette, light, treatment |
-| `ANIMATION.md` | what is rigged, what is painted, and why |
+| `ANIMATION.md` | what animates in frames, what moves by transform, and why |
 | `ART.md` | how a picture gets from a prompt into the game |
-| `GEMINI_NOTES.md` | how the image generator behaves |
+| `GEMINI_NOTES.md` | how the previous image generator behaved |
 | `BACKLOG.md` | what is deliberately not in v1 |
 
 ## Running it

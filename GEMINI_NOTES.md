@@ -9,6 +9,11 @@
 > original is at `mattohara42/hook-line-and-sentence`, `GEMINI_NOTES.md`, 705
 > lines, and is worth reading in full before a hard prompt.
 >
+> **The generator changed on 2026-09-26**, to the Sprite Fusion API and to
+> pixel art (`ART.md`). Everything below was learned on Gemini's painting
+> model. Treat each rule as a hypothesis for Sprite Fusion until it has been
+> tried there, and record what it does in a new section at the end.
+>
 > **Append to this file as this project learns things.** Its value is entirely in
 > being the accumulated memory rather than the initial guess.
 
