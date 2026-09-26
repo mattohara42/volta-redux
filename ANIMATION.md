@@ -1,4 +1,4 @@
-# ANIMATION.md: what is rigged, what is painted, and where the line sits
+# ANIMATION.md: how things move on screen
 
 > Companion to `ART_DIRECTION.md`. Together they are the source of truth for
 > every moving thing on screen. This file exists because getting this wrong is
@@ -6,79 +6,55 @@
 
 ## The rule
 
-**Continuous motion is rigged. Discrete acrobatics are painted frames. Nothing
-in between.**
+**Characters animate in frames. Objects move by transform. Atmosphere is
+code.**
 
-A run cycle, an idle, a throw wind-up, a climb: these are a small number of
-painted parts moved by an `AnimationPlayer` keying bone transforms. They cost one
-generation for the whole character and then cost nothing per animation.
+Every character state (idle, run, jump, throw, the somersault) is a short
+`SpriteFrames` animation of pixel-art frames. Anything rigid (the sword, a
+falling platform, a gate) is one sprite moved, flipped or rotated by code.
+Lava, arcs and sparks stay shaders and particles, per `CLAUDE.md`.
 
-A somersault, a dive, a death: these are four to six hand-picked painted frames,
-because a cutout rig cannot sell a full-body rotation. Flat parts seen edge-on
-are flat parts.
+**Changed 2026-09-26, from rigged to frames.** The first rule was "continuous
+motion is rigged, discrete acrobatics are painted frames," with the hero as a
+`Skeleton2D` cutout. It moved with the art direction (`ART_DIRECTION.md`):
+bone rotation shears and resamples pixels, so a pixel-art cutout rig looks
+wrong the moment a limb turns, and the new generator (`ART.md`) animates a
+still sprite into frames directly. The seven rig states M6 built are the
+thing this replaces. The `AnimationTree` state machine and `Locomotion`'s
+state logic are not: they pick which animation plays, and frames do not
+change that.
 
-## Why frame-by-frame generation is off the table
+## Why frames are back on the table, and the risk that came with them
 
-This is settled, and it is settled by measurement rather than preference. From
-the previous project's `GEMINI_NOTES.md`:
+The old rule was settled by a measurement: Gemini repaints the whole canvas on
+every edit, so separately generated frames wander 1 to 3 px against each other,
+which reads as boiling across a run cycle (the full quote is in
+`GEMINI_NOTES.md`, *Editing an attached painting*). Two things are different
+now. Sprite Fusion's *animate* operation makes every frame of a motion in one
+request, from one still, rather than one frame per round trip. And a 40 px
+pixel sprite is small enough that a stray pixel can be fixed by hand, which a
+2560 px painting was not.
 
-> A faithful edit agrees with the reference on the untouched linework closely,
-> but never to the pixel. The generator repaints the whole canvas rather than
-> compositing onto yours, so [features] it was told not to change come back
-> within a few px of where they were, in the same ink, visually identical, and a
-> 1-3px trace of "changed" in any difference-based cut.
-
-That was measured across nine deliveries with agreement between 0.945 and 0.991,
-which is **excellent** for a static hat and **fatal** for animation. A 1 to 3 px
-wander that nobody can see in a still is visible on every single frame of a
-twelve-frame run cycle, forever. It reads as boiling, and no amount of prompting
-fixes it, because it is a property of the round trip and not a defect in it.
-
-So: the generator produces **poses**. Code produces **motion**. That is exactly
-what the fishing game did, where every one of its thirty-three animations is a
-CSS keyframe on a cut layer and not one is a sprite sheet, and it is the reason
-that game's motion holds up.
-
-## The pose sheet, and why the somersault is affordable
-
-The one place we spend generated frames is the few discrete moves, and there is a
-trick that makes it cheap. From the fishing project's strongest result:
-
-> Six subjects on one canvas works as well as four. The upper bound has not been
-> found. **Put the two subjects hardest to tell apart on the SAME sheet.** A
-> sheet is not merely a saving: it is the only way to ask for a difference
-> rather than describe one.
-
-**The same character in six poses is a six-subject sheet.** Ask for one canvas,
-a 3x2 grid, the hero in six stages of a somersault, and the generator draws them
-against each other. Consistency between the frames stops being something to
-prompt for and becomes a property of the sheet, in the same way that four fish on
-one canvas came back with matched treatment where four separate generations would
-have drifted four ways.
-
-Six frames is few enough that any residual wander can be nudged by hand in an
-image editor, which is not true of sixty.
-
-**Do not push this past about eight frames.** A pose sheet works because the
-frames are far apart and each is a readable pose. Ask for twelve near-identical
-frames of a run cycle and the sheet stops separating them, which is the failure
-the muskellunge and the northern pike ran into from the other direction.
+**Neither of those is measured yet.** Boiling is still the failure to look for
+first. The first animated delivery gets played back at game size and
+filmstripped (`tools/capture.gd --filmstrip=N`) before anything else is built
+on top of it, and what it shows goes into `ART.md`'s generator notes.
 
 ## What each animation is
 
 | animation | how | note |
 |---|---|---|
-| idle, breathing | rig | Two bones, almost nothing |
-| run | rig | Hips, two legs, two arms, head. The workhorse |
-| jump, fall, land | rig | Three poses and the transitions between them |
-| throw | rig | The wind-up matters more than the release. Telegraph it |
-| catch | rig | Must be readable in one frame. See M15 on the audio |
-| climb | rig | |
-| **somersault** | **painted, 6 frames** | The signature move of the original. Earn it |
-| **dive** | **painted, 4 frames** | A fall past a threshold speed becomes this |
-| **death** | **painted, 5 frames** | Plays inside `death_hold` in `config/death.tres`, 0.25 s, so five frames is 20 fps. One per hazard family would be better. One is fine for v1 |
-| **enemies** | rig | All six. A bat is two wings and a body |
-| **the sword in flight** | **one sprite, rotated** | Never generate rotation frames. It is a transform |
+| idle, breathing | frames | Two to four frames. Almost nothing moves |
+| run | frames | The workhorse. Its pace has to match ground speed (PR #52 found this once already) |
+| jump, fall, land | frames | Three distinct poses that must read as three actions (PR #55) |
+| throw | frames | The wind-up matters more than the release. Telegraph it |
+| catch | frames | Must be readable in one frame. See M15 on the audio |
+| climb | frames | |
+| **somersault** | **frames, about 6** | The signature move of the original. Earn it |
+| **dive** | **frames, about 4** | A fall past a threshold speed becomes this |
+| **death** | **frames, about 5** | Plays inside `death_hold` in `config/death.tres`, 0.25 s, so five frames is 20 fps. One per hazard family would be better. One is fine for v1 |
+| **enemies** | frames | All six. A bat is two or three wing frames |
+| **the sword in flight** | **one sprite, rotated** | Never generate rotation frames. It is a transform. `ART_DIRECTION.md` flags the shimmer to check |
 
 ## The somersault is a state, not a costume
 
@@ -97,19 +73,18 @@ have.
 
 ## Godot specifics
 
-- **Cutout rigging**: `Skeleton2D` with `Bone2D` nodes, cut PNG parts as
-  `Sprite2D` children. `AnimationPlayer` keys the bone transforms. This is a
-  first-class Godot workflow and needs no plugin, no Spine licence and no export
-  step.
-- **The painted frames** go in a `SpriteFrames` resource on an
-  `AnimatedSprite2D`, sharing the same `AnimationTree` state machine as the rig.
-  The switch between a rigged state and a painted state is one node visibility
-  toggle, and it has to happen on the same frame the state changes or you get a
-  one-frame flash of both.
+- **Every character is an `AnimatedSprite2D`** with a `SpriteFrames` resource,
+  one named animation per state. Facing is `flip_h`, never a second set of
+  frames.
 - **One `AnimationTree` state machine per character**, and the character script
-  sets parameters on it. The script must never call `AnimationPlayer.play()`
-  directly. Two things deciding what is on screen is how you get a rig stuck in a
-  throw pose.
+  sets parameters on it. Each state's animation sets the sprite's `animation`
+  and `frame` properties, so the tree stays the only thing deciding what is on
+  screen. The script must never call `AnimationPlayer.play()` or
+  `AnimatedSprite2D.play()` directly. Two things deciding what is on screen is
+  how you get a character stuck in a throw pose.
+- **Cross-fades are gone.** A blend between two frame animations is a
+  double exposure, so state transitions are cuts, timed to land on a frame
+  boundary.
 
 ## The rule from the fishing project that transfers unchanged
 
@@ -118,34 +93,17 @@ catch sound and the catch frame come off the same signal. If the sound is
 scheduled by a timer and the animation by the state machine, they will drift, and
 a catch that sounds a frame late feels like a catch you did not earn.
 
-## Who authors a keyframe, settled
+## Who authors a keyframe
 
-Every rig animation so far (`hero_rig.tscn`'s idle, run, jump, fall, land) was
-authored as text: bone rotations and positions written directly into the
-`.tscn`'s `Animation` resources, not keyed in the Godot editor's timeline. That
-produced two real bugs, PR #51 (a property one animation keyed and another did
-not, floating the hero mid-crossfade) and PR #53 (a hand edit left an orphaned
-duplicate track block behind), both caught by Matt playing rather than by
-anything in the suite.
+**Frames come from the generator, timing is text.** The frames are PNGs out of
+Sprite Fusion (`ART.md`). Which frames make up an animation, and how fast they
+play, are written as text into the `.tres`/`.tscn`, as the rig animations were,
+because Claude cannot drive the Godot editor from this session.
 
-**Text authoring stays**, for a concrete reason rather than convenience: Claude
-cannot drive the Godot editor's GUI from this session, so the choice is not
-"editor or text," it is "text, or Matt hand-keyframes," and Matt has no Godot
-experience and does not want to spend time acquiring it right now. The
-correction is automated guardrails instead of a workflow change:
-`tests/test_rig_track_parity.gd` holds every rig to the rule behind #51 (every
-animation on a rig keys the same set of tracks), and
-`tests/test_repo_tscn_hygiene.gd` holds every resource file to the rule behind
-#53 (no key declared twice in one block). Both are proven against the real
-bugs they are named for, not just plausible in the abstract: reintroducing
-each defect fails the relevant test with the exact message, restoring it
-passes again.
-
-This does not close the gap for free. What the editor gives that these tests
-do not is fast visual iteration on a timeline, and #52 and #55 (both genuine
-feel problems: the run cycle's pace, jump/fall/land reading as the same pose)
-were caught by playing, which no test closes either way. `tools/capture.gd`'s
-`--filmstrip=N` mode narrows that gap without an editor session: N frames
-across a transition composited into one image, reviewable directly, which is
-how #51 and #55's class of bug (a blend or a pose that only reads as wrong in
-motion) gets checked before a build is played rather than only after.
+The guardrails built for the rig stay until the rig is deleted:
+`tests/test_rig_track_parity.gd` (every animation keys the same tracks, the rule
+behind PR #51) and `tests/test_repo_tscn_hygiene.gd` (no key declared twice in
+one block, PR #53). The hygiene test outlives the rig. Whether track parity
+still means anything for frame animations is a question for when the first
+frame-based character is built. `tools/capture.gd --filmstrip=N` matters more
+now, since boiling only shows in motion.

@@ -241,7 +241,7 @@ of electric potential and a real surname rather than an owned character.
 **The hero is Lothar of the Hill People.** Settled, not provisional. It arrived
 as a Mike Myers bit and it stays, which means the register this document sets (a
 castle with a lava pit in it, an adult who wants it hard) carries a hero whose
-name is a joke and plays it straight. **M5 paints him** to that brief.
+name is a joke and plays it straight. **M5 draws him** to that brief.
 
 ## What the repo inherits from the first attempt
 
@@ -259,7 +259,7 @@ seven boards actually contained, and `apple2/cast-of-characters.png` and
 | `atari-8-bit` | 7 | ~336x240 | title, start, a couple of layouts |
 
 **The ten sprites ripped from the Apple II release are gone**, deleted in the
-same commit that brought this plan in. We are painting our own, they were the
+same commit that brought this plan in. We are drawing our own, they were the
 most clearly infringing thing in a public repo, and git history keeps them if
 they are ever wanted.
 

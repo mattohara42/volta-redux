@@ -5,15 +5,20 @@
 
 ## The anchor
 
-**Painted fantasy lit by fire and by electricity.** Visible brushwork, soft
-edges, real depth. Think the painted backgrounds of a hand-animated feature
-rather than a modern flat-vector indie platformer, and specifically **not** the
-warm cozy register of the fishing game: this is a castle with a lava pit in it.
+**Pixel art lit by fire and by electricity.** Native-resolution sprites at the
+game's own 640x360, every pixel placed on purpose, scaled up only by whole
+numbers. This is a castle with a lava pit in it, so the register is dark and
+dramatic, and specifically **not** the warm cozy register of the fishing game.
 
-Two named references, to argue against rather than to copy: **Mignola's
-silhouettes**, where a figure is a shape first and detail second, given a
-**painted** treatment rather than flat blacks. Where those two pull apart, take
-Mignola's shape and the painting's surface.
+**Changed 2026-09-26, from painted to pixel.** The first direction was
+painterly (visible brushwork, soft edges, art authored at 4x and filtered
+down). It moved to pixel art so the Sprite Fusion API could become the
+generator (`ART.md`). The rules below that are about light and readability
+carried over unchanged, because they were never about brushwork.
+
+The named reference, to argue against rather than to copy: **Mignola's
+silhouettes**, where a figure is a shape first and detail second. At 40 px tall
+that is not a style choice, it is the only thing that reads.
 
 ## The one rule everything else hangs off
 
@@ -103,29 +108,36 @@ colour alone, at speed, in peripheral vision.
 
 ## Outline and edge
 
-Painted, so no uniform outline. Form is separated by **value and by edge
-quality**: hard edges where a shape matters (the hero against stone), soft edges
-where it does not (a distant arch). Where a shape genuinely will not separate,
-the fix is a **rim light from the nearest real light source**, not a stroke.
+**Outlines are allowed, and they are coloured.** A pixel-art outline is a
+line of darks, so it obeys the one rule above: violet-blue or umber, never a
+neutral black. Prefer a selective outline (darker on the shadow side, lighter
+or broken where the light falls) over a uniform one. Where a shape will not
+separate from its background, the first fix is still a **rim light from the
+nearest real light source**. The outline is the second.
 
 ## Scale and resolution
 
-Design resolution 640x360, rendered at integer multiples, with the viewport
-stretch set so the game is playable at 1280x720 and 1920x1080 without reflow.
-Art is authored at **4x** (2560x1440 for a full-screen background) and imported
-down, because the generator ignores requested pixel dimensions anyway and
-downscaling a painterly asset is free while upscaling is not.
+Design resolution 640x360, rendered at **integer multiples only**, so the game
+is playable at 1280x720 and 1920x1080 with every pixel a clean square. Art is
+authored at **1x**: one art pixel is one design pixel. A full-screen background
+is 640x360 of art, and the hero is around 40 px tall.
 
-**Characters are small.** The hero is around 40 design px tall. This is the
-number most likely to be wrong and it should be settled in M0 with a grey
-capsule, before a single piece of art is generated against it.
+**Import with the filter off.** Nearest-neighbour, no mipmaps, and no sprite
+drawn at a fractional scale or a sub-pixel position. `ART.md` has the import
+settings and when they change over.
+
+**The one exception is rotation.** The sword in flight is one sprite, rotated
+(`ANIMATION.md`), and a rotated pixel sprite will shimmer. At the sword's size
+it may be fine. Check it in a screenshot before believing either way.
 
 ## What this direction forbids
 
 - Pure black and pure white, anywhere, including UI text and particle cores.
 - Neutral greys in shadow.
-- A uniform outline stroke on characters.
-- Bloom as a substitute for painted light. A little is fine. Reaching for it to
+- A neutral black outline, on anything.
+- Mixed pixel scales: a sprite scaled by a non-integer, or two sprites at
+  different pixel sizes on one screen.
+- Bloom as a substitute for drawn light. A little is fine. Reaching for it to
   make a scene read means the values are wrong.
 - Screen shake on anything except the generator boss and lava impacts. It is a
   spice and this game has a lot of impacts.

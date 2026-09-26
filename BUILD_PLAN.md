@@ -76,12 +76,18 @@ names, and the grey rooms proving them are survivable with three swords.
 ## Phase 2: the look (M5 to M9)
 
 ### M5: the art spike, one room end to end
-**One** room, fully painted. One background, one tileset, one rigged hero, one
+**One** room, fully drawn. One background, one tileset, one animated hero, one
 enemy. The point is to run the whole pipeline once (`ART.md`) before committing
 to eighteen rooms of it, and to find out what a room actually costs.
 
 **Done when**: that room is in the game, at final quality, and `ART.md` carries
 the real number of generations it took.
+
+**Reopened 2026-09-26 for pixel art.** The first pass was painted (Gemini, 4x,
+a cutout rig) and it is done and recorded in `ART.md`. The switch to Sprite
+Fusion and pixel art (`ART_DIRECTION.md`) means the same room is redrawn once
+more, through the new pipeline, with the same done-when plus credits spent.
+This PR is also where the project's texture filter flips to Nearest.
 
 ### 🚧 G1: the vertical slice gate
 Take M5's room, add sound, and play it for an hour. **This is a decision point,
@@ -89,18 +95,23 @@ not a milestone.** Fun: continue to M6. Not fun: the fault is in `SPEC.md` and
 that is where the fix goes. Do not proceed on the theory that seventeen more
 rooms will fix one that is not fun.
 
-### M6: the hero, rigged and animated
-Idle, run, jump, fall, land, throw, catch, climb, die. Cutout rig for the
-continuous motion, painted pose sheets for the somersault and the dive. The line
-between the two is in `ANIMATION.md` and it is not a matter of taste.
+**Passed** on the painted art. The art change does not reopen it: G1 judged
+the game, not the picture.
+
+### M6: the hero, animated
+Idle, run, jump, fall, land, throw, catch, climb, die, the somersault and the
+dive, all as pixel-art frame animations on the existing `AnimationTree` state
+machine (`ANIMATION.md`). The seven rig states already built are replaced, and
+the state logic behind them (`Locomotion`) carries over.
 
 **Done when**: every state transitions cleanly into every other state it can
 reach, and the somersault reads as a somersault at game size in a screenshot,
 not just in the editor.
 
 ### M7: the enemy sheet
-Six enemies, and per `GEMINI_NOTES.md` this should be **one or two sheets, not
-six generations**. Cut, rigged, wired to the M4 behaviours.
+Six enemies, derived from one another so they match (`ART.md`: a sheet if
+Sprite Fusion takes one, the style reference operation if not). Animated in
+frames, wired to the M4 behaviours.
 
 **Done when**: the six are on screen, distinguishable at game size, and
 consistent with each other in treatment.
@@ -118,7 +129,7 @@ and charged surfaces are the same. Nothing in this milestone is a generated
 asset, and if something here is being drawn as a PNG loop, that is the bug.
 
 **Done when**: the lava bubbles, the generator arcs, and neither is a texture
-someone painted frame by frame.
+someone drew frame by frame.
 
 ---
 
