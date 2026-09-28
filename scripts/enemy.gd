@@ -36,6 +36,11 @@ var _config: EnemyConfig
 var is_dormant := false
 var _wake_range := 0.0
 
+## The frame-animated sprite a species draws itself with (`ANIMATION.md`), set
+## by `_attach_sprite`. Art faces right; `_face_sprite` mirrors it.
+var _sprite: Node2D = null
+var _sprite_tree: AnimationTree = null
+
 
 func configure(size: Vector2) -> void:
 	super.configure(size)
@@ -88,6 +93,29 @@ func start_dormant() -> void:
 	_wake_range = _config.dormant_wake_range
 
 
+## Puts a sprite scene on this enemy and travels its `AnimationTree` to
+## `state`. Called from a species' `_ready`, once. The sprite sits at this
+## node's origin, which is the middle of the killing box, and each scene's
+## own offset lands the creature's feet on the box's bottom edge.
+func _attach_sprite(scene: PackedScene, state: String) -> void:
+	_sprite = scene.instantiate()
+	add_child(_sprite)
+	_sprite_tree = _sprite.get_node("AnimationTree") as AnimationTree
+	_sprite_tree["parameters/playback"].travel(state)
+
+
+## The art faces right, so a species that walks or looks left mirrors it.
+func _face_sprite(facing: float) -> void:
+	_sprite.scale.x = facing
+
+
+## A dormant enemy is decoration, and decoration holds still: the sprite's
+## animation stops until it wakes.
+func _set_sprite_animating(on: bool) -> void:
+	if _sprite_tree != null and _sprite_tree.active != on:
+		_sprite_tree.active = on
+
+
 ## The one thing every species calls first in its own `_physics_process`.
 ## Returns true while still dormant, which is a species' cue to do nothing
 ## else this frame: a sleeping scorpion does not patrol, a sleeping bat does
@@ -99,7 +127,9 @@ func _step_dormancy(_delta: float) -> bool:
 	var player := get_tree().get_first_node_in_group("player") as Node2D
 	if player != null and global_position.distance_to(player.global_position) <= _wake_range:
 		is_dormant = false
+		_set_sprite_animating(true)
 		return false
+	_set_sprite_animating(false)
 	return true
 
 

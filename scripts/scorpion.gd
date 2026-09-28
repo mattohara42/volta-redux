@@ -8,6 +8,10 @@
 class_name Scorpion
 extends Enemy
 
+## The pixel-art scorpion (`ANIMATION.md`): a walk loop, drawn at 1x, its
+## paler armoured claws and face leading the way it walks.
+const SPRITE_SCENE: PackedScene = preload("res://scenes/scorpion_sprite.tscn")
+
 var _range: float = 0.0
 var _home := Vector2.ZERO
 var _elapsed: float = 0.0
@@ -24,6 +28,8 @@ func place(size: Vector2, range: float, enemy_config: EnemyConfig) -> void:
 
 func _ready() -> void:
 	_home = position
+	_attach_sprite(SPRITE_SCENE, "walk")
+	_face_sprite(_facing)
 
 
 func _physics_process(delta: float) -> void:
@@ -36,7 +42,7 @@ func _physics_process(delta: float) -> void:
 func _update() -> void:
 	_facing = ScorpionPatrol.facing_at(_elapsed, _range, _config.scorpion_speed)
 	position = _home + Vector2(ScorpionPatrol.offset_at(_elapsed, _range, _config.scorpion_speed), 0.0)
-	queue_redraw()
+	_face_sprite(_facing)
 
 
 func reset(frozen_for: float) -> void:
@@ -57,18 +63,3 @@ func is_vulnerable_to(sword: Node2D) -> bool:
 	return ScorpionPatrol.is_vulnerable_to(
 		offset, _facing, killing_box.y * 0.5, _config.scorpion_armor_top_fraction
 	)
-
-
-## Low and wide, with the armoured face drawn as a plate on whichever side it
-## is walking toward, so the mistake the enemy punishes is legible before the
-## sword is thrown and not only after.
-func _draw() -> void:
-	var half := killing_box * 0.5
-	draw_rect(Rect2(-half, killing_box), Palette.ENEMY_CHITIN)
-	var plate_x := _facing * half.x * 0.55
-	draw_rect(Rect2(plate_x - 3.0, -half.y, 6.0, killing_box.y), Palette.STONE_LIT)
-	draw_colored_polygon(PackedVector2Array([
-		Vector2(_facing * half.x, -half.y * 0.3),
-		Vector2(_facing * (half.x + 8.0), 0.0),
-		Vector2(_facing * half.x, half.y * 0.3),
-	]), Palette.SPIKE_TIP)

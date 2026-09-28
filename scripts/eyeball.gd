@@ -9,6 +9,10 @@
 class_name Eyeball
 extends Enemy
 
+## The pixel-art eyeball (`ANIMATION.md`): a float-and-pulse loop, drawn at 1x.
+## It does not turn to face the hero; the pupil looks straight out.
+const SPRITE_SCENE: PackedScene = preload("res://scenes/eyeball_sprite.tscn")
+
 var _roam := Rect2()
 var _start := Vector2.ZERO
 
@@ -23,6 +27,7 @@ func place(size: Vector2, roam: Rect2, enemy_config: EnemyConfig) -> void:
 
 func _ready() -> void:
 	_start = position
+	_attach_sprite(SPRITE_SCENE, "float")
 
 
 func _physics_process(delta: float) -> void:
@@ -32,7 +37,6 @@ func _physics_process(delta: float) -> void:
 	if player == null:
 		return
 	position = EyeballSeek.step(position, player.global_position, _config.eyeball_seek_speed, delta, _roam)
-	queue_redraw()
 
 
 ## Back to wherever the room first put it. Not clock-driven the way a bat or a
@@ -41,17 +45,7 @@ func _physics_process(delta: float) -> void:
 ## to move again.
 func reset(_frozen_for: float) -> void:
 	position = _start
-	queue_redraw()
 
 
 func status() -> String:
 	return "eyeball" + _status_suffix()
-
-
-## A ring around a slit pupil, aimed at whatever it is tracking. The one enemy
-## that looks back is the one the sentence "it tracks you" is worth drawing.
-func _draw() -> void:
-	var r := killing_box.length() * 0.5
-	draw_circle(Vector2.ZERO, r, Palette.ENEMY_CHITIN)
-	draw_circle(Vector2.ZERO, r * 0.55, Palette.STONE_LIT)
-	draw_circle(Vector2.ZERO, r * 0.22, Palette.SPIKE_TIP)

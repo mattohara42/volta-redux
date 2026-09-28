@@ -157,6 +157,48 @@ reads its pose holds from them.
   of it, two or three frames. Lower the threshold, or accept that the dive shows
   on bigger falls. `ANIMATION.md` has what else the threshold decides.
 
+## M7: the enemy sheet (2026-09-28)
+
+**12 requests, 120 credits, and the balance is now 0.** Four creatures, each a
+`generate` and an `animate` from the chosen still, all with the bat's own style
+clause ("it kills on contact, so it is warm and saturated... coloured darks,
+deep warm umber, never neutral black or grey") so they match without a shared
+reference image. One `animate` failed at the SSL handshake before reaching the
+API, charged nothing, and was retried once.
+
+| enemy | `generate` size | picked | walks or loops | notes |
+|---|---|---|---|---|
+| scorpion | 32 | 6 of 12, 37 px | 4-frame walk | the paler armoured claws and face are the tell for "hit it from behind" |
+| ant | 32 | 4 of 12, 37 px | 4-frame crawl | rotates by exact 90 degree steps on its loop, which stays crisp |
+| eyeball | 32 | 9 of 12, 38 px | 4-frame float and pulse | one forward-looking frame set; does not track |
+| dragon | 64 | 4 of 12, 74 px | 4-frame slow breathing | art faces right and mirrors to the breath |
+
+All four came back facing right on request, which the room mirrors by
+`_face_sprite`. Every sheet is padded to an even width so mirroring around the
+node's origin does not shift a pixel. **Identity held across frames**: mean
+colour drifted under 3 of 255 and the bounding box moved by a pixel, the same
+as the hero.
+
+**What is in the game**: `scenes/<name>_sprite.tscn` for each, the shared
+handling in `Enemy` (`_attach_sprite`, `_face_sprite`, a dormant enemy's sprite
+holds still, measured 0 of 7,200 pixels changing against 4,288 for an awake
+one), `TileArt` (the ground drawing pulled out of the M5 room so a second room
+can use it), and `RoomM7Sheet`, the lineup bench (F2 in the overlay). The
+placeholder rectangles are gone; the dragon's breath is still the drawn
+rectangle that kills. `tests/test_enemy_sprites.gd` holds that every animation
+shows real frames of its own name, and that each ground creature's feet land on
+its killing box's bottom edge and are centred on it.
+
+**Silhouettes** (`ART_DIRECTION.md`, rule 1) are all distinct at game size: the
+upright hero, the curled tail and claws of the scorpion, the three body
+segments of the ant, the wings of the bat, the round eyeball with tendrils, the
+big horned dragon. `assets/art_raw/_experiments/m7_silhouettes.png`.
+
+**Not done: the generator**, the sixth. It is M12's boss and has no behaviour to
+run, and there were no credits left after the four. It needs a `generate` at 64
+and an `animate`, 30 credits, before M7's done-when ("the six are on screen")
+can be met.
+
 ## The pipeline, four steps
 
 1. **Claude writes the prompt and calls the API.** No human round trip, so a
