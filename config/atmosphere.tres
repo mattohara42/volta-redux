@@ -31,3 +31,5 @@ arc_jag = 0.16
 arc_fork_chance = 0.6
 arc_fork_length = 0.35
 arc_sparks = 6
+flame_stream_speed = 160.0
+flame_noise_scale = 0.09

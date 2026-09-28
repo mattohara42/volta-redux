@@ -195,11 +195,10 @@ committed to.
 
 ## Raised during M7 (2026-09-28), not judged
 
-- **The dragon's flame is a flat orange rectangle.** It is drawn as the same
-  rectangle that kills, on purpose (honesty about what is lethal), and now it is
-  the brightest and ugliest thing next to pixel-art creatures. A flame shader
-  or particle emitter clipped to that rectangle would keep the honesty and lose
-  the slab. `ART_DIRECTION.md`: atmosphere is code.
+- **The dragon's flame was a flat orange rectangle. Now a shader**
+  (`shaders/flame.gdshader`), clipped to the same killing box, growing through
+  the charge. Its near, top and bottom edges are still straight, on purpose:
+  they are the kill box's edges. Reference: `_experiments/m9_dragon_flame.png`.
 - **The flame starts 57 px from the dragon's snout.** The M4 numbers put the
   cone at `BREATH_OFFSET` (-150, 10), 90 wide, so its near edge is well clear
   of a snout that reaches about 48 px. A flame that leaves the mouth would read
