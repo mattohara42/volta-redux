@@ -89,6 +89,8 @@ Fusion and pixel art (`ART_DIRECTION.md`) means the same room is redrawn once
 more, through the new pipeline, with the same done-when plus credits spent.
 This PR is also where the project's texture filter flips to Nearest.
 
+**Closed 2026-09-28**, in pixel art: Matt called the room final quality.
+
 ### 🚧 G1: the vertical slice gate
 Take M5's room, add sound, and play it for an hour. **This is a decision point,
 not a milestone.** Fun: continue to M6. Not fun: the fault is in `SPEC.md` and

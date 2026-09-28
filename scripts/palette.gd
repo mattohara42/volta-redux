@@ -61,6 +61,15 @@ const ENEMY_CHITIN := Color("5c2a3a")
 # The backdrop a room sits against before there is a painted background.
 const BACKDROP := Color("211c33")
 
+# Shade multiplied into masonry below a walkable lip, one step per tile row
+# down, the last repeating. The light layer's shadow under a ledge, and what
+# keeps a wall face from outshining the background it must stay just above
+# (ART_DIRECTION.md, "Backgrounds lose"). Slightly cool, as stone shadow is.
+# Multipliers, not colours drawn, so they are not in `all()`.
+const GROUND_SHADE: Array[Color] = [
+	Color(0.81, 0.80, 0.84), Color(0.75, 0.74, 0.78), Color(0.71, 0.70, 0.74), Color(0.69, 0.68, 0.72),
+]
+
 
 ## Every named colour, so the rule check has something to iterate.
 static func all() -> Dictionary:
