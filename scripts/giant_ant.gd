@@ -8,6 +8,11 @@
 class_name GiantAnt
 extends Enemy
 
+## The pixel-art ant (`ANIMATION.md`): a crawl loop, drawn at 1x. Its feet are
+## on the local bottom edge of the killing box, so the rotation below is the
+## whole trick of walking a wall.
+const SPRITE_SCENE: PackedScene = preload("res://scenes/ant_sprite.tscn")
+
 var _track := Rect2()
 var _elapsed: float = 0.0
 
@@ -18,6 +23,11 @@ func place(size: Vector2, track: Rect2, enemy_config: EnemyConfig) -> void:
 	_track = track
 	_config = enemy_config
 	add_to_group("mechanisms")
+
+
+func _ready() -> void:
+	_attach_sprite(SPRITE_SCENE, "crawl")
+	_update()
 
 
 func _physics_process(delta: float) -> void:
@@ -32,7 +42,6 @@ func _update() -> void:
 	position = AntCrawl.position_at(distance, _track)
 	var normal := AntCrawl.surface_normal_at(distance, _track)
 	rotation = normal.angle() + PI * 0.5
-	queue_redraw()
 
 
 func reset(frozen_for: float) -> void:
@@ -42,17 +51,3 @@ func reset(frozen_for: float) -> void:
 
 func status() -> String:
 	return "ant" + _status_suffix()
-
-
-## Drawn in the node's own frame, where "down" is always toward whatever
-## surface it is walking, so the rotation set in `_update` is the whole trick:
-## the same six-legged shape reads as upside down on the ceiling without this
-## file knowing what a ceiling is.
-func _draw() -> void:
-	var half := killing_box * 0.5
-	draw_rect(Rect2(-half, killing_box), Palette.ENEMY_CHITIN)
-	var leg_span := half.x * 1.4
-	for i in 3:
-		var x := -half.x * 0.6 + half.x * 0.6 * float(i)
-		draw_line(Vector2(x, half.y), Vector2(x - leg_span * 0.15, half.y + 4.0), Palette.STONE_LIT, 1.5)
-		draw_line(Vector2(x, half.y), Vector2(x + leg_span * 0.15, half.y + 4.0), Palette.STONE_LIT, 1.5)

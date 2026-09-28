@@ -1,0 +1,98 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://assets/art/enemies/ant_sheet.png" id="1_sheet"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_crawl0"]
+atlas = ExtResource("1_sheet")
+region = Rect2(0, 0, 38, 38)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_crawl1"]
+atlas = ExtResource("1_sheet")
+region = Rect2(38, 0, 38, 38)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_crawl2"]
+atlas = ExtResource("1_sheet")
+region = Rect2(76, 0, 38, 38)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_crawl3"]
+atlas = ExtResource("1_sheet")
+region = Rect2(114, 0, 38, 38)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_e"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_crawl0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_crawl1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_crawl2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_crawl3")
+}],
+"loop": true,
+"name": &"crawl",
+"speed": 1.0
+}]
+
+[sub_resource type="Animation" id="Animation_crawl"]
+resource_name = "crawl"
+length = 0.5
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:animation")
+tracks/0/interp = 0
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"crawl"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:frame")
+tracks/1/interp = 0
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.0, 0.125, 0.25, 0.375),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_e"]
+_data = {
+&"crawl": SubResource("Animation_crawl")
+}
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_crawl"]
+animation = &"crawl"
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_e"]
+states/crawl/node = SubResource("AnimationNodeAnimation_crawl")
+states/crawl/position = Vector2(300, 100)
+
+[node name="AntSprite" type="Node2D"]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_e")
+animation = &"crawl"
+centered = false
+offset = Vector2(-19, -21)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_e")
+}
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+tree_root = SubResource("AnimationNodeStateMachine_e")
+anim_player = NodePath("../AnimationPlayer")
+active = true

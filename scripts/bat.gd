@@ -8,17 +8,13 @@
 class_name Bat
 extends Enemy
 
-## The pixel-art bat (`ANIMATION.md`): a flap loop on an `AnimatedSprite2D`,
-## centred on the killing box and drawn at 1x.
+## The pixel-art bat (`ANIMATION.md`): a flap loop, drawn at 1x.
 const SPRITE_SCENE: PackedScene = preload("res://scenes/bat_sprite.tscn")
 
 var _half_extents := Vector2.ZERO
 var _centre := Vector2.ZERO
 var _elapsed: float = 0.0
 var _facing := 1.0
-## Null only if `SPRITE_SCENE` fails to load, in which case `_draw` falls back
-## to the diamond rather than showing nothing.
-var _sprite: Node2D = null
 
 
 ## Not `configure`: `Hazard` already gives that name one argument, and a
@@ -35,13 +31,8 @@ func place(size: Vector2, half_extents: Vector2, enemy_config: EnemyConfig) -> v
 
 func _ready() -> void:
 	_centre = position
-	if SPRITE_SCENE != null:
-		_sprite = SPRITE_SCENE.instantiate()
-		add_child(_sprite)
-		var tree := _sprite.get_node_or_null("AnimationTree") as AnimationTree
-		if tree != null:
-			tree["parameters/playback"].travel("fly")
-		_update_sprite()
+	_attach_sprite(SPRITE_SCENE, "fly")
+	_face_sprite(_facing)
 
 
 func _physics_process(delta: float) -> void:
@@ -58,16 +49,7 @@ func _update() -> void:
 	position = _centre + BatFlight.offset_at(
 		_elapsed, _config.bat_angular_speed, _config.bat_axis_ratio, _half_extents
 	)
-	_update_sprite()
-	queue_redraw()
-
-
-## Mirrors by facing only. The killing box is deliberately smaller than the
-## drawn creature (`BUILD_PLAN.md`'s M4 bench), so the sprite is not sized to it.
-func _update_sprite() -> void:
-	if _sprite == null:
-		return
-	_sprite.scale = Vector2(_facing, 1.0)
+	_face_sprite(_facing)
 
 
 ## Back to the centre of its box at the first frame of its path. A bat left
@@ -81,17 +63,3 @@ func reset(frozen_for: float) -> void:
 
 func status() -> String:
 	return "bat" + _status_suffix()
-
-
-## A narrow diamond, wings out. M5 drew the real thing (`_update_sprite`), so
-## this only runs as the fallback for a scene that somehow has no sprite, and the
-## shape it draws still reads as small and quick against the hero's capsule,
-## which ART_DIRECTION.md's silhouette rule asks of every enemy.
-func _draw() -> void:
-	if _sprite != null:
-		return
-	var r := killing_box.length() * 0.5
-	draw_colored_polygon(PackedVector2Array([
-		Vector2(-r, 0.0), Vector2(0.0, -r * 0.4), Vector2(r, 0.0), Vector2(0.0, r * 0.4),
-	]), Palette.ENEMY_CHITIN)
-	draw_line(Vector2(-r * 0.5, 0.0), Vector2(r * 0.5, 0.0), Palette.SPIKE_TIP, 1.5)

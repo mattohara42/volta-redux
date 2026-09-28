@@ -19,6 +19,12 @@
 class_name Dragon
 extends Enemy
 
+## The pixel-art dragon (`ANIMATION.md`): a slow breathing loop, drawn at 1x,
+## crouched and immobile. The art faces right and is mirrored to face the way
+## the breath goes. The breath itself stays a drawn rectangle, exactly the one
+## that kills: honesty about what is lethal matters more than how it looks.
+const SPRITE_SCENE: PackedScene = preload("res://scenes/dragon_sprite.tscn")
+
 var _elapsed: float = 0.0
 var _breath_offset := Vector2.ZERO
 var _breath_size := Vector2.ZERO
@@ -57,6 +63,11 @@ func _make_breath_area() -> Area2D:
 	area.collision_mask = 4
 	add_child(area)
 	return area
+
+
+func _ready() -> void:
+	_attach_sprite(SPRITE_SCENE, "idle")
+	_face_sprite(signf(_breath_offset.x) if not is_zero_approx(_breath_offset.x) else 1.0)
 
 
 func _physics_process(delta: float) -> void:
@@ -100,20 +111,11 @@ func is_vulnerable_to(sword: Node2D) -> bool:
 	return blade != null and blade.state == SwordFlight.State.RECALLING
 
 
-## A big, low silhouette with a snout pointed the way the breath goes, so the
-## body reads as something that faces a direction before the cone ever proves
-## it. The cone itself is drawn as the same rectangle that kills, the way a
-## geyser's column is: brightening through the charge and full at the breath,
-## in `FIRE_*` rather than lava's palette, because this is flame and not rock.
+## Only the breath is drawn here: the body is the sprite. The cone is the
+## same rectangle that kills, the way a geyser's column is: brightening through
+## the charge and full at the breath, in `FIRE_*` rather than lava's palette,
+## because this is flame and not rock.
 func _draw() -> void:
-	var half := killing_box * 0.5
-	draw_rect(Rect2(-half, killing_box), Palette.ENEMY_CHITIN)
-	var facing := signf(_breath_offset.x) if not is_zero_approx(_breath_offset.x) else 1.0
-	draw_colored_polygon(PackedVector2Array([
-		Vector2(facing * half.x, -half.y * 0.4),
-		Vector2(facing * (half.x + 20.0), 0.0),
-		Vector2(facing * half.x, half.y * 0.4),
-	]), Palette.ENEMY_CHITIN)
 	_draw_breath()
 
 

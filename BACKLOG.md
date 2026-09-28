@@ -192,3 +192,30 @@ committed to.
   when it was built; the M4 gap predates this session and looks like an
   oversight rather than a decision, noted here rather than fixed as a
   drive-by change to unrelated rooms.
+
+## Raised during M7 (2026-09-28), not judged
+
+- **The dragon's flame is a flat orange rectangle.** It is drawn as the same
+  rectangle that kills, on purpose (honesty about what is lethal), and now it is
+  the brightest and ugliest thing next to pixel-art creatures. A flame shader
+  or particle emitter clipped to that rectangle would keep the honesty and lose
+  the slab. `ART_DIRECTION.md`: atmosphere is code.
+- **The flame starts 57 px from the dragon's snout.** The M4 numbers put the
+  cone at `BREATH_OFFSET` (-150, 10), 90 wide, so its near edge is well clear
+  of a snout that reaches about 48 px. A flame that leaves the mouth would read
+  better, but moving it retunes the dragon room.
+- **The test runner passes a test that crashes.** A `SCRIPT ERROR` mid-test
+  aborts that test's remaining checks and the run still reports 0 failed and
+  exits 0, unless a check had already failed. Worth making a script error a
+  failure. Separately, tests run inside `_initialize`, before the tree is
+  ready, so nothing that needs `get_tree()` can be tested headless.
+- **The eyeball's pupil could track the hero.** It is the enemy that "looks
+  back" (`SPEC.md`), and the art is one forward-looking frame set. `animate`
+  or `direction-set` could give it looking-left and looking-right frames.
+- **Enemy sprites are bigger than their killing boxes.** The ant is 37 px
+  wide against a 22 px box, the bat 34 against 20. Forgiving, and deliberate
+  for the bat (`BUILD_PLAN.md`), but the ant now reads as something you can
+  touch without dying. Either grow the box or accept the mercy.
+- **A dormant enemy could show a tell.** Waking has no tell beyond starting to
+  move (`Enemy._step_dormancy`), and a frozen sprite now looks like a statue.
+  That may be exactly right; it is worth playing once.
