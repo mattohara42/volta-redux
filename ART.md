@@ -110,7 +110,10 @@ diagnosing `edit`'s size bug and trying operations for the first time.
 | background | none: the painted wall already pixelated (*Four layers*) | 0 |
 
 **So a room like this costs about 8 requests, 120 credits, once the recipe
-is known.** Every delivery then goes through `tools/recolour-darks.py` and
+is known.** Ground tiles then go through `tools/tile-variants.py`, and the
+room scatters the variants (`TileVariety`) and steps the masonry darker below
+each lip (`Palette.GROUND_SHADE`), which is what keeps a wall face under the
+hero's brightness and just above the background's. Every delivery then goes through `tools/recolour-darks.py` and
 `tools/palette-check.py` before it leaves `art_raw/`.
 
 **What is in the game**: `scenes/hero_sprite.tscn` and
@@ -127,10 +130,6 @@ it renders: `assets/art_raw/_experiments/m5_pixel_room.png`.
   Candidates: `generate` each pose at 32 and `direction-set` it, as the
   still was made (identity may drift), or `edit` and then hand-trim, or
   wait for Sprite Fusion's answer on the ticket.
-- **The idle's boots flicker a little** (5 to 14 pixels a frame). Judged
-  acceptable by filmstrip at game size; Matt's call by eye.
-- **The ledge face is the brightest large area on screen.** A darker wall
-  fill, or a shadow under the lip drawn in code, would calm it.
 
 ## The pipeline, four steps
 
@@ -177,6 +176,7 @@ it was for paintings. Wrong drawn content is still a reroll.
 | `sprite-fusion.py` | new | calls the API, writes deliveries and a request log to `assets/art_raw/` |
 | `key.py` | kept, if needed | delivery on a flat backdrop, out comes a transparent PNG |
 | `pixelate.py` | new | a painted background in, a 1x pixel-art one out, octree-reduced to a small palette |
+| `tile-variants.py` | new | one masonry tile in, N variants out, each brick shifted a little in shade, a few damp or chipped; mortar untouched so every variant joins every other |
 | `recolour-darks.py` | new | gives every pixel `palette-check.py` flags the hue of umber or violet-blue, from its nearest clean neighbour, at its own brightness |
 | `palette-check.py` | kept | judges a delivery against `ART_DIRECTION.md`'s coloured-dark rule |
 | `cut-sheet.py` | kept | one sheet, N connected components, out come N tight crops |
