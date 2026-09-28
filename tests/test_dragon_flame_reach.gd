@@ -24,13 +24,17 @@ func _near_and_far(dragon: Dragon) -> Vector2:
 
 func test_the_box_starts_at_the_snout_and_keeps_the_rooms_far_edge() -> void:
 	var reach := (load(ENEMIES) as EnemyConfig).dragon_snout_reach
-	var edges := _near_and_far(_placed(Vector2(-150.0, 10.0), Vector2(90.0, 30.0)))
+	var dragon := _placed(Vector2(-150.0, 10.0), Vector2(90.0, 30.0))
+	var edges := _near_and_far(dragon)
+	dragon.free()
 	check_near(edges.x, reach, 0.001, "near edge at the snout")
 	check_near(edges.y, 195.0, 0.001, "far edge where the room put it")
 
 
 func test_it_works_facing_right_too() -> void:
 	var reach := (load(ENEMIES) as EnemyConfig).dragon_snout_reach
-	var edges := _near_and_far(_placed(Vector2(150.0, 10.0), Vector2(90.0, 30.0)))
+	var dragon := _placed(Vector2(150.0, 10.0), Vector2(90.0, 30.0))
+	var edges := _near_and_far(dragon)
+	dragon.free()
 	check_near(edges.x, reach, 0.001, "near edge at the snout")
 	check_near(edges.y, 195.0, 0.001, "far edge where the room put it")
