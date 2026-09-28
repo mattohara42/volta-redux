@@ -66,3 +66,9 @@ extends Resource
 @export_range(0.0, 1.0) var arc_fork_length: float = 0.35
 ## Sparks per burst at each end of a bolt.
 @export var arc_sparks: int = 6
+
+@export_group("Flame")
+## How fast the breath streams away from the mouth, in art pixels a second, and
+## the noise's scale. Lower scale, bigger tongues.
+@export var flame_stream_speed: float = 160.0
+@export var flame_noise_scale: float = 0.09

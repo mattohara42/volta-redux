@@ -28,9 +28,8 @@ References: `assets/art_raw/_experiments/m6_air_moves.png`, `m7_sheet.png`,
 **With credits** (30): the generator's still and animation, which finishes M7.
 Then M8, the four acts' tilesets and backgrounds (`ART.md`'s recipe: `generate`
 at 16 for tiles, `tile-variants.py`, the painted background through
-`pixelate.py`). **Without:** the dragon's flame is a flat orange slab beside
-pixel-art creatures (`BACKLOG.md`), and the light layer that ties everything
-together is still only the lava's glow.
+`pixelate.py`). **Without:** the light layer that ties everything together is still only
+the lava's glow (the dragon's flame is now a shader too, `BACKLOG.md`).
 
 ## Blocked on Matt
 
