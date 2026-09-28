@@ -3,41 +3,40 @@
 > **Rewrite this file, never append.** State snapshot and pointers only. No
 > session narrative, that is what `git log` is for. Keep it under 80 lines.
 
-**Updated:** 2026-09-28 · **Phase:** 2, the look · **Active:** M7 (five of six
-built). M6 passed Matt's playtest. M9 was built ahead of M8 because M8 needs
-credits. **Done when:** M7, the six enemies are on screen, distinguishable and
-consistent (`BUILD_PLAN.md`).
+**Updated:** 2026-09-28 · **Phase:** 3, the game · **Active:** M10, Act 1.
+M7 stays open at five of six enemies until credits return (the generator).
+**Done when:** someone who has never played it gets through Act 1 without being
+told what the sword does (`BUILD_PLAN.md`).
 
 ## Where this is
 
-**Credits: 0, and Matt has paused buying more (2026-09-28).** Every request
-costs 15. Do not propose a top-up; build with what exists and code. Spent this session: M5 210, M6 180, M7 120 (`ART.md`).
+**Credits: 0, and Matt has paused buying more (2026-09-28).** Do not propose a
+top-up; build with existing art and code. The estimate is in `ART.md`.
 
-**M6 passed:** twelve hero states, every transition tested, the somersault (a
-jump taken while moving, no throwing until you land) and the dive (a fall past
-640 px/s, then a 0.25 s crouch). **M7 built for five of six:** scorpion, ant,
-eyeball, dragon and bat are sprites on their M4 behaviours, in `RoomM7Sheet`.
-**M9 built:** lava, an arc and a charged floor are shaders and particles
-(`RoomM9Atmosphere`); every lava pit in the game uses it. F2 cycles the benches.
-References: `assets/art_raw/_experiments/m6_air_moves.png`, `m7_sheet.png`,
-`m9_atmosphere_room.png`.
+**Room 1 of 4 built:** `Act1Bank` (`scenes/rooms/act1_bank.tscn`, last on F2).
+A bank to practise throwing on, a culvert with a sleeping scorpion facing away,
+a checkpoint, a sally port with an awake one. `tests/test_act1_bank.gd` holds
+the geometry; two scenarios hold the kill and the armour. Real rooms extend
+`Bench` and draw with `TileArt` (`Bench`'s class comment says why). References:
+`assets/art_raw/_experiments/m10_act1_bank_left.png`, `_right.png`.
+
+**Before this:** M6 passed Matt's playtest; M9 is built (lava, arcs, charged
+floors, the light layer on braziers, breath and arcs).
 
 ## The next action
 
-**Credit-free:** M10, Act 1's rooms, unblocked by `LEVELS.md`'s decisions, built
-on the art that exists (Act 1 tiles, hero, bat, scorpion, ant, eyeball, dragon).
-Also code-only: the light layer (`LightGlow`) is on braziers, the dragon's
-breath and arcs, and could go on torches, the sword and a hero rim light
-(`ART_DIRECTION.md`).
-
-**If credits return** (about 300 finishes M7 and M8, `ART.md`): the generator's
-still and animation (30), then M8, the four acts' tilesets and backgrounds
-(`ART.md`'s recipe: `generate` at 16 for tiles, `tile-variants.py`, the painted
-background through `pixelate.py`).
+**Matt plays `Act1Bank`**, ideally without the overlay (F1). Then room 2 (the
+outer wall: ladders, bats, the scorpion's from-above trick), room 3 (embed:
+wood, a switch, a glimpse of the chained dragon), room 4 (must stand on your own
+sword, ends at the gate), with the act-state autoload arriving alongside room 2.
 
 ## Blocked on Matt
 
-1. **M4 playtest feedback**: the dragon's pacing, the ledge-to-wood throw and
+1. **Playing `Act1Bank`**: does it teach the throw and the scorpion's armour
+   with no words?
+2. **A sword counter** (`BACKLOG.md`, raised during M10): there is none outside
+   the debug overlay, and a new player probably needs one.
+3. **M4 playtest feedback**: the dragon's pacing, the ledge-to-wood throw and
    the dormant scorpion's wake-to-danger gap. Blocks M14's tuning of those.
 
 ## Traps that will bite again
