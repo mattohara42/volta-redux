@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="AtmosphereConfig" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://config/atmosphere_config.gd" id="1_atmosphere"]
+
+[resource]
+script = ExtResource("1_atmosphere")
+lava_scroll_speed = 5.0
+lava_noise_scale = 0.07
+lava_warp = 1.8
+lava_flow_cut = 0.52
+lava_fissure_cut = 0.7
+lava_core_cut = 0.92
+lava_hot_depth = 16.0
+lava_bubble_cell = 16.0
+lava_bubble_rate = 0.35
+lava_crest_depth = 2.0
+ember_per_100px = 5.0
+ember_lifetime = 1.6
+ember_speed_min = 14.0
+ember_speed_max = 34.0
+ember_gravity = 10.0
+haze_height = 30.0
+haze_shift = 1.6
+haze_speed = 2.4
+haze_frequency = 0.5
+glow_height = 90.0
+glow_strength = 0.6
+arc_flicker_hz = 14.0
+arc_subdivisions = 4
+arc_jag = 0.16
+arc_fork_chance = 0.6
+arc_fork_length = 0.35
+arc_sparks = 6

@@ -325,3 +325,21 @@ func test_the_air_move_numbers_are_sane_in_both_presets() -> void:
 			"%s: a run always flips" % name
 		)
 		check(config.dive_recovery_time > 0.0 and config.dive_recovery_time < 1.0, "%s: the pause is short but real" % name)
+
+
+func test_the_atmosphere_numbers_are_sane() -> void:
+	var atmosphere: AtmosphereConfig = load("res://config/atmosphere.tres")
+	check(atmosphere is AtmosphereConfig, "config/atmosphere.tres is an AtmosphereConfig")
+	check(
+		atmosphere.lava_flow_cut < atmosphere.lava_fissure_cut
+		and atmosphere.lava_fissure_cut < atmosphere.lava_core_cut,
+		"lava's bands ascend, or one of them disappears"
+	)
+	check(atmosphere.lava_core_cut <= 1.0 and atmosphere.lava_flow_cut > 0.0, "the bands are fractions")
+	check(atmosphere.ember_speed_min <= atmosphere.ember_speed_max, "embers have a speed range")
+	check(atmosphere.ember_lifetime > 0.0 and atmosphere.ember_per_100px >= 0.0, "embers live and are counted")
+	check(atmosphere.haze_height > 0.0 and atmosphere.glow_height > 0.0, "the bands above the lava have height")
+	check(atmosphere.arc_flicker_hz >= 1.0, "an arc reshapes at least once a second")
+	check(atmosphere.arc_subdivisions >= 1 and atmosphere.arc_subdivisions <= 6, "a bolt is split a few times")
+	check(atmosphere.arc_jag >= 0.0 and atmosphere.arc_jag < 0.5, "a bolt jags but stays a bolt")
+

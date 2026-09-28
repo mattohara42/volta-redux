@@ -199,6 +199,42 @@ run, and there were no credits left after the four. It needs a `generate` at 64
 and an `animate`, 30 credits, before M7's done-when ("the six are on screen")
 can be met.
 
+## M9: lava, electricity and atmosphere (2026-09-28)
+
+**Nothing here is generated: no credits, no PNG.** Taken while credits were 0
+and M8's tilesets needed some.
+
+- **Lava** (`shaders/lava.gdshader`, `LavaSurface`): warped noise drifting
+  across a gradient, quantised to `ART_DIRECTION.md`'s four bands (crust, flow,
+  fissure, core), a bright wobbling crest, and bubbles that grow as a ring and
+  pop as a flash, all computed on the art-pixel grid. Over it: embers
+  (`CPUParticles2D`, 2 px squares cooling hot to crust), a heat haze that shifts
+  what is behind it by whole art pixels (`heat_haze.gdshader`), and its light
+  thrown up the wall as a **Bayer-dithered dome** (`glow.gdshader`). A banded
+  dome without the dithering read as a target of concentric rings; dithering
+  between the bands is how pixel art shades a falloff.
+- **Arc** (`ArcBolt`, `ArcPath`): a new jagged bolt 14 times a second by
+  midpoint displacement, whole-pixel vertices, a halo, a body and a one-pixel
+  core, a fork most of the time, sparks at both ends. `ArcPath` is pure and
+  seeded and has eight tests.
+- **Charged surface** (`charged.gdshader`, `ChargedSurface`): filaments crawling
+  over a dark base, for Act 3's conductive floors.
+- **Every number** is `config/atmosphere.tres`; **every colour** is `Palette`.
+  `tests/test_atmosphere_is_code.gd` holds that no effect loads an image and no
+  shader samples anything but the screen.
+
+**Measured in a running build** (`assets/art_raw/_experiments/m9_motion.png`):
+between frames the lava changes 2,100 to 4,000 of 19,720 pixels, the arc reshapes
+every sample, and the plate's filaments crawl. The rendered lava and arc regions
+have 0 neutral-dark pixels (`palette-check.py`).
+
+**Every lava pit in the game now uses it**: `Bench._add_lava` places a
+`LavaSurface` over the same rectangle the `Hazard` kills in. The room to look at
+is `RoomM9Atmosphere` (F2 in the overlay).
+
+**Tuning left for M14**: how bright the lava is against the hero, the haze's
+strength, the glow's reach, and how often an arc reshapes. All in the one file.
+
 ## The pipeline, four steps
 
 1. **Claude writes the prompt and calls the API.** No human round trip, so a
