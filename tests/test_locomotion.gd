@@ -36,7 +36,7 @@ func test_landing_timer_holds_land_until_it_lapses() -> void:
 
 
 func test_state_names_match_the_state_machine_nodes() -> void:
-	# hero_rig.tscn's AnimationNodeStateMachine states are named to match.
+	# hero_sprite.tscn's AnimationNodeStateMachine states are named to match.
 	check_eq(Locomotion.state_name(Locomotion.State.IDLE), "idle", "idle state name")
 	check_eq(Locomotion.state_name(Locomotion.State.RUN), "run", "run state name")
 	check_eq(Locomotion.state_name(Locomotion.State.JUMP), "jump", "jump state name")
@@ -44,6 +44,9 @@ func test_state_names_match_the_state_machine_nodes() -> void:
 	check_eq(Locomotion.state_name(Locomotion.State.LAND), "land", "land state name")
 	check_eq(Locomotion.state_name(Locomotion.State.THROW), "throw", "throw state name")
 	check_eq(Locomotion.state_name(Locomotion.State.CATCH), "catch", "catch state name")
+	check_eq(Locomotion.state_name(Locomotion.State.CLIMB), "climb", "climb state name")
+	check_eq(Locomotion.state_name(Locomotion.State.CLIMB_STILL), "climb_still", "climb_still state name")
+	check_eq(Locomotion.state_name(Locomotion.State.DIE), "die", "die state name")
 
 
 func test_a_throw_timer_wins_over_ground_and_air_alike() -> void:
@@ -76,4 +79,33 @@ func test_throw_and_catch_lapse_back_to_whatever_state_for_says_next() -> void:
 	check_eq(
 		Locomotion.state_for(false, -400.0, 0.0, 0.0, 0.0, 0.0), Locomotion.State.JUMP,
 		"timer lapsed, still rising"
+	)
+
+
+func test_dying_beats_everything() -> void:
+	check_eq(
+		Locomotion.state_for(false, 300.0, 0.1, 80.0, 0.1, 0.1, true, true), Locomotion.State.DIE,
+		"dying mid-air, mid-catch, on a ladder is still dying"
+	)
+
+
+func test_climbing_beats_airborne_and_holds_still_when_not_moving() -> void:
+	check_eq(
+		Locomotion.state_for(false, -90.0, 0.0, 0.0, 0.0, 0.0, true), Locomotion.State.CLIMB,
+		"climbing up the ladder"
+	)
+	check_eq(
+		Locomotion.state_for(false, 0.0, 0.0, 30.0, 0.0, 0.0, true), Locomotion.State.CLIMB,
+		"shuffling sideways on the ladder"
+	)
+	check_eq(
+		Locomotion.state_for(false, 0.0, 0.0, 0.0, 0.0, 0.0, true), Locomotion.State.CLIMB_STILL,
+		"hanging still on the ladder"
+	)
+
+
+func test_a_throw_from_a_ladder_still_shows_the_throw() -> void:
+	check_eq(
+		Locomotion.state_for(false, 0.0, 0.0, 0.0, 0.1, 0.0, true), Locomotion.State.THROW,
+		"throwing while climbing"
 	)

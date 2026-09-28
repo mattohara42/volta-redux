@@ -276,3 +276,19 @@ pixels, on a few deliveries, all fixable by `tools/recolour-darks.py`.
 **`media.spritefusion.com` answers 403 to urllib's default User-Agent**,
 and animated previews come back as WebP, which Godot 4.7 cannot decode.
 The spritesheet PNG next to it is what the game uses.
+
+**`animate` straight from the idle still covers most actions**, with no pose
+step first (M6, 2026-09-28). Run, jump, land, throw, catch and die all came
+back as the named motion at the still's size, in the same character. Three
+things to know:
+
+- **Frame 0 is always the still.** Every clip starts from the input pose, so
+  a loop or a pose hold uses frames 1 onward.
+- **A held pose does not animate.** "Falling, holding the pose" came back as
+  four copies of the still. The fall uses the jump's last, tucked frame.
+- **A death may flash pure white** for two frames. Dropped: pure white is
+  forbidden, and the Player's lava tint already marks the hit.
+
+**A side-view ladder climb reads as walking.** The back view from the same
+`direction-set` run, animated, reads as climbing, and it is the same
+character because both came from one request.

@@ -123,13 +123,34 @@ background at 1x. The painted rigs are no longer drawn anywhere; M6 deletes
 them. The texture filter is Nearest and the stretch is integer. The room as
 it renders: `assets/art_raw/_experiments/m5_pixel_room.png`.
 
+## M6: the hero's states (2026-09-28)
+
+**9 requests, 135 credits.** Every state is `animate` from the same 36 px
+still, no pose step (`GEMINI_NOTES.md`, *Sprite Fusion, measured*), except
+the climb, animated from the back view `direction-set` already made. Frames
+chosen per state, from `assets/art_raw/hero_*_anim_0_sheet.png`:
+
+| state | frames used | note |
+|---|---|---|
+| idle | 0 to 3 | the M5 loop |
+| run | 1 to 5 | 0.25 s a cycle, to be checked against ground speed by playing |
+| jump | 1 to 3 | crouch, spring, tuck |
+| fall | jump's 3 | the fall request came back as the still four times |
+| land | 1 to 3 | |
+| throw | 3 to 5 | release and follow-through: the sword leaves on the press, so a wind-up would play after it had gone |
+| catch | 1 to 3 | |
+| climb, climb_still | back view 1 to 3, and 0 | |
+| die | 1, 4, 5 | 2 and 3 were a pure-white flash |
+
+The sheets are assembled at 36x36 into `assets/art/hero/hero_<state>_sheet.png`
+and recoloured. `scenes/hero_sprite.tscn` joins every state to every other
+with a cut. Land, throw and catch keep the rig's lengths, because the Player
+reads its pose holds from them.
+
 **Open, for whoever is next:**
 
-- **The hero's other six states show idle frames.** That is M6. The pose
-  step before each `animate` cannot be `edit` while `edit` ignores size.
-  Candidates: `generate` each pose at 32 and `direction-set` it, as the
-  still was made (identity may drift), or `edit` and then hand-trim, or
-  wait for Sprite Fusion's answer on the ticket.
+- **The somersault and the dive** do not exist as movement yet (`SPEC.md`
+  settles that they differ in physics, not how). Their frames wait on that.
 
 ## The pipeline, four steps
 
