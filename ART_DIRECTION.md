@@ -120,7 +120,30 @@ nearest real light source**. The outline is the second.
 Design resolution 640x360, rendered at **integer multiples only**, so the game
 is playable at 1280x720 and 1920x1080 with every pixel a clean square. Art is
 authored at **1x**: one art pixel is one design pixel. A full-screen background
-is 640x360 of art, and the hero is around 40 px tall.
+is 640x360 of art.
+
+**The hero is 34 to 40 px tall, drawn on Sprite Fusion's 32 canvas**
+(decided 2026-09-28, Matt delegating the call). The exact number is whatever
+the first size-32 delivery measures, and `config/world.tres`'s `hero_height`
+and everything tuned against it then move to match. Why this band, measured
+in the M5 room from a real build
+(`assets/art_raw/_experiments/hero_size_compare.png`):
+
+- **The room is the puzzle.** The 1984 hero was tiny because monitors were,
+  but the thing worth keeping is a small man in a big, dangerous hall, reading
+  the whole room before committing. At 34 to 40 px the screen is 9 to 10.6
+  heroes tall and shows three or four jump tiers at once.
+- **The whole throw fits on screen.** The sword reaches 5 hero heights out and
+  returns from up to 7.5. At 54 to 60 px (the size-64 canvas) that round trip
+  spans most of the screen, and a puzzle built on where the sword lands
+  cannot hide the landing.
+- **Smaller than 34 loses the verb.** At 28 px the throw and catch poses have
+  too few pixels to read, and those two poses are the game.
+
+**Shape: chunky, not realistic.** About five heads tall, broad shoulders,
+large hands and an oversized sword, so the silhouette carries the pose at
+this size. The sword is the most important shape on screen and should read
+before his face does. Mignola's rule from the anchor, applied to pixels.
 
 **Import with the filter off.** Nearest-neighbour, no mipmaps, and no sprite
 drawn at a fractional scale or a sub-pixel position. `ART.md` has the import
