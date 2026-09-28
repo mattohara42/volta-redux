@@ -4,7 +4,7 @@
 
 [resource]
 script = ExtResource("1_world")
-hero_height = 40.0
+hero_height = 36.0
 hero_width = 18.0
 tile_size = 16.0
 sword_length = 16.0

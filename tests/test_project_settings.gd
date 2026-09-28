@@ -56,6 +56,19 @@ func test_the_viewport_scales_as_pixel_art() -> void:
 		ProjectSettings.get_setting("display/window/stretch/aspect"), "keep",
 		"the aspect ratio is kept rather than stretched"
 	)
+	check_eq(
+		ProjectSettings.get_setting("display/window/stretch/scale_mode"), "integer",
+		"the viewport scales by whole numbers only"
+	)
+
+
+## Pixel art at 1x is sampled nearest, never filtered (`ART.md`, Godot import
+## settings). The engine default is linear, which blurs every sprite.
+func test_canvas_textures_are_sampled_nearest() -> void:
+	check_eq(
+		ProjectSettings.get_setting("rendering/textures/canvas_textures/default_texture_filter"), 0,
+		"canvas textures default to nearest filtering"
+	)
 
 
 ## The engine must not pull anything downward on its own. `config/movement.tres`
