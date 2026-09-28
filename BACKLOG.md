@@ -220,3 +220,10 @@ committed to.
 - **A dormant enemy could show a tell.** Waking has no tell beyond starting to
   move (`Enemy._step_dormancy`), and a frozen sprite now looks like a statue.
   That may be exactly right; it is worth playing once.
+
+## Raised during the levels decisions (2026-09-28), wanted, not scheduled
+
+- **Remix rooms.** One or two authored, harder versions of early rooms that
+  unlock after the credits: the armour-flipped enemy, tighter timing. Matt wants
+  them and expects more ideas as combat mechanics are tuned, so add each idea
+  here as it comes. Not New Game+. Belongs after M14's tuning pass.

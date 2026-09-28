@@ -1,4 +1,4 @@
-# LEVELS.md: Matt's expanded vision, not yet decided
+# LEVELS.md: Matt's expanded vision, decided 2026-09-28
 
 This is not `SPEC.md`. `SPEC.md`'s Structure section (four acts, ~18 rooms) is
 still the settled plan and `BUILD_PLAN.md`'s "no level building before M10"
@@ -8,8 +8,8 @@ judging, not the building.
 What follows is Matt's own description, organised by area, with where each
 piece fits the mechanics that already exist, where it needs something new,
 and where it pulls against something `SPEC.md` or `CLAUDE.md` already
-settled. Read the "Open questions" list at the end before treating any of
-this as decided.
+settled. The "Decisions" list at the end records what Matt chose. The sections
+in between are the reasoning and still say "open" in places: the decisions win.
 
 ## The shape of the idea
 
@@ -352,39 +352,38 @@ things `CLAUDE.md` currently calls settled:
   fight stands as-is and the chained one is new content elsewhere. Either
   works; picking one is the open question.
 
-## Open questions for Matt
+## Decisions (Matt, 2026-09-28)
 
-1. **Is the caged bird now the caged dragon**, replacing the ending in
-   `SPEC.md`, or does the bird stay and the dragon is a separate late-game
-   beat? This is the one item on this list that touches a decision `CLAUDE.md`
-   currently marks "do not relitigate," so it is the one worth being most
-   deliberate about.
-2. **Is the Act 2 dragon mini-boss the same dragon** as the chained one, with
-   "beaten" reread as "overpowered and taken away in chains," or a different
-   dragon entirely?
-3. **Does the forest replace Act 1, sit before it, or fold into it** alongside
-   the moat and the outer wall? This decides whether the plan is still four
-   acts or becomes five-plus.
-4. **Skeletons: scorpion or ant underneath the reskin?** The dormant-decoration
-   idea is settled; which of the two it drives is not.
-5. ~~The chandelier: rope-and-chain or a second throwable?~~ Settled: no
-   second throwable. See "The torch."
-6. **Room count.** This vision is bigger than `SPEC.md`'s ~18. Worth
-   deciding now whether that number moves, or whether "expand each act,
-   cut rooms first if time is short" (already `BUILD_PLAN.md`'s policy)
-   is enough.
-7. **Does jumping get worse while carrying the torch, or just fighting?**
-   Changes what a torch-carrying room is allowed to ask of the player.
-8. **Vines: a climbable surface (free, a ladder reskin) or a swing move (a
-   second special traversal trick next to the sword's own)?**
-9. **Stump portals: the real two-way system now, or the one-shot "drops you
-   somewhere" version**, with the network judged after G1 as `BACKLOG.md`
-   already planned?
-10. **How often is too often** for the wood/stone fake-out? Recommending
-    once or twice in the whole game, never more.
-11. **Does the speedrun timer and ghost move up from post-ship**, now that
-    "a lot of replayability" is a stated goal, or does `BACKLOG.md`'s
-    original placement for it still hold?
-12. **Is New Game+ (or anything like it) wanted at all?** The one idea in
-    this round that sits closest to the "no difficulty modes" line without
-    quite crossing it. Not recommending either way.
+Matt took every recommendation this file made. Items 1 to 4 unblock M10.
+
+1. **The caged bird is now the caged dragon.** It is freed with current at the
+   climax and Matt's ending replaces the avian rescue. `SPEC.md` and
+   `CLAUDE.md` are updated to match.
+2. **The Act 2 dragon is the same dragon.** "Beaten" means overpowered and
+   chained, not killed. The mechanic already shipped does not change, only the
+   room afterward.
+3. **The forest folds into Act 1**, with the moat and the outer wall. Still four
+   acts.
+4. **Room count stays at about 18.** Expand each act, and cut rooms first if
+   time is short, as `BUILD_PLAN.md` already says.
+5. **Skeletons are a reskinned scorpion**, dormant until approached.
+6. **Carrying the torch costs the sword, not the jump.** A torch room may ask
+   for any jump the hero can make.
+7. **Vines are a climbable surface**, a ladder with different art. No swing.
+8. **Stump portals are the one-shot warp.** The two-way network is judged after
+   G1, as `BACKLOG.md` planned.
+9. **The wood/stone fake-out is used once, twice at most.**
+10. **The speedrun timer and ghost stay post-ship.**
+11. **Remix rooms are wanted**: one or two authored, harder rooms that unlock
+    after the credits. New Game+ as a second playthrough is not. Matt expects
+    more remix ideas to arrive as combat is tuned, so they go to `BACKLOG.md`.
+
+The chandelier question was settled earlier: no second throwable.
+
+### Left to work out at M10
+
+The dragon is caged and visible from Act 1 (`SPEC.md`), and it is also fought
+in Act 2. Those fit together only if Act 1 shows something short of the whole
+creature (chains, a shape in the dark, a shadow on a wall) and Act 2 is where it
+is met and chained. What Act 1 actually shows is a room-level decision for M10,
+not settled here.
