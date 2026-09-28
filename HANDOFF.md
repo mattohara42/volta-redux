@@ -10,8 +10,8 @@ consistent (`BUILD_PLAN.md`).
 
 ## Where this is
 
-**Credits: 0.** Every request costs 15, so anything generated waits on a
-top-up. Spent this session: M5 210, M6 180, M7 120 (`ART.md`).
+**Credits: 0, and Matt has paused buying more (2026-09-28).** Every request
+costs 15. Do not propose a top-up; build with what exists and code. Spent this session: M5 210, M6 180, M7 120 (`ART.md`).
 
 **M6 passed:** twelve hero states, every transition tested, the somersault (a
 jump taken while moving, no throwing until you land) and the dive (a fall past
@@ -24,17 +24,20 @@ References: `assets/art_raw/_experiments/m6_air_moves.png`, `m7_sheet.png`,
 
 ## The next action
 
-**With credits** (30): the generator's still and animation, which finishes M7.
-Then M8, the four acts' tilesets and backgrounds (`ART.md`'s recipe: `generate`
-at 16 for tiles, `tile-variants.py`, the painted background through
-`pixelate.py`). **Without:** the light layer exists (`LightGlow`: braziers, the
-dragon's breath, arcs) but is not yet on torches, the sword or the generator,
-and the hero has no rim light (`ART_DIRECTION.md`).
+**Credit-free:** M10, Act 1's rooms, unblocked by `LEVELS.md`'s decisions, built
+on the art that exists (Act 1 tiles, hero, bat, scorpion, ant, eyeball, dragon).
+Also code-only: the light layer (`LightGlow`) is on braziers, the dragon's
+breath and arcs, and could go on torches, the sword and a hero rim light
+(`ART_DIRECTION.md`).
+
+**If credits return** (about 300 finishes M7 and M8, `ART.md`): the generator's
+still and animation (30), then M8, the four acts' tilesets and backgrounds
+(`ART.md`'s recipe: `generate` at 16 for tiles, `tile-variants.py`, the painted
+background through `pixelate.py`).
 
 ## Blocked on Matt
 
-1. **Credits.** Blocks the generator (30) and all of M8.
-2. **M4 playtest feedback**: the dragon's pacing, the ledge-to-wood throw and
+1. **M4 playtest feedback**: the dragon's pacing, the ledge-to-wood throw and
    the dormant scorpion's wake-to-danger gap. Blocks M14's tuning of those.
 
 ## Traps that will bite again
