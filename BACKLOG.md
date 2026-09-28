@@ -227,3 +227,20 @@ committed to.
   unlock after the credits: the armour-flipped enemy, tighter timing. Matt wants
   them and expects more ideas as combat mechanics are tuned, so add each idea
   here as it comes. Not New Game+. Belongs after M14's tuning pass.
+
+## Raised during M10 (2026-09-28), not judged
+
+- **There is no sword counter outside the debug overlay.** With F1 hiding the
+  overlay, a player cannot see how many swords they hold, and `SPEC.md` calls
+  the count the difficulty dial. M10's done-when is a new player getting through
+  Act 1, so this probably has to exist before that test. Needs a design call:
+  where it sits, and how it stays clear of gold (`ART_DIRECTION.md`).
+- **Rooms are not yet sequenced.** Act 1's first room ends at a gold marker.
+  Walking from one room into the next needs the act-state autoload `CLAUDE.md`
+  already names, and it should arrive with the second room.
+- **Do swords carry between rooms?** Death restores them to the spawn count,
+  but whether a room starts you on what you left the last one with, or always
+  on three, is open. It changes how much the first room's lost swords matter.
+- **Tunnel walls are masonry tiles darkened upward**, the best the Act 1 tiles
+  can do for a wall a screen tall. A proper wall-face tile is M8 work.
+

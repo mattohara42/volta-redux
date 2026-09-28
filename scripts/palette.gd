@@ -69,6 +69,10 @@ const BACKDROP := Color("211c33")
 const GROUND_SHADE: Array[Color] = [
 	Color(0.81, 0.80, 0.84), Color(0.75, 0.74, 0.78), Color(0.71, 0.70, 0.74), Color(0.69, 0.68, 0.72),
 ]
+# How dark a wall face coming down from above gets at its top, as the same kind
+# of multiplier: lit from below where the hero is, falling into the dark going
+# up, so a wall a screen tall recedes behind the floor. Still a coloured dark.
+const WALL_DARK := Color(0.36, 0.35, 0.40)
 
 
 ## Every named colour, so the rule check has something to iterate.

@@ -39,6 +39,24 @@ static func draw_background(canvas: CanvasItem) -> void:
 	canvas.draw_texture(BACKGROUND, Vector2.ZERO)
 
 
+## The painted wall repeated across a room wider than one screen. Every other
+## copy is mirrored, so the seam between two copies is the same edge meeting
+## itself rather than one edge meeting the other.
+static func draw_background_across(canvas: CanvasItem, width: float) -> void:
+	var step := float(BACKGROUND.get_width())
+	var x := 0.0
+	var mirrored := false
+	while x < width:
+		if mirrored:
+			canvas.draw_set_transform(Vector2(x + step, 0.0), 0.0, Vector2(-1.0, 1.0))
+		else:
+			canvas.draw_set_transform(Vector2(x, 0.0))
+		canvas.draw_texture(BACKGROUND, Vector2.ZERO)
+		x += step
+		mirrored = not mirrored
+	canvas.draw_set_transform(Vector2.ZERO)
+
+
 ## A strip of floor tiles along the top edge of `rect`, masonry below it,
 ## stepping darker row by row the way shadow falls under a ledge.
 static func draw_ground(canvas: CanvasItem, rect: Rect2) -> void:
@@ -48,6 +66,29 @@ static func draw_ground(canvas: CanvasItem, rect: Rect2) -> void:
 		canvas, WALL_TILES, Rect2(rect.position + Vector2(0.0, lip), rect.size - Vector2(0.0, lip)),
 		Palette.GROUND_SHADE
 	)
+
+
+## Masonry with no walkable lip, for the face of a wall that comes down from
+## above: stone you cannot stand on should not show the top that says you can.
+## It is lit from below, where the braziers and the hero are, and falls into
+## the dark going up, so a wall a screen tall does not outshine the floor.
+static func draw_wall(canvas: CanvasItem, rect: Rect2) -> void:
+	var rows := ceili(rect.size.y / WALL_TILES[0].get_height())
+	var lit := Palette.GROUND_SHADE[Palette.GROUND_SHADE.size() - 1]
+	var shades: Array[Color] = []
+	for row in rows:
+		var t := float(row) / float(maxi(rows - 1, 1))
+		shades.append(Palette.WALL_DARK.lerp(lit, t * t * t))
+	draw_tiled(canvas, WALL_TILES, rect, shades)
+	# A lintel along the bottom: the floor's own lip, upside down, so the edge
+	# you walk under is finished the way the edge you walk on is.
+	var lip := FLOOR_TILES[0].get_height()
+	canvas.draw_set_transform(Vector2(0.0, rect.end.y * 2.0 - lip), 0.0, Vector2(1.0, -1.0))
+	draw_tiled(
+		canvas, FLOOR_TILES, Rect2(rect.position.x, rect.end.y - lip, rect.size.x, lip),
+		[Palette.GROUND_SHADE[1]]
+	)
+	canvas.draw_set_transform(Vector2.ZERO)
 
 
 static func draw_ladder(canvas: CanvasItem, rect: Rect2) -> void:

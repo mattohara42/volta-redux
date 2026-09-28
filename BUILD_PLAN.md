@@ -153,6 +153,11 @@ Four rooms, built for real. The teaching act.
 **Done when**: someone who has never played it gets through Act 1 without being
 told what the sword does.
 
+**Room 1 built 2026-09-28**: `Act1Bank`, the moat bank. A safe bank to throw
+from, then a culvert with a sleeping scorpion that only a throw in its back
+gets you past, a checkpoint, and a sally port with an awake one. Existing art
+only; waiting on Matt's play before rooms 2 to 4.
+
 ### M11: Act 2, the lava caverns
 Five rooms plus the dragon.
 
