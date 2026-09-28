@@ -219,6 +219,15 @@ and M8's tilesets needed some.
   seeded and has eight tests.
 - **Charged surface** (`charged.gdshader`, `ChargedSurface`): filaments crawling
   over a dark base, for Act 3's conductive floors.
+- **The light layer** (`light.gdshader`, `LightGlow`): a coloured point light
+  added over everything under it (wall, tiles, hero), banded and dithered like
+  the lava's glow through the shared `dither.gdshaderinc`. A lit brazier throws
+  amber and flickers, the dragon's breath swells with its charge, an arc throws
+  cool cyan. Amber from below and cyan from above on the same wall is the
+  "same coloured light falls across every layer" `ART.md` asks for. References:
+  `_experiments/m9_light_brazier.png`, `m9_light_dragon.png`, `m9_light_arc.png`.
+  A light near a room's edge spills into the void beyond it, so a brazier wants
+  to sit a light radius (60 px) inside a wall.
 - **Every number** is `config/atmosphere.tres`; **every colour** is `Palette`.
   `tests/test_atmosphere_is_code.gd` holds that no effect loads an image and no
   shader samples anything but the screen.
@@ -233,7 +242,7 @@ have 0 neutral-dark pixels (`palette-check.py`).
 is `RoomM9Atmosphere` (F2 in the overlay).
 
 **Tuning left for M14**: how bright the lava is against the hero, the haze's
-strength, the glow's reach, and how often an arc reshapes. All in the one file.
+strength, the glow's reach, the lights' radii and strengths, and how often an arc reshapes. All in the one file.
 
 ## The pipeline, four steps
 

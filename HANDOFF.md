@@ -27,9 +27,9 @@ References: `assets/art_raw/_experiments/m6_air_moves.png`, `m7_sheet.png`,
 **With credits** (30): the generator's still and animation, which finishes M7.
 Then M8, the four acts' tilesets and backgrounds (`ART.md`'s recipe: `generate`
 at 16 for tiles, `tile-variants.py`, the painted background through
-`pixelate.py`). **Without:** the light layer that ties everything together is
-still only the lava's glow. The dragon's breath is a shader that leaves its
-mouth.
+`pixelate.py`). **Without:** the light layer exists (`LightGlow`: braziers, the
+dragon's breath, arcs) but is not yet on torches, the sword or the generator,
+and the hero has no rim light (`ART_DIRECTION.md`).
 
 ## Blocked on Matt
 

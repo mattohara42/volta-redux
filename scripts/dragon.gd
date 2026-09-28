@@ -39,6 +39,7 @@ var phase: DragonBreath.Phase = DragonBreath.Phase.CHARGE
 ## make the same choice for the same reason.
 var _breath: Area2D
 var _flame: ColorRect
+var _light: LightGlow
 
 
 ## `breath_offset` is where the cone sits relative to the dragon's own centre,
@@ -59,6 +60,9 @@ func place(size: Vector2, breath_offset: Vector2, breath_size: Vector2, enemy_co
 	var shape := _breath.get_child(0) as CollisionShape2D
 	(shape.shape as RectangleShape2D).size = _breath_size
 	_flame = _make_flame()
+	_light = LightGlow.make(ATMOSPHERE.light_breath_radius, Palette.FIRE_FALLOFF, 0.0)
+	_light.position += _breath_offset
+	add_child(_light)
 	add_to_group("mechanisms")
 
 
@@ -152,3 +156,5 @@ func _show_flame() -> void:
 			_config.dragon_rest_time
 		) * 0.7
 	(_flame.material as ShaderMaterial).set_shader_parameter("intensity", intensity)
+	# The flame lights the wall and floor around it, most when it is fullest.
+	_light.set_strength(ATMOSPHERE.light_breath_strength * intensity if _flame.visible else 0.0)

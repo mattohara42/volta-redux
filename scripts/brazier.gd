@@ -26,6 +26,8 @@ const BOWL_HEIGHT: float = 9.0
 ## so a lit brazier does not out-shout the thing the player is meant to watch.
 const FLAME_HEIGHT: float = 18.0
 
+const CONFIG: AtmosphereConfig = preload("res://config/atmosphere.tres")
+
 ## True once it has been walked past. There is no way back to false: SPEC.md has
 ## no mechanic that puts a brazier out.
 var is_lit := false
@@ -69,8 +71,20 @@ func _on_body_entered(body: Node2D) -> void:
 	if player == null:
 		return
 	is_lit = true
+	_add_light()
 	player.light_checkpoint(global_position)
 	queue_redraw()
+
+
+## The light a lit brazier throws over the wall, the floor and the hero, so the
+## same amber falls across every layer. It sits at the flame.
+func _add_light() -> void:
+	var light := LightGlow.make(
+		CONFIG.light_brazier_radius, Palette.FIRE_FALLOFF,
+		CONFIG.light_brazier_strength, CONFIG.light_brazier_flicker
+	)
+	light.position += Vector2(0.0, -POST_HEIGHT - BOWL_HEIGHT - FLAME_HEIGHT * 0.4)
+	add_child(light)
 
 
 ## Gold **before** it is lit, not after.
@@ -149,19 +163,9 @@ func _draw_fuel(bowl_top: float) -> void:
 ## screenshot and as scenery in motion, and a checkpoint you do not notice is
 ## not doing its job.
 func _draw_flame(bowl_top: float) -> void:
-	_draw_glow(bowl_top)
 	_tongue(bowl_top, BOWL_WIDTH * 0.40, FLAME_HEIGHT, 0.0, Palette.FIRE_FALLOFF)
 	_tongue(bowl_top, BOWL_WIDTH * 0.27, FLAME_HEIGHT * 0.72, 1.9, Palette.FIRE_CORE)
 	_tongue(bowl_top, BOWL_WIDTH * 0.13, FLAME_HEIGHT * 0.40, 3.6, Palette.FIRE_HOT)
-
-
-## Light falls off, so the glow is rings rather than the one flat disc the first
-## version drew. A hard-edged circle of transparent orange reads as a sticker.
-func _draw_glow(bowl_top: float) -> void:
-	var centre := Vector2(0.0, bowl_top - FLAME_HEIGHT * 0.3)
-	for i in range(4, 0, -1):
-		var t := float(i) / 4.0
-		draw_circle(centre, 9.0 + 15.0 * t, Color(Palette.FIRE_FALLOFF, 0.05))
 
 
 ## One tongue: widest at the rim, tapering to a point, leaning further the
