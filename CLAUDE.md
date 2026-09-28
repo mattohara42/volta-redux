@@ -65,8 +65,10 @@ design back toward the trace. `assets/reference/` is the part worth keeping.
   `SPEC.md` → *Non-goals*.
 - **The two bosses cannot be beaten by throwing.** A game with one verb needs its
   bosses to ask what else that verb does.
-- **The caged bird is visible from Act 1.** The ending only lands if you have
-  been walking past it.
+- **The caged creature is a dragon, visible from Act 1.** It is the Act 2
+  mini-boss, chained rather than killed, and freed with current in Act 4. The
+  ending only lands if you have been walking past it for an hour. (Changed from
+  a bird on 2026-09-28, `LEVELS.md`.)
 
 ## Workflow
 

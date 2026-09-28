@@ -98,7 +98,7 @@ cap at five. Ten was too many to make any single throw matter.
 | Puzzles are fixed sequences to memorise | Puzzles are **uses of the sword** | A puzzle you solve by understanding a verb replays well. A sequence you memorise does not |
 | Ten swords | Three, cap five | Scarcity is what makes the catch matter |
 | Somersault as decoration | Somersault as **a state with different physics** | See `ANIMATION.md`. A move that looks different should behave differently |
-| Avian ally appears in the last scene | Caged and **visible from Act 1** | The ending lands if you have been walking past it for an hour |
+| Avian ally appears in the last scene | A **caged dragon**, in view from Act 1 and freed with current | The ending lands if you have been walking past it for an hour, and freeing it uses the verb Volta's domain is built on |
 
 ### The one thing the first attempt decided differently, and it was right
 
@@ -179,15 +179,16 @@ at the gate.
 **Act 2: the lava caverns** (5 rooms). Geysers that launch you, floating
 platforms, rising and falling lava. Teaches the sword under time pressure: a
 throw you have to catch before the platform you are standing on drops. The
-dragon mini-boss closes the act.
+dragon mini-boss closes the act: it is overpowered and chained, not killed, and
+it is the same dragon you free in Act 4.
 
 **Act 3: the generator** (6 rooms). Conductive floors, insulated wood, switches
 that need current and not impact. Teaches the sword as wiring. The haywire
 generator is the act boss and the fight is a circuit, not a damage race.
 
 **Act 4: the Hall of Volta** (3 rooms). Three gems, three holders, kept from the
-original because it is a good ending. Volta himself, then the cage opens and the
-bird finishes it exactly as it did in 1984.
+original because it is a good ending. Volta himself, then current run through the
+right conductor lets the chains go, and the dragon finishes him. You ride it out.
 
 **The jump owns a scale, and it is not the storey.** A 56 px jump is for holes
 in the floor, plinths, low ledges and the short steps between them. Those are
@@ -233,7 +234,7 @@ first attempt lived and why the git history starts with a Phaser 3 spike.
 
 The name drops the licensed character on purpose, and it is a design decision
 before it is a legal one. Nothing above depends on Conan the Barbarian: the
-sword, the castle, the electricity, the caged bird and the wizard are all ours
+sword, the castle, the electricity, the caged dragon and the wizard are all ours
 the moment the hero has a different name, and the game becomes an actual
 reimagination rather than a remake wearing a hat. **Volta stays**, being a unit
 of electric potential and a real surname rather than an owned character.
@@ -275,4 +276,4 @@ authoritative.
 - Procedural generation. Every room is authored.
 - Difficulty modes.
 - Mobile or touch controls. Keyboard and gamepad, desktop and web.
-- A story told in cutscenes. The bird in the cage is the story.
+- A story told in cutscenes. The chained dragon is the story.

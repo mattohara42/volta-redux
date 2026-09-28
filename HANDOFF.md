@@ -34,9 +34,7 @@ mouth.
 ## Blocked on Matt
 
 1. **Credits.** Blocks the generator (30) and all of M8.
-2. **`LEVELS.md`'s open questions**, the ending swap chief among them. Blocks
-   M10's level building.
-3. **M4 playtest feedback**: the dragon's pacing, the ledge-to-wood throw and
+2. **M4 playtest feedback**: the dragon's pacing, the ledge-to-wood throw and
    the dormant scorpion's wake-to-danger gap. Blocks M14's tuning of those.
 
 ## Traps that will bite again
@@ -63,7 +61,9 @@ with `tools/dev.sh shot` after touching art. **`assets/art_raw/` is
 recovery pause** (Matt, 2026-09-28, and the playtest passed the somersault,
 dive, run pace, hero height 36 and lava brightness). **M4:** contact with any enemy kills, the
 dragon is vulnerable only to RECALLING. **G1:** passed. **Generation budget:**
-not a hard gate.
+not a hard gate. **`LEVELS.md`'s twelve questions**
+(Matt, 2026-09-28): the caged creature is the Act 2 dragon, chained then freed
+in Act 4; the forest folds into Act 1; about 18 rooms; remix rooms wanted.
 
 ## Pointers
 
@@ -71,4 +71,4 @@ not a hard gate.
 `ART_DIRECTION.md` how it looks · `ANIMATION.md` what moves ·
 `ART.md`/`GEMINI_NOTES.md` before any art · `CLAUDE.md` how to work here ·
 `README.md` running it · `BACKLOG.md` raised and not judged · `LEVELS.md`
-Matt's expanded level vision, not yet decided · `assets/reference/` original.
+Matt's expanded level vision, decided · `assets/reference/` original.
