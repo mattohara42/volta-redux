@@ -120,7 +120,9 @@ nearest real light source**. The outline is the second.
 Design resolution 640x360, rendered at **integer multiples only**, so the game
 is playable at 1280x720 and 1920x1080 with every pixel a clean square. Art is
 authored at **1x**: one art pixel is one design pixel. A full-screen background
-is 640x360 of art.
+is 640x360 of art, painted and then pixelated rather than drawn at 1x, which
+leaves it softer than the sprites in front of it on purpose (`ART.md`, *Four
+layers*).
 
 **The hero is 34 to 40 px tall, drawn on Sprite Fusion's 32 canvas**
 (decided 2026-09-28, Matt delegating the call). The exact number is whatever

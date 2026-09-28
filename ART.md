@@ -68,6 +68,31 @@ Measured:
 - **`media.spritefusion.com` answers 403 to urllib's default User-Agent.** The
   tool now sends its own and records every asset id before downloading.
 
+## Four layers, each made the way that suits it
+
+Decided 2026-09-28, because Sprite Fusion cannot make anything over 64 px.
+
+| layer | what | how |
+|---|---|---|
+| far background | atmosphere, parallax, designed to repeat | painted in Gemini (the M5 pipeline), then `tools/pixelate.py` to 1x at the room's height |
+| playfield | everything the hero stands on or touches | Sprite Fusion tiles, 16 or 32 px, style-referenced to the hero |
+| props | windows, torches, the caged bird, banners | Sprite Fusion sprites, 32 or 64 px |
+| light | glow, torchlight, fog, heat | code: shaders, lights, particles (`CLAUDE.md`) |
+
+**The light layer is what makes the other three one picture.** A painted,
+pixelated back layer and generated front layers only look like one place
+when the same coloured light falls across all of them.
+
+**Pixelating works on large, simple shapes**, so a background prompt asks for
+big forms and few small details. Act 1's wall converted cleanly at 24
+colours (`assets/art/act1/wall_moat_bg_px.png`), passes `palette-check.py`,
+and its lit windows survive because the tool reduces colours by octree, not
+by area (the tool's docstring has the comparison).
+
+**Not yet measured: whether a Sprite Fusion tile repeats seamlessly.** It
+makes single sprites, not tilesets. The first tile request tests it, and an
+`edit` or a hand fix is the fallback.
+
 ## The pipeline, four steps
 
 1. **Claude writes the prompt and calls the API.** No human round trip, so a
@@ -112,6 +137,7 @@ it was for paintings. Wrong drawn content is still a reroll.
 |---|---|---|
 | `sprite-fusion.py` | new | calls the API, writes deliveries and a request log to `assets/art_raw/` |
 | `key.py` | kept, if needed | delivery on a flat backdrop, out comes a transparent PNG |
+| `pixelate.py` | new | a painted background in, a 1x pixel-art one out, octree-reduced to a small palette |
 | `palette-check.py` | kept | judges a delivery against `ART_DIRECTION.md`'s coloured-dark rule |
 | `cut-sheet.py` | kept | one sheet, N connected components, out come N tight crops |
 | `cut-rig.py` | **retires** with the rig | one character painting, out come the rig parts |

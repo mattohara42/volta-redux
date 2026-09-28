@@ -27,13 +27,16 @@ proportions** (`ART_DIRECTION.md`, *Scale and resolution*). The next request
 That fixes the stance and measures the real height in one go. Then an idle
 `animate` of it, filmstripped at game size for boiling (`ANIMATION.md`).
 
+**Backgrounds are decided too**: painted, then `tools/pixelate.py`, under
+Sprite Fusion tiles and props, tied together by light in code (`ART.md`,
+*Four layers*). Act 1's is converted and not yet wired into the room; that
+happens with the texture-filter flip, in the first pixel-art room PR.
+
 ## Blocked on Matt
 
 1. **Credits: 0.** Every request costs 15.
-2. **Backgrounds.** The API only outputs 16, 32 or 64 px, so it cannot make
-   a 640x360 background. Structural, Matt's call.
-3. **`LEVELS.md`'s open questions**, the ending swap chief among them.
-4. **M4 playtest feedback**: the dragon's pacing, the ledge-to-wood throw
+2. **`LEVELS.md`'s open questions**, the ending swap chief among them.
+3. **M4 playtest feedback**: the dragon's pacing, the ledge-to-wood throw
    and the dormant scorpion's wake-to-danger gap.
 
 ## Traps that will bite again
