@@ -3,18 +3,17 @@
 > **Rewrite this file, never append.** State snapshot and pointers only. No
 > session narrative, that is what `git log` is for. Keep it under 80 lines.
 
-**Updated:** 2026-09-28 · **Phase:** 2, the look · **Active:** M6 (built,
-waiting on Matt's eye) and M7 (five of six built). M9 was built ahead of M8
-because M8 needs credits. **Done when:** M6, the somersault reads as one at
-game size. M7, the six enemies are on screen, distinguishable and consistent
-(`BUILD_PLAN.md`).
+**Updated:** 2026-09-28 · **Phase:** 2, the look · **Active:** M7 (five of six
+built). M6 passed Matt's playtest. M9 was built ahead of M8 because M8 needs
+credits. **Done when:** M7, the six enemies are on screen, distinguishable and
+consistent (`BUILD_PLAN.md`).
 
 ## Where this is
 
 **Credits: 0.** Every request costs 15, so anything generated waits on a
 top-up. Spent this session: M5 210, M6 180, M7 120 (`ART.md`).
 
-**M6 built:** twelve hero states, every transition tested, the somersault (a
+**M6 passed:** twelve hero states, every transition tested, the somersault (a
 jump taken while moving, no throwing until you land) and the dive (a fall past
 640 px/s, then a 0.25 s crouch). **M7 built for five of six:** scorpion, ant,
 eyeball, dragon and bat are sprites on their M4 behaviours, in `RoomM7Sheet`.
@@ -28,21 +27,16 @@ References: `assets/art_raw/_experiments/m6_air_moves.png`, `m7_sheet.png`,
 **With credits** (30): the generator's still and animation, which finishes M7.
 Then M8, the four acts' tilesets and backgrounds (`ART.md`'s recipe: `generate`
 at 16 for tiles, `tile-variants.py`, the painted background through
-`pixelate.py`). **Without:** the light layer that ties everything together is still only
-the lava's glow (the dragon's flame is now a shader too, `BACKLOG.md`).
+`pixelate.py`). **Without:** the light layer that ties everything together is
+still only the lava's glow. The dragon's breath is a shader that leaves its
+mouth.
 
 ## Blocked on Matt
 
 1. **Credits.** Blocks the generator (30) and all of M8.
-2. **The somersault reading as one** (M6's last done-when) and **whether it
-   should travel further or rise less.** It does neither, because every M2 to
-   M4 room is measured against the jump's reach (`ANIMATION.md`).
-3. **Feel, by playing:** the run cycle's pace, `hero_height` at 36, the dive
-   (a fall of about 74 px dives, and so does a full jump onto a floor 18 px or
-   more lower), and how bright the lava is against the hero (`config/`).
-4. **`LEVELS.md`'s open questions**, the ending swap chief among them. Blocks
+2. **`LEVELS.md`'s open questions**, the ending swap chief among them. Blocks
    M10's level building.
-5. **M4 playtest feedback**: the dragon's pacing, the ledge-to-wood throw and
+3. **M4 playtest feedback**: the dragon's pacing, the ledge-to-wood throw and
    the dormant scorpion's wake-to-danger gap. Blocks M14's tuning of those.
 
 ## Traps that will bite again
@@ -66,7 +60,8 @@ with `tools/dev.sh shot` after touching art. **`assets/art_raw/` is
 
 **Pixel art.** **Straight sword, asymmetric hilt.** **M5 final quality.**
 **Moving jumps are somersaults, no throwing during one; dives cost a
-recovery pause** (Matt, 2026-09-28). **M4:** contact with any enemy kills, the
+recovery pause** (Matt, 2026-09-28, and the playtest passed the somersault,
+dive, run pace, hero height 36 and lava brightness). **M4:** contact with any enemy kills, the
 dragon is vulnerable only to RECALLING. **G1:** passed. **Generation budget:**
 not a hard gate.
 

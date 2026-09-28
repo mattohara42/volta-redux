@@ -44,15 +44,20 @@ var _flame: ColorRect
 ## `breath_offset` is where the cone sits relative to the dragon's own centre,
 ## and its sign is the only place this file says which way the dragon faces:
 ## the room places it, the way a ferry's span decides which way a slab goes.
+## The room's box fixes how far the breath reaches. Its near edge is pulled back
+## to the snout, so the fire leaves the mouth and the whole visible flame kills.
 func place(size: Vector2, breath_offset: Vector2, breath_size: Vector2, enemy_config: EnemyConfig) -> void:
 	configure(size)
 	_config = enemy_config
-	_breath_offset = breath_offset
-	_breath_size = breath_size
+	var side := signf(breath_offset.x) if not is_zero_approx(breath_offset.x) else 1.0
+	var far := absf(breath_offset.x) + breath_size.x * 0.5
+	var reach := minf(_config.dragon_snout_reach, far)
+	_breath_offset = Vector2(side * (far + reach) * 0.5, breath_offset.y)
+	_breath_size = Vector2(far - reach, breath_size.y)
 	_breath = _make_breath_area()
-	_breath.position = breath_offset
+	_breath.position = _breath_offset
 	var shape := _breath.get_child(0) as CollisionShape2D
-	(shape.shape as RectangleShape2D).size = breath_size
+	(shape.shape as RectangleShape2D).size = _breath_size
 	_flame = _make_flame()
 	add_to_group("mechanisms")
 
