@@ -19,6 +19,7 @@ var _main := PackedVector2Array()
 var _fork := PackedVector2Array()
 var _clock: float = 0.0
 var _seed: int = 0
+var _light: LightGlow
 
 
 ## Both ends in this node's own coordinates.
@@ -28,6 +29,10 @@ func setup(from: Vector2, to: Vector2, start_seed: int = 1) -> void:
 	_seed = start_seed
 	add_child(_sparks(from))
 	add_child(_sparks(to))
+	var radius := CONFIG.light_arc_radius + from.distance_to(to) * 0.35
+	_light = LightGlow.make(radius, Palette.ARC_RESIDUE, CONFIG.light_arc_strength)
+	_light.position += (from + to) * 0.5
+	add_child(_light)
 	_reshape()
 
 
@@ -41,6 +46,8 @@ func _process(delta: float) -> void:
 
 
 func _reshape() -> void:
+	# A new bolt is a new flash: the light jumps with it instead of holding steady.
+	_light.set_strength(CONFIG.light_arc_strength * (0.6 + 0.4 * float(_seed % 3) / 2.0))
 	_main = ArcPath.bolt(_from, _to, _seed, CONFIG.arc_subdivisions, CONFIG.arc_jag)
 	var rng := RandomNumberGenerator.new()
 	rng.seed = _seed * 31 + 7

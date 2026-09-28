@@ -72,3 +72,18 @@ extends Resource
 ## the noise's scale. Lower scale, bigger tongues.
 @export var flame_stream_speed: float = 160.0
 @export var flame_noise_scale: float = 0.09
+
+@export_group("Light")
+## How quickly a flickering light wobbles, radians a second.
+@export var light_flicker_speed: float = 9.0
+## A lit brazier: reach in px, brightness 0 to 1, and how much it flickers.
+@export var light_brazier_radius: float = 60.0
+@export_range(0.0, 1.0) var light_brazier_strength: float = 0.5
+@export_range(0.0, 1.0) var light_brazier_flicker: float = 0.35
+## The dragon's breath, at its brightest.
+@export var light_breath_radius: float = 80.0
+@export_range(0.0, 1.0) var light_breath_strength: float = 0.6
+## An arc: reach beyond half its own length, and brightness.
+@export var light_arc_radius: float = 36.0
+@export_range(0.0, 1.0) var light_arc_strength: float = 0.35
+

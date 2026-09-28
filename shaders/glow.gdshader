@@ -7,6 +7,8 @@
 shader_type canvas_item;
 render_mode blend_add;
 
+#include "res://shaders/dither.gdshaderinc"
+
 uniform vec4 tint : source_color;
 uniform vec2 band_size;
 uniform float strength;
@@ -14,18 +16,6 @@ uniform float steps = 4.0;
 
 varying vec2 local;
 varying vec2 world_px;
-
-const float BAYER[16] = float[16](
-	0.0, 8.0, 2.0, 10.0,
-	12.0, 4.0, 14.0, 6.0,
-	3.0, 11.0, 1.0, 9.0,
-	15.0, 7.0, 13.0, 5.0
-);
-
-float bayer4(vec2 p) {
-	ivec2 i = ivec2(mod(floor(p), 4.0));
-	return (BAYER[i.x + i.y * 4] + 0.5) / 16.0;
-}
 
 void vertex() {
 	local = VERTEX;

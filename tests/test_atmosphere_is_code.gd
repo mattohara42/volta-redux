@@ -10,6 +10,7 @@ const SCRIPTS: PackedStringArray = [
 	"res://scripts/charged_surface.gd",
 	"res://scripts/logic/arc_path.gd",
 	"res://scripts/dragon.gd",
+	"res://scripts/light_glow.gd",
 ]
 const SHADERS: PackedStringArray = [
 	"res://shaders/lava.gdshader",
@@ -17,6 +18,8 @@ const SHADERS: PackedStringArray = [
 	"res://shaders/glow.gdshader",
 	"res://shaders/charged.gdshader",
 	"res://shaders/flame.gdshader",
+	"res://shaders/light.gdshader",
+	"res://shaders/dither.gdshaderinc",
 ]
 
 
@@ -45,4 +48,5 @@ func test_effect_colours_come_from_the_palette_not_the_shaders() -> void:
 	for path in SHADERS:
 		var text := _text(path)
 		check(not text.contains("vec3(0.0)") and not text.contains("vec3(1.0)"), "%s draws no black or white" % path)
-		check(not text.contains("#"), "%s carries no hex colour" % path)
+		var code := text.replace("#include", "")
+		check(not code.contains("#"), "%s carries no hex colour" % path)
