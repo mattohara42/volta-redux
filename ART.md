@@ -45,6 +45,28 @@ asset ids, which is how a later edit or animate finds its source.
   no "transparent background" or "pixel-perfect". The agent guide calls these
   noise.
 
+**First delivery, 2026-09-28: the hero, one `generate` at size 64.** 12
+variations for 15 credits (`assets/art_raw/hero_lothar_px_*.png`, contact
+sheet at 4x in `assets/art_raw/_experiments/hero_lothar_px_contact.png`).
+Measured:
+
+- **The side view was ignored by 9 of 12.** The nine polished ones are a
+  three-quarter front stance, the exact default `GEMINI_NOTES.md` fought on
+  the painted hero. The three that did draw a profile (1, 2, 3) face left
+  instead of right, which `flip_h` fixes, and are visibly rougher.
+- **Size 64 does not mean 64.** The nine three-quarter ones came back 73x73
+  with the figure filling all 73 rows. The profiles are 64x64 with the figure
+  58 to 62 px tall. **Either way the hero is 1.5 to 1.8 times
+  `config/world.tres`'s `hero_height` of 40**, and pixel art cannot be
+  resampled down to fit. Open question (`HANDOFF.md`).
+- **Real transparency, hard edges.** No partial alpha anywhere, so no key
+  step for Sprite Fusion deliveries.
+- **Not a small palette.** 1,100 to 3,100 distinct colours per sprite. Six
+  fail `palette-check.py` narrowly (0.5% to 2.6% neutral-dark pixels), which
+  a palette remap fixes. `generate` has no colours parameter; `animate` does.
+- **`media.spritefusion.com` answers 403 to urllib's default User-Agent.** The
+  tool now sends its own and records every asset id before downloading.
+
 ## The pipeline, four steps
 
 1. **Claude writes the prompt and calls the API.** No human round trip, so a
