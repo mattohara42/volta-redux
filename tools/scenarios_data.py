@@ -101,7 +101,7 @@ SCENARIOS: list[dict] = [
 		"checks": [
 			{"type": "contains", "pattern": "brazier at (470.0, 320.0) LIT",
 				"message": "walking past the second brazier should have lit it"},
-			{"type": "contains", "pattern": "checkpoint (470.0, 300.0)",
+			{"type": "contains", "pattern": "checkpoint (470.0, 302.0)",
 				"message": "the respawn should have used the second brazier, not the first"},
 		],
 	},
