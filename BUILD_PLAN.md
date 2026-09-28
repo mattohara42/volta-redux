@@ -138,6 +138,11 @@ asset, and if something here is being drawn as a PNG loop, that is the bug.
 **Done when**: the lava bubbles, the generator arcs, and neither is a texture
 someone drew frame by frame.
 
+**Built 2026-09-28, ahead of M8 (which needed credits)**: the lava bubbles, an
+arc and a charged surface are shaders and particles with a test that no effect
+loads an image (`ART.md`). The arc is ready for the generator to use; the
+generator itself is M12's.
+
 ---
 
 ## Phase 3: the game (M10 to M14)
