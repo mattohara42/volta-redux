@@ -3,42 +3,43 @@
 > **Rewrite this file, never append.** State snapshot and pointers only. No
 > session narrative, that is what `git log` is for. Keep it under 80 lines.
 
-**Updated:** 2026-09-28 · **Phase:** 2, the look · **Active:** M5, pixel art.
-**Done when:** the M5 room is in the game at final quality in pixel art, and
-`ART.md` carries the generations and credits it took (`BUILD_PLAN.md`).
+**Updated:** 2026-09-28 · **Phase:** 2, the look · **Active:** M6, the hero
+animated. **Done when:** every state transitions cleanly into every other
+state it can reach, and the somersault reads as a somersault at game size in
+a screenshot, not just in the editor (`BUILD_PLAN.md`).
 
 ## Where this is
 
-**M5 is built and waiting on Matt's eye.** The room renders in pixel art in a
-running build: an animated idle hero (36 px, `hero_height` now 36), a flapping
-bat, Sprite Fusion tiles, the pixelated background, filter Nearest, integer
-stretch. `ART.md` carries the cost (*M5 in pixel art*: 14 requests, 210
-credits, about 120 once the recipe is known). The painted rigs are no longer
-drawn; their scenes and parts stay until M6 deletes them.
+**M5 is closed** in pixel art. **M6 is half done:** idle, run, jump, fall,
+land, throw, catch, climb and die are frame animations on `hero_sprite.tscn`,
+each filmstripped through its transitions in a running build
+(`assets/art_raw/_experiments/m6_transitions.png`). `ART.md` has the recipe
+and cost of both milestones, `GEMINI_NOTES.md` what Sprite Fusion actually
+does. Credits: 165.
 
-**The recipe that works:** `generate` at the target size, `direction-set` for
-a side view, `animate` for motion, `tools/recolour-darks.py` then
-`tools/palette-check.py` on everything. Only `generate` honours `size`
-(`GEMINI_NOTES.md`, *Sprite Fusion, measured*).
+**What is left of M6 is the somersault and the dive**, which do not exist as
+movement yet. Their frames are a few requests once the movement exists.
 
 ## The next action
 
-**Matt looks at the room and calls final quality or not**
-(`assets/art_raw/_experiments/m5_pixel_room.png`, or `tools/dev.sh play`,
-F2 to the M5 bench). The two things to judge are in `ART.md`'s *Open* list:
-the idle's boot flicker and the bright ledge face. Then M5 closes and M6
-starts: the hero's other six states, which show idle frames today.
+**Matt settles how the somersault and dive behave**, then they get built as
+`Locomotion` states with their numbers in `config/movement.tres`, then
+animated. `ANIMATION.md`'s proposal is the starting point: a jump at run
+speed becomes a somersault that travels further, rises less, and cannot
+throw; a fall past a threshold speed becomes a dive.
 
 ## Blocked on Matt
 
-1. **M5's final-quality call.** Blocks closing M5 and starting M6.
-2. **M6's pose route.** `edit` ignores `size`, so turning the still into a
-   run or throw start pose has no clean route yet. Options are in `ART.md`'s
-   *Open* list; Sprite Fusion's reply to Matt's ticket may settle it.
+1. **Somersault and dive behaviour.** Blocks finishing M6.
+2. **Feel, by playing:** the run cycle's pace against ground speed (0.25 s a
+   cycle, `hero_sprite.tscn`), and `hero_height` at 36 instead of 40.
+   Blocks nothing now; M14 retunes whatever this turns up.
 3. **`LEVELS.md`'s open questions**, the ending swap chief among them. Blocks
-   M10's level building, nothing before it.
+   M10's level building.
 4. **M4 playtest feedback**: the dragon's pacing, the ledge-to-wood throw and
    the dormant scorpion's wake-to-danger gap. Blocks M14's tuning of those.
+5. **Sprite Fusion's reply on `edit` ignoring `size`.** Blocks nothing now:
+   `animate` from the still replaced the pose step.
 
 ## Traps that will bite again
 
@@ -46,24 +47,21 @@ starts: the hero's other six states, which show idle frames today.
 each session and `tools/dev.sh` finds it. **Opening the project rewrites
 `project.godot`**, and a stale editor deletes from it: close the editor,
 `git diff project.godot`, restore, then pull. **A new `class_name` script
-fails every caller with "Could not resolve class" until a reimport**, which
-reads like a compile error and isn't.
+fails every caller with "Could not resolve class" until a reimport.**
 
-**Generated frames may look right one at a time and boil in motion**:
-`tools/capture.gd --filmstrip=N`. **The debug overlay covers the hero in a
-zoomed capture**; start `--input` with `debug_toggle_overlay:1`. **Godot's
-`debug/gdscript/warnings/*` settings do not surface through this headless
-pipeline**; `tests/test_repo_typing.gd` substitutes a text scan. **Reading a
-public repo of Matt's needs no permission grant**: anonymous clone through
-this session's proxy already works.
+**Only `generate` honours `size`.** Every other operation keeps roughly its
+input's size, and `animate` always starts on the input's own pose.
+**Generated frames can boil**: `tools/capture.gd --filmstrip=N`, and start
+`--input` with `debug_toggle_overlay:1` or the overlay hides the hero at
+zoom. **A test can pass while a texture is missing**, since nothing in the
+suite draws the hero: load a room with `tools/dev.sh shot` after touching art.
 
 ## Settled, do not relitigate
 
-**Pixel art is the direction** (Matt, after seeing it). **Straight sword,
-asymmetric hilt** for rotation readability. **M4:** contact with any enemy
-kills, the dragon is vulnerable only to RECALLING, the generator is M12's.
-**The gates:** no level building before M10. **G1:** passed, and the art
-change does not reopen it. **Generation budget:** not a hard gate.
+**Pixel art** (Matt, after seeing it). **Straight sword, asymmetric hilt.**
+**M5 final quality**, including the idle's slight boot flicker. **M4:**
+contact with any enemy kills, the dragon is vulnerable only to RECALLING.
+**G1:** passed. **Generation budget:** not a hard gate.
 
 ## Pointers
 
