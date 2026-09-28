@@ -359,6 +359,7 @@ func _step_death(delta: float) -> void:
 		_dead = false
 		_death_elapsed = 0.0
 	_update_sprite()
+	_update_animation(is_on_floor())
 	queue_redraw()
 
 
@@ -480,20 +481,15 @@ func _apply_hero_size(height: float) -> void:
 ## Stands the sprite's feet on the capsule's floor contact point and mirrors
 ## it by `facing`. Pixel art is never scaled (`ART_DIRECTION.md`), so M0's [
 ## and ] keys resize the capsule and not the picture.
-## Tints it the same cue the capsule drew: dead borrows lava's darkest value
-## rather than going grey, ART_DIRECTION.md's darkest colour reserved for what
-## it already reserves darkness for; climbing a warm gold, same as before.
+## Tints it dead the way the capsule drew it: lava's darkest value rather than
+## grey. Climbing needs no tint now that it has its own frames, and gold is
+## reserved for what the player interacts with (ART_DIRECTION.md).
 func _update_sprite() -> void:
 	if _sprite == null:
 		return
 	_sprite.scale = Vector2(facing, 1.0)
 	_sprite.position = Vector2(0.0, world.hero_height * 0.5)
-	if _dead:
-		_sprite.modulate = Palette.LAVA_CRUST
-	elif climbing:
-		_sprite.modulate = Color(Palette.GOLD_FACE, 0.95)
-	else:
-		_sprite.modulate = Color.WHITE
+	_sprite.modulate = Palette.LAVA_CRUST if _dead else Color.WHITE
 
 
 ## Travels the sprite's `AnimationTree` state machine to whatever `Locomotion`
@@ -501,13 +497,15 @@ func _update_sprite() -> void:
 ## The only thing this script does with the tree: `hero_sprite.tscn` owns the
 ## states and how they animate.
 ##
-## Not called during `_step_death`, so the sprite freezes on whatever pose it was
-## in the moment the hero died, matching the body staying where it fell.
+## Called during `_step_death` too, which is how the death plays: `dying` is
+## the hold only, so by the respawn freeze the hero is standing again.
 func _update_animation(grounded: bool) -> void:
 	if _anim_tree == null:
 		return
+	var dying := _dead and _death_elapsed < death_config.death_hold
 	var state := Locomotion.state_for(
-		grounded, velocity.y, _landing_timer, velocity.x, _throw_timer, _catch_timer
+		grounded, velocity.y, _landing_timer, velocity.x, _throw_timer, _catch_timer,
+		climbing, dying
 	)
 	_anim_tree["parameters/playback"].travel(Locomotion.state_name(state))
 
