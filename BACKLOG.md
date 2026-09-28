@@ -199,10 +199,12 @@ committed to.
   (`shaders/flame.gdshader`), clipped to the same killing box, growing through
   the charge. Its near, top and bottom edges are still straight, on purpose:
   they are the kill box's edges. Reference: `_experiments/m9_dragon_flame.png`.
-- **The flame starts 57 px from the dragon's snout.** The M4 numbers put the
-  cone at `BREATH_OFFSET` (-150, 10), 90 wide, so its near edge is well clear
-  of a snout that reaches about 48 px. A flame that leaves the mouth would read
-  better, but moving it retunes the dragon room.
+- **The flame started 57 px from the dragon's snout** (Matt, playtest
+  2026-09-28: "a big empty block in front of the dragon's face"). Fixed: the
+  dragon pulls the kill box's near edge back to its snout
+  (`dragon_snout_reach`, 36 px, measured off the sprite), keeping each room's far
+  edge. The M4 dragon room now kills all the way to the face, 57 px more than
+  before, which is only reachable by standing against the dragon.
 - **The test runner passes a test that crashes.** A `SCRIPT ERROR` mid-test
   aborts that test's remaining checks and the run still reports 0 failed and
   exits 0, unless a check had already failed. Worth making a script error a

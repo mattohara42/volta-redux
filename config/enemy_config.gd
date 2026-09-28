@@ -56,6 +56,11 @@ extends Resource
 ## without spending a sword on it, and a rest too short to set up the one
 ## legitimate shot would make that a matter of luck.
 @export var dragon_rest_time: float = 2.6
+## How far the snout reaches from the dragon's centre, px, which is where the
+## breath starts. A property of the sprite: the room decides how far the breath
+## goes, and the dragon fills the gap back to its own face so the fire and the
+## kill box both leave the mouth.
+@export var dragon_snout_reach: float = 36.0
 
 @export_group("Dormant")
 ## How close the hero has to come to wake a dormant enemy, px. Bigger than a
