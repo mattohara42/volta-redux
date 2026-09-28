@@ -292,3 +292,10 @@ things to know:
 **A side-view ladder climb reads as walking.** The back view from the same
 `direction-set` run, animated, reads as climbing, and it is the same
 character because both came from one request.
+
+**`animate` will rotate a body if the prompt says so and asks for enough
+frames.** An 8-frame "forward somersault, rotating further in every frame"
+came back as a full flip: spring, tuck, inverted, tumble, open. Frame 0 is still
+the input pose, and the tucked frames stay inside the 36 px canvas because the
+still was compact.
+

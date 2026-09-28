@@ -50,8 +50,8 @@ on top of it, and what it shows goes into `ART.md`'s generator notes.
 | throw | frames | The wind-up matters more than the release. Telegraph it |
 | catch | frames | Must be readable in one frame. See M15 on the audio |
 | climb | frames | |
-| **somersault** | **frames, about 6** | The signature move of the original. Earn it |
-| **dive** | **frames, about 4** | A fall past a threshold speed becomes this |
+| **somersault** | **frames, 7** | The signature move of the original. Any jump taken while moving |
+| **dive**, **dive landing** | **frames, 2 and 4** | A fall past `dive_fall_speed` becomes the first; landing from it plays the second for the recovery pause |
 | **death** | **frames, about 5** | Plays inside `death_hold` in `config/death.tres`, 0.25 s, so five frames is 20 fps. One per hazard family would be better. One is fine for v1 |
 | **enemies** | frames | All six. A bat is two or three wing frames |
 | **the sword in flight** | **one sprite, rotated** | Never generate rotation frames. It is a transform. `ART_DIRECTION.md` flags the shimmer to check |
@@ -59,17 +59,34 @@ on top of it, and what it shows goes into `ART.md`'s generator notes.
 ## The somersault is a state, not a costume
 
 The original's somersault was decoration: it looked different and behaved like a
-jump. Here it is **a distinct movement state with its own physics**, because a
-move that looks that different should behave differently or the animation is
-lying.
+jump. Here it is **a distinct movement state**, because a move that looks that
+different should behave differently or the animation is lying.
 
-Proposed, and to be settled by feel in M0 rather than by argument now: the
-somersault is what a jump becomes when you are already at run speed. It travels
-further, it rises less, and **you cannot throw during it**. That last clause is
-the interesting one, because it makes the game's best-looking move also its most
-committed, and committing is exactly what the 1984 game was criticised for. The
-difference is that here it is a choice you make rather than the only jump you
-have.
+**Settled by Matt, 2026-09-28.** A jump taken while moving is a somersault, from
+takeoff to landing (`somersault_min_speed`, `config/movement.tres`). **You cannot
+throw during it.** Recall is the same button held, so it waits too. That is the
+whole of the difference in what you can do, and it is the interesting one: it
+makes the game's best-looking move also its most committed, and committing is
+exactly what the 1984 game was criticised for. The difference is that here it is
+a choice you make rather than the only jump you have. A jump from a standstill is
+a plain jump and throws as usual.
+
+**The flip flies the jump's own arc.** Not further, not lower. Every room from M2
+to M4 is measured against a full-speed jump's reach (`Motion.jump_reach`), and
+those rooms have gaps that are deliberately just out of reach and puzzles that
+need the jump's full height, so any change to the arc silently retunes all of
+them. If the flip should travel further later, the rooms' reach tests move to
+the flip's reach in the same PR.
+
+## The dive is a state too
+
+A fall at or past `dive_fall_speed` becomes a dive: stretched out head first,
+beating the somersault if you were in one. **Landing from a dive costs a short
+recovery pause** (`dive_recovery_time`, 0.25 s): a landing frame and then a
+crouch on the floor in which nothing answers, no steering, no jump, no throw, no
+ladder. The threshold sits above the speed a full jump lands at, so an ordinary
+jump never dives; a fall of about 74 px from rest, or a jump onto a floor 18 px
+or more below its takeoff, does. Both numbers are first guesses for M14.
 
 ## Godot specifics
 
