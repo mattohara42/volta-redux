@@ -58,6 +58,8 @@ DEFAULT_OUT = REPO / "assets" / "art_raw"
 LOG_NAME = "sprite-fusion-log.jsonl"
 INLINE_LIMIT_BYTES = 1_000_000  # the API's decoded inline image limit
 SIZES = (16, 32, 64)
+# media.spritefusion.com answers 403 to urllib's default User-Agent.
+USER_AGENT = "volta-redux-sprite-fusion/1"
 
 
 def _key() -> str:
@@ -71,6 +73,7 @@ def _request(method: str, path: str, body: dict | None = None) -> urllib.request
     data = json.dumps(body).encode() if body is not None else None
     req = urllib.request.Request(API + path, data=data, method=method)
     req.add_header("Authorization", "Bearer " + _key())
+    req.add_header("User-Agent", USER_AGENT)
     if data is not None:
         req.add_header("Content-Type", "application/json")
     return req
@@ -120,9 +123,16 @@ def _events(resp):
         yield json.loads("\n".join(lines))
 
 
-def _download(url: str, dest: Path) -> None:
-    with urllib.request.urlopen(url, timeout=120) as resp:
-        dest.write_bytes(resp.read())
+def _download(url: str, dest: Path) -> str | None:
+    """Save url to dest. Returns an error message instead of raising, so a
+    failed download never loses the asset id the log needs to recover it."""
+    try:
+        req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
+        with urllib.request.urlopen(req, timeout=120) as resp:
+            dest.write_bytes(resp.read())
+    except (urllib.error.URLError, OSError) as e:
+        return f"{type(e).__name__}: {e}"
+    return None
 
 
 def _ext(url: str, fallback: str) -> str:
@@ -180,6 +190,9 @@ def _generate(args: argparse.Namespace, body: dict, logged_inputs: list[str]) ->
     print(f"{completed.get('status')}: {got} of {expected} outputs saved, credits {completed.get('credits')}")
     if completed.get("status") != "succeeded" or got != expected:
         sys.exit(f"sprite-fusion.py: incomplete: {completed.get('error') or 'output count mismatch'}")
+    failed = [o["index"] for o in record["outputs"] if "download_error" in o]
+    if failed:
+        sys.exit(f"sprite-fusion.py: generated and charged, but downloads failed for {failed}. The URLs are in {LOG_NAME}.")
 
 
 def _save_output(event: dict, name: str, out: Path) -> dict:
@@ -188,17 +201,25 @@ def _save_output(event: dict, name: str, out: Path) -> dict:
     entry = {"index": index, "asset_id": asset.get("id"), "type": asset.get("type"), "url": asset.get("assetUrl")}
     if asset.get("assetUrl"):
         dest = out / f"{name}_{index}{_ext(asset['assetUrl'], '.png')}"
-        _download(asset["assetUrl"], dest)
-        entry["path"] = str(dest.relative_to(REPO)) if dest.is_relative_to(REPO) else str(dest)
-        print(f"  [{index}] {asset.get('id')} -> {entry['path']}")
+        error = _download(asset["assetUrl"], dest)
+        if error:
+            entry["download_error"] = error
+            print(f"  [{index}] {asset.get('id')} download failed: {error}")
+        else:
+            entry["path"] = str(dest.relative_to(REPO)) if dest.is_relative_to(REPO) else str(dest)
+            print(f"  [{index}] {asset.get('id')} -> {entry['path']}")
     if asset.get("spritesheetUrl"):
         sheet = out / f"{name}_{index}_sheet{_ext(asset['spritesheetUrl'], '.png')}"
-        _download(asset["spritesheetUrl"], sheet)
+        error = _download(asset["spritesheetUrl"], sheet)
         entry["spritesheet_url"] = asset["spritesheetUrl"]
-        entry["spritesheet_path"] = str(sheet.relative_to(REPO)) if sheet.is_relative_to(REPO) else str(sheet)
         entry["frame_count"] = asset.get("frameCount")
         entry["fps"] = asset.get("fps")
-        print(f"      sheet, {asset.get('frameCount')} frames -> {entry['spritesheet_path']}")
+        if error:
+            entry["download_error"] = error
+            print(f"      sheet download failed: {error}")
+        else:
+            entry["spritesheet_path"] = str(sheet.relative_to(REPO)) if sheet.is_relative_to(REPO) else str(sheet)
+            print(f"      sheet, {asset.get('frameCount')} frames -> {entry['spritesheet_path']}")
     return entry
 
 

@@ -20,23 +20,23 @@ The rig's state logic (`Locomotion`) carries over.
 
 ## The next action
 
-**`tools/sprite-fusion.py` is built and unspent**: `credits` and `assets`
-checked against the live API, the stream and save path tested against a fake
-server only. The first real request is a still hero (`generate`, size 64),
-then an idle `animate` of it, filmstripped at game size to find out whether
-generated frames boil (`ANIMATION.md`). Only then redraw the room.
+**The first hero delivery is in** (`ART.md`, *First delivery*): 12
+variations, 9 in the wrong (three-quarter) stance, all 1.5 to 1.8 times the
+40 px hero. Once Matt picks a variation and settles the size question below,
+the next request is an idle `animate` of it, filmstripped at game size to
+find out whether generated frames boil (`ANIMATION.md`).
 
 ## Blocked on Matt
 
-1. **Credits.** Every request costs 15 and the account holds 15, so one
-   request, total. The first hero plus its idle is two (30 credits), and a
-   full hero is roughly 20 or more (`ART.md`).
-2. **Backgrounds.** The API only outputs 16, 32 or 64 px, so it cannot make
-   a 640x360 background. Options: tile it from 32 px pieces, keep the painted
-   background under pixel sprites, or draw it some other way. Structural, so
-   Matt's call.
-3. **`LEVELS.md`'s open questions**, the ending swap chief among them.
-4. **M4 playtest feedback**: the dragon's pacing, the ledge-to-wood throw
+1. **Hero size.** Size 64 draws him 58 to 73 px tall and size 32 would be
+   about 30; the game's hero is 40 (`config/world.tres`). Pixel art cannot be
+   resampled to fit, so either the hero's height changes (collision, jump
+   tuning, every room) or the art is drawn to 40 some other way. Structural.
+2. **Credits: 0.** Every request costs 15.
+3. **Backgrounds.** The API only outputs 16, 32 or 64 px, so it cannot make
+   a 640x360 background. Structural, Matt's call.
+4. **`LEVELS.md`'s open questions**, the ending swap chief among them.
+5. **M4 playtest feedback**: the dragon's pacing, the ledge-to-wood throw
    and the dormant scorpion's wake-to-danger gap.
 
 ## Traps that will bite again
