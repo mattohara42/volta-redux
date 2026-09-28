@@ -10,6 +10,9 @@
 [ext_resource type="Texture2D" path="res://assets/art/hero/hero_climb_sheet.png" id="8_climb"]
 [ext_resource type="Texture2D" path="res://assets/art/hero/hero_climb_still_sheet.png" id="9_climb_still"]
 [ext_resource type="Texture2D" path="res://assets/art/hero/hero_die_sheet.png" id="10_die"]
+[ext_resource type="Texture2D" path="res://assets/art/hero/hero_somersault_sheet.png" id="11_somersault"]
+[ext_resource type="Texture2D" path="res://assets/art/hero/hero_dive_sheet.png" id="12_dive"]
+[ext_resource type="Texture2D" path="res://assets/art/hero/hero_dive_land_sheet.png" id="13_dive_land"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_idle0"]
 atlas = ExtResource("1_idle")
@@ -126,6 +129,58 @@ region = Rect2(36, 0, 36, 36)
 [sub_resource type="AtlasTexture" id="AtlasTexture_die2"]
 atlas = ExtResource("10_die")
 region = Rect2(72, 0, 36, 36)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_somersault0"]
+atlas = ExtResource("11_somersault")
+region = Rect2(0, 0, 36, 36)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_somersault1"]
+atlas = ExtResource("11_somersault")
+region = Rect2(36, 0, 36, 36)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_somersault2"]
+atlas = ExtResource("11_somersault")
+region = Rect2(72, 0, 36, 36)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_somersault3"]
+atlas = ExtResource("11_somersault")
+region = Rect2(108, 0, 36, 36)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_somersault4"]
+atlas = ExtResource("11_somersault")
+region = Rect2(144, 0, 36, 36)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_somersault5"]
+atlas = ExtResource("11_somersault")
+region = Rect2(180, 0, 36, 36)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_somersault6"]
+atlas = ExtResource("11_somersault")
+region = Rect2(216, 0, 36, 36)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dive0"]
+atlas = ExtResource("12_dive")
+region = Rect2(0, 0, 36, 36)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dive1"]
+atlas = ExtResource("12_dive")
+region = Rect2(36, 0, 36, 36)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dive_land0"]
+atlas = ExtResource("13_dive_land")
+region = Rect2(0, 0, 36, 36)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dive_land1"]
+atlas = ExtResource("13_dive_land")
+region = Rect2(36, 0, 36, 36)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dive_land2"]
+atlas = ExtResource("13_dive_land")
+region = Rect2(72, 0, 36, 36)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dive_land3"]
+atlas = ExtResource("13_dive_land")
+region = Rect2(108, 0, 36, 36)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_hero"]
 animations = [{
@@ -264,6 +319,60 @@ animations = [{
 }],
 "loop": false,
 "name": &"die",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_somersault0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_somersault1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_somersault2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_somersault3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_somersault4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_somersault5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_somersault6")
+}],
+"loop": false,
+"name": &"somersault",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dive0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dive1")
+}],
+"loop": true,
+"name": &"dive",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dive_land0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dive_land1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dive_land2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dive_land3")
+}],
+"loop": false,
+"name": &"dive_land",
 "speed": 1.0
 }]
 
@@ -557,6 +666,93 @@ tracks/1/keys = {
 "values": [0, 1, 2]
 }
 
+[sub_resource type="Animation" id="Animation_somersault"]
+resource_name = "somersault"
+length = 0.42
+loop_mode = 0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:animation")
+tracks/0/interp = 0
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"somersault"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:frame")
+tracks/1/interp = 0
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.06, 0.12, 0.18, 0.24, 0.3, 0.36),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6]
+}
+
+[sub_resource type="Animation" id="Animation_dive"]
+resource_name = "dive"
+length = 0.2
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:animation")
+tracks/0/interp = 0
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"dive"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:frame")
+tracks/1/interp = 0
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0, 1]
+}
+
+[sub_resource type="Animation" id="Animation_dive_land"]
+resource_name = "dive_land"
+length = 0.25
+loop_mode = 0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:animation")
+tracks/0/interp = 0
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"dive_land"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:frame")
+tracks/1/interp = 0
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.06, 0.12, 0.19),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_hero"]
 _data = {
 &"idle": SubResource("Animation_idle"),
@@ -568,7 +764,10 @@ _data = {
 &"catch": SubResource("Animation_catch"),
 &"climb": SubResource("Animation_climb"),
 &"climb_still": SubResource("Animation_climb_still"),
-&"die": SubResource("Animation_die")
+&"die": SubResource("Animation_die"),
+&"somersault": SubResource("Animation_somersault"),
+&"dive": SubResource("Animation_dive"),
+&"dive_land": SubResource("Animation_dive_land")
 }
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_idle"]
@@ -601,6 +800,15 @@ animation = &"climb_still"
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_die"]
 animation = &"die"
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_somersault"]
+animation = &"somersault"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_dive"]
+animation = &"dive"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_dive_land"]
+animation = &"dive_land"
+
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_cut"]
 
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_hero"]
@@ -624,7 +832,13 @@ states/climb_still/node = SubResource("AnimationNodeAnimation_climb_still")
 states/climb_still/position = Vector2(750, 260)
 states/die/node = SubResource("AnimationNodeAnimation_die")
 states/die/position = Vector2(900, 260)
-transitions = ["idle", "run", SubResource("AnimationNodeStateMachineTransition_cut"), "idle", "jump", SubResource("AnimationNodeStateMachineTransition_cut"), "idle", "fall", SubResource("AnimationNodeStateMachineTransition_cut"), "idle", "land", SubResource("AnimationNodeStateMachineTransition_cut"), "idle", "throw", SubResource("AnimationNodeStateMachineTransition_cut"), "idle", "catch", SubResource("AnimationNodeStateMachineTransition_cut"), "idle", "climb", SubResource("AnimationNodeStateMachineTransition_cut"), "idle", "climb_still", SubResource("AnimationNodeStateMachineTransition_cut"), "idle", "die", SubResource("AnimationNodeStateMachineTransition_cut"), "run", "idle", SubResource("AnimationNodeStateMachineTransition_cut"), "run", "jump", SubResource("AnimationNodeStateMachineTransition_cut"), "run", "fall", SubResource("AnimationNodeStateMachineTransition_cut"), "run", "land", SubResource("AnimationNodeStateMachineTransition_cut"), "run", "throw", SubResource("AnimationNodeStateMachineTransition_cut"), "run", "catch", SubResource("AnimationNodeStateMachineTransition_cut"), "run", "climb", SubResource("AnimationNodeStateMachineTransition_cut"), "run", "climb_still", SubResource("AnimationNodeStateMachineTransition_cut"), "run", "die", SubResource("AnimationNodeStateMachineTransition_cut"), "jump", "idle", SubResource("AnimationNodeStateMachineTransition_cut"), "jump", "run", SubResource("AnimationNodeStateMachineTransition_cut"), "jump", "fall", SubResource("AnimationNodeStateMachineTransition_cut"), "jump", "land", SubResource("AnimationNodeStateMachineTransition_cut"), "jump", "throw", SubResource("AnimationNodeStateMachineTransition_cut"), "jump", "catch", SubResource("AnimationNodeStateMachineTransition_cut"), "jump", "climb", SubResource("AnimationNodeStateMachineTransition_cut"), "jump", "climb_still", SubResource("AnimationNodeStateMachineTransition_cut"), "jump", "die", SubResource("AnimationNodeStateMachineTransition_cut"), "fall", "idle", SubResource("AnimationNodeStateMachineTransition_cut"), "fall", "run", SubResource("AnimationNodeStateMachineTransition_cut"), "fall", "jump", SubResource("AnimationNodeStateMachineTransition_cut"), "fall", "land", SubResource("AnimationNodeStateMachineTransition_cut"), "fall", "throw", SubResource("AnimationNodeStateMachineTransition_cut"), "fall", "catch", SubResource("AnimationNodeStateMachineTransition_cut"), "fall", "climb", SubResource("AnimationNodeStateMachineTransition_cut"), "fall", "climb_still", SubResource("AnimationNodeStateMachineTransition_cut"), "fall", "die", SubResource("AnimationNodeStateMachineTransition_cut"), "land", "idle", SubResource("AnimationNodeStateMachineTransition_cut"), "land", "run", SubResource("AnimationNodeStateMachineTransition_cut"), "land", "jump", SubResource("AnimationNodeStateMachineTransition_cut"), "land", "fall", SubResource("AnimationNodeStateMachineTransition_cut"), "land", "throw", SubResource("AnimationNodeStateMachineTransition_cut"), "land", "catch", SubResource("AnimationNodeStateMachineTransition_cut"), "land", "climb", SubResource("AnimationNodeStateMachineTransition_cut"), "land", "climb_still", SubResource("AnimationNodeStateMachineTransition_cut"), "land", "die", SubResource("AnimationNodeStateMachineTransition_cut"), "throw", "idle", SubResource("AnimationNodeStateMachineTransition_cut"), "throw", "run", SubResource("AnimationNodeStateMachineTransition_cut"), "throw", "jump", SubResource("AnimationNodeStateMachineTransition_cut"), "throw", "fall", SubResource("AnimationNodeStateMachineTransition_cut"), "throw", "land", SubResource("AnimationNodeStateMachineTransition_cut"), "throw", "catch", SubResource("AnimationNodeStateMachineTransition_cut"), "throw", "climb", SubResource("AnimationNodeStateMachineTransition_cut"), "throw", "climb_still", SubResource("AnimationNodeStateMachineTransition_cut"), "throw", "die", SubResource("AnimationNodeStateMachineTransition_cut"), "catch", "idle", SubResource("AnimationNodeStateMachineTransition_cut"), "catch", "run", SubResource("AnimationNodeStateMachineTransition_cut"), "catch", "jump", SubResource("AnimationNodeStateMachineTransition_cut"), "catch", "fall", SubResource("AnimationNodeStateMachineTransition_cut"), "catch", "land", SubResource("AnimationNodeStateMachineTransition_cut"), "catch", "throw", SubResource("AnimationNodeStateMachineTransition_cut"), "catch", "climb", SubResource("AnimationNodeStateMachineTransition_cut"), "catch", "climb_still", SubResource("AnimationNodeStateMachineTransition_cut"), "catch", "die", SubResource("AnimationNodeStateMachineTransition_cut"), "climb", "idle", SubResource("AnimationNodeStateMachineTransition_cut"), "climb", "run", SubResource("AnimationNodeStateMachineTransition_cut"), "climb", "jump", SubResource("AnimationNodeStateMachineTransition_cut"), "climb", "fall", SubResource("AnimationNodeStateMachineTransition_cut"), "climb", "land", SubResource("AnimationNodeStateMachineTransition_cut"), "climb", "throw", SubResource("AnimationNodeStateMachineTransition_cut"), "climb", "catch", SubResource("AnimationNodeStateMachineTransition_cut"), "climb", "climb_still", SubResource("AnimationNodeStateMachineTransition_cut"), "climb", "die", SubResource("AnimationNodeStateMachineTransition_cut"), "climb_still", "idle", SubResource("AnimationNodeStateMachineTransition_cut"), "climb_still", "run", SubResource("AnimationNodeStateMachineTransition_cut"), "climb_still", "jump", SubResource("AnimationNodeStateMachineTransition_cut"), "climb_still", "fall", SubResource("AnimationNodeStateMachineTransition_cut"), "climb_still", "land", SubResource("AnimationNodeStateMachineTransition_cut"), "climb_still", "throw", SubResource("AnimationNodeStateMachineTransition_cut"), "climb_still", "catch", SubResource("AnimationNodeStateMachineTransition_cut"), "climb_still", "climb", SubResource("AnimationNodeStateMachineTransition_cut"), "climb_still", "die", SubResource("AnimationNodeStateMachineTransition_cut"), "die", "idle", SubResource("AnimationNodeStateMachineTransition_cut"), "die", "run", SubResource("AnimationNodeStateMachineTransition_cut"), "die", "jump", SubResource("AnimationNodeStateMachineTransition_cut"), "die", "fall", SubResource("AnimationNodeStateMachineTransition_cut"), "die", "land", SubResource("AnimationNodeStateMachineTransition_cut"), "die", "throw", SubResource("AnimationNodeStateMachineTransition_cut"), "die", "catch", SubResource("AnimationNodeStateMachineTransition_cut"), "die", "climb", SubResource("AnimationNodeStateMachineTransition_cut"), "die", "climb_still", SubResource("AnimationNodeStateMachineTransition_cut")]
+states/somersault/node = SubResource("AnimationNodeAnimation_somersault")
+states/somersault/position = Vector2(300, 420)
+states/dive/node = SubResource("AnimationNodeAnimation_dive")
+states/dive/position = Vector2(450, 420)
+states/dive_land/node = SubResource("AnimationNodeAnimation_dive_land")
+states/dive_land/position = Vector2(600, 420)
+transitions = ["idle", "run", SubResource("AnimationNodeStateMachineTransition_cut"), "idle", "jump", SubResource("AnimationNodeStateMachineTransition_cut"), "idle", "fall", SubResource("AnimationNodeStateMachineTransition_cut"), "idle", "land", SubResource("AnimationNodeStateMachineTransition_cut"), "idle", "throw", SubResource("AnimationNodeStateMachineTransition_cut"), "idle", "catch", SubResource("AnimationNodeStateMachineTransition_cut"), "idle", "climb", SubResource("AnimationNodeStateMachineTransition_cut"), "idle", "climb_still", SubResource("AnimationNodeStateMachineTransition_cut"), "idle", "die", SubResource("AnimationNodeStateMachineTransition_cut"), "idle", "somersault", SubResource("AnimationNodeStateMachineTransition_cut"), "idle", "dive", SubResource("AnimationNodeStateMachineTransition_cut"), "idle", "dive_land", SubResource("AnimationNodeStateMachineTransition_cut"), "run", "idle", SubResource("AnimationNodeStateMachineTransition_cut"), "run", "jump", SubResource("AnimationNodeStateMachineTransition_cut"), "run", "fall", SubResource("AnimationNodeStateMachineTransition_cut"), "run", "land", SubResource("AnimationNodeStateMachineTransition_cut"), "run", "throw", SubResource("AnimationNodeStateMachineTransition_cut"), "run", "catch", SubResource("AnimationNodeStateMachineTransition_cut"), "run", "climb", SubResource("AnimationNodeStateMachineTransition_cut"), "run", "climb_still", SubResource("AnimationNodeStateMachineTransition_cut"), "run", "die", SubResource("AnimationNodeStateMachineTransition_cut"), "run", "somersault", SubResource("AnimationNodeStateMachineTransition_cut"), "run", "dive", SubResource("AnimationNodeStateMachineTransition_cut"), "run", "dive_land", SubResource("AnimationNodeStateMachineTransition_cut"), "jump", "idle", SubResource("AnimationNodeStateMachineTransition_cut"), "jump", "run", SubResource("AnimationNodeStateMachineTransition_cut"), "jump", "fall", SubResource("AnimationNodeStateMachineTransition_cut"), "jump", "land", SubResource("AnimationNodeStateMachineTransition_cut"), "jump", "throw", SubResource("AnimationNodeStateMachineTransition_cut"), "jump", "catch", SubResource("AnimationNodeStateMachineTransition_cut"), "jump", "climb", SubResource("AnimationNodeStateMachineTransition_cut"), "jump", "climb_still", SubResource("AnimationNodeStateMachineTransition_cut"), "jump", "die", SubResource("AnimationNodeStateMachineTransition_cut"), "jump", "somersault", SubResource("AnimationNodeStateMachineTransition_cut"), "jump", "dive", SubResource("AnimationNodeStateMachineTransition_cut"), "jump", "dive_land", SubResource("AnimationNodeStateMachineTransition_cut"), "fall", "idle", SubResource("AnimationNodeStateMachineTransition_cut"), "fall", "run", SubResource("AnimationNodeStateMachineTransition_cut"), "fall", "jump", SubResource("AnimationNodeStateMachineTransition_cut"), "fall", "land", SubResource("AnimationNodeStateMachineTransition_cut"), "fall", "throw", SubResource("AnimationNodeStateMachineTransition_cut"), "fall", "catch", SubResource("AnimationNodeStateMachineTransition_cut"), "fall", "climb", SubResource("AnimationNodeStateMachineTransition_cut"), "fall", "climb_still", SubResource("AnimationNodeStateMachineTransition_cut"), "fall", "die", SubResource("AnimationNodeStateMachineTransition_cut"), "fall", "somersault", SubResource("AnimationNodeStateMachineTransition_cut"), "fall", "dive", SubResource("AnimationNodeStateMachineTransition_cut"), "fall", "dive_land", SubResource("AnimationNodeStateMachineTransition_cut"), "land", "idle", SubResource("AnimationNodeStateMachineTransition_cut"), "land", "run", SubResource("AnimationNodeStateMachineTransition_cut"), "land", "jump", SubResource("AnimationNodeStateMachineTransition_cut"), "land", "fall", SubResource("AnimationNodeStateMachineTransition_cut"), "land", "throw", SubResource("AnimationNodeStateMachineTransition_cut"), "land", "catch", SubResource("AnimationNodeStateMachineTransition_cut"), "land", "climb", SubResource("AnimationNodeStateMachineTransition_cut"), "land", "climb_still", SubResource("AnimationNodeStateMachineTransition_cut"), "land", "die", SubResource("AnimationNodeStateMachineTransition_cut"), "land", "somersault", SubResource("AnimationNodeStateMachineTransition_cut"), "land", "dive", SubResource("AnimationNodeStateMachineTransition_cut"), "land", "dive_land", SubResource("AnimationNodeStateMachineTransition_cut"), "throw", "idle", SubResource("AnimationNodeStateMachineTransition_cut"), "throw", "run", SubResource("AnimationNodeStateMachineTransition_cut"), "throw", "jump", SubResource("AnimationNodeStateMachineTransition_cut"), "throw", "fall", SubResource("AnimationNodeStateMachineTransition_cut"), "throw", "land", SubResource("AnimationNodeStateMachineTransition_cut"), "throw", "catch", SubResource("AnimationNodeStateMachineTransition_cut"), "throw", "climb", SubResource("AnimationNodeStateMachineTransition_cut"), "throw", "climb_still", SubResource("AnimationNodeStateMachineTransition_cut"), "throw", "die", SubResource("AnimationNodeStateMachineTransition_cut"), "throw", "somersault", SubResource("AnimationNodeStateMachineTransition_cut"), "throw", "dive", SubResource("AnimationNodeStateMachineTransition_cut"), "throw", "dive_land", SubResource("AnimationNodeStateMachineTransition_cut"), "catch", "idle", SubResource("AnimationNodeStateMachineTransition_cut"), "catch", "run", SubResource("AnimationNodeStateMachineTransition_cut"), "catch", "jump", SubResource("AnimationNodeStateMachineTransition_cut"), "catch", "fall", SubResource("AnimationNodeStateMachineTransition_cut"), "catch", "land", SubResource("AnimationNodeStateMachineTransition_cut"), "catch", "throw", SubResource("AnimationNodeStateMachineTransition_cut"), "catch", "climb", SubResource("AnimationNodeStateMachineTransition_cut"), "catch", "climb_still", SubResource("AnimationNodeStateMachineTransition_cut"), "catch", "die", SubResource("AnimationNodeStateMachineTransition_cut"), "catch", "somersault", SubResource("AnimationNodeStateMachineTransition_cut"), "catch", "dive", SubResource("AnimationNodeStateMachineTransition_cut"), "catch", "dive_land", SubResource("AnimationNodeStateMachineTransition_cut"), "climb", "idle", SubResource("AnimationNodeStateMachineTransition_cut"), "climb", "run", SubResource("AnimationNodeStateMachineTransition_cut"), "climb", "jump", SubResource("AnimationNodeStateMachineTransition_cut"), "climb", "fall", SubResource("AnimationNodeStateMachineTransition_cut"), "climb", "land", SubResource("AnimationNodeStateMachineTransition_cut"), "climb", "throw", SubResource("AnimationNodeStateMachineTransition_cut"), "climb", "catch", SubResource("AnimationNodeStateMachineTransition_cut"), "climb", "climb_still", SubResource("AnimationNodeStateMachineTransition_cut"), "climb", "die", SubResource("AnimationNodeStateMachineTransition_cut"), "climb", "somersault", SubResource("AnimationNodeStateMachineTransition_cut"), "climb", "dive", SubResource("AnimationNodeStateMachineTransition_cut"), "climb", "dive_land", SubResource("AnimationNodeStateMachineTransition_cut"), "climb_still", "idle", SubResource("AnimationNodeStateMachineTransition_cut"), "climb_still", "run", SubResource("AnimationNodeStateMachineTransition_cut"), "climb_still", "jump", SubResource("AnimationNodeStateMachineTransition_cut"), "climb_still", "fall", SubResource("AnimationNodeStateMachineTransition_cut"), "climb_still", "land", SubResource("AnimationNodeStateMachineTransition_cut"), "climb_still", "throw", SubResource("AnimationNodeStateMachineTransition_cut"), "climb_still", "catch", SubResource("AnimationNodeStateMachineTransition_cut"), "climb_still", "climb", SubResource("AnimationNodeStateMachineTransition_cut"), "climb_still", "die", SubResource("AnimationNodeStateMachineTransition_cut"), "climb_still", "somersault", SubResource("AnimationNodeStateMachineTransition_cut"), "climb_still", "dive", SubResource("AnimationNodeStateMachineTransition_cut"), "climb_still", "dive_land", SubResource("AnimationNodeStateMachineTransition_cut"), "die", "idle", SubResource("AnimationNodeStateMachineTransition_cut"), "die", "run", SubResource("AnimationNodeStateMachineTransition_cut"), "die", "jump", SubResource("AnimationNodeStateMachineTransition_cut"), "die", "fall", SubResource("AnimationNodeStateMachineTransition_cut"), "die", "land", SubResource("AnimationNodeStateMachineTransition_cut"), "die", "throw", SubResource("AnimationNodeStateMachineTransition_cut"), "die", "catch", SubResource("AnimationNodeStateMachineTransition_cut"), "die", "climb", SubResource("AnimationNodeStateMachineTransition_cut"), "die", "climb_still", SubResource("AnimationNodeStateMachineTransition_cut"), "die", "somersault", SubResource("AnimationNodeStateMachineTransition_cut"), "die", "dive", SubResource("AnimationNodeStateMachineTransition_cut"), "die", "dive_land", SubResource("AnimationNodeStateMachineTransition_cut"), "somersault", "idle", SubResource("AnimationNodeStateMachineTransition_cut"), "somersault", "run", SubResource("AnimationNodeStateMachineTransition_cut"), "somersault", "jump", SubResource("AnimationNodeStateMachineTransition_cut"), "somersault", "fall", SubResource("AnimationNodeStateMachineTransition_cut"), "somersault", "land", SubResource("AnimationNodeStateMachineTransition_cut"), "somersault", "throw", SubResource("AnimationNodeStateMachineTransition_cut"), "somersault", "catch", SubResource("AnimationNodeStateMachineTransition_cut"), "somersault", "climb", SubResource("AnimationNodeStateMachineTransition_cut"), "somersault", "climb_still", SubResource("AnimationNodeStateMachineTransition_cut"), "somersault", "die", SubResource("AnimationNodeStateMachineTransition_cut"), "somersault", "dive", SubResource("AnimationNodeStateMachineTransition_cut"), "somersault", "dive_land", SubResource("AnimationNodeStateMachineTransition_cut"), "dive", "idle", SubResource("AnimationNodeStateMachineTransition_cut"), "dive", "run", SubResource("AnimationNodeStateMachineTransition_cut"), "dive", "jump", SubResource("AnimationNodeStateMachineTransition_cut"), "dive", "fall", SubResource("AnimationNodeStateMachineTransition_cut"), "dive", "land", SubResource("AnimationNodeStateMachineTransition_cut"), "dive", "throw", SubResource("AnimationNodeStateMachineTransition_cut"), "dive", "catch", SubResource("AnimationNodeStateMachineTransition_cut"), "dive", "climb", SubResource("AnimationNodeStateMachineTransition_cut"), "dive", "climb_still", SubResource("AnimationNodeStateMachineTransition_cut"), "dive", "die", SubResource("AnimationNodeStateMachineTransition_cut"), "dive", "somersault", SubResource("AnimationNodeStateMachineTransition_cut"), "dive", "dive_land", SubResource("AnimationNodeStateMachineTransition_cut"), "dive_land", "idle", SubResource("AnimationNodeStateMachineTransition_cut"), "dive_land", "run", SubResource("AnimationNodeStateMachineTransition_cut"), "dive_land", "jump", SubResource("AnimationNodeStateMachineTransition_cut"), "dive_land", "fall", SubResource("AnimationNodeStateMachineTransition_cut"), "dive_land", "land", SubResource("AnimationNodeStateMachineTransition_cut"), "dive_land", "throw", SubResource("AnimationNodeStateMachineTransition_cut"), "dive_land", "catch", SubResource("AnimationNodeStateMachineTransition_cut"), "dive_land", "climb", SubResource("AnimationNodeStateMachineTransition_cut"), "dive_land", "climb_still", SubResource("AnimationNodeStateMachineTransition_cut"), "dive_land", "die", SubResource("AnimationNodeStateMachineTransition_cut"), "dive_land", "somersault", SubResource("AnimationNodeStateMachineTransition_cut"), "dive_land", "dive", SubResource("AnimationNodeStateMachineTransition_cut")]
 
 [node name="HeroSprite" type="Node2D"]
 

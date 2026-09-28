@@ -5,7 +5,7 @@
 [resource]
 script = ExtResource("1_movement")
 preset_name = "strong"
-note = "The alternative, kept for comparison and not used by the game. SPEC.md argued for this one and playing it settled the question the other way. The jump clears a tier on its own and a full-speed jump covers about 130 px of gap. Tab swaps to it live, which is worth having in M14 when every number gets retuned."
+note = "The alternative, kept for comparison and not used by the game. Its dive_fall_speed is above its max_fall_speed on purpose: a 112 px jump lands at terminal velocity, so any threshold it could reach would make every ordinary jump a dive. SPEC.md argued for this one and playing it settled the question the other way. The jump clears a tier on its own and a full-speed jump covers about 130 px of gap. Tab swaps to it live, which is worth having in M14 when every number gets retuned."
 max_run_speed = 200.0
 ground_accel = 1600.0
 ground_friction = 2400.0
@@ -19,3 +19,6 @@ max_fall_speed = 700.0
 coyote_time = 0.1
 jump_buffer_time = 0.12
 climb_speed = 90.0
+somersault_min_speed = 20.0
+dive_fall_speed = 720.0
+dive_recovery_time = 0.25

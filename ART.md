@@ -125,7 +125,7 @@ it renders: `assets/art_raw/_experiments/m5_pixel_room.png`.
 
 ## M6: the hero's states (2026-09-28)
 
-**9 requests, 135 credits.** Every state is `animate` from the same 36 px
+**12 requests, 180 credits.** Every state is `animate` from the same 36 px
 still, no pose step (`GEMINI_NOTES.md`, *Sprite Fusion, measured*), except
 the climb, animated from the back view `direction-set` already made. Frames
 chosen per state, from `assets/art_raw/hero_*_anim_0_sheet.png`:
@@ -141,6 +141,9 @@ chosen per state, from `assets/art_raw/hero_*_anim_0_sheet.png`:
 | catch | 1 to 3 | |
 | climb, climb_still | back view 1 to 3, and 0 | |
 | die | 1, 4, 5 | 2 and 3 were a pure-white flash |
+| somersault | 1 to 7 of 8 | the request came back as a real full flip: spring, tuck, inverted, open |
+| dive | 2 and 3 of 4 | the two angled head-first frames, looped |
+| dive landing | 1, 2, 3, 5 of 6 | impact, deep crouch, hold, rising; fits the 0.25 s recovery pause |
 
 The sheets are assembled at 36x36 into `assets/art/hero/hero_<state>_sheet.png`
 and recoloured. `scenes/hero_sprite.tscn` joins every state to every other
@@ -149,8 +152,10 @@ reads its pose holds from them.
 
 **Open, for whoever is next:**
 
-- **The somersault and the dive** do not exist as movement yet (`SPEC.md`
-  settles that they differ in physics, not how). Their frames wait on that.
+- **The dive pose is brief on a one-storey drop.** Terminal velocity is 700 and
+  a storey is 96 px, so the hero is past `dive_fall_speed` (640) for about 20 px
+  of it, two or three frames. Lower the threshold, or accept that the dive shows
+  on bigger falls. `ANIMATION.md` has what else the threshold decides.
 
 ## The pipeline, four steps
 

@@ -7,7 +7,9 @@
 ## the character script only reads the answer and travels there.
 class_name Locomotion
 
-enum State { IDLE, RUN, JUMP, FALL, LAND, THROW, CATCH, CLIMB, CLIMB_STILL, DIE }
+enum State {
+	IDLE, RUN, JUMP, FALL, LAND, THROW, CATCH, CLIMB, CLIMB_STILL, DIE, SOMERSAULT, DIVE, DIVE_LAND
+}
 
 
 ## Catch beats throw beats everything else. Both are timer-held poses the
@@ -32,10 +34,18 @@ enum State { IDLE, RUN, JUMP, FALL, LAND, THROW, CATCH, CLIMB, CLIMB_STILL, DIE 
 ## hero would lie down again at the brazier. Climbing beats airborne, since a
 ## climber has no gravity, and holds a still frame when not moving so a hero
 ## hanging on a ladder does not keep pumping his limbs.
+##
+## A somersault is the airborne state of a jump that began moving, from takeoff
+## to landing. A dive is any fall at or past `dive_speed`, and it beats the
+## somersault: a hero dropping a full storey stretches out whatever he was
+## doing. The landing that follows a dive holds DIVE_LAND for `recovery_timer`
+## instead of the ordinary LAND. `dive_speed` defaults to never, so a caller
+## that has no dive (a test, a rig) never sees one.
 static func state_for(
 	on_floor: bool, velocity_y: float, landing_timer: float, speed_x: float,
 	throw_timer: float = 0.0, catch_timer: float = 0.0,
-	climbing: bool = false, dying: bool = false
+	climbing: bool = false, dying: bool = false,
+	somersaulting: bool = false, dive_speed: float = INF, recovery_timer: float = 0.0
 ) -> State:
 	if dying:
 		return State.DIE
@@ -47,7 +57,13 @@ static func state_for(
 		var moving := not is_zero_approx(velocity_y) or not is_zero_approx(speed_x)
 		return State.CLIMB if moving else State.CLIMB_STILL
 	if not on_floor:
+		if lands_a_dive(velocity_y, dive_speed):
+			return State.DIVE
+		if somersaulting:
+			return State.SOMERSAULT
 		return State.JUMP if velocity_y < 0.0 else State.FALL
+	if recovery_timer > 0.0:
+		return State.DIVE_LAND
 	if landing_timer > 0.0:
 		return State.LAND
 	return State.IDLE if is_zero_approx(speed_x) else State.RUN
@@ -76,5 +92,32 @@ static func state_name(state: State) -> String:
 			return "climb_still"
 		State.DIE:
 			return "die"
+		State.SOMERSAULT:
+			return "somersault"
+		State.DIVE:
+			return "dive"
+		State.DIVE_LAND:
+			return "dive_land"
 		_:
 			return "idle"
+
+
+## A jump taken while moving is a somersault. SPEC.md: a move that looks that
+## different has to behave differently, and what it changes is what you can do
+## in the air (`can_throw`), not where it takes you: every room is measured
+## against a full-speed jump's reach, so the flip flies the same arc.
+static func starts_somersault(speed_x: float, min_speed: float) -> bool:
+	return absf(speed_x) >= min_speed
+
+
+## A fall this fast is a dive, and landing from one costs a recovery pause.
+## Positive is downward, as everywhere in `Motion`.
+static func lands_a_dive(fall_speed: float, dive_speed: float) -> bool:
+	return fall_speed >= dive_speed
+
+
+## The throw button does nothing mid-somersault and nothing during the pause
+## after a dive. Recall is the same button held, so it waits too: committing to
+## the flip is the price of the reach it gives you (`ANIMATION.md`).
+static func can_throw(somersaulting: bool, recovering: bool) -> bool:
+	return not somersaulting and not recovering

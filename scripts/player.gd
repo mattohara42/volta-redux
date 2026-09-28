@@ -75,6 +75,13 @@ var _throw_cooldown := 0.0
 var _throw_held := 0.0
 var _recall_fired := false
 
+## Set by a jump taken while moving, cleared on landing or on grabbing a ladder.
+## While it holds the throw button does nothing (`Locomotion.can_throw`).
+var _somersaulting := false
+## Counts down after landing from a dive, rooting the hero. Read by `Locomotion`
+## the way the landing hold is.
+var _recovery_timer := 0.0
+
 # Forgiveness windows, owned here and interpreted by JumpGate.
 var _coyote_timer := 0.0
 var _buffer_timer := 0.0
@@ -170,8 +177,11 @@ func _physics_process(delta: float) -> void:
 		return
 
 	var on_floor := is_on_floor()
-	var input_dir := Input.get_axis("move_left", "move_right")
-	var climb_dir := Input.get_axis("climb_up", "climb_down")
+	_recovery_timer = maxf(_recovery_timer - delta, 0.0)
+	var recovering := _recovery_timer > 0.0
+	# Nothing answers during a dive's recovery, facing included.
+	var input_dir := 0.0 if recovering else Input.get_axis("move_left", "move_right")
+	var climb_dir := 0.0 if recovering else Input.get_axis("climb_up", "climb_down")
 	if not is_zero_approx(input_dir):
 		facing = signf(input_dir)
 	_throw_cooldown = maxf(_throw_cooldown - delta, 0.0)
@@ -181,14 +191,19 @@ func _physics_process(delta: float) -> void:
 
 	_coyote_timer = JumpGate.coyote_next(on_floor, _coyote_timer, config.coyote_time, delta)
 	_buffer_timer = JumpGate.buffer_next(
-		Input.is_action_just_pressed("jump"), _buffer_timer, config.jump_buffer_time, delta
+		Input.is_action_just_pressed("jump") and not recovering,
+		_buffer_timer, config.jump_buffer_time, delta
 	)
 
-	if climbing:
+	if recovering:
+		_step_recovery(delta)
+	elif climbing:
 		_step_climbing(input_dir, climb_dir, delta)
 	else:
 		_step_airborne(input_dir, climb_dir, on_floor, delta)
 
+	# The speed the body hits the floor at: `move_and_slide` zeroes it on impact.
+	var fall_speed := velocity.y
 	move_and_slide()
 	# Spent. Whatever was lifting has to say so again next frame or the hero is
 	# falling, which is the whole of how you get out of a jet.
@@ -201,7 +216,12 @@ func _physics_process(delta: float) -> void:
 	# two is a landing.
 	var grounded_now := is_on_floor()
 	if grounded_now and not on_floor:
-		_landing_timer = _land_pose_duration
+		_somersaulting = false
+		if Locomotion.lands_a_dive(fall_speed, config.dive_fall_speed):
+			_recovery_timer = config.dive_recovery_time
+			_landing_timer = 0.0
+		else:
+			_landing_timer = _land_pose_duration
 	else:
 		_landing_timer = maxf(_landing_timer - delta, 0.0)
 	_update_sprite()
@@ -222,9 +242,21 @@ func _step_climbing(input_dir: float, climb_dir: float, delta: float) -> void:
 	)
 
 
+## Rooted after a dive lands. Gravity still presses the body to the floor, and
+## nothing else answers.
+func _step_recovery(delta: float) -> void:
+	var gravity := Motion.gravity_for(config.jump_height, config.time_to_apex)
+	velocity.y = Motion.step_vertical(
+		velocity.y, gravity, config.fall_gravity_multiplier, config.max_fall_speed, delta
+	)
+	velocity.x = 0.0
+	_buffer_timer = 0.0
+
+
 func _step_airborne(input_dir: float, climb_dir: float, on_floor: bool, delta: float) -> void:
 	if _ladders_touched > 0 and not is_zero_approx(climb_dir):
 		climbing = true
+		_somersaulting = false
 		velocity = Vector2.ZERO
 		return
 
@@ -265,6 +297,12 @@ func _step_airborne(input_dir: float, climb_dir: float, on_floor: bool, delta: f
 ## down longer than any tap. Holding therefore throws and then calls everything
 ## home, which is what you want when you are out of swords and standing on one.
 func _step_throw_button(delta: float) -> void:
+	# A held button that starts before a somersault and runs through it never
+	# recalls: the count resets every frame the flip lasts.
+	if not Locomotion.can_throw(_somersaulting, _recovery_timer > 0.0):
+		_throw_held = 0.0
+		_recall_fired = false
+		return
 	if not Input.is_action_pressed("throw"):
 		_throw_held = 0.0
 		_recall_fired = false
@@ -300,6 +338,8 @@ func die() -> void:
 	_death_elapsed = 0.0
 	velocity = Vector2.ZERO
 	climbing = false
+	_somersaulting = false
+	_recovery_timer = 0.0
 	deaths += 1
 	_draw_a_message()
 	queue_redraw()
@@ -368,6 +408,8 @@ func _step_death(delta: float) -> void:
 func _place_at_checkpoint(restore_swords: bool) -> void:
 	global_position = spawn_point
 	velocity = Vector2.ZERO
+	_somersaulting = false
+	_recovery_timer = 0.0
 	peak_height = 0.0
 	# Whatever was carrying you is not carrying you any more, and it is about to
 	# be put back at the start of its own clock a few lines below.
@@ -449,6 +491,7 @@ func _on_sword_recovered(caught_in_flight: bool) -> void:
 
 func _jump(delta: float) -> void:
 	velocity.y = -Motion.jump_speed_for(config.jump_height, config.time_to_apex, delta)
+	_somersaulting = Locomotion.starts_somersault(velocity.x, config.somersault_min_speed)
 	# Taken here, before the body has moved. Sampling it from the floor check
 	# instead reads the position after the first frame of the jump and reports
 	# every apex one frame short.
@@ -505,7 +548,7 @@ func _update_animation(grounded: bool) -> void:
 	var dying := _dead and _death_elapsed < death_config.death_hold
 	var state := Locomotion.state_for(
 		grounded, velocity.y, _landing_timer, velocity.x, _throw_timer, _catch_timer,
-		climbing, dying
+		climbing, dying, _somersaulting, config.dive_fall_speed, _recovery_timer
 	)
 	_anim_tree["parameters/playback"].travel(Locomotion.state_name(state))
 

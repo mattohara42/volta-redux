@@ -19,3 +19,6 @@ max_fall_speed = 700.0
 coyote_time = 0.1
 jump_buffer_time = 0.12
 climb_speed = 90.0
+somersault_min_speed = 20.0
+dive_fall_speed = 640.0
+dive_recovery_time = 0.25

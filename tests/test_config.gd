@@ -283,3 +283,45 @@ func test_a_jet_is_slower_than_the_hero_can_jump() -> void:
 		"a jet lifts at %.0f px/s against a %.0f px/s takeoff"
 		% [hazards.geyser_lift_speed, takeoff]
 	)
+
+
+## The dive threshold has to sit between an ordinary jump's landing speed and
+## the speed nothing can exceed. A full jump lands at sqrt(2 * falling gravity *
+## height), capped at `max_fall_speed`.
+func test_the_dive_threshold_is_above_a_full_jump_and_reachable() -> void:
+	var climb: MovementConfig = load(CLIMB)
+	var gravity := Motion.gravity_for(climb.jump_height, climb.time_to_apex)
+	var landing := minf(
+		sqrt(2.0 * gravity * climb.fall_gravity_multiplier * climb.jump_height), climb.max_fall_speed
+	)
+	check(
+		climb.dive_fall_speed > landing,
+		"a full jump lands at %.0f px/s and the dive starts at %.0f" % [landing, climb.dive_fall_speed]
+	)
+	check(
+		climb.dive_fall_speed <= climb.max_fall_speed,
+		"a fall can reach %.0f px/s, the dive threshold" % climb.dive_fall_speed
+	)
+
+
+## The strong preset's jump lands at terminal velocity, so a threshold it could
+## reach would make every jump a dive. It never dives, and says so.
+func test_the_strong_preset_never_dives() -> void:
+	var strong: MovementConfig = load(STRONG)
+	check(
+		strong.dive_fall_speed > strong.max_fall_speed,
+		"strong dives at %.0f and falls no faster than %.0f" % [strong.dive_fall_speed, strong.max_fall_speed]
+	)
+
+
+func test_the_air_move_numbers_are_sane_in_both_presets() -> void:
+	var presets: PackedStringArray = [CLIMB, STRONG]
+	for path in presets:
+		var config: MovementConfig = load(path)
+		var name := path.get_file()
+		check(config.somersault_min_speed > 0.0, "%s: standing jumps stay plain jumps" % name)
+		check(
+			config.somersault_min_speed < config.max_run_speed,
+			"%s: a run always flips" % name
+		)
+		check(config.dive_recovery_time > 0.0 and config.dive_recovery_time < 1.0, "%s: the pause is short but real" % name)

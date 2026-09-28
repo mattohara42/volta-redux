@@ -44,3 +44,16 @@ extends Resource
 @export_group("Climbing")
 ## Ladder speed, px/s. Deliberately slower than running.
 @export var climb_speed: float = 90.0
+
+@export_group("Air moves")
+## A jump taken at or above this horizontal speed is a somersault, px/s. Just
+## above what one frame of held direction gives from a standstill, so pressing
+## a direction as you jump flips and jumping straight up does not.
+@export var somersault_min_speed: float = 20.0
+## A fall at this vertical speed or faster is a dive, px/s. Above the speed a
+## full jump lands at, or every jump would dive, and no higher than
+## `max_fall_speed`, or nothing ever could.
+@export var dive_fall_speed: float = 640.0
+## Seconds the hero is rooted after landing from a dive. Nothing answers: no
+## steering, no jump, no throw, no ladder.
+@export var dive_recovery_time: float = 0.25
