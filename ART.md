@@ -58,7 +58,8 @@ Measured:
   with the figure filling all 73 rows. The profiles are 64x64 with the figure
   58 to 62 px tall. **Either way the hero is 1.5 to 1.8 times
   `config/world.tres`'s `hero_height` of 40**, and pixel art cannot be
-  resampled down to fit. Open question (`HANDOFF.md`).
+  resampled down to fit. Decided since: size 32, a 34 to 40 px hero
+  (`ART_DIRECTION.md`, *Scale and resolution*).
 - **Real transparency, hard edges.** No partial alpha anywhere, so no key
   step for Sprite Fusion deliveries.
 - **Not a small palette.** 1,100 to 3,100 distinct colours per sprite. Six

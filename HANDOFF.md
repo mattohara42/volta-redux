@@ -20,23 +20,20 @@ The rig's state logic (`Locomotion`) carries over.
 
 ## The next action
 
-**The first hero delivery is in** (`ART.md`, *First delivery*): 12
-variations, 9 in the wrong (three-quarter) stance, all 1.5 to 1.8 times the
-40 px hero. Once Matt picks a variation and settles the size question below,
-the next request is an idle `animate` of it, filmstripped at game size to
-find out whether generated frames boil (`ANIMATION.md`).
+**Hero size is decided: 34 to 40 px on the size-32 canvas, chunky
+proportions** (`ART_DIRECTION.md`, *Scale and resolution*). The next request
+(needs credits) is one `edit` at size 32 with two inputs: profile variation
+1 for the side-view pose, and a polished three-quarter one (6) for the look.
+That fixes the stance and measures the real height in one go. Then an idle
+`animate` of it, filmstripped at game size for boiling (`ANIMATION.md`).
 
 ## Blocked on Matt
 
-1. **Hero size.** Size 64 draws him 58 to 73 px tall and size 32 would be
-   about 30; the game's hero is 40 (`config/world.tres`). Pixel art cannot be
-   resampled to fit, so either the hero's height changes (collision, jump
-   tuning, every room) or the art is drawn to 40 some other way. Structural.
-2. **Credits: 0.** Every request costs 15.
-3. **Backgrounds.** The API only outputs 16, 32 or 64 px, so it cannot make
+1. **Credits: 0.** Every request costs 15.
+2. **Backgrounds.** The API only outputs 16, 32 or 64 px, so it cannot make
    a 640x360 background. Structural, Matt's call.
-4. **`LEVELS.md`'s open questions**, the ending swap chief among them.
-5. **M4 playtest feedback**: the dragon's pacing, the ledge-to-wood throw
+3. **`LEVELS.md`'s open questions**, the ending swap chief among them.
+4. **M4 playtest feedback**: the dragon's pacing, the ledge-to-wood throw
    and the dormant scorpion's wake-to-danger gap.
 
 ## Traps that will bite again
