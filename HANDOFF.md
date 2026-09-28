@@ -4,42 +4,43 @@
 > session narrative, that is what `git log` is for. Keep it under 80 lines.
 
 **Updated:** 2026-09-28 · **Phase:** 2, the look · **Active:** M6, the hero
-animated. **Done when:** every state transitions cleanly into every other
+animated, built and waiting on Matt's eye. **Done when:** every state transitions cleanly into every other
 state it can reach, and the somersault reads as a somersault at game size in
 a screenshot, not just in the editor (`BUILD_PLAN.md`).
 
 ## Where this is
 
-**M5 is closed** in pixel art. **M6 is half done:** idle, run, jump, fall,
-land, throw, catch, climb and die are frame animations on `hero_sprite.tscn`,
-each filmstripped through its transitions in a running build
-(`assets/art_raw/_experiments/m6_transitions.png`). `ART.md` has the recipe
-and cost of both milestones, `GEMINI_NOTES.md` what Sprite Fusion actually
-does. Credits: 165.
+**M5 is closed** in pixel art. **M6 is built:** all twelve states (idle, run,
+jump, fall, land, throw, catch, climb, die, somersault, dive, dive landing) are
+frame animations on `hero_sprite.tscn`, every one has a transition to every
+other, and `tests/test_hero_sprite.gd` holds that. The transitions are
+filmstripped in a running build (`assets/art_raw/_experiments/m6_transitions.png`
+and `m6_air_moves.png`). `ART.md` has the recipe and cost, `ANIMATION.md` what
+the somersault and dive do. Credits: 120.
 
-**What is left of M6 is the somersault and the dive**, which do not exist as
-movement yet. Their frames are a few requests once the movement exists.
+**Somersault:** a jump taken while moving; no throw or recall until you land.
+It flies the jump's own arc, so no room needed retuning. **Dive:** a fall past
+640 px/s, then a landing crouch that roots you for 0.25 s.
 
 ## The next action
 
-**Matt settles how the somersault and dive behave**, then they get built as
-`Locomotion` states with their numbers in `config/movement.tres`, then
-animated. `ANIMATION.md`'s proposal is the starting point: a jump at run
-speed becomes a somersault that travels further, rises less, and cannot
-throw; a fall past a threshold speed becomes a dive.
+**Matt looks at `m6_air_moves.png` and calls the somersault readable at game
+size or not** (M6's done-when), then M6 closes and M7, the enemy sheet, starts:
+six enemies derived from one another (`BUILD_PLAN.md`).
 
 ## Blocked on Matt
 
-1. **Somersault and dive behaviour.** Blocks finishing M6.
-2. **Feel, by playing:** the run cycle's pace against ground speed (0.25 s a
-   cycle, `hero_sprite.tscn`), and `hero_height` at 36 instead of 40.
-   Blocks nothing now; M14 retunes whatever this turns up.
-3. **`LEVELS.md`'s open questions**, the ending swap chief among them. Blocks
+1. **The somersault reading as one** (M6's last done-when), from the filmstrip.
+2. **Whether the flip should travel further or rise less.** It does neither
+   now, because every M2 to M4 room is measured against the jump's reach.
+   Changing it moves those rooms' reach tests in the same PR (`ANIMATION.md`).
+3. **Feel, by playing:** the run cycle's pace against ground speed, `hero_height`
+   at 36, and the dive: at 640 px/s a fall of about 74 px dives, and so does a
+   full jump onto a floor 18 px or more lower. Blocks nothing; M14 retunes.
+4. **`LEVELS.md`'s open questions**, the ending swap chief among them. Blocks
    M10's level building.
-4. **M4 playtest feedback**: the dragon's pacing, the ledge-to-wood throw and
+5. **M4 playtest feedback**: the dragon's pacing, the ledge-to-wood throw and
    the dormant scorpion's wake-to-danger gap. Blocks M14's tuning of those.
-5. **Sprite Fusion's reply on `edit` ignoring `size`.** Blocks nothing now:
-   `animate` from the still replaced the pose step.
 
 ## Traps that will bite again
 
