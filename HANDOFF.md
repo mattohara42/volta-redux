@@ -3,40 +3,44 @@
 > **Rewrite this file, never append.** State snapshot and pointers only. No
 > session narrative, that is what `git log` is for. Keep it under 80 lines.
 
-**Updated:** 2026-09-28 · **Phase:** 2, the look · **Active:** M6, the hero
-animated, built and waiting on Matt's eye. **Done when:** every state transitions cleanly into every other
-state it can reach, and the somersault reads as a somersault at game size in
-a screenshot, not just in the editor (`BUILD_PLAN.md`).
+**Updated:** 2026-09-28 · **Phase:** 2, the look · **Active:** M6 (built,
+waiting on Matt's eye) and M7 (five of six built). M9 was built ahead of M8
+because M8 needs credits. **Done when:** M6, the somersault reads as one at
+game size. M7, the six enemies are on screen, distinguishable and consistent
+(`BUILD_PLAN.md`).
 
 ## Where this is
 
-**M5 is closed** in pixel art. **M6 is built:** all twelve states (idle, run,
-jump, fall, land, throw, catch, climb, die, somersault, dive, dive landing) are
-frame animations on `hero_sprite.tscn`, every one has a transition to every
-other, and `tests/test_hero_sprite.gd` holds that. The transitions are
-filmstripped in a running build (`assets/art_raw/_experiments/m6_transitions.png`
-and `m6_air_moves.png`). `ART.md` has the recipe and cost, `ANIMATION.md` what
-the somersault and dive do. Credits: 120.
+**Credits: 0.** Every request costs 15, so anything generated waits on a
+top-up. Spent this session: M5 210, M6 180, M7 120 (`ART.md`).
 
-**Somersault:** a jump taken while moving; no throw or recall until you land.
-It flies the jump's own arc, so no room needed retuning. **Dive:** a fall past
-640 px/s, then a landing crouch that roots you for 0.25 s.
+**M6 built:** twelve hero states, every transition tested, the somersault (a
+jump taken while moving, no throwing until you land) and the dive (a fall past
+640 px/s, then a 0.25 s crouch). **M7 built for five of six:** scorpion, ant,
+eyeball, dragon and bat are sprites on their M4 behaviours, in `RoomM7Sheet`.
+**M9 built:** lava, an arc and a charged floor are shaders and particles
+(`RoomM9Atmosphere`); every lava pit in the game uses it. F2 cycles the benches.
+References: `assets/art_raw/_experiments/m6_air_moves.png`, `m7_sheet.png`,
+`m9_atmosphere_room.png`.
 
 ## The next action
 
-**Matt looks at `m6_air_moves.png` and calls the somersault readable at game
-size or not** (M6's done-when), then M6 closes and M7, the enemy sheet, starts:
-six enemies derived from one another (`BUILD_PLAN.md`).
+**With credits** (30): the generator's still and animation, which finishes M7.
+Then M8, the four acts' tilesets and backgrounds (`ART.md`'s recipe: `generate`
+at 16 for tiles, `tile-variants.py`, the painted background through
+`pixelate.py`). **Without:** the dragon's flame is a flat orange slab beside
+pixel-art creatures (`BACKLOG.md`), and the light layer that ties everything
+together is still only the lava's glow.
 
 ## Blocked on Matt
 
-1. **The somersault reading as one** (M6's last done-when), from the filmstrip.
-2. **Whether the flip should travel further or rise less.** It does neither
-   now, because every M2 to M4 room is measured against the jump's reach.
-   Changing it moves those rooms' reach tests in the same PR (`ANIMATION.md`).
-3. **Feel, by playing:** the run cycle's pace against ground speed, `hero_height`
-   at 36, and the dive: at 640 px/s a fall of about 74 px dives, and so does a
-   full jump onto a floor 18 px or more lower. Blocks nothing; M14 retunes.
+1. **Credits.** Blocks the generator (30) and all of M8.
+2. **The somersault reading as one** (M6's last done-when) and **whether it
+   should travel further or rise less.** It does neither, because every M2 to
+   M4 room is measured against the jump's reach (`ANIMATION.md`).
+3. **Feel, by playing:** the run cycle's pace, `hero_height` at 36, the dive
+   (a fall of about 74 px dives, and so does a full jump onto a floor 18 px or
+   more lower), and how bright the lava is against the hero (`config/`).
 4. **`LEVELS.md`'s open questions**, the ending swap chief among them. Blocks
    M10's level building.
 5. **M4 playtest feedback**: the dragon's pacing, the ledge-to-wood throw and
@@ -45,24 +49,27 @@ six enemies derived from one another (`BUILD_PLAN.md`).
 ## Traps that will bite again
 
 **No Godot is preinstalled**; fetch the 4.7.2 Linux binary to `~/godot/godot`
-each session and `tools/dev.sh` finds it. **Opening the project rewrites
-`project.godot`**, and a stale editor deletes from it: close the editor,
-`git diff project.godot`, restore, then pull. **A new `class_name` script
-fails every caller with "Could not resolve class" until a reimport.**
+each session. **Opening the project rewrites `project.godot`**: close the
+editor, `git diff project.godot`, restore, then pull. **A new `class_name`
+script fails every caller until a reimport, and the test runner still exits 0
+with the parse error printed**: read its output, not its exit code. The same
+goes for a `SCRIPT ERROR` mid-test. **Tests run before the tree is ready**, so
+nothing needing `get_tree()` can be tested headless.
 
-**Only `generate` honours `size`.** Every other operation keeps roughly its
-input's size, and `animate` always starts on the input's own pose.
-**Generated frames can boil**: `tools/capture.gd --filmstrip=N`, and start
-`--input` with `debug_toggle_overlay:1` or the overlay hides the hero at
-zoom. **A test can pass while a texture is missing**, since nothing in the
-suite draws the hero: load a room with `tools/dev.sh shot` after touching art.
+**Only `generate` honours `size`.** `animate` starts on the input's own pose
+and never moves its feet. **Generated frames can boil**: `tools/capture.gd
+--filmstrip=N`, starting `--input` with `debug_toggle_overlay:1` or the overlay
+hides the hero. **A test can pass while a texture is missing**: load a room
+with `tools/dev.sh shot` after touching art. **`assets/art_raw/` is
+`.gdignore`d**: Godot cannot decode Sprite Fusion's animated WebP.
 
 ## Settled, do not relitigate
 
-**Pixel art** (Matt, after seeing it). **Straight sword, asymmetric hilt.**
-**M5 final quality**, including the idle's slight boot flicker. **M4:**
-contact with any enemy kills, the dragon is vulnerable only to RECALLING.
-**G1:** passed. **Generation budget:** not a hard gate.
+**Pixel art.** **Straight sword, asymmetric hilt.** **M5 final quality.**
+**Moving jumps are somersaults, no throwing during one; dives cost a
+recovery pause** (Matt, 2026-09-28). **M4:** contact with any enemy kills, the
+dragon is vulnerable only to RECALLING. **G1:** passed. **Generation budget:**
+not a hard gate.
 
 ## Pointers
 
