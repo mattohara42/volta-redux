@@ -221,3 +221,58 @@ itself is settled now; the other is still open.
    on a rig sheet, three pose sheets and possibly a portrait. If attach-and-edit
    is the answer, every sheet after the first is an edit of the first. Still
    open: M5's rig sheet was the hero's only painting so far.
+
+## Sprite Fusion, measured (2026-09-28)
+
+Fourteen requests building M5's room in pixel art. Each finding below was
+measured on a delivery in `assets/art_raw/`, and the request is in its
+`sprite-fusion-log.jsonl`.
+
+**Only `generate` honours `size`.** The docs say every operation returns a
+16, 32 or 64 square. Measured:
+
+| operation | asked | got |
+|---|---|---|
+| `generate` | 32 | 32 to 40, square |
+| `generate` | 16 | 16 to 18, square |
+| `edit`, two 64-73 px inputs | 32 | 44x73, 56x94 |
+| `edit`, one 64 px input | 32 | 41x63, 49x91 |
+| `edit`, one 32 px input | 32 | 54x64, 42x62 |
+| `style-reference`, one 36 px input | 32 | 50 to 58, square |
+| `direction-set`, 39 px input | 32 | 35 to 41, square |
+| `direction-set`, 56x94 input | 32 | 48 to 58, square |
+| `animate` | none | the input's own size |
+
+So `edit` and `style-reference` cannot be trusted for size at all, and
+`direction-set` and `animate` keep roughly what they are given. A support
+ticket is open with Sprite Fusion on the `edit` mismatch.
+
+**`generate` still defaults to three-quarter.** 11 of 12 came back
+three-quarter at size 32 even with the positive-plus-negation framing that
+fixed it on Gemini. Rule 1 above holds here: a subject has a prior.
+
+**`edit` does change a pose.** Unlike Gemini's pose-faithful edits, a
+two-input `edit` ("take the pose from the first image, the look from the
+second") returned a true profile both times. It is the size that fails.
+
+**`direction-set` is the way to a side view at the right size.** Feed it a
+size-correct `generate` delivery and one of its eight facings is a true
+profile at that size. Index 3 faced right and index 4 faced left, on the
+one run measured.
+
+**`animate` holds identity and palette.** Four idle frames from a clean
+still came back with 0 neutral-dark pixels and the same silhouette, with
+the feet's outline fixed across frames. What moves inside the boots is a
+little shading, 5 to 14 of about 64 pixels per frame: small boiling, to be
+judged by eye at game size rather than argued.
+
+**Tiles repeat about half the time.** `generate` makes single sprites, not
+tilesets, but tiling each of 12 variations 4x4 showed several seamless ones
+per request. Choosing among them was enough; no hand fix was needed.
+
+**Outlines land just inside the neutral-dark band.** A few percent of
+pixels, on a few deliveries, all fixable by `tools/recolour-darks.py`.
+
+**`media.spritefusion.com` answers 403 to urllib's default User-Agent**,
+and animated previews come back as WebP, which Godot 4.7 cannot decode.
+The spritesheet PNG next to it is what the game uses.

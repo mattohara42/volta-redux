@@ -28,19 +28,22 @@ here. Deliveries land untouched in `assets/art_raw/` as `NAME_<index>`, and
 every request is appended to `assets/art_raw/sprite-fusion-log.jsonl` with its
 asset ids, which is how a later edit or animate finds its source.
 
-**What the API docs settle** (read 2026-09-28, not yet tried):
+**What the API docs say** (read 2026-09-28; where they turned out wrong, it says so):
 
 - **Every request costs 15 credits**, whatever the operation, reserved up
   front and refunded only if nothing was saved. A `generate` returns several
   variations for that price.
-- **Output is 16, 32 or 64 px square, nothing else.** The hero (about 40 px)
-  and enemies fit a 64 canvas, tiles fit 16 or 32. **A 640x360 background
-  cannot come from this API.** That gap is open (`HANDOFF.md`).
+- **Output is 16, 32 or 64 px square, nothing else.** True of `generate`
+  only. `edit` and `style-reference` ignore `size` and come back as large as
+  94 px (`GEMINI_NOTES.md`, *Sprite Fusion, measured*). **A 640x360
+  background cannot come from this API**, which is what *Four layers* below
+  answers.
 - **No sheets.** The docs forbid asking for a grid, atlas or several poses on
   one canvas. Each pose is its own `edit` of the source sprite.
 - **Animate from a matching pose.** For a run, a throw or a jump, `edit` the
   still into that action's starting pose first, then `animate` that. Idle can
-  animate the still directly. So a hero state costs about 30 credits.
+  animate the still directly. **Open for M6:** `edit` does not hold size, so
+  the pose step needs another route (see *M5 in pixel art* below).
 - **Prompts describe the subject only.** No pixel sizes (that is `--size`),
   no "transparent background" or "pixel-perfect". The agent guide calls these
   noise.
@@ -75,7 +78,7 @@ Decided 2026-09-28, because Sprite Fusion cannot make anything over 64 px.
 | layer | what | how |
 |---|---|---|
 | far background | atmosphere, parallax, designed to repeat | painted in Gemini (the M5 pipeline), then `tools/pixelate.py` to 1x at the room's height |
-| playfield | everything the hero stands on or touches | Sprite Fusion tiles, 16 or 32 px, style-referenced to the hero |
+| playfield | everything the hero stands on or touches | Sprite Fusion tiles, `generate` at 16 px (style reference ignores size) |
 | props | windows, torches, the caged bird, banners | Sprite Fusion sprites, 32 or 64 px |
 | light | glow, torchlight, fog, heat | code: shaders, lights, particles (`CLAUDE.md`) |
 
@@ -89,9 +92,45 @@ colours (`assets/art/act1/wall_moat_bg_px.png`), passes `palette-check.py`,
 and its lit windows survive because the tool reduces colours by octree, not
 by area (the tool's docstring has the comparison).
 
-**Not yet measured: whether a Sprite Fusion tile repeats seamlessly.** It
-makes single sprites, not tilesets. The first tile request tests it, and an
-`edit` or a hand fix is the fallback.
+**Tiles repeat often enough to pick from.** Sprite Fusion makes single
+sprites, not tilesets, but tiling each of a request's 12 variations 4x4
+showed several seamless ones every time. No hand fix was needed.
+
+## M5 in pixel art: what it took (2026-09-28)
+
+**14 requests, 210 credits.** Eight of them built the room; six were
+diagnosing `edit`'s size bug and trying operations for the first time.
+
+| asset | recipe | requests |
+|---|---|---|
+| hero still | `generate` at 32 (size holds, pose is three-quarter), then `direction-set` on the best one: index 3 is a right-facing profile at 36 px | 2 |
+| hero idle | `animate`, 4 frames, from the still | 1 |
+| bat | `generate` at 32, then `animate`, 4 frames of flap | 2 |
+| floor top, wall fill, ladder | `generate` at 16, one request each, the seamless variation picked | 3 |
+| background | none: the painted wall already pixelated (*Four layers*) | 0 |
+
+**So a room like this costs about 8 requests, 120 credits, once the recipe
+is known.** Every delivery then goes through `tools/recolour-darks.py` and
+`tools/palette-check.py` before it leaves `art_raw/`.
+
+**What is in the game**: `scenes/hero_sprite.tscn` and
+`scenes/bat_sprite.tscn` (frames on an `AnimatedSprite2D`, picked by an
+`AnimationTree`), and `scripts/room_m5_wall.gd` drawing the tiles and the
+background at 1x. The painted rigs are no longer drawn anywhere; M6 deletes
+them. The texture filter is Nearest and the stretch is integer. The room as
+it renders: `assets/art_raw/_experiments/m5_pixel_room.png`.
+
+**Open, for whoever is next:**
+
+- **The hero's other six states show idle frames.** That is M6. The pose
+  step before each `animate` cannot be `edit` while `edit` ignores size.
+  Candidates: `generate` each pose at 32 and `direction-set` it, as the
+  still was made (identity may drift), or `edit` and then hand-trim, or
+  wait for Sprite Fusion's answer on the ticket.
+- **The idle's boots flicker a little** (5 to 14 pixels a frame). Judged
+  acceptable by filmstrip at game size; Matt's call by eye.
+- **The ledge face is the brightest large area on screen.** A darker wall
+  fill, or a shadow under the lip drawn in code, would calm it.
 
 ## The pipeline, four steps
 
@@ -138,6 +177,7 @@ it was for paintings. Wrong drawn content is still a reroll.
 | `sprite-fusion.py` | new | calls the API, writes deliveries and a request log to `assets/art_raw/` |
 | `key.py` | kept, if needed | delivery on a flat backdrop, out comes a transparent PNG |
 | `pixelate.py` | new | a painted background in, a 1x pixel-art one out, octree-reduced to a small palette |
+| `recolour-darks.py` | new | gives every pixel `palette-check.py` flags the hue of umber or violet-blue, from its nearest clean neighbour, at its own brightness |
 | `palette-check.py` | kept | judges a delivery against `ART_DIRECTION.md`'s coloured-dark rule |
 | `cut-sheet.py` | kept | one sheet, N connected components, out come N tight crops |
 | `cut-rig.py` | **retires** with the rig | one character painting, out come the rig parts |
@@ -162,10 +202,10 @@ have to ask for, and let the tool refuse when nobody asked.
 
 ## Budget
 
-The painted M5 cost is recorded under *Open requests* below. For Sprite Fusion
-there is no number yet, only the plan to count: **M5's pixel re-spike records
-generations and credits spent for one room, and that number replaces this
-paragraph.** `GET /credits` before and after makes it exact.
+**One room in pixel art: about 8 requests, 120 credits**, once the recipe is
+known, and 210 the first time (*M5 in pixel art* above). The painted M5 took
+10 Gemini generations (*Open requests* below). Every request is 15 credits;
+`tools/sprite-fusion.py credits` reads the balance, 300 after M5.
 
 ## What `assets/reference/` is for, and what it is not
 
