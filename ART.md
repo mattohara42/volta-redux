@@ -22,12 +22,28 @@ upload URL for a large input), `GET /credits`. The key lives in the
 `SPRITE_FUSION_API_KEY` environment variable and **nowhere in this repo**: not
 in a file, a log, a URL, or anything that ships.
 
-**Not built yet: `tools/sprite-fusion.py`.** The client is blocked on two
-things outside the repo: the cloud environment's network policy has to allow
-`www.spritefusion.com`, and the key has to be set as an environment secret.
-When it is built, it writes every delivery untouched into `assets/art_raw/`
-and refuses to overwrite an existing file unless asked (`CLAUDE.md`: the
-destructive mode is the flag).
+**The client is `tools/sprite-fusion.py`.** A generation is a dry run
+unless `--spend` is passed, since spending credits is the irreversible step
+here. Deliveries land untouched in `assets/art_raw/` as `NAME_<index>`, and
+every request is appended to `assets/art_raw/sprite-fusion-log.jsonl` with its
+asset ids, which is how a later edit or animate finds its source.
+
+**What the API docs settle** (read 2026-09-28, not yet tried):
+
+- **Every request costs 15 credits**, whatever the operation, reserved up
+  front and refunded only if nothing was saved. A `generate` returns several
+  variations for that price.
+- **Output is 16, 32 or 64 px square, nothing else.** The hero (about 40 px)
+  and enemies fit a 64 canvas, tiles fit 16 or 32. **A 640x360 background
+  cannot come from this API.** That gap is open (`HANDOFF.md`).
+- **No sheets.** The docs forbid asking for a grid, atlas or several poses on
+  one canvas. Each pose is its own `edit` of the source sprite.
+- **Animate from a matching pose.** For a run, a throw or a jump, `edit` the
+  still into that action's starting pose first, then `animate` that. Idle can
+  animate the still directly. So a hero state costs about 30 credits.
+- **Prompts describe the subject only.** No pixel sizes (that is `--size`),
+  no "transparent background" or "pixel-perfect". The agent guide calls these
+  noise.
 
 ## The pipeline, four steps
 
@@ -35,7 +51,8 @@ destructive mode is the flag).
    generation costs credits rather than an hour of Matt's time. A prompt that
    saves a generation is still worth writing carefully.
 2. **Key it, if needed.** Whether Sprite Fusion returns real transparency or a
-   backdrop to key out is not known yet. If a backdrop, `tools/key.py`.
+   backdrop to key out is not known until the first delivery. If a backdrop,
+   `tools/key.py`.
 3. **Cut it.** A sheet becomes N sprites (`tools/cut-sheet.py`). An animation
    becomes frames on a common baseline for a `SpriteFrames` resource.
 4. **Check it.** `tools/palette-check.py` against `ART_DIRECTION.md`, and a
@@ -54,10 +71,10 @@ not a fresh prompt per state. Derived art matches by construction.
 
 **Put the two things hardest to tell apart side by side.** On the last
 project a rainbow trout and a steelhead were separated correctly first attempt
-when drawn against each other, having been unseparable in words. Whether
-Sprite Fusion takes a multi-subject sheet at all is unknown. If not, the
-*style reference* operation is the nearest substitute: generate one enemy,
-then the rest against it.
+when drawn against each other, having been unseparable in words. Sprite Fusion
+does not take a multi-subject sheet, so *style reference* is the nearest
+substitute: generate one enemy, then the rest against it, passing the ones
+already made as references.
 
 **Ask for an edit when there is already a sprite to edit.** Name the one thing
 that changes. This is how the hero gets a second costume, or an enemy a variant.
@@ -70,7 +87,7 @@ it was for paintings. Wrong drawn content is still a reroll.
 
 | tool | status | does |
 |---|---|---|
-| `sprite-fusion.py` | **to build**, blocked (above) | calls the API, writes deliveries to `assets/art_raw/` |
+| `sprite-fusion.py` | new | calls the API, writes deliveries and a request log to `assets/art_raw/` |
 | `key.py` | kept, if needed | delivery on a flat backdrop, out comes a transparent PNG |
 | `palette-check.py` | kept | judges a delivery against `ART_DIRECTION.md`'s coloured-dark rule |
 | `cut-sheet.py` | kept | one sheet, N connected components, out come N tight crops |

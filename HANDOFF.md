@@ -3,7 +3,7 @@
 > **Rewrite this file, never append.** State snapshot and pointers only. No
 > session narrative, that is what `git log` is for. Keep it under 80 lines.
 
-**Updated:** 2026-09-26 · **Phase:** 2, the look · **Active:** M5, reopened
+**Updated:** 2026-09-28 · **Phase:** 2, the look · **Active:** M5, reopened
 for pixel art. **Done when:** the M5 room is in the game at final quality in
 pixel art, and `ART.md` carries the generations and credits it took
 (`BUILD_PLAN.md`).
@@ -20,20 +20,23 @@ The rig's state logic (`Locomotion`) carries over.
 
 ## The next action
 
-**Build `tools/sprite-fusion.py`**, once unblocked (below). Its request fields
-are in the API reference page, which could not be read from this container.
-Then the first delivery is a still hero plus one *animate* call, filmstripped
-at game size, to find out whether generated frames boil (`ANIMATION.md`).
-Only then redraw the room.
+**`tools/sprite-fusion.py` is built and unspent**: `credits` and `assets`
+checked against the live API, the stream and save path tested against a fake
+server only. The first real request is a still hero (`generate`, size 64),
+then an idle `animate` of it, filmstripped at game size to find out whether
+generated frames boil (`ANIMATION.md`). Only then redraw the room.
 
 ## Blocked on Matt
 
-1. **Network and key for Sprite Fusion.** The environment's network policy
-   denies `www.spritefusion.com`: add it to the allowed domains (environment
-   settings, Network access). Set `SPRITE_FUSION_API_KEY` as an environment
-   secret.
-2. **`LEVELS.md`'s open questions**, the ending swap chief among them.
-3. **M4 playtest feedback**: the dragon's pacing, the ledge-to-wood throw
+1. **Credits.** Every request costs 15 and the account holds 15, so one
+   request, total. The first hero plus its idle is two (30 credits), and a
+   full hero is roughly 20 or more (`ART.md`).
+2. **Backgrounds.** The API only outputs 16, 32 or 64 px, so it cannot make
+   a 640x360 background. Options: tile it from 32 px pieces, keep the painted
+   background under pixel sprites, or draw it some other way. Structural, so
+   Matt's call.
+3. **`LEVELS.md`'s open questions**, the ending swap chief among them.
+4. **M4 playtest feedback**: the dragon's pacing, the ledge-to-wood throw
    and the dormant scorpion's wake-to-danger gap.
 
 ## Traps that will bite again
