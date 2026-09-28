@@ -19,6 +19,7 @@ window/size/window_width_override=1280
 window/size/window_height_override=720
 window/stretch/mode="canvas_items"
 window/stretch/aspect="keep"
+window/stretch/scale_mode="integer"
 
 [physics]
 
@@ -32,6 +33,7 @@ renderer/rendering_method.mobile="gl_compatibility"
 ; Palette.BACKDROP. Kept in step by test_palette.gd, because a neutral grey
 ; letterbox is still a neutral grey and ART_DIRECTION.md does not allow one.
 environment/defaults/default_clear_color=Color(0.12941177, 0.10980392, 0.2, 1)
+textures/canvas_textures/default_texture_filter=0
 
 [layer_names]
 

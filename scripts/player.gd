@@ -19,39 +19,30 @@ extends CharacterBody2D
 ## Hero heights to cycle with [ and ], around ART_DIRECTION.md's estimate of 40.
 const HERO_HEIGHT_STEPS: PackedFloat32Array = [28.0, 34.0, 40.0, 46.0, 54.0]
 
-## The rig this species is built from, painted once for the whole game.
-## `assets/art/hero/rig/`, cut from the M5 delivery `ART.md` records.
-const RIG_SCENE: PackedScene = preload("res://scenes/hero_rig.tscn")
-## `scenes/hero_rig.tscn`'s own bone and sprite offsets, composited: top of the
-## head to the sole of the boot, and the horizontal centreline through the
-## standing figure. Read off the rig's recorded numbers, not measured from a
-## screenshot, so a redraw of the rig is the only thing that moves them.
-const RIG_SOURCE_TOP: float = 80.0
-const RIG_SOURCE_BOTTOM: float = 1140.0
-const RIG_SOURCE_CENTRE_X: float = 440.0
-## `assets/art/hero/rig/torso.png`'s own height, in the same source pixels as
-## the three constants above. `Bat.RIG_TARGET_BODY_LENGTH` sizes against this.
-const RIG_SOURCE_TORSO_LENGTH: float = 470.0
+## The pixel-art hero (`ANIMATION.md`): frames on an `AnimatedSprite2D`, picked
+## by the scene's own `AnimationTree`. Drawn at 1x with its feet on the scene's
+## origin, so nothing here scales it.
+const SPRITE_SCENE: PackedScene = preload("res://scenes/hero_sprite.tscn")
 
 var config: MovementConfig
-## The painted rig, standing in for the drawn capsule wherever one is
-## available. Null only if `RIG_SCENE` fails to load, in which case `_draw`
-## falls back to the capsule rather than showing nothing.
-var _rig: Node2D = null
-## `_rig`'s own `AnimationTree`. Null under the same condition as `_rig`, or if
-## a future rig scene drops the node; `_update_animation` no-ops either way.
+## Null only if `SPRITE_SCENE` fails to load, in which case `_draw` falls back
+## to the capsule rather than showing nothing.
+var _sprite: Node2D = null
+## `_sprite`'s own `AnimationTree`. Null under the same condition as `_sprite`,
+## or if a future sprite scene drops the node; `_update_animation` no-ops
+## either way.
 var _anim_tree: AnimationTree = null
-## How long the landing pose holds, read once from the rig's own "land"
+## How long the landing pose holds, read once from the sprite's own "land"
 ## animation length rather than duplicated as a number here, so retiming the
-## pose in `hero_rig.tscn` is the only place that has to change. Zero (no
-## hold at all) if the rig or the animation is missing.
+## pose in `hero_sprite.tscn` is the only place that has to change. Zero (no
+## hold at all) if the sprite or the animation is missing.
 var _land_pose_duration := 0.0
 ## Counts down from `_land_pose_duration` after a landing; `Locomotion` reads
 ## it to hold the LAND state for that long before falling back to idle/run.
 var _landing_timer := 0.0
 ## The throw and catch pose holds, read the same way `_land_pose_duration` is:
-## off the rig's own "throw" and "catch" animation lengths, so retiming either
-## pose in `hero_rig.tscn` is again the only place that has to change.
+## off the sprite's own "throw" and "catch" animation lengths, so retiming
+## either pose in `hero_sprite.tscn` is again the only place that has to change.
 var _throw_pose_duration := 0.0
 var _catch_pose_duration := 0.0
 ## Count down after a throw fires or an in-flight catch lands; `Locomotion`
@@ -145,11 +136,11 @@ func _ready() -> void:
 	spawn_point = global_position
 	swords_at_spawn = sword_config.starting_swords
 	swords_held = swords_at_spawn
-	if RIG_SCENE != null:
-		_rig = RIG_SCENE.instantiate()
-		add_child(_rig)
-		_anim_tree = _rig.get_node_or_null("AnimationTree")
-		var anim_player := _rig.get_node_or_null("AnimationPlayer") as AnimationPlayer
+	if SPRITE_SCENE != null:
+		_sprite = SPRITE_SCENE.instantiate()
+		add_child(_sprite)
+		_anim_tree = _sprite.get_node_or_null("AnimationTree")
+		var anim_player := _sprite.get_node_or_null("AnimationPlayer") as AnimationPlayer
 		if anim_player != null and anim_player.has_animation("land"):
 			_land_pose_duration = anim_player.get_animation("land").length
 		if anim_player != null and anim_player.has_animation("throw"):
@@ -213,7 +204,7 @@ func _physics_process(delta: float) -> void:
 		_landing_timer = _land_pose_duration
 	else:
 		_landing_timer = maxf(_landing_timer - delta, 0.0)
-	_update_rig()
+	_update_sprite()
 	_update_animation(grounded_now)
 	queue_redraw()
 
@@ -367,7 +358,7 @@ func _step_death(delta: float) -> void:
 		last_downtime = _death_elapsed
 		_dead = false
 		_death_elapsed = 0.0
-	_update_rig()
+	_update_sprite()
 	queue_redraw()
 
 
@@ -446,7 +437,7 @@ func _throw() -> void:
 
 
 ## A picked-up sword refills the count exactly the same as a caught one; the
-## rig only cares about the difference. `caught_in_flight` is false for a
+## sprite only cares about the difference. `caught_in_flight` is false for a
 ## sword walked over off the floor, and that never sets the catch pose: there
 ## is nothing to brace for, you just walked into it.
 func _on_sword_recovered(caught_in_flight: bool) -> void:
@@ -482,41 +473,35 @@ func _apply_hero_size(height: float) -> void:
 	capsule.radius = world.hero_width * 0.5
 	var probe := _probe_shape.shape as RectangleShape2D
 	probe.size = Vector2(world.hero_width * 0.5, height * 0.8)
-	_update_rig()
+	_update_sprite()
 	queue_redraw()
 
 
-## Scales and positions the rig so its own feet land on the capsule's own
-## floor contact point, whatever `world.hero_height` currently is (M0's [ and
-## ] keys included), and mirrors it around its own centreline rather than the
-## origin, since the painted figure is not centred on (0, 0) in its own scene.
+## Stands the sprite's feet on the capsule's floor contact point and mirrors
+## it by `facing`. Pixel art is never scaled (`ART_DIRECTION.md`), so M0's [
+## and ] keys resize the capsule and not the picture.
 ## Tints it the same cue the capsule drew: dead borrows lava's darkest value
 ## rather than going grey, ART_DIRECTION.md's darkest colour reserved for what
 ## it already reserves darkness for; climbing a warm gold, same as before.
-func _update_rig() -> void:
-	if _rig == null:
+func _update_sprite() -> void:
+	if _sprite == null:
 		return
-	var rig_scale := world.hero_height / (RIG_SOURCE_BOTTOM - RIG_SOURCE_TOP)
-	var signed_scale := rig_scale * facing
-	_rig.scale = Vector2(signed_scale, rig_scale)
-	_rig.position = Vector2(
-		-RIG_SOURCE_CENTRE_X * signed_scale,
-		world.hero_height * 0.5 - RIG_SOURCE_BOTTOM * rig_scale
-	)
+	_sprite.scale = Vector2(facing, 1.0)
+	_sprite.position = Vector2(0.0, world.hero_height * 0.5)
 	if _dead:
-		_rig.modulate = Palette.LAVA_CRUST
+		_sprite.modulate = Palette.LAVA_CRUST
 	elif climbing:
-		_rig.modulate = Color(Palette.GOLD_FACE, 0.95)
+		_sprite.modulate = Color(Palette.GOLD_FACE, 0.95)
 	else:
-		_rig.modulate = Color.WHITE
+		_sprite.modulate = Color.WHITE
 
 
-## Travels the rig's `AnimationTree` state machine to whatever `Locomotion`
+## Travels the sprite's `AnimationTree` state machine to whatever `Locomotion`
 ## says the current ground contact, vertical speed and landing hold read as.
-## The only thing this script does with the tree: `hero_rig.tscn` owns the
+## The only thing this script does with the tree: `hero_sprite.tscn` owns the
 ## states and how they animate.
 ##
-## Not called during `_step_death`, so the rig freezes on whatever pose it was
+## Not called during `_step_death`, so the sprite freezes on whatever pose it was
 ## in the moment the hero died, matching the body staying where it fell.
 func _update_animation(grounded: bool) -> void:
 	if _anim_tree == null:
@@ -556,11 +541,11 @@ func _nearest_size_index(height: float) -> int:
 	return best
 
 
-## A capsule, drawn rather than imported. M5 painted the real thing
-## (`_update_rig`), so this only runs as the fallback for a scene that somehow
-## has no rig, and the shape it draws is still the one M0 settled on.
+## A capsule, drawn rather than imported. M5 drew the real thing
+## (`_update_sprite`), so this only runs as the fallback for a scene that somehow
+## has no sprite, and the shape it draws is still the one M0 settled on.
 func _draw() -> void:
-	if _rig != null:
+	if _sprite != null:
 		return
 	var h := world.hero_height
 	var r := world.hero_width * 0.5

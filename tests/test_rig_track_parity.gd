@@ -54,8 +54,10 @@ func _track_sets(player: AnimationPlayer) -> Dictionary:
 	return sets
 
 
-## Rigs, not the rig-test benches: `hero_rig.tscn`, not
-## `hero_rig_test.tscn`. The suffix excludes the second on purpose.
+## Rigs and frame-animated sprites, not the rig-test benches: `hero_rig.tscn`
+## and `hero_sprite.tscn`, not `hero_rig_test.tscn`. A sprite state that forgets
+## to key `animation` leaves the previous state's frames on screen, which is
+## the same bug as PR #51 in a different shape.
 func _discover_rigs() -> PackedStringArray:
 	var found: PackedStringArray = []
 	var directory := DirAccess.open(RIGS_DIR)
@@ -64,7 +66,7 @@ func _discover_rigs() -> PackedStringArray:
 	directory.list_dir_begin()
 	var entry := directory.get_next()
 	while entry != "":
-		if entry.ends_with("_rig.tscn"):
+		if entry.ends_with("_rig.tscn") or entry.ends_with("_sprite.tscn"):
 			found.append(RIGS_DIR.path_join(entry))
 		entry = directory.get_next()
 	directory.list_dir_end()
