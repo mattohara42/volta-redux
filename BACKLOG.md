@@ -230,11 +230,10 @@ committed to.
 
 ## Raised during M10 (2026-09-28), not judged
 
-- **There is no sword counter outside the debug overlay.** With F1 hiding the
-  overlay, a player cannot see how many swords they hold, and `SPEC.md` calls
-  the count the difficulty dial. M10's done-when is a new player getting through
-  Act 1, so this probably has to exist before that test. Needs a design call:
-  where it sits, and how it stays clear of gold (`ART_DIRECTION.md`).
+- **The sword counter** (Matt asked for it, 2026-09-28): built as `SwordCounter`,
+  top right, a gold sword per sword in hand and a dim one per sword that is out.
+  Gold because it is the sword itself; whether that competes with gold meaning
+  "interactive" is worth a look when playing.
 - **Rooms are not yet sequenced.** Act 1's first room ends at a gold marker.
   Walking from one room into the next needs the act-state autoload `CLAUDE.md`
   already names, and it should arrive with the second room.

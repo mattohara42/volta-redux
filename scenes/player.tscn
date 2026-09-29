@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3]
+[gd_scene load_steps=11 format=3]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_player"]
 [ext_resource type="Resource" path="res://config/movement.tres" id="2_climb"]
@@ -7,6 +7,7 @@
 [ext_resource type="Resource" path="res://config/sword.tres" id="5_sword_config"]
 [ext_resource type="Resource" path="res://config/death.tres" id="7_death_config"]
 [ext_resource type="PackedScene" path="res://scenes/sword.tscn" id="6_sword_scene"]
+[ext_resource type="Script" path="res://scripts/sword_counter.gd" id="8_counter"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_body"]
 radius = 9.0
@@ -47,6 +48,11 @@ grow_horizontal = 2
 grow_vertical = 2
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Hud" type="CanvasLayer" parent="."]
+
+[node name="SwordCounter" type="Node2D" parent="Hud"]
+script = ExtResource("8_counter")
 
 [node name="Sound" type="AudioStreamPlayer2D" parent="."]
 volume_db = -6.0
