@@ -17,7 +17,9 @@ top-up; build with existing art and code. The estimate is in `ART.md`.
 A bank to practise throwing on, a culvert with a sleeping scorpion facing away,
 a checkpoint, a sally port with an awake one. `tests/test_act1_bank.gd` holds
 the geometry; two scenarios hold the kill and the armour. Real rooms extend
-`Bench` and draw with `TileArt` (`Bench`'s class comment says why). References:
+`Bench` and draw with `TileArt` (`Bench`'s class comment says why). The sword
+counter (`SwordCounter`, on the player's `Hud` layer) shows swords in hand and
+out, top right, in every room. References:
 `assets/art_raw/_experiments/m10_act1_bank_left.png`, `_right.png`.
 
 **Before this:** M6 passed Matt's playtest; M9 is built (lava, arcs, charged
@@ -34,9 +36,7 @@ sword, ends at the gate), with the act-state autoload arriving alongside room 2.
 
 1. **Playing `Act1Bank`**: does it teach the throw and the scorpion's armour
    with no words?
-2. **A sword counter** (`BACKLOG.md`, raised during M10): there is none outside
-   the debug overlay, and a new player probably needs one.
-3. **M4 playtest feedback**: the dragon's pacing, the ledge-to-wood throw and
+2. **M4 playtest feedback**: the dragon's pacing, the ledge-to-wood throw and
    the dormant scorpion's wake-to-danger gap. Blocks M14's tuning of those.
 
 ## Traps that will bite again
