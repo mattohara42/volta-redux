@@ -3,40 +3,41 @@
 > **Rewrite this file, never append.** State snapshot and pointers only. No
 > session narrative, that is what `git log` is for. Keep it under 80 lines.
 
-**Updated:** 2026-09-28 · **Phase:** 3, the game · **Active:** M10, Act 1.
-M7 stays open at five of six enemies until credits return (the generator).
+**Updated:** 2026-09-30 · **Phase:** 3, the game · **Active:** M10, Act 1.
+M7 is built for all six, waiting on Matt's eye.
 **Done when:** someone who has never played it gets through Act 1 without being
 told what the sword does (`BUILD_PLAN.md`).
 
 ## Where this is
 
-**Credits: 0, and Matt has paused buying more (2026-09-28).** Do not propose a
-top-up; build with existing art and code. The estimate is in `ART.md`.
+**Credits: 0 again.** Sprite Fusion gave 150 on 2026-09-30 and Matt chose to
+spend them all: 45 re-testing their size fix (not live yet, `GEMINI_NOTES.md`),
+30 on M7's generator, 90 on Act 1 props. Matt's pause on buying still holds; do
+not propose a top-up.
 
 **Room 1 of 4 built:** `Act1Bank` (`scenes/rooms/act1_bank.tscn`, last on F2).
-A bank to practise throwing on, a culvert with a sleeping scorpion facing away,
-a checkpoint, a sally port with an awake one. `tests/test_act1_bank.gd` holds
-the geometry; two scenarios hold the kill and the armour. Real rooms extend
-`Bench` and draw with `TileArt` (`Bench`'s class comment says why). The sword
-counter (`SwordCounter`, on the player's `Hud` layer) shows swords in hand and
-out, top right, in every room. References:
-`assets/art_raw/_experiments/m10_act1_bank_left.png`, `_right.png`.
+Real rooms extend `Bench` and draw with `TileArt` (`Bench`'s class comment says
+why). The sword counter (`SwordCounter`) shows swords in hand and out, top
+right, in every room.
 
-**Before this:** M6 passed Matt's playtest; M9 is built (lava, arcs, charged
-floors, the light layer on braziers, breath and arcs).
+**Act 1 props are generated, not wired:** wood, portcullis, switch, brazier,
+chain, shackle. `ART.md` → *Act 1 props* has the usable picks and which need
+`tools/recolour-darks.py`. The rooms still draw these as rectangles.
 
 ## The next action
 
-**Matt plays `Act1Bank`**, ideally without the overlay (F1). Then room 2 (the
-outer wall: ladders, bats, the scorpion's from-above trick), room 3 (embed:
-wood, a switch, a glimpse of the chained dragon), room 4 (must stand on your own
+**Matt plays `Act1Bank`** and looks at `RoomM7Sheet`. Then room 2 (the outer
+wall: ladders, bats, the scorpion's from-above trick), room 3 (embed: wood, a
+switch, a glimpse of the chained dragon), room 4 (must stand on your own
 sword, ends at the gate), with the act-state autoload arriving alongside room 2.
+Pick and wire the props as each room needs them.
 
 ## Blocked on Matt
 
 1. **Playing `Act1Bank`**: does it teach the throw and the scorpion's armour
    with no words?
-2. **M4 playtest feedback**: the dragon's pacing, the ledge-to-wood throw and
+2. **`RoomM7Sheet`**: are the six consistent in treatment? That closes M7.
+3. **M4 playtest feedback**: the dragon's pacing, the ledge-to-wood throw and
    the dormant scorpion's wake-to-danger gap. Blocks M14's tuning of those.
 
 ## Traps that will bite again
@@ -49,21 +50,23 @@ with the parse error printed**: read its output, not its exit code. The same
 goes for a `SCRIPT ERROR` mid-test. **Tests run before the tree is ready**, so
 nothing needing `get_tree()` can be tested headless.
 
-**Only `generate` honours `size`.** `animate` starts on the input's own pose
-and never moves its feet. **Generated frames can boil**: `tools/capture.gd
---filmstrip=N`, starting `--input` with `debug_toggle_overlay:1` or the overlay
-hides the hero. **A test can pass while a texture is missing**: load a room
-with `tools/dev.sh shot` after touching art. **`assets/art_raw/` is
-`.gdignore`d**: Godot cannot decode Sprite Fusion's animated WebP.
+**No Sprite Fusion operation honours `size` exactly**, re-tested 2026-09-30.
+`animate` starts on the input's own pose and never moves its feet. **Generated
+frames can boil**: `tools/capture.gd --filmstrip=N`, starting `--input` with
+`debug_toggle_overlay:1` or the overlay hides the hero. **A test can pass while
+a texture is missing**: load a room with `tools/dev.sh shot` after touching
+art. **`assets/art_raw/` is `.gdignore`d**: Godot cannot decode Sprite
+Fusion's animated WebP. **An SSL EOF before the API answers charges nothing**:
+check `credits`, then retry once.
 
 ## Settled, do not relitigate
 
 **Pixel art.** **Straight sword, asymmetric hilt.** **M5 final quality.**
 **Moving jumps are somersaults, no throwing during one; dives cost a
 recovery pause** (Matt, 2026-09-28, and the playtest passed the somersault,
-dive, run pace, hero height 36 and lava brightness). **M4:** contact with any enemy kills, the
-dragon is vulnerable only to RECALLING. **G1:** passed. **Generation budget:**
-not a hard gate. **`LEVELS.md`'s twelve questions**
+dive, run pace, hero height 36 and lava brightness). **M4:** contact with any
+enemy kills, the dragon is vulnerable only to RECALLING. **G1:** passed.
+**Generation budget:** not a hard gate. **`LEVELS.md`'s twelve questions**
 (Matt, 2026-09-28): the caged creature is the Act 2 dragon, chained then freed
 in Act 4; the forest folds into Act 1; about 18 rooms; remix rooms wanted.
 

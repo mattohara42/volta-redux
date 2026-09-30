@@ -243,3 +243,9 @@ committed to.
 - **Tunnel walls are masonry tiles darkened upward**, the best the Act 1 tiles
   can do for a wall a screen tall. A proper wall-face tile is M8 work.
 
+## Raised during M7's generator (2026-09-30), not judged
+
+- **The generator's arc is painted into its sprite.** `CLAUDE.md` says arcs
+  are shaders and particles, and M9 already has one (`ArcBolt`). At M12, either
+  regenerate the still without the arc and hang an `ArcBolt` between the horns,
+  or keep the painted flicker as idle hum and add the shader arc for the fight.

@@ -11,6 +11,7 @@ const SPRITES := {
 	"ant": "res://scenes/ant_sprite.tscn",
 	"eyeball": "res://scenes/eyeball_sprite.tscn",
 	"dragon": "res://scenes/dragon_sprite.tscn",
+	"generator": "res://scenes/generator_sprite.tscn",
 }
 const ENEMIES := "res://config/enemies.tres"
 
