@@ -118,10 +118,10 @@ frames, wired to the M4 behaviours.
 **Done when**: the six are on screen, distinguishable at game size, and
 consistent with each other in treatment.
 
-**Built 2026-09-28 for five of six**: scorpion, ant, eyeball, dragon and bat are
-on screen in `RoomM7Sheet`, wired to their M4 behaviours, distinguishable in
-silhouette and matching in treatment (`ART.md`). The generator is not: it is
-M12's boss and there were no credits left. It needs 30 to finish this.
+**Built for all six** (2026-09-28, the generator 2026-09-30): scorpion, ant,
+eyeball, dragon and bat are on screen in `RoomM7Sheet`, wired to their M4
+behaviours; the generator stands beside them as a sprite, its behaviour being
+M12's. Awaiting Matt's eye on "consistent in treatment" (`ART.md`).
 
 ### M8: environments
 Tilesets for the four acts, parallax backgrounds, props. The acts have to look

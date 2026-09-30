@@ -192,12 +192,28 @@ its killing box's bottom edge and are centred on it.
 **Silhouettes** (`ART_DIRECTION.md`, rule 1) are all distinct at game size: the
 upright hero, the curled tail and claws of the scorpion, the three body
 segments of the ant, the wings of the bat, the round eyeball with tendrils, the
-big horned dragon. `assets/art_raw/_experiments/m7_silhouettes.png`.
+big horned dragon. `assets/art_raw/_experiments/m7_silhouettes.png`, and all six: `m7_six.png`.
 
-**Not done: the generator**, the sixth. It is M12's boss and has no behaviour to
-run, and there were no credits left after the four. It needs a `generate` at 64
-and an `animate`, 30 credits, before M7's done-when ("the six are on screen")
-can be met.
+**The generator, the sixth (2026-09-30).** A `generate` at 64 (picked 4 of 12,
+72 px, a horned dynamo with a fire grate) and a 4-frame hum, with 0 neutral
+darks in either. It has no behaviour until M12, so `RoomM7Sheet` stands its
+sprite alone at the right, and the room grew to 760 to fit it. **Its arc is
+painted into the frames**, which `CLAUDE.md` says is the wrong approach
+(`BACKLOG.md`).
+
+## Act 1 props, generated and not yet wired (2026-09-30)
+
+The last 90 credits, one `generate` each, all in `assets/art_raw/` and none
+picked or in the game yet. The rooms still draw these as rectangles.
+
+| delivery | size | usable | notes |
+|---|---|---|---|
+| `tile_wood` | 16 | 1 to 6 | planks; 1 and 6 fail the palette check |
+| `tile_portcullis` | 16 | most | for `Gate`, repeats top to bottom |
+| `prop_switch` | 32 | 1, 8 | some came back three-quarter barrels; 10 of 12 need `recolour-darks.py` |
+| `prop_brazier` | 32 | most | unlit, the flame stays code; 10 of 12 need `recolour-darks.py` |
+| `tile_chain` | 16 | 7 to 11 | for the chained dragon |
+| `prop_shackle` | 16 | 1, 8, 9 | where the chain meets the wall |
 
 ## M9: lava, electricity and atmosphere (2026-09-28)
 
@@ -318,7 +334,8 @@ have to ask for, and let the tool refuse when nobody asked.
 **One room in pixel art: about 8 requests, 120 credits**, once the recipe is
 known, and 210 the first time (*M5 in pixel art* above). The painted M5 took
 10 Gemini generations (*Open requests* below). Every request is 15 credits;
-`tools/sprite-fusion.py credits` reads the balance, 300 after M5.
+`tools/sprite-fusion.py credits` reads the balance: 300 after M5, 0 after M7's
+first four, 150 given by Sprite Fusion on 2026-09-30, and 0 again the same day.
 
 ## What `assets/reference/` is for, and what it is not
 

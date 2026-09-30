@@ -244,8 +244,16 @@ measured on a delivery in `assets/art_raw/`, and the request is in its
 | `animate` | none | the input's own size |
 
 So `edit` and `style-reference` cannot be trusted for size at all, and
-`direction-set` and `animate` keep roughly what they are given. A support
-ticket is open with Sprite Fusion on the `edit` mismatch.
+`direction-set` and `animate` keep roughly what they are given.
+
+**Re-tested 2026-09-30, after Sprite Fusion said a release had improved it**
+(the support ticket on this, answered with 150 credits). Nothing had changed
+yet. The same `style-reference` request as the bat, asked 32, returned 45 to
+58. An `edit` of the 36 px hero, asked 32, returned one 26x36 (the input's own
+crop) and one 97x143, the input scaled up four times in blocks. A `generate`
+at 64 returned 64 to 77, the dragon's spread exactly. Re-test once more before
+trusting any operation's size; `retest_*` in `assets/art_raw/` is the
+comparison set.
 
 **`generate` still defaults to three-quarter.** 11 of 12 came back
 three-quarter at size 32 even with the positive-plus-negation framing that

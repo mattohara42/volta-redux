@@ -5,11 +5,11 @@
 ## game size and consistent in treatment. This is the instrument for judging
 ## that, so the layout is a lineup and not a fight: a bench, like the M4 rooms,
 ## not one of M10's authored rooms. The generator, the sixth, is M12's boss and
-## has no behaviour to run yet.
+## has no behaviour to run yet, so it stands here as its sprite alone.
 class_name RoomM7Sheet
 extends Bench
 
-const ROOM_WIDTH: float = 640.0
+const ROOM_WIDTH: float = 760.0
 
 const START_BRAZIER_X: float = 40.0
 
@@ -34,6 +34,9 @@ const DRAGON_X: float = 590.0
 const BREATH_OFFSET := Vector2(-90.0, 10.0)
 const BREATH_SIZE := Vector2(60.0, 30.0)
 
+const GENERATOR_SCENE: PackedScene = preload("res://scenes/generator_sprite.tscn")
+const GENERATOR_X: float = 700.0
+
 
 func _ready() -> void:
 	_add_solid(Rect2(0.0, FLOOR_TOP, ROOM_WIDTH, ROOM_HEIGHT - FLOOR_TOP))
@@ -49,11 +52,14 @@ func _ready() -> void:
 		Rect2(DRAGON_X - DRAGON_SIZE.x * 0.5, FLOOR_TOP - DRAGON_SIZE.y, DRAGON_SIZE.x, DRAGON_SIZE.y),
 		BREATH_OFFSET, BREATH_SIZE
 	)
+	var generator := GENERATOR_SCENE.instantiate() as Node2D
+	generator.position = Vector2(GENERATOR_X, FLOOR_TOP)
+	add_child(generator)
 	_add_enclosure(ROOM_WIDTH)
 	_frame_camera(ROOM_WIDTH)
 	queue_redraw()
 
 
 func _draw() -> void:
-	TileArt.draw_background(self)
+	TileArt.draw_background_across(self, ROOM_WIDTH)
 	TileArt.draw_ground(self, Rect2(0.0, FLOOR_TOP, ROOM_WIDTH, ROOM_HEIGHT - FLOOR_TOP))
