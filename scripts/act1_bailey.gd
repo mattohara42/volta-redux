@@ -125,7 +125,9 @@ func _draw_grate() -> void:
 	var dim := GRATE_SHADE
 	for x in GRATE_CHAINS:
 		TileArt.draw_chain(self, x, GRATE.position.y, GRATE.end.y, dim)
+	draw_texture_rect(TileArt.PORTCULLIS_TILE, GRATE, true, dim)
+	# The eyes go over the bars: behind them, one can fall on a bar and vanish,
+	# and two lit points are the whole of this glimpse.
 	if _clock < BLINK_OPEN:
 		for side in [-1.0, 1.0]:
 			draw_rect(Rect2(EYES_AT + Vector2(side * EYE_GAP * 0.5 - 2.0, -1.0), Vector2(4.0, 2.0)), Palette.FIRE_CORE)
-	draw_texture_rect(TileArt.PORTCULLIS_TILE, GRATE, true, dim)

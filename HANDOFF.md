@@ -10,7 +10,7 @@ told what the sword does (`BUILD_PLAN.md`).
 
 ## Where this is
 
-**Credits: 840.** The chest prompt got HTTP 403, nothing generated (`ART.md`).
+**Credits: 825.** (The chest's first try got HTTP 403; a retry went through.)
 Spend in small batches, each looked at before the next (`ART.md` → *What is
 left to generate*). Enemies and characters wait on `RoomM7Sheet`'s verdict.
 
@@ -22,7 +22,7 @@ why). The sword counter (`SwordCounter`) shows swords in hand and out, top
 right, in every room.
 
 **Act 1 art wired** except the brazier and switch, which stay code by choice
-(`ART.md` → *Act 1 props*). The sword chest is code until its art generates.
+(`ART.md` → *Act 1 props*).
 
 ## The next action
 

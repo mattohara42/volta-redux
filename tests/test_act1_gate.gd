@@ -1,8 +1,9 @@
-## Act 1's last room, as arithmetic. Its claim is `RoomM2Gap`'s: it **cannot be
-## finished without standing on your own sword**. The crossing is that room's,
-## raised onto the approach, so these are that file's checks measured from
-## `NEAR_TOP` instead of the floor. Then the gate: the switch sits where a
-## standing throw from the yard lands, and the gate cannot be jumped.
+## Act 1's last room, as arithmetic. Its claim: it **cannot be finished without
+## standing on your own sword**. The far side is out of a jump's reach, and a
+## sword in the wooden face under it is a step you can reach and climb off, with
+## nothing above the ledge in the way (the bug `RoomM2Gap`'s arithmetic missed).
+## Then the gate: the switch sits where a standing throw from the yard lands,
+## and the gate cannot be jumped.
 extends TestCase
 
 const MOVE := "res://config/movement.tres"
@@ -24,7 +25,7 @@ func _near_lip() -> float:
 
 func _ledge_centre() -> float:
 	var world: WorldConfig = load(WORLD)
-	return SwordFlight.embed_position(Act1Gate.POST.position.x, 1.0, world.sword_length)
+	return SwordFlight.embed_position(Act1Gate.HOARDING.position.x, 1.0, world.sword_length)
 
 
 func _ledge_top() -> float:
@@ -32,35 +33,37 @@ func _ledge_top() -> float:
 	return (Act1Gate.NEAR_TOP - world.hero_height * 0.5) - Sword.LEDGE_THICKNESS * 0.5
 
 
-func test_the_gap_cannot_be_jumped() -> void:
-	var rise := Act1Gate.NEAR_TOP - Act1Gate.FAR_TOP
-	var needed := Act1Gate.FAR_EDGE - Act1Gate.NEAR_EDGE
-	check(needed > _reach(rise), "the bare gap is %.0f px against a %.0f px jump" % [needed, _reach(rise)])
-
-
-func test_the_sword_makes_it_crossable() -> void:
-	var world: WorldConfig = load(WORLD)
-	var first := _ledge_centre() - _near_lip()
-	var first_rise := Act1Gate.NEAR_TOP - _ledge_top()
-	check(first <= _reach(first_rise), "to the ledge: %.0f px, budget %.0f" % [first, _reach(first_rise)])
-	var second := (Act1Gate.FAR_EDGE + world.hero_width * 0.5) - _ledge_centre()
-	var second_rise := _ledge_top() - Act1Gate.FAR_TOP
-	check(second <= _reach(second_rise), "off the ledge: %.0f px, budget %.0f" % [second, _reach(second_rise)])
-
-
-func test_the_crossing_cannot_be_skipped() -> void:
+func test_the_far_side_cannot_be_jumped_to() -> void:
 	var move: MovementConfig = load(MOVE)
-	check(Act1Gate.NEAR_TOP - Act1Gate.POST.position.y > move.jump_height, "the post is too tall to land on")
-	check(Act1Gate.PIT_TOP - Act1Gate.FAR_TOP > move.jump_height, "the far side is out of reach from the ditch")
-	check(Act1Gate.PIT_TOP - Act1Gate.NEAR_TOP < move.jump_height, "and falling in is a retry")
+	check(
+		Act1Gate.NEAR_TOP - Act1Gate.FAR_TOP > move.jump_height,
+		"the far side is %.0f px up against a %.0f px jump" % [Act1Gate.NEAR_TOP - Act1Gate.FAR_TOP, move.jump_height]
+	)
 
 
-func test_the_post_catches_a_throw_from_the_lip() -> void:
+func test_the_sword_ledge_can_be_reached_and_climbed_off() -> void:
+	var move: MovementConfig = load(MOVE)
+	var reach_to := _ledge_centre() - _near_lip()
+	var rise := Act1Gate.NEAR_TOP - _ledge_top()
+	check(reach_to <= _reach(rise), "lip to ledge: %.0f px, budget %.0f" % [reach_to, _reach(rise)])
+	var climb := _ledge_top() - Act1Gate.FAR_TOP
+	check(climb < move.jump_height, "ledge to the far side: %.0f px up, under a %.0f px jump" % [climb, move.jump_height])
+	check_eq(Act1Gate.HOARDING.position.x, Act1Gate.FAR_EDGE, "the wood is the far side's own face")
+	check_eq(Act1Gate.HOARDING.position.y, Act1Gate.FAR_TOP, "running up to its top, so nothing overhangs the ledge")
+
+
+func test_falling_in_is_a_retry() -> void:
+	var move: MovementConfig = load(MOVE)
+	check(Act1Gate.PIT_TOP - Act1Gate.NEAR_TOP < move.jump_height, "the ditch is shallower than a jump on the near side")
+	check(Act1Gate.PIT_TOP - Act1Gate.FAR_TOP > move.jump_height, "and the far side is out of reach from it")
+
+
+func test_the_hoarding_catches_a_throw_from_the_lip() -> void:
 	var world: WorldConfig = load(WORLD)
 	var sword: SwordConfig = load(SWORD)
 	var y := Act1Gate.NEAR_TOP - world.hero_height * 0.5
-	check(y > Act1Gate.POST.position.y and y < Act1Gate.POST.end.y, "a throw at %.0f meets the post" % y)
-	check(Act1Gate.POST.position.x - _near_lip() < sword.max_range, "and the post is in range")
+	check(y > Act1Gate.HOARDING.position.y and y < Act1Gate.HOARDING.end.y, "a throw at %.0f meets the wood" % y)
+	check(Act1Gate.HOARDING.position.x - _near_lip() < sword.max_range, "and it is in range")
 
 
 func test_the_switch_is_where_a_standing_throw_lands() -> void:

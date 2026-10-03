@@ -236,6 +236,15 @@ committed to.
   "interactive" is worth a look when playing.
 - **Rooms are sequenced** by `ActState` and `config/act1.tres`; swords carry
   and chests resupply (`SPEC.md`). Resolved 2026-10-03.
+- **`RoomM2Gap` has never been finishable** (found 2026-10-03). A real build
+  gets onto the sword ledge and stops: the post rises 120 px and a jump off the
+  ledge clears about 100. `tests/test_room_m2_gap.gd` checks horizontal reach
+  only and never the post as an obstacle, and its scenario only screenshots
+  the ledge. `Act1Gate` copied it and was rebuilt with the wood in the far
+  face; the bench and `RoomM2Switch`'s copy of the gap still need the same
+  fix, and a scenario that crosses.
+- **A script error hangs the test runner** rather than failing it (found
+  2026-10-03, a parse error in a new test): CI would sit until its timeout.
 - **Later rooms' resupply** (hidden swords, a mechanism that gives more) is
   `SPEC.md`'s and not built. Design it with the first room that needs it.
 - **Tunnel walls are masonry tiles darkened upward**, the best the Act 1 tiles
