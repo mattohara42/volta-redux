@@ -3,16 +3,16 @@
 > **Rewrite this file, never append.** State snapshot and pointers only. No
 > session narrative, that is what `git log` is for. Keep it under 80 lines.
 
-**Updated:** 2026-09-30 · **Phase:** 3, the game · **Active:** M10, Act 1.
+**Updated:** 2026-10-03 · **Phase:** 3, the game · **Active:** M10, Act 1.
 M7 is built for all six, waiting on Matt's eye.
 **Done when:** someone who has never played it gets through Act 1 without being
 told what the sword does (`BUILD_PLAN.md`).
 
 ## Where this is
 
-**Credits: 0 again.** Sprite Fusion gave 150 on 2026-09-30 and Matt chose to
-spend them all: 45 re-testing their size fix (not live yet, `GEMINI_NOTES.md`),
-30 on M7's generator, 90 on Act 1 props. Matt's pause on buying still holds; do
+**Credits: 0.** The last 45 re-tested Sprite Fusion's size fix on 2026-10-03:
+`generate` and `edit` now hold size, `style-reference` still does not
+(`GEMINI_NOTES.md`, *Re-tested again*). Matt's pause on buying still holds; do
 not propose a top-up.
 
 **Room 1 of 4 built:** `Act1Bank` (`scenes/rooms/act1_bank.tscn`, last on F2).
@@ -50,7 +50,8 @@ with the parse error printed**: read its output, not its exit code. The same
 goes for a `SCRIPT ERROR` mid-test. **Tests run before the tree is ready**, so
 nothing needing `get_tree()` can be tested headless.
 
-**No Sprite Fusion operation honours `size` exactly**, re-tested 2026-09-30.
+**`style-reference` ignores `size`** (58 to 71 when asked 32); `generate`
+holds it and `edit` refuses it and keeps the input's size (2026-10-03).
 `animate` starts on the input's own pose and never moves its feet. **Generated
 frames can boil**: `tools/capture.gd --filmstrip=N`, starting `--input` with
 `debug_toggle_overlay:1` or the overlay hides the hero. **A test can pass while
