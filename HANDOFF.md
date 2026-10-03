@@ -3,14 +3,14 @@
 > **Rewrite this file, never append.** State snapshot and pointers only. No
 > session narrative, that is what `git log` is for. Keep it under 80 lines.
 
-**Updated:** 2026-10-03 · **Phase:** 3, the game · **Active:** M10, Act 1.
-M7 is built for all six, waiting on Matt's eye.
-**Done when:** someone who has never played it gets through Act 1 without being
-told what the sword does (`BUILD_PLAN.md`).
+**Updated:** 2026-10-03 · **Phase:** 3, the game · **Active:** M11, Act 2.
+M10 waits only on a fresh player getting through Act 1 untold (its done-when).
+**M11 done when:** Act 2 is playable start to finish, and the dragon is
+beatable without spending a sword on it (`BUILD_PLAN.md`).
 
 ## Where this is
 
-**Credits: 825.** (The chest's first try got HTTP 403; a retry went through.)
+**Credits: 765.** Random HTTP 403s cost nothing; retry once.
 Spend in small batches, each looked at before the next (`ART.md` → *What is
 left to generate*). Enemies and characters wait on `RoomM7Sheet`'s verdict.
 
@@ -26,8 +26,10 @@ right, in every room.
 
 ## The next action
 
-**Matt plays Act 1 from `Act1Bank` to the act card.** That is M10's done-when
-test, and only a player can run it. Then M11 (Act 2).
+**Act 2, room 1 built:** `Act2Mouth` (the ferry bench's tested crossing in cavern
+art), reached through Act 1's card. Next: rooms 2 to 5 and the dragon's lair,
+planned in the M11 PR. **Act 2 needs a painted background** (Matt, Gemini);
+until then its rooms show a plain backdrop under a rock ceiling.
 
 ## Blocked on Matt
 

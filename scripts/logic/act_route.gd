@@ -17,6 +17,12 @@ static func is_last(rooms: PackedStringArray, current: String) -> bool:
 	return rooms.size() > 0 and rooms[rooms.size() - 1] == current
 
 
+## The act that follows act `index` of `count`, or `index` itself when it is
+## the last: until there is an ending, finishing the last act plays it again.
+static func act_after(index: int, count: int) -> int:
+	return index + 1 if index + 1 < count else index
+
+
 ## What you arrive in the next room holding. Only what is in your hand comes
 ## with you: a sword left embedded or lying in the last room stays there.
 static func carried(held: int, max_swords: int) -> int:

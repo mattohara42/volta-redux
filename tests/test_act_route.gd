@@ -24,6 +24,18 @@ func test_a_room_outside_the_act_goes_nowhere() -> void:
 	check(not ActRoute.is_last(_rooms, "bench.tscn"), "and does not finish the act")
 
 
+func test_an_act_leads_to_the_next_and_the_last_plays_again() -> void:
+	check_eq(ActRoute.act_after(0, 2), 1, "Act 1 leads to Act 2")
+	check_eq(ActRoute.act_after(1, 2), 1, "the last act plays again until there is an ending")
+
+
+func test_act_two_lists_rooms_that_exist() -> void:
+	var act: ActConfig = load("res://config/act2.tres")
+	check(act is ActConfig and act.rooms.size() >= 1, "config/act2.tres has its rooms")
+	for room in act.rooms:
+		check(ResourceLoader.exists(room), "%s exists" % room)
+
+
 func test_only_the_swords_in_hand_carry() -> void:
 	check_eq(ActRoute.carried(2, 5), 2, "two in hand, two arrive")
 	check_eq(ActRoute.carried(0, 5), 0, "an empty hand arrives empty")
