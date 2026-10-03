@@ -479,4 +479,18 @@ SCENARIOS: list[dict] = [
 				"message": "nobody should have died crossing"},
 		],
 	},
+	{
+		"name": "Act 2: ride both jets up the geyser shaft",
+		"scene": "res://scenes/rooms/act2_geysers.tscn",
+		"out": "act2_geysers_ride.png",
+		"input": "move_right:110;-:75;move_right:90",
+		"zoom": 1.0,
+		"centre": (430, 200),
+		"checks": [
+			{"type": "contains", "pattern": "capture: no deaths",
+				"message": "the climb killed a run that should have made it"},
+			{"type": "player_position", "min_x": 508, "max_y": 224,
+				"message": "the hero is not up on the far bank"},
+		],
+	},
 ]
