@@ -493,4 +493,25 @@ SCENARIOS: list[dict] = [
 				"message": "the hero is not up on the far bank"},
 		],
 	},
+	{
+		"name": "Act 2: kill the causeway bat from the island, then cross",
+		"scene": "res://scenes/rooms/act2_causeway.tscn",
+		"out": "act2_causeway_crossed.png",
+		"input": (
+			"move_right:58;move_right,jump:16;move_right:12;move_right,jump:16;move_right:12;"
+			"move_right,jump:16;move_right:20;-:90;throw:4;-:70;move_right:22;move_right,jump:16;"
+			"move_right:12;move_right,jump:16;move_right:12;move_right,jump:16;move_right:12;"
+			"move_right,jump:16;move_right:24"
+		),
+		"zoom": 1.0,
+		"centre": (860, 250),
+		"checks": [
+			{"type": "contains", "pattern": "no enemies remaining",
+				"message": "a timed throw from the island should have killed the bat"},
+			{"type": "contains", "pattern": "capture: no deaths",
+				"message": "the crossing killed a run that should have made it"},
+			{"type": "player_position", "min_x": 944,
+				"message": "the hero is not on the far bank"},
+		],
+	},
 ]
