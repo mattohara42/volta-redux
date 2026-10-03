@@ -201,7 +201,13 @@ sprite alone at the right, and the room grew to 760 to fit it. **Its arc is
 painted into the frames**, which `CLAUDE.md` says is the wrong approach
 (`BACKLOG.md`).
 
-## Act 1 props, generated and not yet wired (2026-09-30)
+## Act 1 props (generated 2026-09-30, wired 2026-10-03)
+
+Wired into `Act1Bailey` and `Act1Gate`: wood pick 3, chain 2 and shackle 1 as
+listed, and portcullis **6**, because picks 1 and 5 have crossbars and a gate
+drawn with them reads as a ladder, which is a climbable thing in this game.
+The switch and brazier stay drawn in code: the switch's slot shape was found
+by playing (`SwordSwitch`), and the generated ones came back as barrels.
 
 The last 90 credits, one `generate` each, all in `assets/art_raw/` and none
 picked or in the game yet. The rooms still draw these as rectangles.

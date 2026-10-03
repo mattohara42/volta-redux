@@ -29,6 +29,14 @@ const BATTLEMENT_TILES: Array[Texture2D] = [
 ]
 ## Two teeth per tile. Warm and saturated, because it kills (`ART_DIRECTION.md`).
 const SPIKE_TILES: Array[Texture2D] = [preload("res://assets/art/act1/tiles_px/spikes.png")]
+## Planks a sword bites into. Warm umber, so wood reads as wood from across the
+## room (`ART_DIRECTION.md`).
+const WOOD_TILES: Array[Texture2D] = [preload("res://assets/art/act1/tiles_px/wood.png")]
+## The portcullis a `Gate` draws, repeating top to bottom.
+const PORTCULLIS_TILE: Texture2D = preload("res://assets/art/act1/tiles_px/portcullis.png")
+## Heavy chain, repeating top to bottom, and the ring it hangs from.
+const CHAIN_TILES: Array[Texture2D] = [preload("res://assets/art/act1/tiles_px/chain.png")]
+const SHACKLE: Texture2D = preload("res://assets/art/act1/props/shackle.png")
 ## A cracked slab, cropped to the stone so its top row is the surface you land on.
 const CRUMBLE_TILE: Texture2D = preload("res://assets/art/act1/tiles_px/crumble.png")
 const UNSHADED: Array[Color] = [Color.WHITE]
@@ -102,6 +110,19 @@ static func draw_wall(canvas: CanvasItem, rect: Rect2) -> void:
 
 static func draw_ladder(canvas: CanvasItem, rect: Rect2) -> void:
 	draw_tiled(canvas, LADDER_TILES, rect, UNSHADED)
+
+
+static func draw_wood(canvas: CanvasItem, rect: Rect2) -> void:
+	draw_tiled(canvas, WOOD_TILES, rect, UNSHADED)
+
+
+## A chain hanging from a shackle at `top`, down to `bottom`, centred on `x`.
+## `shade` dims it for a chain seen in the dark, behind the room.
+static func draw_chain(canvas: CanvasItem, x: float, top: float, bottom: float, shade: Color) -> void:
+	var width := CHAIN_TILES[0].get_width()
+	var ring := SHACKLE.get_height()
+	canvas.draw_texture(SHACKLE, Vector2(x - SHACKLE.get_width() * 0.5, top), shade)
+	draw_tiled(canvas, CHAIN_TILES, Rect2(x - width * 0.5, top + ring, width, bottom - top - ring), [shade])
 
 
 ## A row of battlements standing on a wall walk whose surface is `walk_y`, from
