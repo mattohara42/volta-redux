@@ -5,6 +5,6 @@
 [resource]
 script = ExtResource("1_act")
 title = "Act 2: the lava caverns"
-rooms = PackedStringArray("res://scenes/rooms/act2_mouth.tscn", "res://scenes/rooms/act2_geysers.tscn", "res://scenes/rooms/act2_causeway.tscn", "res://scenes/rooms/act2_tide.tscn", "res://scenes/rooms/act2_mine.tscn")
+rooms = PackedStringArray("res://scenes/rooms/act2_mouth.tscn", "res://scenes/rooms/act2_geysers.tscn", "res://scenes/rooms/act2_causeway.tscn", "res://scenes/rooms/act2_tide.tscn", "res://scenes/rooms/act2_mine.tscn", "res://scenes/rooms/act2_lair.tscn")
 complete_card_seconds = 2.5
 card_font_size = 24

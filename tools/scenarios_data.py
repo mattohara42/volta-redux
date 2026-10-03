@@ -563,4 +563,25 @@ SCENARIOS: list[dict] = [
 				"message": "nobody should have died on the climb"},
 		],
 	},
+	{
+		"name": "Act 2: chain the dragon with a recall and walk on past it",
+		"scene": "res://scenes/rooms/act2_lair.tscn",
+		"out": "act2_lair_chained.png",
+		"input": (
+			"move_right:18;move_right,jump:8;move_right:24;throw:6;-:40;move_right:20;-:5;"
+			"throw:25;-:20;move_right:80;-:20"
+		),
+		"zoom": 1.6,
+		"centre": (380, 260),
+		"checks": [
+			{"type": "contains", "pattern": "capture: no enemies remaining",
+				"message": "the recall should have chained the dragon"},
+			{"type": "contains", "pattern": "capture: no deaths",
+				"message": "a chained dragon should no longer kill on contact"},
+			{"type": "player_position", "min_x": 430,
+				"message": "the hero should have walked under the timber past the dragon"},
+			{"type": "contains", "pattern": "3 sword(s) held",
+				"message": "the fight should have cost nothing, and the chest made it three"},
+		],
+	},
 ]

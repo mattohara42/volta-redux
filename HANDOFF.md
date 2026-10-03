@@ -26,9 +26,9 @@ right, in every room.
 
 ## The next action
 
-**Act 2, rooms 1 to 5 built:** `Act2Mouth`, `Act2Geysers`, `Act2Causeway`
-extend their M3 benches; `Act2Tide` is the lava tide; `Act2Mine` climbs two
-sword-step storeys past an eyeball. Next: the dragon's lair. **Act 2 needs a painted background** (Matt, Gemini);
+**All six Act 2 rooms built and connected,** ending in `Act2Lair`, where a
+recall overpowers the dragon and chains it (`Dragon._defeat`), costing no
+sword. M11's done-when is met in CI; feel waits on Matt's play. **Act 2 needs a painted background** (Matt, Gemini);
 until then its rooms show a plain backdrop under a rock ceiling.
 
 ## Blocked on Matt

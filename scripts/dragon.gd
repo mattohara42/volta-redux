@@ -39,6 +39,9 @@ var phase: DragonBreath.Phase = DragonBreath.Phase.CHARGE
 ## make the same choice for the same reason.
 var _breath: Area2D
 var _flame: ColorRect
+## Overpowered: no breath, no bite, chains across it, and no longer an enemy.
+var is_chained := false
+var _chains: Node2D
 var _light: LightGlow
 
 
@@ -129,12 +132,40 @@ func _update() -> void:
 ## and for the same reason: a respawn that landed mid-breath would be a death
 ## nobody could have seen coming, which is the punishment M3 exists to remove.
 func reset(frozen_for: float) -> void:
+	if is_chained:
+		return
 	_elapsed = -maxf(frozen_for, 0.0)
 	_update()
 
 
 func status() -> String:
+	if is_chained:
+		return "dragon chained"
 	return "dragon %s%s" % [DragonBreath.phase_name(phase), _status_suffix()]
+
+
+## Not killed: overpowered and chained (Matt, 2026-09-28, `LEVELS.md`). It stops
+## breathing and stops killing on contact, chains are drawn across it, and it
+## leaves the enemies group, because a chained dragon is scenery you walk past.
+## It stays chained through a respawn: `reset` leaves it alone.
+func _defeat() -> void:
+	is_chained = true
+	remove_from_group("enemies")
+	set_physics_process(false)
+	set_deferred("monitoring", false)
+	_breath.set_deferred("monitoring", false)
+	_flame.visible = false
+	_light.set_strength(0.0)
+	_chains = Node2D.new()
+	_chains.draw.connect(_draw_chains)
+	add_child(_chains)
+
+
+## Two chains over its back to the floor either side, from the Act 1 tiles: the
+## same chain the bailey's grate showed in the dark, now on the creature.
+func _draw_chains() -> void:
+	for side in [-0.3, 0.3]:
+		TileArt.draw_chain(_chains, killing_box.x * side, -killing_box.y * 0.5, killing_box.y * 0.5, Color.WHITE)
 
 
 ## The one override that makes this a boss rather than a fifth animal: a
