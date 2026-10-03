@@ -219,7 +219,10 @@ picked or in the game yet. The rooms still draw these as rectangles.
 
 Four `generate` requests, 60 credits, each usable first time. In
 `assets/art_raw/`, contact sheet with tiles repeated three across at
-`_experiments/batch1_contact.png`. Picked, not wired.
+`_experiments/batch1_contact.png`. Wired into `Act1Wall` on 2026-10-03 (crumbling stone moved to pick 8, since 9
+leaves a blank right column that shows as a seam); the processed tiles are in
+`assets/art/act1/tiles_px/` and the torch in `assets/art/act1/props/`. The room
+as it renders: `_experiments/act1_wall_{climb,gatehouse,breach}.png`.
 
 | delivery | size | picks | notes |
 |---|---|---|---|

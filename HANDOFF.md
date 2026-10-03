@@ -10,33 +10,31 @@ told what the sword does (`BUILD_PLAN.md`).
 
 ## Where this is
 
-**Credits: 840** (2026-10-03, after batch 1). Matt topped up 450 and the
-developer matched it. Spend in small measured batches, looking at each before
-the next (`ART.md` → *What is left to generate* for the list, *Act 1 outer
-wall, batch 1* for the latest picks). Enemies and new characters wait on
-Matt's verdict on `RoomM7Sheet`, since a "not consistent" there means redoing.
+**Credits: 840** (Matt's 450 plus the developer's matching 450, less batch 1).
+Spend in small batches, each looked at before the next (`ART.md` → *What is
+left to generate*). Enemies and characters wait on `RoomM7Sheet`'s verdict.
 
-**Room 1 of 4 built:** `Act1Bank` (`scenes/rooms/act1_bank.tscn`, last on F2).
+**Rooms 1 and 2 of 4 built:** `Act1Bank` and `Act1Wall` (the outer wall: the
+climb, the gatehouse step that teaches from-above, the breach), last two on F2.
 Real rooms extend `Bench` and draw with `TileArt` (`Bench`'s class comment says
 why). The sword counter (`SwordCounter`) shows swords in hand and out, top
 right, in every room.
 
-**Act 1 props are generated, not wired:** wood, portcullis, switch, brazier,
-chain, shackle. `ART.md` → *Act 1 props* has the usable picks and which need
-`tools/recolour-darks.py`. The rooms still draw these as rectangles.
+**Wired:** battlements, spikes, crumbling slabs (`FallingPlatform.art`) and
+`WallTorch`, in `Act1Wall`. **Generated, not wired:** wood, portcullis, switch,
+brazier, chain, shackle (`ART.md` → *Act 1 props*); rooms 3 and 4 need them.
 
 ## The next action
 
-**Matt plays `Act1Bank`** and looks at `RoomM7Sheet`. Then room 2 (the outer
-wall: ladders, bats, the scorpion's from-above trick), room 3 (embed: wood, a
-switch, a glimpse of the chained dragon), room 4 (must stand on your own
-sword, ends at the gate), with the act-state autoload arriving alongside room 2.
-Pick and wire the props as each room needs them.
+**Matt plays `Act1Bank` and `Act1Wall`** and looks at `RoomM7Sheet`. Then the
+act-state autoload (not built yet: rooms still end at a gold marker), room 3
+(embed: wood, a switch, a glimpse of the chained dragon) and room 4 (must stand
+on your own sword, ends at the gate), wiring the generated props as each needs.
 
 ## Blocked on Matt
 
-1. **Playing `Act1Bank`**: does it teach the throw and the scorpion's armour
-   with no words?
+1. **Playing `Act1Bank` and `Act1Wall`**: does the bank teach the throw and
+   the armour, and does the gatehouse step teach from-above, with no words?
 2. **`RoomM7Sheet`**: are the six consistent in treatment? That closes M7.
 3. **M4 playtest feedback**: the dragon's pacing, the ledge-to-wood throw and
    the dormant scorpion's wake-to-danger gap. Blocks M14's tuning of those.

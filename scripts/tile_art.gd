@@ -22,6 +22,15 @@ const WALL_TILES: Array[Texture2D] = [
 	preload("res://assets/art/act1/tiles_px/wall_fill_5.png"),
 ]
 const LADDER_TILES: Array[Texture2D] = [preload("res://assets/art/act1/tiles_px/ladder.png")]
+## The outer wall's crenellations: a merlon and a gap per tile, standing behind
+## a wall walk. Scenery, not geometry: nothing stands on it.
+const BATTLEMENT_TILES: Array[Texture2D] = [
+	preload("res://assets/art/act1/tiles_px/battlement.png")
+]
+## Two teeth per tile. Warm and saturated, because it kills (`ART_DIRECTION.md`).
+const SPIKE_TILES: Array[Texture2D] = [preload("res://assets/art/act1/tiles_px/spikes.png")]
+## A cracked slab, cropped to the stone so its top row is the surface you land on.
+const CRUMBLE_TILE: Texture2D = preload("res://assets/art/act1/tiles_px/crumble.png")
 const UNSHADED: Array[Color] = [Color.WHITE]
 
 ## Atmosphere only, not the player's path: the painted wall pixelated to a 640x360
@@ -93,6 +102,27 @@ static func draw_wall(canvas: CanvasItem, rect: Rect2) -> void:
 
 static func draw_ladder(canvas: CanvasItem, rect: Rect2) -> void:
 	draw_tiled(canvas, LADDER_TILES, rect, UNSHADED)
+
+
+## A row of battlements standing on a wall walk whose surface is `walk_y`, from
+## `x` for `width`. Shaded like the masonry under a lip, so it sits behind the
+## hero and reads as wall rather than as something to stand on.
+static func draw_battlements(canvas: CanvasItem, x: float, walk_y: float, width: float) -> void:
+	var height := BATTLEMENT_TILES[0].get_height()
+	draw_tiled(
+		canvas, BATTLEMENT_TILES, Rect2(x, walk_y - height, width, height),
+		[Palette.GROUND_SHADE[1]]
+	)
+
+
+## A spike bed's teeth over `bed`, the drawn rectangle `Bench._add_spikes` keeps.
+## The tile is drawn standing on the bed's floor, so it may stand a little proud
+## of the lethal box, never short of it.
+static func draw_spikes(canvas: CanvasItem, bed: Rect2) -> void:
+	var height := SPIKE_TILES[0].get_height()
+	draw_tiled(
+		canvas, SPIKE_TILES, Rect2(bed.position.x, bed.end.y - height, bed.size.x, height), UNSHADED
+	)
 
 
 ## Repeats `textures` from `rect`'s top-left corner, a variant per cell by

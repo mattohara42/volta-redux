@@ -80,6 +80,11 @@ extends Resource
 @export var light_brazier_radius: float = 60.0
 @export_range(0.0, 1.0) var light_brazier_strength: float = 0.5
 @export_range(0.0, 1.0) var light_brazier_flicker: float = 0.35
+## A wall torch: smaller and dimmer than a brazier, so the checkpoint still
+## reads as the brightest thing on a wall walk.
+@export var light_torch_radius: float = 40.0
+@export_range(0.0, 1.0) var light_torch_strength: float = 0.35
+@export_range(0.0, 1.0) var light_torch_flicker: float = 0.45
 ## The dragon's breath, at its brightest.
 @export var light_breath_radius: float = 80.0
 @export_range(0.0, 1.0) var light_breath_strength: float = 0.6
