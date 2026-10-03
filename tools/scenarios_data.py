@@ -57,13 +57,18 @@ SCENARIOS: list[dict] = [
 		],
 	},
 	{
-		"name": "Screenshot the ledge over the gap",
+		"name": "Cross the M2 gap on a sword in the hoarding",
 		"scene": "res://scenes/rooms/room_m2_gap.tscn",
 		"out": "room_m2_gap.png",
-		"input": "throw:6;-:40",
+		"input": "-:20;throw:4;-:40;move_right,jump:14;move_right:6;-:30;move_right,jump:16;move_right:16;-:20",
 		"zoom": 0.5,
 		"centre": (440, 250),
-		"checks": [],
+		"checks": [
+			{"type": "player_position", "min_x": 488.0, "max_y": 250.0,
+				"message": "the hero should be standing on the far side, past the hoarding"},
+			{"type": "contains", "pattern": "sword embedded",
+				"message": "the step should be a sword embedded in the hoarding"},
+		],
 	},
 	{
 		"name": "Screenshot the gate a sword opened",

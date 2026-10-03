@@ -47,11 +47,12 @@ const SWITCH_WALL := Rect2(0.0, 0.0, 24.0, FLOOR_TOP - 40.0)
 ## past is the switch. A sword thrown at it while it is shut is a sword gone.
 const GATE := Rect2(400.0, 200.0, 16.0, FLOOR_TOP - 200.0)
 
-## The same crossing as M2's first room, on the far side of the gate.
+## The same crossing as M2's first room, on the far side of the gate: the far
+## side out of a jump's reach, with a wooden face the sword makes a step in.
 const NEAR_EDGE: float = 560.0
-const FAR_EDGE: float = 680.0
-const FAR_TOP: float = FLOOR_TOP - 32.0
-const POST := Rect2(625.0, 200.0, 10.0, ROOM_HEIGHT - 200.0)
+const FAR_EDGE: float = 632.0
+const FAR_TOP: float = FLOOR_TOP - 64.0
+const HOARDING := Rect2(FAR_EDGE, FAR_TOP, 16.0, ROOM_HEIGHT - FAR_TOP)
 const PIT_TOP: float = 356.0
 
 
@@ -60,9 +61,9 @@ func _ready() -> void:
 
 	_add_solid(Rect2(0.0, FLOOR_TOP, NEAR_EDGE, ROOM_HEIGHT - FLOOR_TOP))
 	_add_solid(SWITCH_WALL)
-	_add_solid(Rect2(FAR_EDGE, FAR_TOP, ROOM_WIDTH - FAR_EDGE, ROOM_HEIGHT - FAR_TOP))
+	_add_solid(Rect2(HOARDING.end.x, FAR_TOP, ROOM_WIDTH - HOARDING.end.x, ROOM_HEIGHT - FAR_TOP))
 	_add_solid(Rect2(NEAR_EDGE, PIT_TOP, FAR_EDGE - NEAR_EDGE, ROOM_HEIGHT - PIT_TOP))
-	_add_wood(POST)
+	_add_wood(HOARDING)
 	_add_ladder(NEAR_EDGE + 4.0, FLOOR_TOP, PIT_TOP)
 
 	# The room wires its own switch to its own gate. CLAUDE.md: a room never
