@@ -85,6 +85,8 @@ func status() -> String:
 ## slab will be in a second**, and that is the sentence a player has to read
 ## before they decide to jump.
 func _draw() -> void:
+	if _draw_art():
+		return
 	_draw_rail()
 	var rect := Rect2(-_size * 0.5, _size)
 	draw_rect(rect, Palette.STONE_MID)

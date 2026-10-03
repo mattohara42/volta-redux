@@ -7,20 +7,8 @@
 ## walkable lip (`Palette.GROUND_SHADE`).
 class_name TileArt
 
-const FLOOR_TILES: Array[Texture2D] = [
-	preload("res://assets/art/act1/tiles_px/floor_top_0.png"),
-	preload("res://assets/art/act1/tiles_px/floor_top_1.png"),
-	preload("res://assets/art/act1/tiles_px/floor_top_2.png"),
-	preload("res://assets/art/act1/tiles_px/floor_top_3.png"),
-]
-const WALL_TILES: Array[Texture2D] = [
-	preload("res://assets/art/act1/tiles_px/wall_fill_0.png"),
-	preload("res://assets/art/act1/tiles_px/wall_fill_1.png"),
-	preload("res://assets/art/act1/tiles_px/wall_fill_2.png"),
-	preload("res://assets/art/act1/tiles_px/wall_fill_3.png"),
-	preload("res://assets/art/act1/tiles_px/wall_fill_4.png"),
-	preload("res://assets/art/act1/tiles_px/wall_fill_5.png"),
-]
+## The castle, which every room draws unless it passes another act's set.
+const ACT1: ActTiles = preload("res://assets/art/act1/act1_tiles.tres")
 const LADDER_TILES: Array[Texture2D] = [preload("res://assets/art/act1/tiles_px/ladder.png")]
 ## The outer wall's crenellations: a merlon and a gap per tile, standing behind
 ## a wall walk. Scenery, not geometry: nothing stands on it.
@@ -41,26 +29,27 @@ const SHACKLE: Texture2D = preload("res://assets/art/act1/props/shackle.png")
 const CRUMBLE_TILE: Texture2D = preload("res://assets/art/act1/tiles_px/crumble.png")
 const UNSHADED: Array[Color] = [Color.WHITE]
 
-## Atmosphere only, not the player's path: the painted wall pixelated to a 640x360
-## room by `tools/pixelate.py`.
-const BACKGROUND: Texture2D = preload("res://assets/art/act1/wall_moat_bg_px.png")
-
-
 ## One floor tile's width, the unit a ledge's length is counted in so its art
 ## ends on a tile edge.
 static func tile_width() -> float:
-	return FLOOR_TILES[0].get_width()
+	return ACT1.floor_tiles[0].get_width()
 
 
 static func draw_background(canvas: CanvasItem) -> void:
-	canvas.draw_texture(BACKGROUND, Vector2.ZERO)
+	canvas.draw_texture(ACT1.background, Vector2.ZERO)
 
 
 ## The painted wall repeated across a room wider than one screen. Every other
 ## copy is mirrored, so the seam between two copies is the same edge meeting
 ## itself rather than one edge meeting the other.
-static func draw_background_across(canvas: CanvasItem, width: float) -> void:
-	var step := float(BACKGROUND.get_width())
+static func draw_background_across(canvas: CanvasItem, width: float, tiles: ActTiles = null) -> void:
+	var set := _or_act1(tiles)
+	if set.background == null:
+		# Not painted yet: the plain backdrop, which the light layer still falls on.
+		canvas.draw_rect(Rect2(0.0, 0.0, width, Bench.ROOM_HEIGHT), Palette.BACKDROP)
+		return
+	var bg := set.background
+	var step := float(bg.get_width())
 	var x := 0.0
 	var mirrored := false
 	while x < width:
@@ -68,7 +57,7 @@ static func draw_background_across(canvas: CanvasItem, width: float) -> void:
 			canvas.draw_set_transform(Vector2(x + step, 0.0), 0.0, Vector2(-1.0, 1.0))
 		else:
 			canvas.draw_set_transform(Vector2(x, 0.0))
-		canvas.draw_texture(BACKGROUND, Vector2.ZERO)
+		canvas.draw_texture(bg, Vector2.ZERO)
 		x += step
 		mirrored = not mirrored
 	canvas.draw_set_transform(Vector2.ZERO)
@@ -76,11 +65,12 @@ static func draw_background_across(canvas: CanvasItem, width: float) -> void:
 
 ## A strip of floor tiles along the top edge of `rect`, masonry below it,
 ## stepping darker row by row the way shadow falls under a ledge.
-static func draw_ground(canvas: CanvasItem, rect: Rect2) -> void:
-	var lip := FLOOR_TILES[0].get_height()
-	draw_tiled(canvas, FLOOR_TILES, Rect2(rect.position, Vector2(rect.size.x, lip)), UNSHADED)
+static func draw_ground(canvas: CanvasItem, rect: Rect2, tiles: ActTiles = null) -> void:
+	var set := _or_act1(tiles)
+	var lip := set.floor_tiles[0].get_height()
+	draw_tiled(canvas, set.floor_tiles, Rect2(rect.position, Vector2(rect.size.x, lip)), UNSHADED)
 	draw_tiled(
-		canvas, WALL_TILES, Rect2(rect.position + Vector2(0.0, lip), rect.size - Vector2(0.0, lip)),
+		canvas, set.wall_tiles, Rect2(rect.position + Vector2(0.0, lip), rect.size - Vector2(0.0, lip)),
 		Palette.GROUND_SHADE
 	)
 
@@ -89,20 +79,21 @@ static func draw_ground(canvas: CanvasItem, rect: Rect2) -> void:
 ## above: stone you cannot stand on should not show the top that says you can.
 ## It is lit from below, where the braziers and the hero are, and falls into
 ## the dark going up, so a wall a screen tall does not outshine the floor.
-static func draw_wall(canvas: CanvasItem, rect: Rect2) -> void:
-	var rows := ceili(rect.size.y / WALL_TILES[0].get_height())
+static func draw_wall(canvas: CanvasItem, rect: Rect2, tiles: ActTiles = null) -> void:
+	var set := _or_act1(tiles)
+	var rows := ceili(rect.size.y / set.wall_tiles[0].get_height())
 	var lit := Palette.GROUND_SHADE[Palette.GROUND_SHADE.size() - 1]
 	var shades: Array[Color] = []
 	for row in rows:
 		var t := float(row) / float(maxi(rows - 1, 1))
 		shades.append(Palette.WALL_DARK.lerp(lit, t * t * t))
-	draw_tiled(canvas, WALL_TILES, rect, shades)
+	draw_tiled(canvas, set.wall_tiles, rect, shades)
 	# A lintel along the bottom: the floor's own lip, upside down, so the edge
 	# you walk under is finished the way the edge you walk on is.
-	var lip := FLOOR_TILES[0].get_height()
+	var lip := set.floor_tiles[0].get_height()
 	canvas.draw_set_transform(Vector2(0.0, rect.end.y * 2.0 - lip), 0.0, Vector2(1.0, -1.0))
 	draw_tiled(
-		canvas, FLOOR_TILES, Rect2(rect.position.x, rect.end.y - lip, rect.size.x, lip),
+		canvas, set.floor_tiles, Rect2(rect.position.x, rect.end.y - lip, rect.size.x, lip),
 		[Palette.GROUND_SHADE[1]]
 	)
 	canvas.draw_set_transform(Vector2.ZERO)
@@ -170,3 +161,7 @@ static func draw_tiled(
 			x += tile.x
 		y += tile.y
 		row += 1
+
+
+static func _or_act1(tiles: ActTiles) -> ActTiles:
+	return tiles if tiles != null else ACT1

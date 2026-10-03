@@ -27,14 +27,6 @@ var phase: PlatformCycle.Phase = PlatformCycle.Phase.STEADY
 var _drop: float = 0.0
 ## Seconds since something stood on it, or -1 when nothing has.
 var _elapsed: float = -1.0
-## A tile to repeat across the slab in place of the bench drawing, for a real
-## room. Null in the grey benches, which keep the shapes below.
-var art: Texture2D = null:
-	set(value):
-		art = value
-		# Tiling a texture across a rect only repeats when the item allows it.
-		texture_repeat = TEXTURE_REPEAT_ENABLED if value != null else TEXTURE_REPEAT_PARENT_NODE
-		queue_redraw()
 
 
 ## Built in code rather than handed a scene, like every other mechanism in the
@@ -127,10 +119,9 @@ func status() -> String:
 ## underside, which is the silhouette of a thing that has already half gone.
 ## Whether that reads at 40 px is a screenshot question and not a test question.
 func _draw() -> void:
-	var rect := Rect2(-_size * 0.5, _size)
-	if art != null:
-		draw_texture_rect(art, rect, true)
+	if _draw_art():
 		return
+	var rect := Rect2(-_size * 0.5, _size)
 	draw_rect(rect, Palette.STONE_MID)
 	# The lit top edge every solid in the benches has, so it reads as a surface
 	# you stand on rather than as an object floating in the gap.

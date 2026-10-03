@@ -22,6 +22,14 @@ var _size := Vector2.ZERO
 ## relative to this, so "home" is a fact about the room and not about the clock.
 var _home := Vector2.ZERO
 var _shape: CollisionShape2D
+## A tile to repeat across the slab in place of the bench drawing, for a real
+## room. Null in the grey benches, which keep their shapes.
+var art: Texture2D = null:
+	set(value):
+		art = value
+		# Tiling a texture across a rect only repeats when the item allows it.
+		texture_repeat = TEXTURE_REPEAT_ENABLED if value != null else TEXTURE_REPEAT_PARENT_NODE
+		queue_redraw()
 
 
 ## The body every platform is: a box of the size the room asked for, moved by
@@ -70,3 +78,14 @@ func reset(frozen_for: float) -> void:
 ## slab at home and a slab one frame from letting go are the same picture.
 func status() -> String:
 	return "platform"
+
+
+## Draws `art` across the slab if it has any, and says whether it did. The art
+## hangs from the standing surface at its own height, so a jagged underside is
+## not cut off at the collision box.
+func _draw_art() -> bool:
+	if art == null:
+		return false
+	var top_left := -_size * 0.5
+	draw_texture_rect(art, Rect2(top_left, Vector2(_size.x, art.get_height())), true)
+	return true

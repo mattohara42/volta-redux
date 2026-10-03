@@ -3,12 +3,12 @@
 ##
 ## A room ends at a `RoomExit`, which hands the hero over here. This finds the
 ## room in its act, carries the swords in hand into the next room, and at the
-## end of the act shows the act-complete card and starts the act again: the
-## placeholder for Act 2's first room. Rooms loaded any other way (F2, a bench,
+## end of an act shows its card and moves on to the next act's first room, or
+## plays the last act again until there is an ending. Rooms loaded any other way (F2, a bench,
 ## `tools/dev.sh play`) start as they always did.
 extends Node
 
-const ACTS: Array[ActConfig] = [preload("res://config/act1.tres")]
+const ACTS: Array[ActConfig] = [preload("res://config/act1.tres"), preload("res://config/act2.tres")]
 
 ## Swords to arrive with, or -1 for none carried. Read once, by the next hero.
 var _carried := -1
@@ -37,7 +37,7 @@ func leave_room(room_path: String, swords_held: int, max_swords: int) -> void:
 		_carried = ActRoute.carried(swords_held, max_swords)
 		get_tree().change_scene_to_file.call_deferred(next)
 	else:
-		_finish(act)
+		_finish(act, swords_held, max_swords)
 
 
 ## The act `room_path` belongs to, or null for a bench.
@@ -48,9 +48,9 @@ func act_of(room_path: String) -> ActConfig:
 	return null
 
 
-## The act-complete card: the room freezes under it, then the act starts over
-## from its first room with a fresh hero.
-func _finish(act: ActConfig) -> void:
+## The act-complete card: the room freezes under it, then the next act begins
+## with what you held, as any exit carries it.
+func _finish(act: ActConfig, swords_held: int, max_swords: int) -> void:
 	var card := CanvasLayer.new()
 	card.process_mode = Node.PROCESS_MODE_ALWAYS
 	card.layer = 100
@@ -71,5 +71,6 @@ func _finish(act: ActConfig) -> void:
 	await get_tree().create_timer(act.complete_card_seconds, true).timeout
 	get_tree().paused = false
 	card.queue_free()
-	_carried = -1
-	get_tree().change_scene_to_file(act.rooms[0])
+	var next := ACTS[ActRoute.act_after(ACTS.find(act), ACTS.size())]
+	_carried = ActRoute.carried(swords_held, max_swords)
+	get_tree().change_scene_to_file(next.rooms[0])

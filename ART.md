@@ -248,6 +248,19 @@ One `generate` at 32 (`prop_sword_chest`, prompt in the log), after a first try
 came back HTTP 403 with nothing generated. Pick 2: side on, three gold hilts
 upright, passes the palette check (only 1 to 3 do). Wired as `SwordChest`.
 
+## Act 2 tiles, batch 1 (2026-10-03)
+
+Four `generate` requests at 16, 60 credits, plus three HTTP 403s that cost
+nothing and went through on retry. Picks: cavern floor 2, cavern wall 3, basalt
+slab 4 (cropped to its rows), mine beam 1; all pass the palette check. Floor and
+wall variants from `tools/tile-variants.py`, whose damp green cast is the moat's
+and wrong for a dry cavern: worth a `--dry` flag before Act 2 ships. Drawn
+through `ActTiles` (`assets/art/act2/act2_tiles.tres`). Contact sheet:
+`_experiments/act2_batch1_contact.png`; in a room: `_experiments/act2_mouth_*.png`.
+
+**Act 2 has no background.** It is painted in Gemini and pixelated (*Four
+layers*), which is Matt's time, not credits.
+
 ## M9: lava, electricity and atmosphere (2026-09-28)
 
 **Nothing here is generated: no credits, no PNG.** Taken while credits were 0
