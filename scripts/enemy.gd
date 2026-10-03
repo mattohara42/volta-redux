@@ -65,7 +65,14 @@ func _on_area_entered(area: Area2D) -> void:
 	if not area.is_in_group("swords"):
 		return
 	if is_vulnerable_to(area):
-		queue_free()
+		_defeat()
+
+
+## What losing does. Every enemy but one simply goes: `SPEC.md`'s "both die".
+## The dragon overrides this, because it is overpowered and chained rather than
+## killed, and it is the same dragon you free in Act 4.
+func _defeat() -> void:
+	queue_free()
 
 
 ## Dormant decoration does not kill on touch. `Hazard`'s own signal calls
