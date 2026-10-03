@@ -3,17 +3,22 @@
 ##
 ## Two beats, left to right:
 ##
-##   1. **The ditch.** `RoomM2Gap`'s crossing, the same numbers raised onto the
-##      approach: a gap too wide to jump with the far side higher, and a wooden
-##      post standing in it. A throw into the post grows a one-tile ledge halfway
-##      across. A ladder gets you out of the ditch, so falling in is a retry.
+##   1. **The ditch.** The far side is too high to jump to, and its face is a
+##      wooden hoarding. A throw into the face grows a one-tile ledge just under
+##      the far side: jump onto your sword, then up off it. A ladder gets you out
+##      of the ditch, so falling in is a retry.
+##
+##      This was `RoomM2Gap`'s post-in-the-gap first, and a real build showed the
+##      post blocking the way on from the ledge: a jump off the ledge cannot clear
+##      a post that a jump from the floor cannot land on. Putting the wood in the
+##      far face keeps the verb and removes the wall.
 ##   2. **The gate yard.** A drop into the yard before the castle gate. The
 ##      switch is set into the face you dropped from, as in the bailey, and the
 ##      gate is the way out of Act 1. A ladder goes back up, and a chest there
 ##      means nobody arrives at the last gate with nothing to throw.
 ##
-## `tests/test_act1_gate.gd` holds the crossing to `config/` the way
-## `tests/test_room_m2_gap.gd` holds the bench it came from.
+## `tests/test_act1_gate.gd` holds the crossing to `config/`, and the scenario
+## in `tools/scenarios_data.py` crosses it in a real build.
 class_name Act1Gate
 extends Bench
 
@@ -26,11 +31,12 @@ const NEAR_TOP: float = FLOOR_TOP - 48.0
 const START_BRAZIER_X: float = 48.0
 const CHEST_X: float = 96.0
 
-## `RoomM2Gap`'s crossing, the same widths and rises.
+## The ditch. The far side stands higher than a jump, and its face is wood.
 const NEAR_EDGE: float = 400.0
-const FAR_EDGE: float = 520.0
-const FAR_TOP: float = NEAR_TOP - 32.0
-const POST := Rect2(465.0, NEAR_TOP - 120.0, 10.0, ROOM_HEIGHT - (NEAR_TOP - 120.0))
+const FAR_EDGE: float = 472.0
+const FAR_TOP: float = NEAR_TOP - 64.0
+const HOARDING_WIDTH: float = 16.0
+const HOARDING := Rect2(FAR_EDGE, FAR_TOP, HOARDING_WIDTH, ROOM_HEIGHT - FAR_TOP)
 const PIT_TOP: float = NEAR_TOP + 36.0
 
 const CHECKPOINT_X: float = 600.0
@@ -51,8 +57,8 @@ static func grounds() -> Array[Rect2]:
 	return [
 		Rect2(0.0, NEAR_TOP, NEAR_EDGE, ROOM_HEIGHT - NEAR_TOP),
 		Rect2(NEAR_EDGE, PIT_TOP, FAR_EDGE - NEAR_EDGE, ROOM_HEIGHT - PIT_TOP),
-		Rect2(FAR_EDGE, FAR_TOP, YARD_X - FAR_EDGE, SWITCH.position.y - FAR_TOP),
-		Rect2(FAR_EDGE, SWITCH.position.y, SWITCH.position.x - FAR_EDGE, ROOM_HEIGHT - SWITCH.position.y),
+		Rect2(HOARDING.end.x, FAR_TOP, YARD_X - HOARDING.end.x, SWITCH.position.y - FAR_TOP),
+		Rect2(HOARDING.end.x, SWITCH.position.y, SWITCH.position.x - HOARDING.end.x, ROOM_HEIGHT - SWITCH.position.y),
 		Rect2(YARD_X, FLOOR_TOP, ROOM_WIDTH - YARD_X, ROOM_HEIGHT - FLOOR_TOP),
 	]
 
@@ -65,7 +71,7 @@ func _ready() -> void:
 	for ground in grounds():
 		_add_solid(ground)
 	_add_solid(gate_wall())
-	_add_wood(POST, false)
+	_add_wood(HOARDING, false)
 	_add_ladder(NEAR_EDGE + 4.0, NEAR_TOP, PIT_TOP)
 	_add_ladder(LADDER_X, FAR_TOP, FLOOR_TOP)
 
@@ -91,9 +97,9 @@ func _draw() -> void:
 	# unbroken down to the yard, with the switch set into it.
 	TileArt.draw_ground(self, grounds()[0])
 	TileArt.draw_ground(self, grounds()[1])
-	TileArt.draw_ground(self, Rect2(FAR_EDGE, FAR_TOP, YARD_X - FAR_EDGE, ROOM_HEIGHT - FAR_TOP))
+	TileArt.draw_ground(self, Rect2(HOARDING.end.x, FAR_TOP, YARD_X - HOARDING.end.x, ROOM_HEIGHT - FAR_TOP))
 	TileArt.draw_ground(self, grounds()[4])
 	TileArt.draw_wall(self, gate_wall())
-	TileArt.draw_wood(self, POST)
+	TileArt.draw_wood(self, HOARDING)
 	for ladder in _ladders:
 		TileArt.draw_ladder(self, ladder)

@@ -242,12 +242,11 @@ log (subject, side view, what repeats, palette in words, coloured darks) gave
 several usable picks in every request. Iron still comes back neutral, so budget
 `recolour-darks.py` for anything iron, as with the brazier and switch.
 
-## Wanted: the sword chest (2026-10-03)
+## The sword chest (2026-10-03)
 
-One `generate` at 32, prompt in `assets/art_raw/sprite-fusion-log.jsonl`
-(`prop_sword_chest`). The first try came back HTTP 403 with nothing generated,
-so `SwordChest` draws a placeholder in code: wood, a gold band and lock, three
-gold hilts standing out of it (`_experiments/sword_chest_placeholder.png`).
+One `generate` at 32 (`prop_sword_chest`, prompt in the log), after a first try
+came back HTTP 403 with nothing generated. Pick 2: side on, three gold hilts
+upright, passes the palette check (only 1 to 3 do). Wired as `SwordChest`.
 
 ## M9: lava, electricity and atmosphere (2026-09-28)
 
