@@ -540,4 +540,27 @@ SCENARIOS: list[dict] = [
 				"message": "standing in the passage through a high tide should kill"},
 		],
 	},
+	{
+		"name": "Act 2: climb the mine on two swords, kill the eyeball, recall both",
+		"scene": "res://scenes/rooms/act2_mine.tscn",
+		"out": "act2_mine_climbed.png",
+		"input": (
+			"move_right:99;-:12;throw:4;-:40;move_right,jump:14;move_right:6;-:30;"
+			"move_right,jump:16;move_right:16;-:20;-:10;throw:4;-:30;move_right:76;-:12;"
+			"throw:4;-:40;move_right,jump:14;move_right:6;-:30;move_right,jump:16;"
+			"move_right:16;-:20;throw:40;-:90"
+		),
+		"zoom": 1.0,
+		"centre": (860, 200),
+		"checks": [
+			{"type": "player_position", "min_x": 888, "max_y": 190,
+				"message": "the hero should be on the top level"},
+			{"type": "contains", "pattern": "no enemies remaining",
+				"message": "the throw from the landing should have killed the eyeball"},
+			{"type": "contains", "pattern": "2 sword(s) held",
+				"message": "recall should have brought both steps home"},
+			{"type": "contains", "pattern": "capture: no deaths",
+				"message": "nobody should have died on the climb"},
+		],
+	},
 ]
