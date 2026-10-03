@@ -1,0 +1,48 @@
+## How rooms connect, as rules. The claims: exits only lead forward, the last
+## room finishes the act, only what is in your hand comes with you, and a chest
+## brings you up to its fill without ever taking a sword away or passing the cap.
+extends TestCase
+
+const ACT1 := "res://config/act1.tres"
+const SWORD := "res://config/sword.tres"
+var _rooms := PackedStringArray(["a.tscn", "b.tscn", "c.tscn"])
+
+
+func test_an_exit_leads_to_the_next_room() -> void:
+	check_eq(ActRoute.next_room(_rooms, "a.tscn"), "b.tscn", "a leads to b")
+	check_eq(ActRoute.next_room(_rooms, "b.tscn"), "c.tscn", "b leads to c")
+
+
+func test_the_last_room_finishes_the_act() -> void:
+	check_eq(ActRoute.next_room(_rooms, "c.tscn"), "", "nothing after the last room")
+	check(ActRoute.is_last(_rooms, "c.tscn"), "and it is the last")
+	check(not ActRoute.is_last(_rooms, "a.tscn"), "the first is not")
+
+
+func test_a_room_outside_the_act_goes_nowhere() -> void:
+	check_eq(ActRoute.next_room(_rooms, "bench.tscn"), "", "a bench's exit is dead")
+	check(not ActRoute.is_last(_rooms, "bench.tscn"), "and does not finish the act")
+
+
+func test_only_the_swords_in_hand_carry() -> void:
+	check_eq(ActRoute.carried(2, 5), 2, "two in hand, two arrive")
+	check_eq(ActRoute.carried(0, 5), 0, "an empty hand arrives empty")
+	check_eq(ActRoute.carried(7, 5), 5, "never past the cap")
+
+
+func test_a_chest_tops_you_up_and_never_takes_away() -> void:
+	check_eq(ActRoute.chest_top_up(0, 0, 3, 5), 3, "empty: up to three")
+	check_eq(ActRoute.chest_top_up(1, 1, 3, 5), 2, "one in hand, one out: two more in hand")
+	check_eq(ActRoute.chest_top_up(0, 3, 3, 5), 0, "all three out in the room: nothing")
+	check_eq(ActRoute.chest_top_up(4, 0, 3, 5), 4, "already over: keeps four")
+	check_eq(ActRoute.chest_top_up(0, 0, 9, 5), 5, "a fill past the cap stops at the cap")
+
+
+func test_act_one_lists_rooms_that_exist() -> void:
+	var act: ActConfig = load(ACT1)
+	check(act is ActConfig, "config/act1.tres is an ActConfig")
+	check(act.rooms.size() >= 2, "it has its rooms")
+	check(act.title != "", "and a title for its card")
+	check(act.complete_card_seconds > 0.0, "a card that is on screen")
+	for room in act.rooms:
+		check(ResourceLoader.exists(room), "%s exists" % room)

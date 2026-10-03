@@ -11,6 +11,10 @@ config/description="A 2D puzzle platformer. The sword is the game."
 run/main_scene="res://scenes/rooms/room_m0.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 
+[autoload]
+
+ActState="*res://scripts/act_state.gd"
+
 [display]
 
 window/size/viewport_width=640

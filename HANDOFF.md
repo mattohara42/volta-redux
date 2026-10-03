@@ -10,7 +10,7 @@ told what the sword does (`BUILD_PLAN.md`).
 
 ## Where this is
 
-**Credits: 840** (Matt's 450 plus the developer's matching 450, less batch 1).
+**Credits: 840.** The chest prompt got HTTP 403, nothing generated (`ART.md`).
 Spend in small batches, each looked at before the next (`ART.md` → *What is
 left to generate*). Enemies and characters wait on `RoomM7Sheet`'s verdict.
 
@@ -26,10 +26,11 @@ brazier, chain, shackle (`ART.md` → *Act 1 props*); rooms 3 and 4 need them.
 
 ## The next action
 
-**Matt plays `Act1Bank` and `Act1Wall`** and looks at `RoomM7Sheet`. Then the
-act-state autoload (not built yet: rooms still end at a gold marker), room 3
-(embed: wood, a switch, a glimpse of the chained dragon) and room 4 (must stand
-on your own sword, ends at the gate), wiring the generated props as each needs.
+**Matt plays Act 1 from `Act1Bank`**: rooms now connect (`ActState`, order in
+`config/act1.tres`), swords carry, a chest by each entry tops you up to three,
+and the last exit shows the act card. Then room 3 (embed: wood, a switch, a
+glimpse of the chained dragon) and room 4 (stand on your own sword, ends at the
+gate), each added to `config/act1.tres` and wired with the generated props.
 
 ## Blocked on Matt
 

@@ -139,6 +139,10 @@ func test_the_sword_count_is_the_difficulty_dial_and_it_is_small() -> void:
 		"you do not start over the cap"
 	)
 	check(sword.max_swords <= 5, "cap five, per SPEC.md")
+	check(
+		sword.chest_fill >= 1 and sword.chest_fill <= sword.max_swords,
+		"a chest gives something and never past the cap"
+	)
 
 
 ## An embedded sword is a one-tile ledge in M2. If these drift apart, that stops
