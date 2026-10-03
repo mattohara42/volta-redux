@@ -41,7 +41,6 @@ var _breath: Area2D
 var _flame: ColorRect
 ## Overpowered: no breath, no bite, chains across it, and no longer an enemy.
 var is_chained := false
-var _chains: Node2D
 var _light: LightGlow
 
 
@@ -147,6 +146,7 @@ func status() -> String:
 ## Not killed: overpowered and chained (Matt, 2026-09-28, `LEVELS.md`). It stops
 ## breathing and stops killing on contact, chains are drawn across it, and it
 ## leaves the enemies group, because a chained dragon is scenery you walk past.
+## Its sprite travels to the chained strain loop.
 ## It stays chained through a respawn: `reset` leaves it alone.
 func _defeat() -> void:
 	is_chained = true
@@ -156,16 +156,9 @@ func _defeat() -> void:
 	_breath.set_deferred("monitoring", false)
 	_flame.visible = false
 	_light.set_strength(0.0)
-	_chains = Node2D.new()
-	_chains.draw.connect(_draw_chains)
-	add_child(_chains)
-
-
-## Two chains over its back to the floor either side, from the Act 1 tiles: the
-## same chain the bailey's grate showed in the dark, now on the creature.
-func _draw_chains() -> void:
-	for side in [-0.3, 0.3]:
-		TileArt.draw_chain(_chains, killing_box.x * side, -killing_box.y * 0.5, killing_box.y * 0.5, Color.WHITE)
+	# The strain loop: the generated chained dragon (`ART.md`), heaving against
+	# the rings in the floor. Through its AnimationTree, like every state.
+	_sprite_tree["parameters/playback"].travel("chained")
 
 
 ## The one override that makes this a boss rather than a fifth animal: a

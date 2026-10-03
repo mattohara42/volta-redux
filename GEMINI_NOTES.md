@@ -323,3 +323,7 @@ came back as a full flip: spring, tuck, inverted, tumble, open. Frame 0 is still
 the input pose, and the tucked frames stay inside the 36 px canvas because the
 still was compact.
 
+**`edit` does not reliably hold size after all (2026-10-03, later).** Two edits
+of the 74x74 dragon came back 80x68 and 95x70, where the morning's re-test had
+both edits keep the input's size. Treat a size-held edit as likely, not given:
+measure every delivery, and budget for a sprite of its own size when it moves.

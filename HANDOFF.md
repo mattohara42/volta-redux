@@ -10,7 +10,7 @@ beatable without spending a sword on it (`BUILD_PLAN.md`).
 
 ## Where this is
 
-**Credits: 765.** Random HTTP 403s cost nothing; retry once.
+**Credits: 735.** Random HTTP 403s cost nothing; retry once.
 Spend in small batches, each looked at before the next (`ART.md` → *What is
 left to generate*). Enemies and characters wait on `RoomM7Sheet`'s verdict.
 
@@ -27,8 +27,8 @@ right, in every room.
 ## The next action
 
 **All six Act 2 rooms built and connected,** ending in `Act2Lair`, where a
-recall overpowers the dragon and chains it (`Dragon._defeat`), costing no
-sword. M11's done-when is met in CI; feel waits on Matt's play. **Act 2 needs a painted background** (Matt, Gemini);
+recall overpowers the dragon and chains it (`Dragon._defeat`, generated
+chained art), costing no sword. M11's done-when is met in CI; feel waits on Matt's play. **Act 2 needs a painted background** (Matt, Gemini);
 until then its rooms show a plain backdrop under a rock ceiling.
 
 ## Blocked on Matt

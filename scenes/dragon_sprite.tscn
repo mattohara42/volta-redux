@@ -1,6 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="Texture2D" path="res://assets/art/enemies/dragon_sheet.png" id="1_sheet"]
+[ext_resource type="Texture2D" path="res://assets/art/enemies/dragon_chained_sheet.png" id="2_chained"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_idle0"]
 atlas = ExtResource("1_sheet")
@@ -17,6 +18,22 @@ region = Rect2(148, 0, 74, 74)
 [sub_resource type="AtlasTexture" id="AtlasTexture_idle3"]
 atlas = ExtResource("1_sheet")
 region = Rect2(222, 0, 74, 74)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_chained0"]
+atlas = ExtResource("2_chained")
+region = Rect2(0, 0, 95, 70)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_chained1"]
+atlas = ExtResource("2_chained")
+region = Rect2(95, 0, 95, 70)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_chained2"]
+atlas = ExtResource("2_chained")
+region = Rect2(190, 0, 95, 70)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_chained3"]
+atlas = ExtResource("2_chained")
+region = Rect2(285, 0, 95, 70)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_e"]
 animations = [{
@@ -35,6 +52,23 @@ animations = [{
 }],
 "loop": true,
 "name": &"idle",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_chained0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_chained1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_chained2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_chained3")
+}],
+"loop": true,
+"name": &"chained",
 "speed": 1.0
 }]
 
@@ -66,18 +100,80 @@ tracks/1/keys = {
 "update": 1,
 "values": [0, 1, 2, 3]
 }
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AnimatedSprite2D:offset")
+tracks/2/interp = 0
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2(-37, -45)]
+}
+
+[sub_resource type="Animation" id="Animation_chained"]
+resource_name = "chained"
+length = 1.6
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:animation")
+tracks/0/interp = 0
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"chained"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:frame")
+tracks/1/interp = 0
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.0, 0.4, 0.8, 1.2),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AnimatedSprite2D:offset")
+tracks/2/interp = 0
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2(-47, -41)]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_e"]
 _data = {
+&"chained": SubResource("Animation_chained"),
 &"idle": SubResource("Animation_idle")
 }
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_idle"]
 animation = &"idle"
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_chained"]
+animation = &"chained"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="Transition_idle_chained"]
+
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_e"]
 states/idle/node = SubResource("AnimationNodeAnimation_idle")
 states/idle/position = Vector2(300, 100)
+states/chained/node = SubResource("AnimationNodeAnimation_chained")
+states/chained/position = Vector2(500, 100)
+transitions = ["idle", "chained", SubResource("Transition_idle_chained")]
 
 [node name="DragonSprite" type="Node2D"]
 
