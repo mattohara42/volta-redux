@@ -215,6 +215,24 @@ picked or in the game yet. The rooms still draw these as rectangles.
 | `tile_chain` | 16 | 7 to 11 | for the chained dragon |
 | `prop_shackle` | 16 | 1, 8, 9 | where the chain meets the wall |
 
+## Act 1 outer wall, batch 1 (2026-10-03)
+
+Four `generate` requests, 60 credits, each usable first time. In
+`assets/art_raw/`, contact sheet with tiles repeated three across at
+`_experiments/batch1_contact.png`. Picked, not wired.
+
+| delivery | size | picks | notes |
+|---|---|---|---|
+| `tile_battlement` | 16 | 0, then 9, 11 | 0 is the clearest merlon-and-gap row; 1 and 6 are off-palette saturated blue; 8 came back 18x18 |
+| `tile_spikes` | 16 | 0, 9 | all pass the palette check; 10 and 11 are brightest and risk competing with lava |
+| `tile_stone_crumble` | 16 | 9, 7, 8 | a top-half slab with cracks; 2 to 4 are full-tile and too saturated |
+| `prop_wall_torch` | 32 | 6, 7, 9 | 9 of 12 fail the palette check on neutral iron, and `recolour-darks.py` fixes all three picks |
+
+**The one-request recipe held for tiles and props**: the prompt shape in the
+log (subject, side view, what repeats, palette in words, coloured darks) gave
+several usable picks in every request. Iron still comes back neutral, so budget
+`recolour-darks.py` for anything iron, as with the brazier and switch.
+
 ## M9: lava, electricity and atmosphere (2026-09-28)
 
 **Nothing here is generated: no credits, no PNG.** Taken while credits were 0
@@ -335,7 +353,9 @@ have to ask for, and let the tool refuse when nobody asked.
 known, and 210 the first time (*M5 in pixel art* above). The painted M5 took
 10 Gemini generations (*Open requests* below). Every request is 15 credits;
 `tools/sprite-fusion.py credits` reads the balance: 300 after M5, 0 after M7's
-first four, 150 given by Sprite Fusion on 2026-09-30, and 0 again the same day.
+first four, 150 given by Sprite Fusion on 2026-09-30, and 0 again the same day; 900
+after Matt's top-up and the developer's matching gift on 2026-10-03, 840 after
+batch 1.
 
 ## What is left to generate (estimated 2026-10-03)
 
