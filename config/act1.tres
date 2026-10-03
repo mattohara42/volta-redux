@@ -5,6 +5,6 @@
 [resource]
 script = ExtResource("1_act")
 title = "Act 1: the moat and the outer wall"
-rooms = PackedStringArray("res://scenes/rooms/act1_bank.tscn", "res://scenes/rooms/act1_wall.tscn")
+rooms = PackedStringArray("res://scenes/rooms/act1_bank.tscn", "res://scenes/rooms/act1_wall.tscn", "res://scenes/rooms/act1_bailey.tscn", "res://scenes/rooms/act1_gate.tscn")
 complete_card_seconds = 2.5
 card_font_size = 24

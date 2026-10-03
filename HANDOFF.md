@@ -14,28 +14,25 @@ told what the sword does (`BUILD_PLAN.md`).
 Spend in small batches, each looked at before the next (`ART.md` → *What is
 left to generate*). Enemies and characters wait on `RoomM7Sheet`'s verdict.
 
-**Rooms 1 and 2 of 4 built:** `Act1Bank` and `Act1Wall` (the outer wall: the
-climb, the gatehouse step that teaches from-above, the breach), last two on F2.
+**All four Act 1 rooms built and connected:** `Act1Bank` (throw, armour),
+`Act1Wall` (from-above), `Act1Bailey` (embed, recall, a switch; the dragon's
+grate) and `Act1Gate` (stand on your sword; the castle gate ends the act).
 Real rooms extend `Bench` and draw with `TileArt` (`Bench`'s class comment says
 why). The sword counter (`SwordCounter`) shows swords in hand and out, top
 right, in every room.
 
-**Wired:** battlements, spikes, crumbling slabs (`FallingPlatform.art`) and
-`WallTorch`, in `Act1Wall`. **Generated, not wired:** wood, portcullis, switch,
-brazier, chain, shackle (`ART.md` → *Act 1 props*); rooms 3 and 4 need them.
+**Act 1 art wired** except the brazier and switch, which stay code by choice
+(`ART.md` → *Act 1 props*). The sword chest is code until its art generates.
 
 ## The next action
 
-**Matt plays Act 1 from `Act1Bank`**: rooms now connect (`ActState`, order in
-`config/act1.tres`), swords carry, a chest by each entry tops you up to three,
-and the last exit shows the act card. Then room 3 (embed: wood, a switch, a
-glimpse of the chained dragon) and room 4 (stand on your own sword, ends at the
-gate), each added to `config/act1.tres` and wired with the generated props.
+**Matt plays Act 1 from `Act1Bank` to the act card.** That is M10's done-when
+test, and only a player can run it. Then M11 (Act 2).
 
 ## Blocked on Matt
 
-1. **Playing `Act1Bank` and `Act1Wall`**: does the bank teach the throw and
-   the armour, and does the gatehouse step teach from-above, with no words?
+1. **Playing Act 1 through**: does each room teach its verb with no words, and
+   is the bailey's grate read as something alive in the dark?
 2. **`RoomM7Sheet`**: are the six consistent in treatment? That closes M7.
 3. **M4 playtest feedback**: the dragon's pacing, the ledge-to-wood throw and
    the dormant scorpion's wake-to-danger gap. Blocks M14's tuning of those.

@@ -11,6 +11,15 @@ extends StaticBody2D
 var is_open := false
 
 var _shape: CollisionShape2D
+## A portcullis tile to draw in place of the bench bars, for a real room. Null
+## in the benches.
+var art: Texture2D = null:
+	set(value):
+		art = value
+		texture_repeat = TEXTURE_REPEAT_ENABLED if value != null else TEXTURE_REPEAT_PARENT_NODE
+		queue_redraw()
+## How much of a raised portcullis still shows at the top of its opening.
+const RAISED_SHOWING: float = 6.0
 
 
 ## Builds its own collision rather than being handed one, so nothing depends on
@@ -56,6 +65,11 @@ func _draw() -> void:
 		return
 	var shape := _shape.shape as RectangleShape2D
 	var rect := Rect2(-shape.size * 0.5, shape.size)
+	if art != null:
+		# Raised, only its teeth show under the lintel; dropped, it fills the way.
+		var shown := Rect2(rect.position, Vector2(rect.size.x, RAISED_SHOWING)) if is_open else rect
+		draw_texture_rect_region(art, shown, Rect2(Vector2(0.0, rect.size.y - shown.size.y), shown.size))
+		return
 	if is_open:
 		# The frame stays. Only the bars go.
 		draw_rect(rect, Color(Palette.STONE_DEEP, 0.35))
