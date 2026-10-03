@@ -337,6 +337,125 @@ known, and 210 the first time (*M5 in pixel art* above). The painted M5 took
 `tools/sprite-fusion.py credits` reads the balance: 300 after M5, 0 after M7's
 first four, 150 given by Sprite Fusion on 2026-09-30, and 0 again the same day.
 
+## What is left to generate (estimated 2026-10-03)
+
+**About 62 requests, 930 credits, for everything `SPEC.md` and `LEVELS.md`
+describe; about 1,100 with a fifth again for misses.** A lean cut is about 52
+requests, 780 credits (*The lean cut* below). This is an estimate built from
+the recipes measured above, not a costed order: no row has been prompted yet.
+
+**How a row is counted.** Every request is 15 credits.
+
+- **A tile or a prop is one `generate`.** Its 12 variations give the pick and
+  the variants (`wall_fill` came from one request), and recolouring is free.
+- **An enemy is a `generate` and an `animate`.** That is what M7 measured.
+- **A new pose of an existing character is an `edit` and then an `animate`.**
+  `edit` now keeps the input's size (`GEMINI_NOTES.md`, *Re-tested again*),
+  which is what makes this the recipe.
+- **A new character in profile is `generate` plus `direction-set`**, and then
+  one `animate` per state. That is the hero's recipe from M5 and M6.
+- **Backgrounds cost no credits.** They are painted in Gemini and pixelated
+  (*Four layers*), which costs Matt's time instead. Lava, water, fire, arcs,
+  geyser spray and glow are code (M9).
+
+**Already made and not counted again:** the hero's thirteen states, all six
+enemies, Act 1's floor top, wall fill and ladder, the moat wall background,
+and the six Act 1 props (*Act 1 props* above).
+
+### Act 1: the forest, the moat and the outer wall (15)
+
+| asset | recipe | requests |
+|---|---|---|
+| tree trunk, wood you can embed in | tile | 1 |
+| branch platform | tile | 1 |
+| cracked branch (`FallingPlatform`) | prop | 1 |
+| canopy and leaves | tile | 1 |
+| vine (a ladder, `LEVELS.md` decision 7) | tile | 1 |
+| stump portal | prop | 1 |
+| forest floor and riverbank | tile | 1 |
+| spikes, used in every act | tile | 1 |
+| rampart and battlement | tile | 1 |
+| wall torch (the flame is code) | prop | 1 |
+| siege engine, a timed hazard | prop | 1 |
+| skeleton, a reskinned dormant scorpion | enemy | 2 |
+| banner or arrow-slit dressing | prop | 1 |
+| stone falling platform | tile | 1 |
+
+### The inner castle and the throne room (6)
+
+**Assumed** to sit between Act 1's gate and Act 2's descent, since the
+chandelier opens the way down. Where it falls in the act structure is M10's
+call.
+
+| asset | recipe | requests |
+|---|---|---|
+| hall floor top and wall fill | tile, one each | 2 |
+| throne | prop | 1 |
+| chandelier, dropped by a throw | prop | 1 |
+| castle guard, the scorpion with its armour flipped (also the remix rooms' enemy) | enemy | 2 |
+
+### Act 2: the lava caverns (8)
+
+| asset | recipe | requests |
+|---|---|---|
+| cavern floor top and rock wall fill | tile, one each | 2 |
+| floating basalt platform | tile | 1 |
+| geyser vent (the spray is code) | prop | 1 |
+| mine beams or scaffolding, the act's wood | tile | 1 |
+| stalactite dressing | prop | 1 |
+| the dragon chained, straining | `edit` of the dragon, then `animate` | 2 |
+
+### Act 3: the generator (11)
+
+| asset | recipe | requests |
+|---|---|---|
+| conductive metal floor | tile | 1 |
+| underground stone wall fill | tile | 1 |
+| copper conductor rail | tile | 1 |
+| current switch, distinct from M2's impact switch | prop | 1 |
+| floor plate (`FloorPlate`) | prop | 1 |
+| insulator post | prop | 1 |
+| cable and conduit dressing | prop | 1 |
+| insulated door | prop | 1 |
+| the generator without its painted arc (`BACKLOG.md`) | `animate` | 1 |
+| the generator's fight states, overloading and failing | `edit` twice | 2 |
+
+### Act 4: the Hall of Volta (13)
+
+| asset | recipe | requests |
+|---|---|---|
+| hall floor top, wall fill, pillar dressing | tile, one each | 3 |
+| the chained dragon's anchor or cage | prop | 1 |
+| Volta, in profile | `generate`, `direction-set` | 2 |
+| Volta's idle, cast, stagger, and fall into the fire | `animate` each | 4 |
+| the dragon freed, flying, and carrying the hero out | `edit` once, `animate` twice | 3 |
+
+### Across every act (9)
+
+| asset | recipe | requests |
+|---|---|---|
+| the hero carrying the torch: idle, run, jump, climb | `edit` once, `animate` four times | 5 |
+| gem, gem holder, key | prop, one each | 3 |
+| the sword, which is drawn by `sword.gd` today | prop | 1 |
+
+### The lean cut (about 52)
+
+Cut first: the four dressing rows (banner, stalactite, cables, pillar), the
+siege engine, and the hero's torch climb and torch jump, if those reuse the
+torch run. Volta can drop to three animations, the dragon's carry can reuse
+its flight, and the sword can stay drawn in code. That is about 10 requests.
+**The castle guard, the skeleton, the chained dragon and Volta stay**: each
+one is a decision in `LEVELS.md` or `SPEC.md`, not decoration.
+
+### What could move this
+
+- **Matt's eye on `RoomM7Sheet`.** If the six are not consistent in
+  treatment, redoing some adds 5 to 10 requests.
+- **Volta is the least designed thing here.** A boss fight with more states
+  than four could double Act 4's row.
+- **Rooms past the first pass.** Remix rooms reuse act art. A new look for
+  a room (a library, a crypt) is about 3 tile requests each.
+
 ## What `assets/reference/` is for, and what it is not
 
 53 screenshots of the 1984 original, inherited from the first attempt
