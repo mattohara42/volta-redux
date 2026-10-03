@@ -18,3 +18,7 @@ geyser_swell_time = 0.5
 geyser_erupt_time = 1.4
 geyser_dormant_time = 1.1
 geyser_lift_speed = 170.0
+tide_low_time = 2.4
+tide_rise_time = 1.0
+tide_high_time = 1.6
+tide_fall_time = 1.0

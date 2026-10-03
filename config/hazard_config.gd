@@ -114,3 +114,11 @@ extends Resource
 ## that decides how much of an eruption a storey costs, and the room's ledges are
 ## laid out against what it buys.
 @export var geyser_lift_speed: float = 170.0
+
+## The lava tide (Act 2): how long it lies low, rises, stands high and falls, in
+## seconds. The low hold is the window a passage is crossed in, so it is the
+## number a tide room is built against (`tests/test_act2_tide.gd`).
+@export var tide_low_time: float = 2.4
+@export var tide_rise_time: float = 1.0
+@export var tide_high_time: float = 1.6
+@export var tide_fall_time: float = 1.0
