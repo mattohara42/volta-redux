@@ -251,9 +251,25 @@ So `edit` and `style-reference` cannot be trusted for size at all, and
 yet. The same `style-reference` request as the bat, asked 32, returned 45 to
 58. An `edit` of the 36 px hero, asked 32, returned one 26x36 (the input's own
 crop) and one 97x143, the input scaled up four times in blocks. A `generate`
-at 64 returned 64 to 77, the dragon's spread exactly. Re-test once more before
-trusting any operation's size; `retest_*` in `assets/art_raw/` is the
-comparison set.
+at 64 returned 64 to 77, the dragon's spread exactly. `retest_*` in
+`assets/art_raw/` is that comparison set.
+
+**Re-tested again 2026-10-03, the same three prompts, 45 credits.** The fix
+has shipped for two of the three operations (`retest2_*`, contact sheet
+`_experiments/retest2_contact.png`):
+
+| operation | asked | 2026-09-30 | 2026-10-03 |
+|---|---|---|---|
+| `generate` | 64 | 64 to 77 | 64 on 11 of 12, one 66 |
+| `edit`, 36 px hero | 32 | 26x36 and 97x143 | `size` now refused (HTTP 400, no charge); without it, 26x36 and 24x34 |
+| `style-reference`, 36 px input | 32 | 45 to 58 | 58 to 71, worse |
+
+So `generate` can now be trusted for size. `edit` keeps the input's size by
+design ("Edits keep the input sprite's size; remove the size field"), which
+is the behaviour M6 needed for a pose step, and both edits did the asked
+change (hair tied back) on the same figure. `style-reference` still ignores
+`size`, and came back bigger than before: do not use it where size matters.
+`direction-set` and `animate` were not re-tested.
 
 **`generate` still defaults to three-quarter.** 11 of 12 came back
 three-quarter at size 32 even with the positive-plus-negation framing that
