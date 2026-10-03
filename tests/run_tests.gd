@@ -23,7 +23,10 @@ func _initialize() -> void:
 	for path in files:
 		var file_name := path.get_file()
 		var script := load(path) as GDScript
-		if script == null:
+		# A file with a parse error still loads as a script, and calling `new` on
+		# it aborts this whole function before `quit`, so Godot idles forever and
+		# CI sits until its timeout. Asking first makes it a reported failure.
+		if script == null or not script.can_instantiate():
 			failed_tests += 1
 			report.append("FAIL  %s: will not load, see the parse error above" % file_name)
 			continue

@@ -7,14 +7,6 @@
 extends TestCase
 
 
-func _reach(rise: float) -> float:
-	var move: MovementConfig = load("res://config/movement.tres")
-	return Motion.jump_reach(
-		move.jump_height, move.time_to_apex, move.fall_gravity_multiplier,
-		move.max_run_speed, rise
-	)
-
-
 ## One sword, and that is the whole puzzle. Two and you spend one on the switch
 ## and one on the gap, and never find out what recall is for.
 func test_the_room_hands_out_exactly_one_sword() -> void:
@@ -105,44 +97,8 @@ func test_the_embedded_sword_lands_inside_the_switch() -> void:
 
 
 ## The crossing beyond the gate, on the same terms as M2's first room.
-func test_the_gap_beyond_the_gate_still_needs_the_sword() -> void:
-	var world: WorldConfig = load("res://config/world.tres")
-	var bare := RoomM2Switch.FAR_EDGE - RoomM2Switch.NEAR_EDGE
-	var bare_rise := Bench.FLOOR_TOP - RoomM2Switch.FAR_TOP
-	check(
-		bare > _reach(bare_rise),
-		"the bare gap is %.0f px against a %.0f px budget" % [bare, _reach(bare_rise)]
-	)
-
-	var lip := RoomM2Switch.NEAR_EDGE - world.hero_width * 0.5
-	var ledge := SwordFlight.embed_position(
-		RoomM2Switch.POST.position.x, 1.0, world.sword_length
-	)
-	var ledge_top := (Bench.FLOOR_TOP - world.hero_height * 0.5) - Sword.LEDGE_THICKNESS * 0.5
-	check(
-		ledge - lip <= _reach(Bench.FLOOR_TOP - ledge_top),
-		"lip to ledge is %.0f px, budget %.0f" % [
-			ledge - lip, _reach(Bench.FLOOR_TOP - ledge_top)
-		]
-	)
-	check(
-		(RoomM2Switch.FAR_EDGE + world.hero_width * 0.5) - ledge
-			<= _reach(ledge_top - RoomM2Switch.FAR_TOP),
-		"ledge to far side is %.0f px, budget %.0f" % [
-			(RoomM2Switch.FAR_EDGE + world.hero_width * 0.5) - ledge,
-			_reach(ledge_top - RoomM2Switch.FAR_TOP)
-		]
-	)
-
-
-## Falling in has to be a retry rather than either a shortcut or a soft lock.
-func test_the_pit_is_a_retry() -> void:
-	var move: MovementConfig = load("res://config/movement.tres")
-	check(
-		RoomM2Switch.PIT_TOP - RoomM2Switch.FAR_TOP > move.jump_height,
-		"the far side is out of reach from the pit floor"
-	)
-	check(
-		RoomM2Switch.PIT_TOP - Bench.FLOOR_TOP < move.jump_height,
-		"the near side is not, so you can always climb back and try again"
+func test_the_ditch_beyond_the_gate_needs_the_sword() -> void:
+	DitchChecks.run(
+		self, "RoomM2Switch", RoomM2Switch.NEAR_EDGE, Bench.FLOOR_TOP,
+		RoomM2Switch.FAR_TOP, RoomM2Switch.HOARDING, RoomM2Switch.PIT_TOP
 	)
