@@ -10,11 +10,11 @@ told what the sword does (`BUILD_PLAN.md`).
 
 ## Where this is
 
-**Credits: 0.** The last 45 re-tested Sprite Fusion's size fix on 2026-10-03:
-`generate` and `edit` now hold size, `style-reference` still does not
-(`GEMINI_NOTES.md`, *Re-tested again*). What is left to generate is about
-930 credits, 780 lean (`ART.md`). Matt's pause on buying still holds; do
-not propose a top-up.
+**Credits: 840** (2026-10-03, after batch 1). Matt topped up 450 and the
+developer matched it. Spend in small measured batches, looking at each before
+the next (`ART.md` → *What is left to generate* for the list, *Act 1 outer
+wall, batch 1* for the latest picks). Enemies and new characters wait on
+Matt's verdict on `RoomM7Sheet`, since a "not consistent" there means redoing.
 
 **Room 1 of 4 built:** `Act1Bank` (`scenes/rooms/act1_bank.tscn`, last on F2).
 Real rooms extend `Bench` and draw with `TileArt` (`Bench`'s class comment says
