@@ -60,6 +60,9 @@ const TORCHES: Array[float] = [336.0, 496.0, 960.0, 1440.0]
 const TORCH_HEIGHT: float = 26.0
 
 const EXIT_X: float = ROOM_WIDTH - 56.0
+## A chest of swords by the way in, so whatever the last room cost you is
+## made up before this one asks for anything.
+const CHEST_X: float = 96.0
 
 const CRUMBLE_ART: Texture2D = preload("res://assets/art/act1/tiles_px/crumble.png")
 
@@ -107,6 +110,8 @@ func _ready() -> void:
 		add_child(torch)
 		move_child(torch, 0)
 
+	_add_exit(Rect2(EXIT_X, LOWER_TOP - 48.0, 8.0, 48.0))
+	_add_chest(Vector2(CHEST_X, FLOOR_TOP))
 	_add_enclosure(ROOM_WIDTH)
 	_frame_camera(ROOM_WIDTH)
 	queue_redraw()
@@ -133,5 +138,3 @@ func _draw() -> void:
 	for bed in _spike_beds:
 		TileArt.draw_spikes(self, bed)
 	TileArt.draw_ladder(self, _ladders[0])
-	# The way on, until rooms are sequenced by act state. Gold means interactive.
-	draw_rect(Rect2(EXIT_X, LOWER_TOP - 48.0, 8.0, 48.0), Palette.GOLD_FACE)

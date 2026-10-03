@@ -290,6 +290,24 @@ func _add_gate(rect: Rect2) -> Gate:
 	return gate
 
 
+## Where the room ends: the hero walking into `rect` is handed to `ActState`.
+func _add_exit(rect: Rect2) -> RoomExit:
+	var exit := RoomExit.new()
+	exit.configure(rect.size)
+	exit.position = rect.get_center()
+	add_child(exit)
+	return exit
+
+
+## A chest of swords standing on the floor at `base`.
+func _add_chest(base: Vector2) -> SwordChest:
+	var chest := SwordChest.new()
+	chest.position = base
+	add_child(chest)
+	move_child(chest, 0)
+	return chest
+
+
 ## How many swords this room hands you, for a room whose puzzle depends on the
 ## count. Call it from `_ready`: the player is a child, so it is already up.
 func _hand_out_swords(count: int) -> void:

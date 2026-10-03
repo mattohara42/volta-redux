@@ -56,6 +56,9 @@ const GUARD_HOME_X: float = 952.0
 const GUARD_RANGE: float = 176.0
 
 const EXIT_X: float = ROOM_WIDTH - 56.0
+## A chest of swords by the way in, so whatever the last room cost you is
+## made up before this one asks for anything.
+const CHEST_X: float = 96.0
 
 
 func _ready() -> void:
@@ -73,6 +76,8 @@ func _ready() -> void:
 	sleeper.start_dormant()
 	_add_scorpion(_scorpion_box(GUARD_HOME_X), GUARD_RANGE)
 
+	_add_exit(Rect2(EXIT_X, FLOOR_TOP - 48.0, 8.0, 48.0))
+	_add_chest(Vector2(CHEST_X, FLOOR_TOP))
 	_add_enclosure(ROOM_WIDTH)
 	_frame_camera(ROOM_WIDTH)
 	queue_redraw()
@@ -92,5 +97,3 @@ func _draw() -> void:
 	TileArt.draw_ground(self, Rect2(DITCH.position.x, DITCH.end.y, DITCH.size.x, ROOM_HEIGHT - DITCH.end.y))
 	TileArt.draw_ground(self, Rect2(DITCH.end.x, FLOOR_TOP, ROOM_WIDTH - DITCH.end.x, ROOM_HEIGHT - FLOOR_TOP))
 	TileArt.draw_ground(self, PLINTH)
-	# The way on, until rooms are sequenced by act state. Gold means interactive.
-	draw_rect(Rect2(EXIT_X, FLOOR_TOP - 48.0, 8.0, 48.0), Palette.GOLD_FACE)

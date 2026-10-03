@@ -88,6 +88,12 @@ and the level geometry to serve it. Concretely, the sword does five things:
 **The sword count is the difficulty dial and it is small.** Start with three,
 cap at five. Ten was too many to make any single throw matter.
 
+**Swords carry between rooms, and rooms resupply** (Matt, 2026-10-03). You
+walk into the next room with what is in your hand; a sword left embedded
+behind you stays there. Early rooms have a chest that tops you up to three;
+later rooms, where a puzzle may spend many, hide swords or offer a mechanism
+that gives more. Exits only lead forward.
+
 ## What changes from 1984, and why
 
 | the original | here | because |

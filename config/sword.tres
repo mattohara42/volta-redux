@@ -22,6 +22,7 @@ fall_drag = 600.0
 max_fall_speed = 500.0
 starting_swords = 3
 max_swords = 5
+chest_fill = 3
 throw_sound = ExtResource("2_throw")
 catch_sound = ExtResource("3_catch")
 embed_sound = ExtResource("4_embed")

@@ -142,6 +142,10 @@ func _ready() -> void:
 	config = preset_climb
 	spawn_point = global_position
 	swords_at_spawn = sword_config.starting_swords
+	# Walking in from the room before, you keep what you held (`ActState`).
+	var act_state := get_node_or_null("/root/ActState")
+	if act_state != null:
+		swords_at_spawn = act_state.arriving_swords(swords_at_spawn)
 	swords_held = swords_at_spawn
 	if SPRITE_SCENE != null:
 		_sprite = SPRITE_SCENE.instantiate()
@@ -460,6 +464,13 @@ func light_checkpoint(base: Vector2) -> void:
 func set_swords_at_spawn(count: int) -> void:
 	swords_at_spawn = count
 	swords_held = count
+
+
+## A sword chest: the swords you own, in hand and still out in the room, come
+## back up to `fill`. Never fewer than you hold now.
+func top_up_swords(fill: int) -> void:
+	var out := get_tree().get_nodes_in_group("swords").size()
+	swords_held = ActRoute.chest_top_up(swords_held, out, fill, sword_config.max_swords)
 
 
 ## Spends a sword. The count drops now, not when the throw resolves, because

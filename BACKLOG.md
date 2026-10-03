@@ -234,12 +234,10 @@ committed to.
   top right, a gold sword per sword in hand and a dim one per sword that is out.
   Gold because it is the sword itself; whether that competes with gold meaning
   "interactive" is worth a look when playing.
-- **Rooms are not yet sequenced.** Act 1's first room ends at a gold marker.
-  Walking from one room into the next needs the act-state autoload `CLAUDE.md`
-  already names, and it should arrive with the second room.
-- **Do swords carry between rooms?** Death restores them to the spawn count,
-  but whether a room starts you on what you left the last one with, or always
-  on three, is open. It changes how much the first room's lost swords matter.
+- **Rooms are sequenced** by `ActState` and `config/act1.tres`; swords carry
+  and chests resupply (`SPEC.md`). Resolved 2026-10-03.
+- **Later rooms' resupply** (hidden swords, a mechanism that gives more) is
+  `SPEC.md`'s and not built. Design it with the first room that needs it.
 - **Tunnel walls are masonry tiles darkened upward**, the best the Act 1 tiles
   can do for a wall a screen tall. A proper wall-face tile is M8 work.
 

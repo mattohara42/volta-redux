@@ -50,6 +50,10 @@ extends Resource
 ## no single throw mattered there.
 @export var starting_swords: int = 3
 @export var max_swords: int = 5
+## What a sword chest tops you up to: the swords you own (in hand and out in the
+## room) are brought up to this, never past it. Matt, 2026-10-03: early rooms
+## resupply from a chest of three, later rooms from hidden swords or a mechanism.
+@export var chest_fill: int = 3
 
 @export_group("Sound")
 ## BUILD_PLAN.md M15: "The throw, the catch, the embed and the recall need
