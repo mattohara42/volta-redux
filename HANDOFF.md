@@ -26,9 +26,10 @@ right, in every room.
 
 ## The next action
 
-**Act 2, room 1 built:** `Act2Mouth` (the ferry bench's tested crossing in cavern
-art), reached through Act 1's card. Next: rooms 2 to 5 and the dragon's lair,
-planned in the M11 PR. **Act 2 needs a painted background** (Matt, Gemini);
+**Act 2, rooms 1 and 2 built:** `Act2Mouth` (ferries) and `Act2Geysers` (jets),
+each extending the M3 bench it came from so the bench's tests hold it. Next:
+the causeway (throw and catch from a falling slab), rising lava, the mine, and
+the dragon's lair. **Act 2 needs a painted background** (Matt, Gemini);
 until then its rooms show a plain backdrop under a rock ceiling.
 
 ## Blocked on Matt
