@@ -163,28 +163,4 @@ func _draw_fuel(bowl_top: float) -> void:
 ## screenshot and as scenery in motion, and a checkpoint you do not notice is
 ## not doing its job.
 func _draw_flame(bowl_top: float) -> void:
-	_tongue(bowl_top, BOWL_WIDTH * 0.40, FLAME_HEIGHT, 0.0, Palette.FIRE_FALLOFF)
-	_tongue(bowl_top, BOWL_WIDTH * 0.27, FLAME_HEIGHT * 0.72, 1.9, Palette.FIRE_CORE)
-	_tongue(bowl_top, BOWL_WIDTH * 0.13, FLAME_HEIGHT * 0.40, 3.6, Palette.FIRE_HOT)
-
-
-## One tongue: widest at the rim, tapering to a point, leaning further the
-## higher it goes. `phase` offsets the lean so the three do not move as one.
-func _tongue(
-	bowl_top: float, half_width: float, height: float, phase: float, colour: Color
-) -> void:
-	const STEPS := 8
-	var lean := sin(_flicker * 6.0 + phase) * half_width * 0.45
-	var left := PackedVector2Array()
-	var right := PackedVector2Array()
-	for i in STEPS + 1:
-		var t := float(i) / float(STEPS)
-		# Full width at the fuel, a point at the tip, and a slight waist between
-		# the two. A straight taper draws a horn rather than a flame.
-		var width := half_width * pow(1.0 - t, 0.85) * (1.0 + 0.35 * sin(PI * t))
-		var x := lean * t * t
-		var y := bowl_top - height * t
-		left.append(Vector2(x - width, y))
-		right.append(Vector2(x + width, y))
-	right.reverse()
-	draw_colored_polygon(left + right, colour)
+	Flame.draw(self, Vector2(0.0, bowl_top), BOWL_WIDTH * 0.40, FLAME_HEIGHT, _flicker)

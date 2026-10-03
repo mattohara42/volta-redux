@@ -35,22 +35,4 @@ func _process(delta: float) -> void:
 
 func _draw() -> void:
 	draw_texture(ART, Vector2(-ART.get_width() * 0.5, -ART.get_height()))
-	_tongue(FLAME_HALF_WIDTH, FLAME_HEIGHT, 0.0, Palette.FIRE_FALLOFF)
-	_tongue(FLAME_HALF_WIDTH * 0.6, FLAME_HEIGHT * 0.7, 1.9, Palette.FIRE_CORE)
-	_tongue(FLAME_HALF_WIDTH * 0.3, FLAME_HEIGHT * 0.4, 3.6, Palette.FIRE_HOT)
-
-
-## One tongue of flame rising from the head, tapering to a leaning point.
-func _tongue(half_width: float, height: float, phase: float, colour: Color) -> void:
-	const STEPS := 6
-	var lean := sin(_flicker * 6.0 + phase) * half_width * 0.5
-	var left := PackedVector2Array()
-	var right := PackedVector2Array()
-	for i in STEPS + 1:
-		var t := float(i) / float(STEPS)
-		var width := half_width * pow(1.0 - t, 0.85) * (1.0 + 0.35 * sin(PI * t))
-		var at := HEAD + Vector2(lean * t * t, -height * t)
-		left.append(at + Vector2(-width, 0.0))
-		right.append(at + Vector2(width, 0.0))
-	right.reverse()
-	draw_colored_polygon(left + right, colour)
+	Flame.draw(self, HEAD, FLAME_HALF_WIDTH, FLAME_HEIGHT, _flicker)
