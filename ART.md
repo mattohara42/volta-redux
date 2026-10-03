@@ -261,6 +261,15 @@ through `ActTiles` (`assets/art/act2/act2_tiles.tres`). Contact sheet:
 **Act 2 has no background.** It is painted in Gemini and pixelated (*Four
 layers*), which is Matt's time, not credits.
 
+## The chained dragon (2026-10-03)
+
+Two requests, 30 credits: an `edit` of `enemies/dragon_px.png` into a chained
+pose (pick 1 of 2: head dragged low, chains over its back, rings in the floor),
+then a 4-frame `animate` of it straining (`enemies/dragon_chained_sheet.png`,
+95x70 a frame; filmstripped, no boil). The `chained` state of
+`scenes/dragon_sprite.tscn`, reached from `Dragon._defeat` through the
+AnimationTree. In the lair: `_experiments/act2_lair_chained.png`.
+
 ## M9: lava, electricity and atmosphere (2026-09-28)
 
 **Nothing here is generated: no credits, no PNG.** Taken while credits were 0
