@@ -514,4 +514,30 @@ SCENARIOS: list[dict] = [
 				"message": "the hero is not on the far bank"},
 		],
 	},
+	{
+		"name": "Act 2: wait out a high tide on a refuge",
+		"scene": "res://scenes/rooms/act2_tide.tscn",
+		"out": "act2_tide_refuge.png",
+		"input": "move_right:102;move_right,jump:14;move_right:4;-:200",
+		"zoom": 1.0,
+		"centre": (500, 250),
+		"checks": [
+			{"type": "contains", "pattern": "capture: no deaths",
+				"message": "a hero on the refuge should have outlasted the high tide"},
+			{"type": "player_position", "min_x": 431, "max_x": 489, "max_y": 270,
+				"message": "the hero should be standing on the first refuge"},
+		],
+	},
+	{
+		"name": "Act 2: a high tide kills a hero left in the passage",
+		"scene": "res://scenes/rooms/act2_tide.tscn",
+		"out": "act2_tide_flooded.png",
+		"input": "move_right:70;-:200",
+		"zoom": 1.0,
+		"centre": (500, 250),
+		"checks": [
+			{"type": "contains_regex", "pattern": r"capture: 1 death\(s\)",
+				"message": "standing in the passage through a high tide should kill"},
+		],
+	},
 ]

@@ -26,9 +26,9 @@ right, in every room.
 
 ## The next action
 
-**Act 2, rooms 1 to 3 built:** `Act2Mouth` (ferries), `Act2Geysers` (jets),
-`Act2Causeway` (falling slabs and a bat), each extending its M3 bench so the
-bench's tests hold it. Next: rising lava, the mine, the dragon's lair. **Act 2 needs a painted background** (Matt, Gemini);
+**Act 2, rooms 1 to 4 built:** `Act2Mouth` (ferries), `Act2Geysers` (jets),
+`Act2Causeway` (falling slabs, a bat) extend their M3 benches; `Act2Tide` is
+the new lava tide (`LavaTide`). Next: the mine, then the dragon's lair. **Act 2 needs a painted background** (Matt, Gemini);
 until then its rooms show a plain backdrop under a rock ceiling.
 
 ## Blocked on Matt
