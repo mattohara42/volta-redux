@@ -31,7 +31,7 @@ Usage:
     tools/sprite-fusion.py credits
     tools/sprite-fusion.py assets [--limit N]
     tools/sprite-fusion.py generate --name NAME --prompt TEXT --size {16,32,64} [--spend]
-    tools/sprite-fusion.py edit --name NAME --prompt TEXT --input X [--input X ...] [--size N] [--spend]
+    tools/sprite-fusion.py edit --name NAME --prompt TEXT --input X [--input X ...] [--spend]
     tools/sprite-fusion.py style-reference --name NAME --prompt TEXT --input X [...] [--size N] [--spend]
     tools/sprite-fusion.py direction-set --name NAME --input X [--size N] [--spend]
     tools/sprite-fusion.py animate --name NAME --prompt TEXT --input X [--frames N] [--colors N] [--spend]
@@ -244,7 +244,8 @@ def main() -> None:
         return p
 
     generation("generate", prompt=True, inputs=False).add_argument("--size", type=int, choices=SIZES, required=True)
-    generation("edit", prompt=True, inputs=True).add_argument("--size", type=int, choices=SIZES)
+    # No --size: the API refuses one on edit and keeps the input's size (2026-10-03).
+    generation("edit", prompt=True, inputs=True)
     generation("style-reference", prompt=True, inputs=True).add_argument("--size", type=int, choices=SIZES)
     generation("direction-set", prompt=False, inputs=True).add_argument("--size", type=int, choices=SIZES)
     animate = generation("animate", prompt=True, inputs=True)
