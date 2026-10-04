@@ -290,6 +290,34 @@ func _add_gate(rect: Rect2) -> Gate:
 	return gate
 
 
+## The room's circuit (`SPEC.md` → *Conduct*). One per room that has current.
+func _add_network() -> CircuitNetwork:
+	var network := CircuitNetwork.new()
+	add_child(network)
+	return network
+
+
+## A piece of metal in `network`. A source is live always. `art` tiles it.
+func _add_conductor(
+	network: CircuitNetwork, rect: Rect2, source: bool = false, art: Texture2D = null
+) -> Conductor:
+	var piece := Conductor.new()
+	piece.configure(rect, source)
+	piece.art = art
+	add_child(piece)
+	network.add(piece)
+	return piece
+
+
+## A switch that needs current, in `network`, wired to nothing yet.
+func _add_current_switch(network: CircuitNetwork, rect: Rect2) -> CurrentSwitch:
+	var switch := CurrentSwitch.new()
+	switch.configure(rect)
+	add_child(switch)
+	network.add(switch)
+	return switch
+
+
 ## Where the room ends: the hero walking into `rect` is handed to `ActState`.
 func _add_exit(rect: Rect2) -> RoomExit:
 	var exit := RoomExit.new()

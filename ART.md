@@ -270,6 +270,14 @@ then a 4-frame `animate` of it straining (`enemies/dragon_chained_sheet.png`,
 `scenes/dragon_sprite.tscn`, reached from `Dragon._defeat` through the
 AnimationTree. In the lair: `_experiments/act2_lair_chained.png`.
 
+## Act 3 tiles, batch 1 (2026-10-04)
+
+Three `generate` requests at 16, 45 credits (690 left): deep floor 0 and deep
+wall 0 (dark dressed blocks, matching), copper plate 2 (the most muted, so dead
+metal stays cold and matte against the live shader). `ActTiles` set:
+`assets/art/act3/act3_tiles.tres`. Contact sheet:
+`_experiments/act3_batch1_contact.png`; in a room: `_experiments/act3_*.png`.
+
 ## M9: lava, electricity and atmosphere (2026-09-28)
 
 **Nothing here is generated: no credits, no PNG.** Taken while credits were 0

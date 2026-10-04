@@ -624,4 +624,49 @@ SCENARIOS: list[dict] = [
 				"message": "stepping on the live plate should have killed"},
 		],
 	},
+	{
+		"name": "Act 3: bridge the hall's seam and the gate rises",
+		"scene": "res://scenes/rooms/act3_hall.tscn",
+		"out": "act3_hall_bridged.png",
+		"input": "move_right:160;-:20;move_left:2;-:10;throw:4;-:40",
+		"zoom": 1.2,
+		"centre": (600, 250),
+		"checks": [
+			{"type": "contains_regex", "pattern": r"gate at .* OPEN",
+				"message": "a sword across the seam should have opened the gate"},
+			{"type": "contains", "pattern": "capture: no deaths",
+				"message": "dropping past the recessed live face should be safe"},
+		],
+	},
+	{
+		"name": "Act 3: the insulator's wooden seam carries nothing",
+		"scene": "res://scenes/rooms/act3_insulator.tscn",
+		"out": "act3_insulator_decoy.png",
+		"input": "move_right:160;-:30;move_left:2;-:10;throw:4;-:40",
+		"zoom": 1.2,
+		"centre": (600, 250),
+		"checks": [
+			{"type": "contains", "pattern": "sword embedded",
+				"message": "the sword should have bitten the copper and the wood"},
+			{"type": "contains_regex", "pattern": r"gate at .* SHUT",
+				"message": "copper over wood carries no current, so the gate stays shut"},
+		],
+	},
+	{
+		"name": "Act 3: the insulator's copper seam, thrown from the step, opens it",
+		"scene": "res://scenes/rooms/act3_insulator.tscn",
+		"out": "act3_insulator_bridged.png",
+		"input": (
+			"move_right:160;-:30;move_left:2;-:10;throw:4;-:40;move_right,jump:14;"
+			"move_right:4;-:20;move_left:2;-:10;throw:4;-:40"
+		),
+		"zoom": 1.2,
+		"centre": (600, 250),
+		"checks": [
+			{"type": "contains_regex", "pattern": r"gate at .* OPEN",
+				"message": "the copper seam bridged from the step should have opened the gate"},
+			{"type": "contains", "pattern": "capture: no deaths",
+				"message": "nobody should have died"},
+		],
+	},
 ]
