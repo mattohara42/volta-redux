@@ -32,6 +32,10 @@ func _on_body_entered(body: Node2D) -> void:
 	if state == null:
 		return
 	var scene := get_tree().current_scene
+	# A room loaded under another node (the capture tool) is not the current
+	# scene, and has nowhere to go.
+	if scene == null:
+		return
 	state.leave_room(scene.scene_file_path, player.swords_held, player.sword_config.max_swords, player.gems_held)
 
 

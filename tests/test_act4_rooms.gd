@@ -45,3 +45,40 @@ func test_the_guard_step_kills_from_above() -> void:
 	check(near_side > Act4Guard.STEP_END + world.hero_width, "its patrol never reaches the step")
 	check(near_side - Act4Guard.STEP_END < sword.max_range, "but its near end is in range of a throw from it")
 	check(Act4Guard.GUARD_HOME_X + Act4Guard.GUARD_RANGE < Act4Guard.PASSAGE.end.x, "and it stays under the roof")
+
+
+func test_the_throne_seam_is_thrown_from_the_floor() -> void:
+	var sword: SwordConfig = load(SWORD)
+	var half := Sword.LEDGE_THICKNESS * 0.5 + sword.conduct_reach
+	var y := Act4Room.throw_y(Bench.FLOOR_TOP)
+	check(y - half < Act4Throne.live_copper().end.y and y + half > Act4Throne.stub().position.y, "a floor throw lands across the dais seam")
+	check(Act4Throne.FACE_X - Act4Throne.LIP_X == Act4Throne.RECESS, "the live face sits back under the dais lip")
+
+
+func test_the_throne_rail_needs_every_gem() -> void:
+	var world: WorldConfig = load(WORLD)
+	var sword: SwordConfig = load(SWORD)
+	var move: MovementConfig = load(MOVE)
+	var rail := Act4Throne.rail()
+	check_eq(rail.size(), 4, "three breaks make four pieces")
+	for i in rail.size() - 1:
+		var gap := rail[i + 1].position.x - rail[i].end.x
+		check(gap > world.sword_length + sword.conduct_reach * 2.0, "break %d is too wide for a sword" % i)
+		var centre := Act4Throne.pedestal(i).get_center().x
+		check(centre > rail[i].end.x and centre < rail[i + 1].position.x, "pedestal %d stands under its break" % i)
+	check(Act4Throne.RAIL_Y + Act4Throne.RAIL_HEIGHT < Bench.FLOOR_TOP - move.jump_height - world.hero_height, "the rail is out of reach")
+
+
+func test_the_throne_third_gem_is_cut_from_the_gallery() -> void:
+	var sword: SwordConfig = load(SWORD)
+	var y := Act4Room.throw_y(Act4Throne.GALLERY.position.y)
+	check(y > Act4Throne.SHELF.position.y and y < Act4Throne.SHELF.end.y, "a gallery throw flies through the shelf")
+	check(Act4Throne.SHELF.position.x - Act4Throne.GALLERY.end.x < sword.max_range, "in range")
+	check(Act4Throne.SHELF.position.x < Act4Throne.VOLTA_WAKES_X, "and Volta wakes only once you are past it")
+
+
+func test_volta_is_out_of_reach() -> void:
+	var move: MovementConfig = load(MOVE)
+	var sword: SwordConfig = load(SWORD)
+	check(Bench.FLOOR_TOP - Act4Throne.DAIS_TOP > move.jump_height, "the dais cannot be jumped")
+	check(Act4Throne.VOLTA_AT.x - Act4Throne.LIP_X > sword.max_range * 0.5, "and he stands well back from its lip")

@@ -256,3 +256,10 @@ committed to.
 - **Death lines ignore the cause.** `DeathMessages` draws from one pool, so
   an arc in Act 3 can say "THE GEYSER HAD OTHER PLANS". Either key lines to
   what killed you or keep the pool free of named hazards.
+- **The throne has one conductor, not a choice of two.** `SPEC.md` says
+  current "through the right conductor"; every layout tried for a decoy face
+  either blocked the path or needed a contrived seam. One face for now.
+- **A pull can lose a sword into the dais recess**, beside live copper, where
+  it cannot be picked up. The room's chest refills to three. Judge in play
+  whether that cost is right or the pull should throw swords clear.
+

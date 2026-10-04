@@ -159,6 +159,14 @@ func test_a_recall_cannot_be_taken_away_from_you() -> void:
 	check_eq(_step(S.RECALLING, {"overshot": true}), S.RECALLING, "nor passing you")
 
 
+## Volta tears embedded swords out of the walls: they fall, they do not fly
+## home, and nothing else in the room can do it.
+func test_a_yank_tears_an_embedded_sword_out_and_drops_it() -> void:
+	check_eq(_step(S.EMBEDDED, {"yanked": true}), S.FALLING, "an embedded sword falls")
+	check_eq(_step(S.EMBEDDED, {"yanked": true, "recalled": true}), S.RECALLING, "a recall in the same step still wins")
+	check_eq(_step(S.FLYING, {"yanked": true}), S.FLYING, "one in flight ignores it")
+
+
 ## Except current. A live barrier destroys a sword in any state that is still
 ## out in the room (Matt, 2026-10-04): recall early, or lose what you left behind.
 func test_a_live_barrier_destroys_a_sword_in_any_state() -> void:
@@ -258,5 +266,6 @@ func _step(state: SwordFlight.State, facts: Dictionary = {}) -> SwordFlight.Stat
 		facts.get("contact", SwordFlight.Contact.NONE),
 		facts.get("overshot", false),
 		facts.get("on_floor", false),
-		facts.get("recalled", false)
+		facts.get("recalled", false),
+		facts.get("yanked", false)
 	)

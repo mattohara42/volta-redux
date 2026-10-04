@@ -72,7 +72,8 @@ static func next_state(
 	contact: Contact,
 	overshot: bool,
 	on_floor: bool,
-	recalled: bool
+	recalled: bool,
+	yanked: bool = false
 ) -> State:
 	if contact == Contact.LIVE and state != State.CAUGHT and state != State.DESTROYED:
 		return State.DESTROYED
@@ -102,6 +103,10 @@ static func next_state(
 		State.EMBEDDED:
 			if recalled:
 				return State.RECALLING
+			# Torn out by something stronger than the wall (Volta, Act 4): it
+			# falls rather than flies home, wherever it was thrown.
+			if yanked:
+				return State.FALLING
 			return State.EMBEDDED
 		State.FALLING:
 			if on_floor:
