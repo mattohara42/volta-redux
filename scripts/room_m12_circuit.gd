@@ -46,29 +46,17 @@ func _ready() -> void:
 	_hand_out_swords(SWORDS_HANDED_OUT)
 	_add_solid(Rect2(0.0, FLOOR_TOP, ROOM_WIDTH, ROOM_HEIGHT - FLOOR_TOP))
 	_add_solid(Rect2(GATE.position.x, 0.0, GATE.size.x, GATE.position.y))
-	var network := CircuitNetwork.new()
-	add_child(network)
-	var source := _add_conductor(network, live_piece(), true)
+	var network := _add_network()
+	_add_conductor(network, live_piece(), true)
 	var lower := _add_conductor(network, stub(), false)
-	var plate := _add_conductor(network, LIVE_PLATE, true)
-	var switch := CurrentSwitch.new()
-	switch.configure(SWITCH)
-	add_child(switch)
-	network.add(switch)
+	_add_conductor(network, LIVE_PLATE, true)
+	var switch := _add_current_switch(network, SWITCH)
 	network.wire(lower, switch)
 	var gate := _add_gate(GATE)
 	switch.held_changed.connect(gate.set_open)
 	_add_enclosure(ROOM_WIDTH)
 	_frame_camera(ROOM_WIDTH)
 	queue_redraw()
-
-
-func _add_conductor(network: CircuitNetwork, rect: Rect2, source: bool) -> Conductor:
-	var piece := Conductor.new()
-	piece.configure(rect, source)
-	add_child(piece)
-	network.add(piece)
-	return piece
 
 
 func _draw() -> void:

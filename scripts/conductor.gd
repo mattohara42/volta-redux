@@ -23,6 +23,14 @@ var is_live := false:
 ## The rect this piece occupies, in the room's coordinates.
 var rect := Rect2()
 
+## Plate art repeated across the piece, for a real room. Null on the bench,
+## which keeps the drawn shape.
+var art: Texture2D = null:
+	set(value):
+		art = value
+		texture_repeat = TEXTURE_REPEAT_ENABLED if value != null else TEXTURE_REPEAT_PARENT_NODE
+		queue_redraw()
+
 var _zap: Area2D
 var _glow: ChargedSurface
 
@@ -80,6 +88,9 @@ func _on_live_changed(_live: bool) -> void:
 ## until its art is generated.
 func _draw() -> void:
 	var local := Rect2(-rect.size * 0.5, rect.size)
+	if art != null:
+		draw_texture_rect(art, local, true)
+		return
 	draw_rect(local, Palette.STONE_MID)
 	draw_rect(Rect2(local.position, Vector2(local.size.x, 2.0)), Palette.STONE_LIT)
 	draw_rect(local, Palette.ARC_RESIDUE, false, 1.0)
