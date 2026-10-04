@@ -10,7 +10,7 @@ beaten by throwing (`BUILD_PLAN.md`). Both hold in scenarios; feel is Matt's.
 
 ## Where this is
 
-**Credits: 690.** Random HTTP 403s cost nothing; retry once.
+**Credits: 645.** Random HTTP 403s cost nothing; retry once.
 Spend in small batches, each looked at before the next (`ART.md` → *What is
 left to generate*). Enemies and characters wait on `RoomM7Sheet`'s verdict.
 
@@ -26,9 +26,9 @@ chained art), costing no sword. **Act 3's current is built** (`SPEC.md` → *Con
 `Conductor`, `CurrentSwitch`, `CircuitNetwork`, proven on `RoomM12Circuit`.
 Act 3 is six rooms and `Act3Generator`: the generator throws telegraphed
 arcs (`GeneratorCycle`, `config/enemies.tres`), breaks any sword thrown at
-it, and shorts for good when its three-break loop is closed. Its fight-state
-art and an arc-free still are not generated yet (`ART.md` → *Act 3*); until
-then a shorted generator is dimmed and its painted arc still flickers. **Act 2 needs a painted background** (Matt, Gemini);
+it, and shorts for good when its three-break loop is closed. Its art is
+generated: an arc-free hum with an `ArcBolt` between the horns, and a
+burnt-out still it travels to when it shorts. **Act 2 needs a painted background** (Matt, Gemini);
 until then its rooms show a plain backdrop under a rock ceiling.
 
 ## Blocked on Matt
