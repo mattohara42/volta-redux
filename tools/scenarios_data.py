@@ -936,4 +936,40 @@ SCENARIOS: list[dict] = [
 				"message": "and current should reach the switch"},
 		],
 	},
+	{
+		"name": "Act 4: cut the gallery's shelf down and take its gem",
+		"scene": "res://scenes/rooms/act4_gallery.tscn",
+		"out": "act4_gallery_gem.png",
+		"input": (
+			"move_right:80;move_right,jump:14;-:30;throw:4;-:30;move_right:4;-:2;"
+			"move_right,jump:14;-:30;move_right,jump:14;-:30;move_right:30;-:6;throw:4;"
+			"-:90;move_right:90;-:30"
+		),
+		"zoom": 1.0,
+		"centre": (560, 220),
+		"checks": [
+			{"type": "contains", "pattern": "capture: shelf CUT",
+				"message": "a throw from the gallery should knock the shelf away"},
+			{"type": "contains", "pattern": "1 gem(s) held",
+				"message": "and the fallen gem should be picked up"},
+			{"type": "contains", "pattern": "2 sword(s) held",
+				"message": "the shelf sword flew on and came home; the step sword is still in the wood"},
+		],
+	},
+	{
+		"name": "Act 4: kill the guard from the step and take its gem",
+		"scene": "res://scenes/rooms/act4_guard.tscn",
+		"out": "act4_guard_gem.png",
+		"input": "move_right:100;-:540;throw:4;-:30;move_right:200;-:10",
+		"zoom": 1.0,
+		"centre": (600, 220),
+		"checks": [
+			{"type": "contains", "pattern": "capture: no enemies remaining",
+				"message": "a throw from the step should kill the guard head on"},
+			{"type": "contains", "pattern": "1 gem(s) held",
+				"message": "and the gem it carried should be picked up"},
+			{"type": "contains", "pattern": "capture: no deaths",
+				"message": "nobody should have died"},
+		],
+	},
 ]
