@@ -30,3 +30,12 @@ func test_recalling_a_sword_breaks_what_it_bridged() -> void:
 	var with_sword := Circuit.links_through([0, 1])
 	check(Circuit.live([0], with_sword).has(1), "bridged, the far side is live")
 	check(not Circuit.live([0], []).has(1), "recalled, it is dead again")
+
+
+func test_a_path_crosses_a_thin_field_even_when_both_ends_miss_it() -> void:
+	var field := Rect2(100.0, 0.0, 4.0, 100.0)
+	check(Circuit.crosses(Vector2(90.0, 50.0), Vector2(120.0, 50.0), field), "a fast sword stepping over it")
+	check(Circuit.crosses(Vector2(102.0, 50.0), Vector2(102.0, 50.0), field), "one standing in it")
+	check(not Circuit.crosses(Vector2(90.0, 50.0), Vector2(99.0, 50.0), field), "one short of it")
+	check(not Circuit.crosses(Vector2(90.0, -40.0), Vector2(120.0, -10.0), field), "one passing over its top")
+	check(Circuit.crosses(Vector2(90.0, -10.0), Vector2(120.0, 20.0), field), "one clipping its top corner")

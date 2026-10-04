@@ -98,3 +98,60 @@ func test_the_toll_way_out_needs_one_sword_back() -> void:
 	check(ledge_top - climb.position.y < move.jump_height, "but a sword in the wood is a step to it")
 	check(Act3Toll.wood().end.y == Bench.FLOOR_TOP, "and the wood reaches the throw")
 	check(Act3Toll.GATE.end.x < climb.position.x, "the climb is past the gate")
+
+
+func _rung_top(stand: float) -> float:
+	return _throw_y(stand) - Sword.LEDGE_THICKNESS * 0.5
+
+
+func _lands_in(throw_y: float, piece: Rect2) -> bool:
+	var sword: SwordConfig = load(SWORD)
+	var half := Sword.LEDGE_THICKNESS * 0.5 + sword.conduct_reach
+	return throw_y - half >= piece.position.y and throw_y + half <= piece.end.y
+
+
+func test_the_rungs_room_puts_the_obvious_throw_in_live_copper() -> void:
+	var world: WorldConfig = load(WORLD)
+	var move: MovementConfig = load("res://config/movement.tres")
+	var p := Act3Rungs.pieces()
+	var tiers := [
+		[Bench.FLOOR_TOP, Act3Rungs.CRATE_LOW, Act3Rungs.LOW_TOP, p[0], p[1]],
+		[Act3Rungs.LOW_TOP, Act3Rungs.CRATE_HIGH, Act3Rungs.HIGH_TOP, p[2], p[3]],
+	]
+	for tier in tiers:
+		var floor_y: float = tier[0]
+		var crate: Rect2 = tier[1]
+		var top: float = tier[2]
+		var dead: Rect2 = tier[3]
+		var live: Rect2 = tier[4]
+		check(_lands_in(_throw_y(floor_y), live), "a throw from %.0f lands wholly in live copper" % floor_y)
+		check(_lands_in(_throw_y(crate.position.y), dead), "a throw from the crate lands wholly in dead copper")
+		check(floor_y - top > move.jump_height, "the tier cannot be jumped from its floor")
+		check(crate.position.y - top > move.jump_height, "nor from its crate")
+		check(_rung_top(crate.position.y) - top < move.jump_height, "but the dead rung is a step to it")
+		check(live.position.y > _rung_top(crate.position.y) + Conductor.TOUCH, "and standing on that rung touches no live copper")
+		check(_rung_top(crate.position.y) - world.hero_height > top - 1.0, "the hero's head clears nothing above")
+
+
+func test_the_rungs_barrier_spares_a_recall_from_the_bridge_only() -> void:
+	var rungs := [
+		Vector2(Act3Rungs.LOW_FACE_X - 8.0, _throw_y(Act3Rungs.CRATE_LOW.position.y)),
+		Vector2(Act3Rungs.HIGH_FACE_X - 8.0, _throw_y(Act3Rungs.CRATE_HIGH.position.y)),
+	]
+	var on_bridge := Vector2(Act3Rungs.BRIDGE_END - 10.0, _throw_y(Act3Rungs.HIGH_TOP))
+	var beyond := Vector2(Act3Rungs.BARRIER.end.x + 60.0, _throw_y(Bench.FLOOR_TOP))
+	for rung in rungs:
+		check(not Circuit.crosses(rung, on_bridge, Act3Rungs.BARRIER), "recalled to the bridge's far end, the rung at %.0f flies over the field" % rung.y)
+		check(Circuit.crosses(rung, beyond, Act3Rungs.BARRIER), "recalled to the floor beyond, it crosses it")
+	check(Act3Rungs.BARRIER.position.y >= Act3Rungs.HIGH_TOP + Act3Rungs.BRIDGE_THICKNESS, "the field hangs below the bridge, so walking over it is safe")
+
+
+func test_the_rungs_way_out_needs_two_swords() -> void:
+	var move: MovementConfig = load("res://config/movement.tres")
+	var low := Act3Rungs.STEP_LOW
+	var high := Act3Rungs.STEP_HIGH
+	check(low.size.y > move.jump_height, "the first step cannot be jumped")
+	check(low.position.y - high.position.y > move.jump_height, "nor the second from the first")
+	check(_rung_top(Bench.FLOOR_TOP) - low.position.y < move.jump_height, "a sword thrown from the floor is a step up")
+	check(_rung_top(low.position.y) - high.position.y < move.jump_height, "and one thrown from the first step is the next")
+	check(low.position.x > Act3Rungs.BARRIER.end.x, "and it is all beyond the barrier")

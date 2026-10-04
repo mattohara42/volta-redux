@@ -45,3 +45,35 @@ static func links_through(touching: Array) -> Array:
 		for j in range(i + 1, touching.size()):
 			out.append([touching[i], touching[j]])
 	return out
+
+
+## Whether a sword moving from `from` to `to` this frame passed through `rect`:
+## a live barrier is a thin field and a fast sword can step clean over it, so
+## the path is tested rather than either end. Liang and Barsky's clip.
+static func crosses(from: Vector2, to: Vector2, rect: Rect2) -> bool:
+	if rect.has_point(from) or rect.has_point(to):
+		return true
+	var delta := to - from
+	var t0 := 0.0
+	var t1 := 1.0
+	var edges := [
+		[-delta.x, from.x - rect.position.x],
+		[delta.x, rect.end.x - from.x],
+		[-delta.y, from.y - rect.position.y],
+		[delta.y, rect.end.y - from.y],
+	]
+	for edge in edges:
+		var p: float = edge[0]
+		var q: float = edge[1]
+		if is_zero_approx(p):
+			if q < 0.0:
+				return false
+			continue
+		var t := q / p
+		if p < 0.0:
+			t0 = maxf(t0, t)
+		else:
+			t1 = minf(t1, t)
+		if t0 > t1:
+			return false
+	return true

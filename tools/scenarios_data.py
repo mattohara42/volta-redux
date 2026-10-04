@@ -37,6 +37,15 @@ TOLL_PAID = (
 	"move_left:2;-:10;throw:4;-:40;move_right,jump:14;-:30;move_left:2;-:10;throw:4;-:40"
 )
 
+# Act 3's rungs room from the start to the high tier: crate, dead rung, tier,
+# crate, dead rung, tier.
+RUNGS_UP = (
+	"move_right:60;move_right,jump:14;-:30;throw:4;-:40;move_right:6;-:4;move_right,jump:14;-:30;"
+	"move_right,jump:16;-:30;move_right,jump:10;-:30;throw:4;-:40;move_right:8;-:4;"
+	"move_right,jump:14;-:30;move_right,jump:16;-:30"
+)
+RUNGS_RECALLED = RUNGS_UP + ";move_right:70;-:20;throw:40;-:90"
+
 SCENARIOS: list[dict] = [
 	{
 		"name": "Screenshot the room",
@@ -761,6 +770,67 @@ SCENARIOS: list[dict] = [
 			{"type": "contains_regex", "pattern": r"gate at .* SHUT",
 				"message": "the recall should have dropped the gate behind the hero"},
 			{"type": "player_position", "min_x": 1180.0, "max_y": 260.0,
+				"message": "the hero should be up on the way out"},
+			{"type": "contains", "pattern": "capture: no deaths",
+				"message": "nobody should have died"},
+		],
+	},
+	{
+		"name": "Act 3: a rung in live copper kills",
+		"scene": "res://scenes/rooms/act3_rungs.tscn",
+		"out": "act3_rungs_live.png",
+		"input": (
+			"move_right:60;-:4;move_right,jump:14;move_right:30;-:30;move_left:9;-:20;"
+			"move_right:1;-:10;throw:4;-:30;move_right,jump:14;-:30"
+		),
+		"zoom": 1.6,
+		"centre": (380, 260),
+		"checks": [
+			{"type": "contains", "pattern": "1 death(s)",
+				"message": "stepping onto a sword in live copper should kill"},
+		],
+	},
+	{
+		"name": "Act 3: recall from the bridge and every sword comes home",
+		"scene": "res://scenes/rooms/act3_rungs.tscn",
+		"out": "act3_rungs_bridge.png",
+		"input": RUNGS_RECALLED,
+		"zoom": 1.0,
+		"centre": (700, 220),
+		"checks": [
+			{"type": "contains", "pattern": "3 sword(s) held",
+				"message": "recalled from above, the rungs should fly over the barrier"},
+			{"type": "contains", "pattern": "capture: no deaths",
+				"message": "nobody should have died"},
+		],
+	},
+	{
+		"name": "Act 3: recall from beyond the barrier and the rungs are lost",
+		"scene": "res://scenes/rooms/act3_rungs.tscn",
+		"out": "act3_rungs_lost.png",
+		"input": RUNGS_UP + ";move_right:110;-:40;throw:40;-:90",
+		"zoom": 1.0,
+		"centre": (700, 220),
+		"checks": [
+			{"type": "contains", "pattern": "1 sword(s) held",
+				"message": "the two rungs should have crossed the live field and been destroyed"},
+			{"type": "contains", "pattern": "capture: no deaths",
+				"message": "nobody should have died"},
+		],
+	},
+	{
+		"name": "Act 3: two wooden steps out of the rungs room",
+		"scene": "res://scenes/rooms/act3_rungs.tscn",
+		"out": "act3_rungs_out.png",
+		"input": RUNGS_RECALLED + (
+			";move_right:40;-:40;throw:4;-:40;move_right:6;-:4;move_right,jump:14;-:30;"
+			"move_right,jump:16;-:30;throw:4;-:40;move_right:8;-:4;move_right,jump:14;-:30;"
+			"move_right,jump:16;move_right:40"
+		),
+		"zoom": 1.0,
+		"centre": (900, 220),
+		"checks": [
+			{"type": "player_position", "min_x": 1060.0, "max_y": 190.0,
 				"message": "the hero should be up on the way out"},
 			{"type": "contains", "pattern": "capture: no deaths",
 				"message": "nobody should have died"},

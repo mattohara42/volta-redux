@@ -159,6 +159,14 @@ func test_a_recall_cannot_be_taken_away_from_you() -> void:
 	check_eq(_step(S.RECALLING, {"overshot": true}), S.RECALLING, "nor passing you")
 
 
+## Except current. A live barrier destroys a sword in any state that is still
+## out in the room (Matt, 2026-10-04): recall early, or lose what you left behind.
+func test_a_live_barrier_destroys_a_sword_in_any_state() -> void:
+	for state in [S.FLYING, S.RETURNING, S.RECALLING, S.EMBEDDED, S.FALLING, S.GROUNDED]:
+		check_eq(_step(state, {"contact": SwordFlight.Contact.LIVE}), S.DESTROYED, "%s is destroyed" % SwordFlight.state_name(state))
+	check_eq(_step(S.CAUGHT, {"contact": SwordFlight.Contact.LIVE}), S.CAUGHT, "one already in hand is not")
+
+
 ## An embedded sword answers nothing except the recall, because a ledge that
 ## vanished when something brushed it would not be a ledge.
 func test_an_embedded_sword_ignores_everything_but_the_recall() -> void:
