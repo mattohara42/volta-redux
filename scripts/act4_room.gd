@@ -1,10 +1,9 @@
-## What Act 4's rooms share: the Hall of Volta. Until its own tiles are
-## generated (`ART.md` → *Act 4*) it borrows Act 3's dressed underground
-## stone, which is the nearest thing the game has to a hall.
+## What Act 4's rooms share: the Hall of Volta, in dark violet marble with a
+## bronze line under every floor's lip (`ART.md` → *Act 4*).
 class_name Act4Room
 extends Bench
 
-const TILES: ActTiles = preload("res://assets/art/act3/act3_tiles.tres")
+const TILES: ActTiles = preload("res://assets/art/act4/act4_tiles.tres")
 const CEILING_HEIGHT: float = 32.0
 const WORLD_CONFIG: WorldConfig = preload("res://config/world.tres")
 

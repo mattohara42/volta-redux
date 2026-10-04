@@ -1207,3 +1207,17 @@ this time. Then a 4-frame `animate` wing beat (`dragon_flight_sheet.png`):
 the body stays level, slight boiling on the downstroke. 0 neutral darks in
 both. The hero sits on it as the hero sprite, so no rider art was needed.
 
+## Volta and the hall (2026-10-04, 105 credits)
+
+**Volta**: a `generate` at 64 (12 candidates, all palette-clean, nearly all
+three-quarter), pick 0 for its silhouette, then `direction-set`, whose index
+4 is a true profile facing left, the same index as the hero's. Three
+`animate`s from it: idle, cast (the staff thrust forward, orb flaring) and
+fall (toppling backward), 64x64, 0 neutral darks in all three although the
+still itself failed the check. `scenes/volta_sprite.tscn`.
+
+**Hall tiles**: two `generate`s at 16. Floor 4 (violet marble lip over a
+bronze line) and wall 0, the calmest; wall 4 was too saturated to sit behind
+play. Wall 0 came back 15x15 with a transparent last row and column, filled
+with its own mortar colour before `tile-variants.py`. `act4_tiles.tres`.
+

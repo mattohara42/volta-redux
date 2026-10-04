@@ -6,13 +6,18 @@
 ## sword in the room out of its wall and throws it toward him, breaking
 ## whatever circuit it was part of. Touching him kills.
 ##
-## Drawn in code until his art is generated (`ART.md` → *Act 4*).
+## His sprite (`scenes/volta_sprite.tscn`) faces left, toward the hero, and
+## its AnimationTree is told which of idle, cast and fall to show.
 class_name Volta
 extends Node2D
 
 signal fallen
 
-const SIZE := Vector2(24.0, 40.0)
+const SPRITE_SCENE: PackedScene = preload("res://scenes/volta_sprite.tscn")
+## His body, robe hem to crown, for touching him. The staff is not part of it.
+const SIZE := Vector2(28.0, 52.0)
+## The orb on his staff, from his feet: where every bolt leaves from.
+const HAND := Vector2(-16.0, -48.0)
 ## How long the fall into the fire takes, seconds. Presentation, not tuning.
 const FALL_TIME: float = 0.8
 
@@ -31,11 +36,15 @@ var _cast_index := -1
 var _target := Vector2.ZERO
 var _phase: GeneratorCycle.Phase = GeneratorCycle.Phase.REST
 var _bolt: ArcBolt
+var _sprite: Node2D
 
 
 func configure(feet: Vector2, config: EnemyConfig) -> void:
 	base = feet
 	enemy_config = config
+	_sprite = SPRITE_SCENE.instantiate() as Node2D
+	_sprite.position = feet
+	add_child(_sprite)
 	add_to_group("mechanisms")
 	add_to_group("volta")
 	queue_redraw()
@@ -64,6 +73,7 @@ func _physics_process(delta: float) -> void:
 		_target = player.global_position
 	if phase != _phase:
 		_phase = phase
+		_travel("idle" if phase == GeneratorCycle.Phase.REST else "cast")
 		if phase == GeneratorCycle.Phase.STRIKING and _pulling():
 			_pull()
 		_show_bolt(phase == GeneratorCycle.Phase.STRIKING and not _pulling())
@@ -86,6 +96,7 @@ func strike_box() -> Rect2:
 func stop() -> void:
 	is_stopped = true
 	_phase = GeneratorCycle.Phase.REST
+	_travel("idle")
 	_show_bolt(false)
 	queue_redraw()
 
@@ -96,6 +107,7 @@ func fall_into(pit_floor: float) -> void:
 		return
 	is_defeated = true
 	_show_bolt(false)
+	_travel("fall")
 	queue_redraw()
 	var tween := create_tween()
 	tween.tween_property(self, "position:y", pit_floor - base.y + SIZE.y, FALL_TIME).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
@@ -112,6 +124,7 @@ func reset(_frozen_for: float) -> void:
 	_clock = 0.0
 	_cast_index = -1
 	_phase = GeneratorCycle.Phase.REST
+	_travel("idle")
 	_show_bolt(false)
 	queue_redraw()
 
@@ -134,7 +147,11 @@ func _pull() -> void:
 
 
 func _hand() -> Vector2:
-	return base + Vector2(-SIZE.x * 0.5, -SIZE.y * 0.7)
+	return base + HAND
+
+
+func _travel(state: String) -> void:
+	(_sprite.get_node("AnimationTree") as AnimationTree)["parameters/playback"].travel(state)
 
 
 func _show_bolt(on: bool) -> void:
@@ -148,27 +165,17 @@ func _show_bolt(on: bool) -> void:
 	_bolt.setup(_hand(), _target, _cast_index + 1)
 
 
-## A robed figure: violet robe, a pale face, a staff. During a bolt's warning
-## the box it will strike is marked; during a pull's warning his staff glows.
+## During a bolt's warning the box it will strike is marked; during a pull's
+## warning his staff's orb swells.
 func _draw() -> void:
-	var body := rect()
-	draw_colored_polygon(PackedVector2Array([
-		body.position + Vector2(body.size.x * 0.3, 8.0),
-		body.position + Vector2(body.size.x * 0.7, 8.0),
-		body.end,
-		Vector2(body.position.x, body.end.y),
-	]), Palette.ENEMY_CHITIN)
-	draw_rect(Rect2(body.position + Vector2(body.size.x * 0.3, 0.0), Vector2(body.size.x * 0.4, 9.0)), Palette.STONE_LIT)
-	var staff_top := body.position + Vector2(-2.0, -6.0)
-	draw_line(staff_top, Vector2(staff_top.x, body.end.y), Palette.WOOD_FACE, 2.0)
-	if is_defeated:
+	if is_defeated or is_stopped or _phase != GeneratorCycle.Phase.WARNING:
 		return
-	var pulling_soon := _phase == GeneratorCycle.Phase.WARNING and _pulling()
-	draw_circle(staff_top, 3.0 if pulling_soon else 2.0, Palette.ARC_CORE if pulling_soon else Palette.ARC)
-	if _phase == GeneratorCycle.Phase.WARNING and not _pulling():
-		var box := strike_box()
-		draw_rect(box, Palette.ARC_RESIDUE, false, 1.0)
-		draw_line(Vector2(box.get_center().x, box.position.y), Vector2(box.get_center().x, box.end.y), Palette.ARC_RESIDUE, 1.0)
+	if _pulling():
+		draw_circle(_hand(), 5.0, Palette.ARC_CORE)
+		return
+	var box := strike_box()
+	draw_rect(box, Palette.ARC_RESIDUE, false, 1.0)
+	draw_line(Vector2(box.get_center().x, box.position.y), Vector2(box.get_center().x, box.end.y), Palette.ARC_RESIDUE, 1.0)
 
 
 func _player() -> Player:
