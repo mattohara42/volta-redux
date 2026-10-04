@@ -7,7 +7,7 @@
 built and waiting on Matt's play, like M10 to M12. **Next: M14**, the pass.
 **M13 done when:** the game can be completed from a new save (`BUILD_PLAN.md`).
 The game now launches into `Act1Bank` and runs to "The end."; F2 still
-reaches the benches.
+reaches the benches. `tools/dev.sh route` walks every exit in order (CI).
 
 ## Where this is
 

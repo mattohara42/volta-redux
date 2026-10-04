@@ -46,6 +46,12 @@ jobs:
       - name: Run the tests
         run: GODOT=~/godot/godot tools/dev.sh test
 
+      # The scenarios play rooms one at a time, under a tool where a room's
+      # exit has nowhere to go. This walks every exit in order, from the
+      # main scene through each act's card to the ending and a new game.
+      - name: Walk the whole route
+        run: GODOT=~/godot/godot tools/dev.sh route
+
       # An assertion proves the code ran, not that the picture is right.
       # tools/scenarios_data.py carries the 28 capture-and-check scenarios
       # this used to run as one shell step per scenario, inline in this file:
