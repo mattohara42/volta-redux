@@ -47,3 +47,23 @@ func test_every_face_is_in_range_of_its_throw() -> void:
 	var sword: SwordConfig = load(SWORD)
 	check(Act3Hall.GATE.position.x - Act3Hall.FACE_X < sword.max_range, "anywhere in the hall's yard short of the gate")
 	check(Act3Insulator.STEP.end.x - Act3Insulator.FACE_X < sword.max_range, "anywhere on the insulator's step")
+
+
+func test_the_copper_floor_room_can_be_thrown_from_the_stone() -> void:
+	var world: WorldConfig = load(WORLD)
+	var sword: SwordConfig = load(SWORD)
+	check(_spans(_throw_y(Bench.FLOOR_TOP), Act3Floor.live_copper(), Act3Floor.stub()), "a yard throw lands across its seam")
+	var off_strip := Act3Floor.STRIP.end.x + world.hero_width * 0.5
+	check(off_strip - Act3Floor.FACE_X < sword.max_range, "standing just off the copper, the face is in range")
+	check(Act3Floor.GATE.position.x > off_strip, "and the gate is beyond the copper, so nobody has to cross it live")
+
+
+func test_the_series_room_needs_both_seams() -> void:
+	check(_spans(_throw_y(Bench.FLOOR_TOP), Act3Series.middle(), Act3Series.stub()), "the yard throw bridges the low seam")
+	check(_spans(_throw_y(Act3Series.STEP.position.y), Act3Series.live_copper(), Act3Series.middle()), "the step throw bridges the high seam")
+	check(not _spans(_throw_y(Bench.FLOOR_TOP), Act3Series.live_copper(), Act3Series.middle()), "and the yard throw cannot reach the high one")
+	var links_low := Circuit.links_through([1, 2])
+	var links_high := Circuit.links_through([0, 1])
+	check(not Circuit.connected(0, 2, links_low), "the low seam alone leaves the stub dead")
+	check(not Circuit.connected(0, 2, links_high), "the high seam alone leaves the stub dead")
+	check(Circuit.connected(0, 2, links_low + links_high), "both together make it live")
