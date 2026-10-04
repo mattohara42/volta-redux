@@ -13,6 +13,7 @@ const SCRIPTS: PackedStringArray = [
 	"res://scripts/light_glow.gd",
 	"res://scripts/light_field.gd",
 	"res://scripts/light_source.gd",
+	"res://scripts/backdrop.gd",
 ]
 const SHADERS: PackedStringArray = [
 	"res://shaders/lava.gdshader",
@@ -22,6 +23,10 @@ const SHADERS: PackedStringArray = [
 	"res://shaders/flame.gdshader",
 	"res://shaders/light.gdshader",
 	"res://shaders/light_field.gdshader",
+	"res://shaders/backdrop.gdshaderinc",
+	"res://shaders/backdrop_cavern.gdshader",
+	"res://shaders/backdrop_works.gdshader",
+	"res://shaders/backdrop_hall.gdshader",
 	"res://shaders/dither.gdshaderinc",
 ]
 

@@ -14,6 +14,10 @@ extends Resource
 ## The card's lettering, in the same size as the death messages.
 @export var card_font_size: int = 24
 
+## The far layers drawn by `Backdrop` while the act has no painted background:
+## 0 none, 1 the caverns, 2 the works, 3 the hall (`Backdrop.Style`).
+@export_enum("None", "Cavern", "Works", "Hall") var backdrop: int = 0
+
 @export_group("Light")
 ## What the dark is in this act: everything no light reaches is multiplied by
 ## this (`LightField`). White is no dark at all. A coloured dark, never a grey

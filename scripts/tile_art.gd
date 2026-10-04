@@ -45,8 +45,9 @@ static func draw_background(canvas: CanvasItem) -> void:
 static func draw_background_across(canvas: CanvasItem, width: float, tiles: ActTiles = null) -> void:
 	var set := _or_act1(tiles)
 	if set.background == null:
-		# Not painted yet: the plain backdrop, which the light layer still falls on.
-		canvas.draw_rect(Rect2(0.0, 0.0, width, Bench.ROOM_HEIGHT), Palette.BACKDROP)
+		# Not painted yet: nothing here, so the act's `Backdrop` shows through
+		# from under the room, or the project's clear colour (`Palette.BACKDROP`)
+		# where there is none.
 		return
 	var bg := set.background
 	var step := float(bg.get_width())

@@ -95,6 +95,14 @@ the lights. Anything that is itself light (lava, glows, arcs, flames) draws
 over the dark through `LightField.emissive`, so the dark never dims the thing
 doing the lighting. Benches stay lit evenly.
 
+**Acts 2 to 4 have code-drawn far layers until theirs are painted.** A
+`Backdrop` (a shader, two layers of parallax, every colour a mix of
+`Palette`'s) draws the caverns, the generator's works and the hall, and
+`test_backdrop.gd` holds it under the stone you stand on. A painted
+background replaces it with one line: give the act's `ActTiles` its
+`background` and set the act's `backdrop` to 0, which the same test then
+expects.
+
 **Pixelating works on large, simple shapes**, so a background prompt asks for
 big forms and few small details. Act 1's wall converted cleanly at 24
 colours (`assets/art/act1/wall_moat_bg_px.png`), passes `palette-check.py`,
