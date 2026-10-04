@@ -669,4 +669,59 @@ SCENARIOS: list[dict] = [
 				"message": "nobody should have died"},
 		],
 	},
+	{
+		"name": "Act 3: bridging while standing on the copper floor kills",
+		"scene": "res://scenes/rooms/act3_floor.tscn",
+		"out": "act3_floor_shocked.png",
+		"input": "move_right:160;-:20;move_left:2;-:10;throw:4;-:40",
+		"zoom": 1.0,
+		"centre": (600, 250),
+		"checks": [
+			{"type": "contains_regex", "pattern": r"capture: 1 death",
+				"message": "the current let through should have run through the hero's feet"},
+		],
+	},
+	{
+		"name": "Act 3: step off the copper, then bridge",
+		"scene": "res://scenes/rooms/act3_floor.tscn",
+		"out": "act3_floor_bridged.png",
+		"input": "move_right:160;-:10;move_right:30;-:20;move_left:2;-:10;throw:4;-:40",
+		"zoom": 1.2,
+		"centre": (620, 250),
+		"checks": [
+			{"type": "contains", "pattern": "capture: no deaths",
+				"message": "throwing from the stone should be safe"},
+			{"type": "contains_regex", "pattern": r"gate at .* OPEN",
+				"message": "the bridged seam should have opened the gate"},
+		],
+	},
+	{
+		"name": "Act 3: one of two seams in series opens nothing",
+		"scene": "res://scenes/rooms/act3_series.tscn",
+		"out": "act3_series_one.png",
+		"input": "move_right:160;-:30;move_left:2;-:10;throw:4;-:40",
+		"zoom": 1.0,
+		"centre": (600, 250),
+		"checks": [
+			{"type": "contains_regex", "pattern": r"gate at .* SHUT",
+				"message": "one bridged seam of two should leave the gate shut"},
+		],
+	},
+	{
+		"name": "Act 3: both seams in series open the gate",
+		"scene": "res://scenes/rooms/act3_series.tscn",
+		"out": "act3_series_both.png",
+		"input": (
+			"move_right:160;-:30;move_left:2;-:10;throw:4;-:40;move_right,jump:14;"
+			"move_right:4;-:20;move_left:2;-:10;throw:4;-:40"
+		),
+		"zoom": 1.2,
+		"centre": (620, 250),
+		"checks": [
+			{"type": "contains_regex", "pattern": r"gate at .* OPEN",
+				"message": "both seams bridged should open the gate"},
+			{"type": "contains", "pattern": "capture: no deaths",
+				"message": "nobody should have died"},
+		],
+	},
 ]
