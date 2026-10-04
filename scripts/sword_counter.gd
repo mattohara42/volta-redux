@@ -1,4 +1,5 @@
-## The sword counter: the one piece of HUD the game has. `SPEC.md` makes the
+## The sword counter: the one piece of HUD the game has, and Act 4's gems
+## under it. `SPEC.md` makes the
 ## count the difficulty dial, and a dial you cannot see is not one.
 ##
 ## A small upright sword per sword you own, top right, drawn pixel by pixel in
@@ -16,9 +17,12 @@ extends Node2D
 const MARGIN := Vector2(8.0, 8.0)
 const ICON_SIZE := Vector2(5.0, 13.0)
 const SPACING: float = 7.0
+const GEM_SIZE := Vector2(6.0, 8.0)
+const GEM_SPACING: float = 9.0
 
 var _player: Player
 var _icons: Array[bool] = []
+var _gems := 0
 
 
 func _ready() -> void:
@@ -43,8 +47,9 @@ func _process(_delta: float) -> void:
 		if sword != null and sword.state != SwordFlight.State.CAUGHT and sword.state != SwordFlight.State.DESTROYED:
 			out += 1
 	var icons := SwordTally.icons(_player.swords_held, out, _player.sword_config.max_swords)
-	if icons != _icons:
+	if icons != _icons or _player.gems_held != _gems:
 		_icons = icons
+		_gems = _player.gems_held
 		queue_redraw()
 
 
@@ -54,6 +59,10 @@ func _draw() -> void:
 	var left := width - MARGIN.x - ICON_SIZE.x - SPACING * float(maxi(count - 1, 0))
 	for i in count:
 		_draw_icon(Vector2(left + SPACING * float(i), MARGIN.y), _icons[i])
+	# Act 4's gems, a row below the swords, only once there are any.
+	for i in _gems:
+		var centre := Vector2(width - MARGIN.x - 3.0 - GEM_SPACING * float(i), MARGIN.y + ICON_SIZE.y + 9.0)
+		Gem.draw_gem(self, centre, GEM_SIZE)
 
 
 ## Point up: a 1 px tip, a 2 px blade, a crossguard wider on one side (the

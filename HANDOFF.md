@@ -3,10 +3,10 @@
 > **Rewrite this file, never append.** State snapshot and pointers only. No
 > session narrative, that is what `git log` is for. Keep it under 80 lines.
 
-**Updated:** 2026-10-04 · **Phase:** 3, the game · **Active:** M12, Act 3,
-built and waiting on Matt's play, like M10 and M11. **Next: M13**, Act 4.
-**M12 done when:** Act 3 playable start to finish, and the generator cannot be
-beaten by throwing (`BUILD_PLAN.md`). Both hold in scenarios; feel is Matt's.
+**Updated:** 2026-10-04 · **Phase:** 3, the game · **Active:** M13, Act 4.
+M10, M11 and M12 are built and wait only on Matt's play.
+**M13 done when:** the game can be completed from a new save (`BUILD_PLAN.md`).
+Act 4's design is decided (`SPEC.md` → *Act 4*).
 
 ## Where this is
 
@@ -20,16 +20,12 @@ built, connected and wired with art. Real rooms extend `Bench` and draw with
 
 ## The next action
 
-**All six Act 2 rooms built and connected,** ending in `Act2Lair`, where a
-recall overpowers the dragon and chains it (`Dragon._defeat`, generated
-chained art), costing no sword. **Act 3's current is built** (`SPEC.md` → *Conduct*): `Circuit`,
-`Conductor`, `CurrentSwitch`, `CircuitNetwork`, proven on `RoomM12Circuit`.
-Act 3 is six rooms and `Act3Generator`: the generator throws telegraphed
-arcs (`GeneratorCycle`, `config/enemies.tres`), breaks any sword thrown at
-it, and shorts for good when its three-break loop is closed. Its art is
-generated: an arc-free hum with an `ArcBolt` between the horns, and a
-burnt-out still it travels to when it shorts. **Act 2 needs a painted background** (Matt, Gemini);
-until then its rooms show a plain backdrop under a rock ceiling.
+Acts 1 to 3 are built and connected, each ending in its boss (`Act2Lair`'s
+chained dragon, `Act3Generator`). **M13 step 1 is in**: `Gem`, `GemHolder`
+and gems carried by `ActState`, proven on `RoomM13Gems`. Next: Act 4 rooms
+1 and 2 (a gem each), then room 3 (Volta, the chains, the dragon), then the
+ridden flight and the end card. **Act 2 needs a painted background** (Matt,
+Gemini); until then its rooms show a plain backdrop under a rock ceiling.
 
 ## Blocked on Matt
 
