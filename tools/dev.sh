@@ -8,6 +8,7 @@
 #   tools/dev.sh play [scene]        run it, F2 cycles the benches
 #   tools/dev.sh shot SCENE OUT ...  a screenshot from a real running build
 #   tools/dev.sh scenarios [filter]  the capture-and-check scenarios CI runs
+#   tools/dev.sh route               every room's exit, in order, to the ending
 #
 # CLAUDE.md: the destructive mode is the flag. `shot` does not pass
 # --overwrite, so replacing an existing image is something you ask for.
@@ -62,6 +63,9 @@ import)
 	;;
 test)
 	"$GODOT_BIN" --headless --path . --script res://tests/run_tests.gd
+	;;
+route)
+	"$GODOT_BIN" --headless --path . --script res://tools/route_check.gd
 	;;
 play)
 	if [[ $# -gt 0 ]]; then

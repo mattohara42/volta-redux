@@ -14,15 +14,18 @@ const ACTS: Array[ActConfig] = [preload("res://config/act1.tres"), preload("res:
 var _carried := -1
 ## Gems to arrive with, or -1 for none carried. Read once, by the next hero.
 var _carried_gems := -1
-## Set between an exit and the next room, so an exit cannot fire twice.
-var _leaving := false
+## The room being left, between its exit and the next room, so an exit cannot
+## fire twice. Kept per room rather than as a flag the next hero clears,
+## because a room with no hero in it (the ending's flight) must still be able
+## to leave.
+var _leaving_from := ""
 
 
 ## What the hero arriving in a room starts with. Called by `Player._ready`.
 func arriving_swords(default: int) -> int:
 	var count := _carried if _carried >= 0 else default
 	_carried = -1
-	_leaving = false
+	_leaving_from = ""
 	return count
 
 
@@ -36,12 +39,12 @@ func arriving_gems(default: int) -> int:
 ## The hero walked into the exit of `room_path` holding `swords_held` and
 ## `gems_held`. Gems belong to an act, so a new act starts with none.
 func leave_room(room_path: String, swords_held: int, max_swords: int, gems_held: int = 0) -> void:
-	if _leaving:
+	if _leaving_from == room_path:
 		return
 	var act := act_of(room_path)
 	if act == null:
 		return
-	_leaving = true
+	_leaving_from = room_path
 	var next := ActRoute.next_room(act.rooms, room_path)
 	if next != "":
 		_carried = ActRoute.carried(swords_held, max_swords)
