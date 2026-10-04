@@ -46,6 +46,10 @@ RUNGS_UP = (
 )
 RUNGS_RECALLED = RUNGS_UP + ";move_right:70;-:20;throw:40;-:90"
 
+# The generator's three breaks, the same throws as the toll's: the yard, then
+# each step of the stair. The arcs are timed so none lands on this route.
+GENERATOR_LOOP = TOLL_PAID
+
 SCENARIOS: list[dict] = [
 	{
 		"name": "Screenshot the room",
@@ -832,6 +836,69 @@ SCENARIOS: list[dict] = [
 		"checks": [
 			{"type": "player_position", "min_x": 1060.0, "max_y": 190.0,
 				"message": "the hero should be up on the way out"},
+			{"type": "contains", "pattern": "capture: no deaths",
+				"message": "nobody should have died"},
+		],
+	},
+	{
+		"name": "Act 3: a sword thrown at the generator breaks on it",
+		"scene": "res://scenes/rooms/act3_generator.tscn",
+		"out": "act3_generator_thrown.png",
+		"input": (
+			"move_right:157;-:40;move_right,jump:14;-:30;move_right,jump:14;-:30;"
+			"move_right:1;-:4;throw:4;-:30"
+		),
+		"zoom": 1.0,
+		"centre": (700, 220),
+		"checks": [
+			{"type": "contains", "pattern": "2 sword(s) held",
+				"message": "the sword thrown at the casing should be gone"},
+			{"type": "contains", "pattern": "capture: no swords in play",
+				"message": "and not stuck in it"},
+			{"type": "contains", "pattern": "capture: generator live",
+				"message": "the generator cannot be beaten by throwing"},
+		],
+	},
+	{
+		"name": "Act 3: standing still under the generator's arc kills",
+		"scene": "res://scenes/rooms/act3_generator.tscn",
+		"out": "act3_generator_struck.png",
+		"input": "move_right:157;-:150",
+		"zoom": 1.0,
+		"centre": (700, 220),
+		"checks": [
+			{"type": "contains", "pattern": "1 death(s)",
+				"message": "the arc should strike where the hero stood"},
+		],
+	},
+	{
+		"name": "Act 3: bridge all three breaks and the generator shorts",
+		"scene": "res://scenes/rooms/act3_generator.tscn",
+		"out": "act3_generator_shorted.png",
+		"input": GENERATOR_LOOP + ";move_right:30;-:60",
+		"zoom": 1.0,
+		"centre": (700, 220),
+		"checks": [
+			{"type": "contains", "pattern": "capture: generator SHORTED",
+				"message": "closing the loop should short the generator"},
+			{"type": "contains_regex", "pattern": r"gate at .* OPEN",
+				"message": "and lift the gate"},
+			{"type": "contains", "pattern": "capture: no deaths",
+				"message": "dodging the arc after the last throw"},
+		],
+	},
+	{
+		"name": "Act 3: recall the swords and walk out past the dead generator",
+		"scene": "res://scenes/rooms/act3_generator.tscn",
+		"out": "act3_generator_out.png",
+		"input": GENERATOR_LOOP + ";move_right:30;-:20;throw:40;-:60;move_right:80",
+		"zoom": 1.0,
+		"centre": (800, 220),
+		"checks": [
+			{"type": "contains", "pattern": "3 sword(s) held",
+				"message": "a shorted loop is dead copper, so every sword comes home"},
+			{"type": "player_position", "min_x": 960.0,
+				"message": "the hero should be through the gate"},
 			{"type": "contains", "pattern": "capture: no deaths",
 				"message": "nobody should have died"},
 		],

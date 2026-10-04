@@ -155,3 +155,31 @@ func test_the_rungs_way_out_needs_two_swords() -> void:
 	check(_rung_top(Bench.FLOOR_TOP) - low.position.y < move.jump_height, "a sword thrown from the floor is a step up")
 	check(_rung_top(low.position.y) - high.position.y < move.jump_height, "and one thrown from the first step is the next")
 	check(low.position.x > Act3Rungs.BARRIER.end.x, "and it is all beyond the barrier")
+
+
+func test_the_generator_loop_needs_all_three_breaks() -> void:
+	var sword: SwordConfig = load(SWORD)
+	var pieces := Act3Generator.pieces()
+	var stands: Array[float] = [Act3Generator.STEP_HIGH.position.y, Act3Generator.STEP_LOW.position.y, Bench.FLOOR_TOP]
+	for i in stands.size():
+		check(_spans(_throw_y(stands[i]), pieces[i], pieces[i + 1]), "the throw from %.0f bridges break %d" % [stands[i], i])
+	check(Act3Generator.STEP_HIGH.end.x - Act3Generator.FACE_X < sword.max_range, "the face is in range from the far end of the stair")
+	var links: Array = []
+	for i in pieces.size() - 1:
+		var some := Circuit.links_through([i, i + 1])
+		check(not Circuit.connected(0, pieces.size() - 1, some), "break %d alone leaves the loop open" % i)
+		links.append_array(some)
+	check(Circuit.connected(0, pieces.size() - 1, links), "all three close it")
+
+
+func test_the_generator_breaks_a_sword_thrown_at_it() -> void:
+	var throw_y := _throw_y(Act3Generator.STEP_HIGH.position.y)
+	var casing := Act3Generator.CASING
+	check(throw_y > casing.position.y and throw_y < casing.end.y, "a throw from the high step flies into the casing")
+	check(not Act3Generator.CASING.has_point(Vector2(casing.position.x, _throw_y(Bench.FLOOR_TOP))), "a throw from the yard passes under it")
+
+
+func test_the_generator_shelf_can_be_walked_under() -> void:
+	var world: WorldConfig = load(WORLD)
+	check(Bench.FLOOR_TOP - Act3Generator.SHELF.end.y > world.hero_height, "the hero fits under the shelf")
+	check(Act3Generator.SHELF.position.x > Act3Generator.STEP_HIGH.end.x + world.hero_width, "and the stair does not run into it")

@@ -3,10 +3,10 @@
 > **Rewrite this file, never append.** State snapshot and pointers only. No
 > session narrative, that is what `git log` is for. Keep it under 80 lines.
 
-**Updated:** 2026-10-04 · **Phase:** 3, the game · **Active:** M12, Act 3.
-M10 and M11 are built and wait only on Matt's play.
+**Updated:** 2026-10-04 · **Phase:** 3, the game · **Active:** M12, Act 3,
+built and waiting on Matt's play, like M10 and M11. **Next: M13**, Act 4.
 **M12 done when:** Act 3 playable start to finish, and the generator cannot be
-beaten by throwing (`BUILD_PLAN.md`).
+beaten by throwing (`BUILD_PLAN.md`). Both hold in scenarios; feel is Matt's.
 
 ## Where this is
 
@@ -24,9 +24,11 @@ built, connected and wired with art. Real rooms extend `Bench` and draw with
 recall overpowers the dragon and chains it (`Dragon._defeat`, generated
 chained art), costing no sword. **Act 3's current is built** (`SPEC.md` → *Conduct*): `Circuit`,
 `Conductor`, `CurrentSwitch`, `CircuitNetwork`, proven on `RoomM12Circuit`.
-All six Act 3 rooms built (`Act3Hall` to `Act3Rungs`; room 6 adds live
-rungs and the first `Barrier`). Next: the generator, three breaks at three
-heights (Matt, 2026-10-04). **Act 2 needs a painted background** (Matt, Gemini);
+Act 3 is six rooms and `Act3Generator`: the generator throws telegraphed
+arcs (`GeneratorCycle`, `config/enemies.tres`), breaks any sword thrown at
+it, and shorts for good when its three-break loop is closed. Its fight-state
+art and an arc-free still are not generated yet (`ART.md` → *Act 3*); until
+then a shorted generator is dimmed and its painted arc still flickers. **Act 2 needs a painted background** (Matt, Gemini);
 until then its rooms show a plain backdrop under a rock ceiling.
 
 ## Blocked on Matt

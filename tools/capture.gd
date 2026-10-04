@@ -177,6 +177,7 @@ class CaptureAgent:
 		_report_platforms()
 		_report_geysers()
 		_report_enemies()
+		_report_generators()
 		_report_mechanisms()
 
 		_hold_exactly(PackedStringArray())
@@ -358,6 +359,15 @@ class CaptureAgent:
 				print("capture: geyser at %s, column %s, %s" % [
 					geyser.global_position, geyser.column(), geyser.status()
 				])
+
+
+	## Whether each generator is still live, and which phase of its arc it is
+	## in: a shorted generator and a resting one look much alike in a still.
+	func _report_generators() -> void:
+		for node in get_tree().get_nodes_in_group("generators"):
+			var generator := node as Generator
+			if generator != null:
+				print("capture: %s" % generator.status())
 
 
 	## Which enemies are still alive, and where. A killed one is `queue_free`d

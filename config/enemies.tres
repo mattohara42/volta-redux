@@ -15,3 +15,7 @@ dragon_breathe_time = 0.5
 dragon_rest_time = 2.6
 dragon_snout_reach = 36.0
 dormant_wake_range = 40.0
+generator_rest_time = 1.6
+generator_warning_time = 0.8
+generator_strike_time = 0.3
+generator_strike_size = Vector2(32, 48)

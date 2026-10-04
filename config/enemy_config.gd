@@ -68,3 +68,15 @@ extends Resource
 ## precise trigger, and LEVELS.md's whole point is that the hero finds out by
 ## something moving, not by reading a hitbox.
 @export var dormant_wake_range: float = 40.0
+
+@export_group("Generator")
+## The rest between arcs, seconds. The generator throws at where you were when
+## it began to charge, so this is how long you get to stand still and throw.
+@export var generator_rest_time: float = 1.6
+## The warning, seconds: a marker where the arc will land. Long enough to step
+## out of at a walk, which is the only thing it asks.
+@export var generator_warning_time: float = 0.8
+## How long the arc stays in the ground, seconds.
+@export var generator_strike_time: float = 0.3
+## The arc's killing box, px, centred on where you stood.
+@export var generator_strike_size: Vector2 = Vector2(32.0, 48.0)
