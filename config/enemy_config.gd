@@ -80,3 +80,20 @@ extends Resource
 @export var generator_strike_time: float = 0.3
 ## The arc's killing box, px, centred on where you stood.
 @export var generator_strike_size: Vector2 = Vector2(32.0, 48.0)
+
+@export_group("Volta")
+## Volta's casting clock, the generator's shape (`GeneratorCycle`): rest,
+## warning, strike, starting at rest.
+@export var volta_rest_time: float = 1.4
+@export var volta_warning_time: float = 0.7
+@export var volta_strike_time: float = 0.3
+## His bolt's killing box, px, centred on where you stood.
+@export var volta_strike_size: Vector2 = Vector2(28.0, 44.0)
+## Every this many casts, the strike is a pull instead of a bolt: every
+## embedded sword in the room is torn out and thrown toward him.
+@export var volta_pull_every: int = 3
+## How hard a pull throws a sword, px/s, before it falls.
+@export var volta_pull_speed: float = 160.0
+## How long current must hold on the chains before they let go, seconds. Long
+## enough that a pull can break it, short enough to fit between two pulls.
+@export var volta_chain_burn_time: float = 2.0

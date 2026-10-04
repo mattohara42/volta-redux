@@ -47,6 +47,8 @@ var _recalled := false
 ## Set by a live `Barrier` the sword's path crossed, and acted on at the next
 ## step like any other contact.
 var _fried := false
+## Set by `yank`: torn out of the wall at this horizontal speed, at the next step.
+var _yank_speed := 0.0
 
 @onready var _shape: CollisionShape2D = $CollisionShape2D
 ## The one-tile ledge an embedded sword becomes. A separate body because an
@@ -103,6 +105,12 @@ func fry() -> void:
 	_fried = true
 
 
+## Torn out of whatever it is embedded in and thrown toward `toward_x` at
+## `speed`, falling as it goes. Only an embedded sword answers, like a recall.
+func yank(toward_x: float, speed: float) -> void:
+	_yank_speed = signf(toward_x - global_position.x) * speed
+
+
 ## Bring it home. Only an embedded sword answers; the rest ignore it, so the
 ## player can shout at every sword on screen and let the machine sort it out.
 func recall() -> void:
@@ -145,11 +153,17 @@ func _physics_process(delta: float) -> void:
 			offset_before, offset_after
 		),
 		_landed,
-		_recalled
+		_recalled,
+		_yank_speed != 0.0
 	)
 	_contact = SwordFlight.Contact.NONE
 	_recalled = false
 	_fried = false
+	if next == SwordFlight.State.FALLING and state == SwordFlight.State.EMBEDDED:
+		# Torn out: falling has gravity, this gives it the throw.
+		_velocity = Vector2(_yank_speed, 0.0)
+		rotation = 0.0
+	_yank_speed = 0.0
 	_shock_whoever_touches_it()
 
 	if next != state:
@@ -297,6 +311,8 @@ func _enter(next: SwordFlight.State, caught_in_flight: bool = false) -> void:
 			# Keeps whatever horizontal speed it had, so a sword that sailed
 			# past you lands past you.
 			_velocity.y = 0.0
+			# A torn-out sword is no longer a ledge.
+			_ledge.set_deferred("disabled", true)
 		SwordFlight.State.GROUNDED:
 			_velocity = Vector2.ZERO
 			rotation = 0.0

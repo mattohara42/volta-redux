@@ -24,8 +24,11 @@ Acts 1 to 3 are built and connected, each ending in its boss (`Act2Lair`'s
 chained dragon, `Act3Generator`). **M13 step 1 is in**: `Gem`, `GemHolder`
 and gems carried by `ActState`, proven on `RoomM13Gems`. Act 4 rooms 1
 and 2 built (`Act4Gallery`, a gem cut down from a shelf; `Act4Guard`, a gem
-carried by a scorpion), on Act 3's tiles until Act 4's exist. Next: room 3
-(Volta, the chains, the dragon), then the ridden flight and the end card. **Act 2 needs a painted background** (Matt,
+carried by a scorpion), on Act 3's tiles until Act 4's exist. `Act4Throne`
+is room 3: three gems close the rail, a sword in the dais seam burns the
+chains, Volta's pulls tear swords out, and the freed dragon puts him in the
+fire. Next: the ridden flight and the end card. Volta is drawn in code
+until his art is generated. **Act 2 needs a painted background** (Matt,
 Gemini); until then its rooms show a plain backdrop under a rock ceiling.
 
 ## Blocked on Matt

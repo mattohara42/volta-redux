@@ -50,6 +50,17 @@ RUNGS_RECALLED = RUNGS_UP + ";move_right:70;-:20;throw:40;-:90"
 # each step of the stair. The arcs are timed so none lands on this route.
 GENERATOR_LOOP = TOLL_PAID
 
+# Act 4's throne up to the dais: the gallery, the shelf's gem, three
+# pedestals. Two gems ride in from the earlier rooms (the scene's
+# starting_gems).
+THRONE_PREFIX = (
+	"move_right:40;move_right,jump:14;-:30;throw:4;-:30;move_right:4;-:2;"
+	"move_right,jump:14;-:30;move_right,jump:14;-:30;move_right:30;-:6;throw:4;-:60;"
+	"move_right:62;move_right,jump:14;move_right:20;move_right,jump:14;move_right:20;"
+	"move_right,jump:14;move_right:30;-:4"
+)
+THRONE_BRIDGED = THRONE_PREFIX + ";throw:4;move_left:16"
+
 SCENARIOS: list[dict] = [
 	{
 		"name": "Screenshot the room",
@@ -970,6 +981,45 @@ SCENARIOS: list[dict] = [
 				"message": "and the gem it carried should be picked up"},
 			{"type": "contains", "pattern": "capture: no deaths",
 				"message": "nobody should have died"},
+		],
+	},
+	{
+		"name": "Act 4: three gems, the dais seam, and the dragon finishes Volta",
+		"scene": "res://scenes/rooms/act4_throne.tscn",
+		"out": "act4_throne_won.png",
+		"input": THRONE_BRIDGED + ";-:320;move_right:20;-:30",
+		"zoom": 1.0,
+		"centre": (900, 200),
+		"checks": [
+			{"type": "count_regex", "pattern": r"holder FILLED", "count": 3,
+				"message": "the two carried gems and the shelf's should all be set"},
+			{"type": "contains", "pattern": "capture: chains FREE",
+				"message": "current held on the chains should burn them through"},
+			{"type": "contains", "pattern": "capture: volta DEFEATED",
+				"message": "and the dragon should put Volta in the fire"},
+			{"type": "player_position", "min_x": 870.0,
+				"message": "the hero should reach the dragon, which is the way out"},
+			{"type": "contains", "pattern": "capture: no deaths",
+				"message": "the hall's current dies with him, so the dais is safe"},
+		],
+	},
+	{
+		"name": "Act 4: Volta's pull tears the bridge out and the burn starts again",
+		"scene": "res://scenes/rooms/act4_throne.tscn",
+		"out": "act4_throne_pulled.png",
+		# Dodge bolts 0 and 1, then bridge just before cast 2, which is a pull.
+		"input": THRONE_PREFIX + ";move_left:16;-:100;move_left:16;-:80;move_right:28;-:4;throw:4;-:60",
+		"zoom": 1.0,
+		"centre": (900, 200),
+		"checks": [
+			{"type": "contains", "pattern": "STRIKING (pull)",
+				"message": "the cast that lands should be a pull"},
+			{"type": "contains", "pattern": "capture: chains holding, burn 0.0",
+				"message": "a pull mid-burn should leave the chains on, the burn started again"},
+			{"type": "not_contains", "pattern": "sword embedded",
+				"message": "every embedded sword should have been torn out"},
+			{"type": "contains", "pattern": "capture: no deaths",
+				"message": "and nobody should have died, so this is the pull and not a respawn"},
 		],
 	},
 ]
