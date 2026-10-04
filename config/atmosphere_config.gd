@@ -92,3 +92,25 @@ extends Resource
 @export var light_arc_radius: float = 36.0
 @export_range(0.0, 1.0) var light_arc_strength: float = 0.35
 
+
+@export_group("Light field")
+## Bands between full dark and full light in a room's light (`LightField`).
+## Fewer is chunkier pixel-art banding, more is smoother.
+@export var light_field_steps: float = 8.0
+## The hero's own light, so the thing you steer is never lost in the dark.
+## Faint on purpose: it is a rim of firelight, not a lantern.
+@export var light_hero_radius: float = 72.0
+@export_range(0.0, 1.0) var light_hero_strength: float = 0.22
+## A lava pit lights the room along its whole surface.
+@export var light_lava_radius: float = 120.0
+@export_range(0.0, 1.0) var light_lava_strength: float = 0.75
+## Live copper and a live barrier, along their length.
+@export var light_live_radius: float = 40.0
+@export_range(0.0, 1.0) var light_live_strength: float = 0.5
+## A gem, lying or set: small and cold.
+@export var light_gem_radius: float = 28.0
+@export_range(0.0, 1.0) var light_gem_strength: float = 0.4
+## A sword in flight or lying loose: a glint, so the most important shape on
+## screen is never lost in a dark corner.
+@export var light_sword_radius: float = 22.0
+@export_range(0.0, 1.0) var light_sword_strength: float = 0.3

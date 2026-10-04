@@ -23,6 +23,7 @@ const HERO_HEIGHT_STEPS: PackedFloat32Array = [28.0, 34.0, 40.0, 46.0, 54.0]
 ## by the scene's own `AnimationTree`. Drawn at 1x with its feet on the scene's
 ## origin, so nothing here scales it.
 const SPRITE_SCENE: PackedScene = preload("res://scenes/hero_sprite.tscn")
+const ATMOSPHERE: AtmosphereConfig = preload("res://config/atmosphere.tres")
 
 var config: MovementConfig
 ## Null only if `SPRITE_SCENE` fails to load, in which case `_draw` falls back
@@ -167,6 +168,9 @@ func _ready() -> void:
 		if anim_player != null and anim_player.has_animation("catch"):
 			_catch_pose_duration = anim_player.get_animation("catch").length
 	_apply_hero_size(world.hero_height)
+	# A faint rim of firelight that goes where the hero goes, so the thing you
+	# steer is never lost in a room's dark (`LightField`).
+	add_child(LightSource.point(ATMOSPHERE.light_hero_radius, Palette.FIRE_CORE, ATMOSPHERE.light_hero_strength))
 	_message_label.add_theme_font_size_override("font_size", death_config.message_font_size)
 	_message_label.add_theme_color_override("font_color", Palette.FIRE_HOT)
 	_message_label.text = ""

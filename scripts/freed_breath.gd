@@ -8,6 +8,7 @@ signal finished
 
 const BREATH_TIME: float = 0.7
 const WIDTH: float = 22.0
+const ATMOSPHERE: AtmosphereConfig = preload("res://config/atmosphere.tres")
 
 var _from := Vector2.ZERO
 var _to := Vector2.ZERO
@@ -17,6 +18,10 @@ var _clock := 0.0
 func setup(from: Vector2, to: Vector2) -> void:
 	_from = from
 	_to = to
+	# Fire is light, so it draws over the room's dark (`LightField`), and it
+	# lights the throne room for as long as it lasts.
+	LightField.emissive(self)
+	add_child(LightSource.line(from, to, ATMOSPHERE.light_breath_radius, Palette.FIRE_CORE, ATMOSPHERE.light_breath_strength))
 
 
 func _process(delta: float) -> void:

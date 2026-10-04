@@ -11,6 +11,8 @@ const SCRIPTS: PackedStringArray = [
 	"res://scripts/logic/arc_path.gd",
 	"res://scripts/dragon.gd",
 	"res://scripts/light_glow.gd",
+	"res://scripts/light_field.gd",
+	"res://scripts/light_source.gd",
 ]
 const SHADERS: PackedStringArray = [
 	"res://shaders/lava.gdshader",
@@ -19,6 +21,7 @@ const SHADERS: PackedStringArray = [
 	"res://shaders/charged.gdshader",
 	"res://shaders/flame.gdshader",
 	"res://shaders/light.gdshader",
+	"res://shaders/light_field.gdshader",
 	"res://shaders/dither.gdshaderinc",
 ]
 

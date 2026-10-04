@@ -10,6 +10,7 @@ extends StaticBody2D
 ## How far past its own faces a live piece reaches for a body, so feet resting
 ## on its top count as touching it. Purely contact, not a tuning number.
 const TOUCH: float = 1.0
+const ATMOSPHERE: AtmosphereConfig = preload("res://config/atmosphere.tres")
 
 var is_source := false
 var is_live := false:
@@ -61,6 +62,14 @@ func configure(area: Rect2, source: bool = false) -> void:
 	_glow.setup(Rect2(-area.size * 0.5, area.size))
 	_glow.visible = false
 	add_child(_glow)
+	# Its light, under the glow so it goes out with it: live copper lights the
+	# recess it sits in, dead copper is as dark as stone (`LightField`).
+	var along := Vector2(area.size.x, 0.0) if area.size.x >= area.size.y else Vector2(0.0, area.size.y)
+	var centre := area.size * 0.5
+	_glow.add_child(LightSource.line(
+		centre - along * 0.5, centre + along * 0.5, ATMOSPHERE.light_live_radius,
+		Palette.ARC, ATMOSPHERE.light_live_strength
+	))
 	is_live = source
 
 
