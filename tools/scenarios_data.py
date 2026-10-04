@@ -30,6 +30,13 @@ Every check carries the same failure message the CI step's `echo` line did,
 so a local failure reads the same as a CI one did.
 """
 
+# Act 3's toll room up to the moment the gate lifts: drop to the yard, one
+# throw from the floor and one from each step of the stair.
+TOLL_PAID = (
+	"move_right:157;-:40;move_left:2;-:10;throw:4;-:40;move_right,jump:14;-:30;"
+	"move_left:2;-:10;throw:4;-:40;move_right,jump:14;-:30;move_left:2;-:10;throw:4;-:40"
+)
+
 SCENARIOS: list[dict] = [
 	{
 		"name": "Screenshot the room",
@@ -720,6 +727,41 @@ SCENARIOS: list[dict] = [
 		"checks": [
 			{"type": "contains_regex", "pattern": r"gate at .* OPEN",
 				"message": "both seams bridged should open the gate"},
+			{"type": "contains", "pattern": "capture: no deaths",
+				"message": "nobody should have died"},
+		],
+	},
+	{
+		"name": "Act 3: the toll takes every sword to open the gate",
+		"scene": "res://scenes/rooms/act3_toll.tscn",
+		"out": "act3_toll_paid.png",
+		"input": TOLL_PAID,
+		"zoom": 1.2,
+		"centre": (640, 240),
+		"checks": [
+			{"type": "contains_regex", "pattern": r"gate at .* OPEN",
+				"message": "three bridged seams should open the gate"},
+			{"type": "contains", "pattern": "0 sword(s) held",
+				"message": "and leave nothing in hand"},
+			{"type": "count_regex", "pattern": r"sword embedded at \(552\.0", "count": 3,
+				"message": "each sword should stand out of the face, not sink through a seam"},
+		],
+	},
+	{
+		"name": "Act 3: recall past the toll and climb out",
+		"scene": "res://scenes/rooms/act3_toll.tscn",
+		"out": "act3_toll_out.png",
+		"input": TOLL_PAID + (
+			";move_right:120;-:20;throw:40;-:60;throw:4;-:40;move_right:14;-:20;"
+			"move_right,jump:14;-:20;move_right,jump:14;move_right:60"
+		),
+		"zoom": 1.2,
+		"centre": (1040, 240),
+		"checks": [
+			{"type": "contains_regex", "pattern": r"gate at .* SHUT",
+				"message": "the recall should have dropped the gate behind the hero"},
+			{"type": "player_position", "min_x": 1180.0, "max_y": 260.0,
+				"message": "the hero should be up on the way out"},
 			{"type": "contains", "pattern": "capture: no deaths",
 				"message": "nobody should have died"},
 		],

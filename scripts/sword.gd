@@ -236,16 +236,19 @@ func _settle_against_the_surface(direction: float) -> void:
 	var step := Vector2(signf(direction) * world.sword_length, 0.0)
 	var space := get_world_2d().direct_space_state
 	var hit := {}
-	# The centre line first, then the blade's top and bottom edges: a sword
-	# thrown into an insulating seam (`SPEC.md` → *Conduct*) bites the metal
-	# either side, and its centre line runs down the gap between them.
+	# The centre line and the blade's top and bottom edges, keeping whichever
+	# meets a face first: a sword thrown into an insulating seam (`SPEC.md` →
+	# *Conduct*) bites the metal either side, and its centre line runs down the
+	# gap between them to whatever is behind.
 	for lift in [0.0, -LEDGE_THICKNESS * 0.5, LEDGE_THICKNESS * 0.5]:
 		var origin := global_position + Vector2(0.0, lift)
 		var query := PhysicsRayQueryParameters2D.create(origin - step * 2.0, origin + step)
 		query.collision_mask = 1
-		hit = space.intersect_ray(query)
-		if not hit.is_empty():
-			break
+		var found := space.intersect_ray(query)
+		if found.is_empty():
+			continue
+		if hit.is_empty() or absf(found["position"].x - query.from.x) < absf(hit["position"].x - query.from.x):
+			hit = found
 	if hit.is_empty():
 		# Nothing found, so leave it where it stopped rather than teleport it
 		# somewhere arbitrary. Visible as a ledge overlapping the plank.
