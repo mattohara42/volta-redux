@@ -94,7 +94,7 @@ scenarios)
 	python3 tools/scenarios.py "$GODOT_BIN" "${1:-}"
 	;;
 *)
-	sed -n '3,10p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'
+	sed -n '3,11p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'
 	exit 2
 	;;
 esac
