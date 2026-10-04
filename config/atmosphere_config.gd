@@ -114,3 +114,21 @@ extends Resource
 ## screen is never lost in a dark corner.
 @export var light_sword_radius: float = 22.0
 @export_range(0.0, 1.0) var light_sword_strength: float = 0.3
+
+@export_group("Backdrop")
+## How fast each of a backdrop's two layers moves against the room: 1 moves
+## with it, 0 holds still on the screen.
+@export_range(0.0, 1.0) var backdrop_far_depth: float = 0.2
+@export_range(0.0, 1.0) var backdrop_near_depth: float = 0.45
+## Act 2: how fast a lavafall runs down the far wall, and ash drifts up, art px/s.
+@export var backdrop_fall_speed: float = 30.0
+@export var backdrop_ash_speed: float = 9.0
+## Act 3: how fast a flywheel turns, radians a second, and how often a lamp
+## blinks, per second.
+@export var backdrop_gear_spin: float = 0.15
+@export var backdrop_lamp_rate: float = 0.7
+## Act 4: how fast the rain runs, and the chance the storm flashes in any sixth
+## of a second. Rare on purpose: a flash is a lift of dull colours, never a
+## white, and a frequent one would be a strobe.
+@export var backdrop_rain_speed: float = 140.0
+@export_range(0.0, 0.1) var backdrop_flash_chance: float = 0.012

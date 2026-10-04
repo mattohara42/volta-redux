@@ -40,21 +40,27 @@ var _spike_beds: Array[Rect2] = []
 ## room has built everything it is going to light.
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_READY:
-		_light_the_room.call_deferred()
+		_dress_the_room.call_deferred()
 
 
-## A room that belongs to an act gets that act's dark (`LightField`). A bench
-## belongs to none and stays lit evenly, because it is an instrument.
-func _light_the_room() -> void:
+## A room that belongs to an act gets that act's far layers (`Backdrop`) and
+## its dark (`LightField`). A bench belongs to none and stays as it was drawn,
+## lit evenly, because it is an instrument.
+func _dress_the_room() -> void:
 	var act_state := get_node_or_null("/root/ActState")
 	if act_state == null or scene_file_path.is_empty():
 		return
 	var act: ActConfig = act_state.act_of(scene_file_path)
-	if act == null or act.ambient_light == Color.WHITE:
+	if act == null:
 		return
-	var field := LightField.new()
-	field.setup(act.ambient_light, act.ceiling_dim)
-	add_child(field)
+	if act.backdrop != Backdrop.Style.NONE:
+		var backdrop := Backdrop.new()
+		backdrop.setup(act.backdrop as Backdrop.Style, hash(scene_file_path))
+		add_child(backdrop)
+	if act.ambient_light != Color.WHITE:
+		var field := LightField.new()
+		field.setup(act.ambient_light, act.ceiling_dim)
+		add_child(field)
 
 
 func _add_solid(rect: Rect2) -> StaticBody2D:

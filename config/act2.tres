@@ -10,3 +10,4 @@ complete_card_seconds = 2.5
 card_font_size = 24
 ambient_light = Color(0.56, 0.46, 0.66, 1)
 ceiling_dim = 0.3
+backdrop = 1
