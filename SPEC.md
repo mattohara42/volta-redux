@@ -85,6 +85,16 @@ and the level geometry to serve it. Concretely, the sword does five things:
    already an electrical generator gone haywire, and Volta's name is a unit of
    electric potential.
 
+   **How conduct works** (Matt, 2026-10-04). A sword sticks in conductive
+   metal exactly as it sticks in wood. Metal comes in pieces, and current runs
+   from a source along any path of metal and swords: an embedded sword joins
+   every piece its blade touches, so a sword thrown into an insulating seam
+   bridges the pieces either side, and recalling it breaks the bridge. A
+   switch that needs current opens while it is on a live path. **Live metal
+   kills on contact**, like lava; dead metal is safe. The generator cannot be
+   hit by a sword: its own current runs out through broken rails, and bridging
+   every break at once closes the loop back into it and shorts it out.
+
 **The sword count is the difficulty dial and it is small.** Start with three,
 cap at five. Ten was too many to make any single throw matter.
 

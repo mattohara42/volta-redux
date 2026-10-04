@@ -151,7 +151,8 @@ committed to.
   reversible detail: it decides how a whole fight reads, so it is here rather
   than guessed at in the milestone. `HANDOFF.md` carries the current state.
 
-  **The generator has no proposal.** SPEC.md: "cannot be hit by a sword at
+  **Resolved 2026-10-04:** conduct and the generator's fight are in `SPEC.md`.
+  **The generator had no proposal.** SPEC.md: "cannot be hit by a sword at
   all," and M12's done-when is "cannot be beaten by throwing," which is the
   whole vocabulary problem: this boss is not beaten by a variant of throwing,
   it needs the sword's sixth state. CLAUDE.md names it directly: "fly, return,

@@ -3,10 +3,10 @@
 > **Rewrite this file, never append.** State snapshot and pointers only. No
 > session narrative, that is what `git log` is for. Keep it under 80 lines.
 
-**Updated:** 2026-10-03 · **Phase:** 3, the game · **Active:** M11, Act 2.
-M10 waits only on a fresh player getting through Act 1 untold (its done-when).
-**M11 done when:** Act 2 is playable start to finish, and the dragon is
-beatable without spending a sword on it (`BUILD_PLAN.md`).
+**Updated:** 2026-10-04 · **Phase:** 3, the game · **Active:** M12, Act 3.
+M10 and M11 are built and wait only on Matt's play.
+**M12 done when:** Act 3 playable start to finish, and the generator cannot be
+beaten by throwing (`BUILD_PLAN.md`).
 
 ## Where this is
 
@@ -14,21 +14,17 @@ beatable without spending a sword on it (`BUILD_PLAN.md`).
 Spend in small batches, each looked at before the next (`ART.md` → *What is
 left to generate*). Enemies and characters wait on `RoomM7Sheet`'s verdict.
 
-**All four Act 1 rooms built and connected:** `Act1Bank` (throw, armour),
-`Act1Wall` (from-above), `Act1Bailey` (embed, recall, a switch; the dragon's
-grate) and `Act1Gate` (stand on your sword; the castle gate ends the act).
-Real rooms extend `Bench` and draw with `TileArt` (`Bench`'s class comment says
-why). The sword counter (`SwordCounter`) shows swords in hand and out, top
-right, in every room.
-
-**Act 1 art wired** except the brazier and switch, which stay code by choice
-(`ART.md` → *Act 1 props*).
+**Act 1's four rooms** (`Act1Bank`, `Act1Wall`, `Act1Bailey`, `Act1Gate`) are
+built, connected and wired with art. Real rooms extend `Bench` and draw with
+`TileArt` (`Bench`'s class comment says why).
 
 ## The next action
 
 **All six Act 2 rooms built and connected,** ending in `Act2Lair`, where a
 recall overpowers the dragon and chains it (`Dragon._defeat`, generated
-chained art), costing no sword. M11's done-when is met in CI; feel waits on Matt's play. **Act 2 needs a painted background** (Matt, Gemini);
+chained art), costing no sword. **Act 3's current is built** (`SPEC.md` → *Conduct*): `Circuit`,
+`Conductor`, `CurrentSwitch`, `CircuitNetwork`, proven on `RoomM12Circuit`.
+Next: Act 3's rooms, then the generator. **Act 2 needs a painted background** (Matt, Gemini);
 until then its rooms show a plain backdrop under a rock ceiling.
 
 ## Blocked on Matt
