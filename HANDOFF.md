@@ -22,9 +22,10 @@ built, connected and wired with art. Real rooms extend `Bench` and draw with
 
 Acts 1 to 3 are built and connected, each ending in its boss (`Act2Lair`'s
 chained dragon, `Act3Generator`). **M13 step 1 is in**: `Gem`, `GemHolder`
-and gems carried by `ActState`, proven on `RoomM13Gems`. Next: Act 4 rooms
-1 and 2 (a gem each), then room 3 (Volta, the chains, the dragon), then the
-ridden flight and the end card. **Act 2 needs a painted background** (Matt,
+and gems carried by `ActState`, proven on `RoomM13Gems`. Act 4 rooms 1
+and 2 built (`Act4Gallery`, a gem cut down from a shelf; `Act4Guard`, a gem
+carried by a scorpion), on Act 3's tiles until Act 4's exist. Next: room 3
+(Volta, the chains, the dragon), then the ridden flight and the end card. **Act 2 needs a painted background** (Matt,
 Gemini); until then its rooms show a plain backdrop under a rock ceiling.
 
 ## Blocked on Matt

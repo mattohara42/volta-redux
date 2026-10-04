@@ -18,6 +18,10 @@
 class_name Enemy
 extends Hazard
 
+## Lost, wherever it was. A room listens for this to leave something behind,
+## like the gem Act 4's guard carries.
+signal defeated(at: Vector2)
+
 ## Layer 6, "enemies". A sword watches it and nothing else does, the same
 ## arrangement lava and spikes have with layer 3: a box only the thing that
 ## needs to see it can see.
@@ -72,6 +76,7 @@ func _on_area_entered(area: Area2D) -> void:
 ## The dragon overrides this, because it is overpowered and chained rather than
 ## killed, and it is the same dragon you free in Act 4.
 func _defeat() -> void:
+	defeated.emit(global_position)
 	queue_free()
 
 

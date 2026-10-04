@@ -368,6 +368,10 @@ class CaptureAgent:
 		var player := get_tree().get_first_node_in_group("player") as Player
 		if player != null and player.gems_held > 0:
 			print("capture: %d gem(s) held" % player.gems_held)
+		for node in get_tree().get_nodes_in_group("gem_shelves"):
+			var shelf := node as GemShelf
+			if shelf != null:
+				print("capture: %s" % shelf.status())
 		for node in get_tree().get_nodes_in_group("gem_holders"):
 			var holder := node as GemHolder
 			if holder != null:

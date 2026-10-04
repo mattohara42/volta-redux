@@ -8,7 +8,7 @@
 ## `tools/dev.sh play`) start as they always did.
 extends Node
 
-const ACTS: Array[ActConfig] = [preload("res://config/act1.tres"), preload("res://config/act2.tres"), preload("res://config/act3.tres")]
+const ACTS: Array[ActConfig] = [preload("res://config/act1.tres"), preload("res://config/act2.tres"), preload("res://config/act3.tres"), preload("res://config/act4.tres")]
 
 ## Swords to arrive with, or -1 for none carried. Read once, by the next hero.
 var _carried := -1
