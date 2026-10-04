@@ -15,3 +15,4 @@ enemies = ExtResource("3_enemies")
 position = Vector2(50, 290)
 
 [node name="DebugOverlay" parent="." instance=ExtResource("5_overlay")]
+starts_hidden = true

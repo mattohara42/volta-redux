@@ -17,3 +17,4 @@ hazards = ExtResource("4_hazards")
 position = Vector2(60, 290)
 
 [node name="DebugOverlay" parent="." instance=ExtResource("6_overlay")]
+starts_hidden = true
