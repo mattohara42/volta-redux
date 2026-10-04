@@ -1022,4 +1022,30 @@ SCENARIOS: list[dict] = [
 				"message": "and nobody should have died, so this is the pull and not a respawn"},
 		],
 	},
+	{
+		"name": "Act 4: ride the dragon out between the pillars",
+		"scene": "res://scenes/rooms/act4_flight.tscn",
+		"out": "act4_flight_out.png",
+		"input": "-:205;climb_down:28;-:100;climb_up:39;-:95;climb_down:28;-:100;climb_down:14;-:300",
+		"zoom": 1.0,
+		"centre": (2100, 180),
+		"checks": [
+			{"type": "contains", "pattern": "0 crash(es), FINISHED",
+				"message": "the course should be flyable with up and down alone"},
+		],
+	},
+	{
+		"name": "Act 4: a pillar sends the flight back to the start",
+		"scene": "res://scenes/rooms/act4_flight.tscn",
+		"out": "act4_flight_crash.png",
+		"input": "climb_up:200;-:60",
+		"zoom": 1.0,
+		"centre": (400, 180),
+		"checks": [
+			{"type": "contains_regex", "pattern": r"rider at \d+, [1-9]\d* crash",
+				"message": "hugging the ceiling should hit the first pillar"},
+			{"type": "not_contains", "pattern": "FINISHED",
+				"message": "and the flight should start again"},
+		],
+	},
 ]

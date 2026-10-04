@@ -385,7 +385,7 @@ class CaptureAgent:
 			var generator := node as Generator
 			if generator != null:
 				print("capture: %s" % generator.status())
-		for group in ["volta", "chains"]:
+		for group in ["volta", "chains", "riders"]:
 			for node in get_tree().get_nodes_in_group(group):
 				print("capture: %s" % node.status())
 

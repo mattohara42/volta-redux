@@ -17,10 +17,16 @@ static func is_last(rooms: PackedStringArray, current: String) -> bool:
 	return rooms.size() > 0 and rooms[rooms.size() - 1] == current
 
 
-## The act that follows act `index` of `count`, or `index` itself when it is
-## the last: until there is an ending, finishing the last act plays it again.
+## The act that follows act `index` of `count`. After the last, the ending
+## has played and the game starts again from Act 1: there are no saves until
+## M16, so that is a new game.
 static func act_after(index: int, count: int) -> int:
-	return index + 1 if index + 1 < count else index
+	return index + 1 if index + 1 < count else 0
+
+
+## Whether finishing act `index` of `count` finishes the game.
+static func is_ending(index: int, count: int) -> bool:
+	return index == count - 1
 
 
 ## What you arrive in the next room holding. Only what is in your hand comes
