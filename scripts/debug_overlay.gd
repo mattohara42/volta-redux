@@ -42,6 +42,15 @@ const BENCHES: PackedStringArray = [
 	"res://scenes/rooms/act3_series.tscn",
 ]
 
+## The game rooms set this, so a playthrough starts on the room and not on
+## the instruments. F1 still brings the panel up there.
+@export var starts_hidden := false
+
+## Whether the panel shows, once F1 has been pressed this session. Static, so it
+## survives the scene change at every exit: each room makes its own overlay, and
+## a panel hidden in one room should not come back in the next.
+static var _shown_by_choice: Variant = null
+
 @onready var _panel: PanelContainer = $Panel
 @onready var _label: Label = $Panel/Margin/Label
 
@@ -66,6 +75,7 @@ func _ready() -> void:
 	_panel.add_theme_stylebox_override("panel", style)
 	_label.add_theme_color_override("font_color", Palette.FIRE_HOT)
 	_label.add_theme_font_size_override("font_size", 7)
+	_panel.visible = (not starts_hidden) if _shown_by_choice == null else _shown_by_choice
 
 
 func _cycle_bench() -> void:
@@ -155,6 +165,7 @@ func _process(_delta: float) -> void:
 		return
 	if Input.is_action_just_pressed("debug_toggle_overlay"):
 		_panel.visible = not _panel.visible
+		_shown_by_choice = _panel.visible
 	if _player == null or not _panel.visible:
 		return
 

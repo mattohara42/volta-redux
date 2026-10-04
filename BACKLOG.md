@@ -18,6 +18,10 @@ committed to.
 
 ## Ideas not yet judged
 
+- **The debug overlay and F2 ship in every game room.** The game rooms now start
+  with the panel hidden, but F1 and F2 still work, so one keypress drops a
+  player into the bench cycle. Gate both on `OS.is_debug_build()` before any
+  export.
 - **Ricochet off metal surfaces**, for angle puzzles. Listed in `SPEC.md` as one
   of the sword's five behaviours but cut down to four for v1. Add it only if Act
   3 turns out thin.
