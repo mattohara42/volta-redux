@@ -8,3 +8,5 @@ title = "Act 3: the generator"
 rooms = PackedStringArray("res://scenes/rooms/act3_hall.tscn", "res://scenes/rooms/act3_insulator.tscn", "res://scenes/rooms/act3_floor.tscn", "res://scenes/rooms/act3_series.tscn", "res://scenes/rooms/act3_toll.tscn", "res://scenes/rooms/act3_rungs.tscn", "res://scenes/rooms/act3_generator.tscn")
 complete_card_seconds = 2.5
 card_font_size = 24
+ambient_light = Color(0.56, 0.62, 0.78, 1)
+ceiling_dim = 0.25

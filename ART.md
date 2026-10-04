@@ -86,6 +86,15 @@ Decided 2026-09-28, because Sprite Fusion cannot make anything over 64 px.
 pixelated back layer and generated front layers only look like one place
 when the same coloured light falls across all of them.
 
+**Since 2026-10-04 the light layer has a dark as well as lights.** Every room
+in an act carries a `LightField`: the whole room multiplied by the act's
+`ambient_light` (a coloured dark, set in `config/actN.tres`), lifted back
+wherever a `LightSource` reaches, banded and dithered on the art-pixel grid.
+Braziers, torches, lava, live copper, arcs, gems, the sword and the hero are
+the lights. Anything that is itself light (lava, glows, arcs, flames) draws
+over the dark through `LightField.emissive`, so the dark never dims the thing
+doing the lighting. Benches stay lit evenly.
+
 **Pixelating works on large, simple shapes**, so a background prompt asks for
 big forms and few small details. Act 1's wall converted cleanly at 24
 colours (`assets/art/act1/wall_moat_bg_px.png`), passes `palette-check.py`,

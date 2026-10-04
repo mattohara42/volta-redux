@@ -98,6 +98,8 @@ func _make_flame() -> ColorRect:
 	material.set_shader_parameter("stream_speed", ATMOSPHERE.flame_stream_speed)
 	material.set_shader_parameter("noise_scale", ATMOSPHERE.flame_noise_scale)
 	rect.material = material
+	# Fire is light, so it draws over the room's dark (`LightField`).
+	LightField.emissive(rect)
 	add_child(rect)
 	return rect
 

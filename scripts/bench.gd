@@ -34,6 +34,29 @@ var _woods: Array[Rect2] = []
 var _spike_beds: Array[Rect2] = []
 
 
+## A notification rather than `_ready`, because every room overrides `_ready`
+## and not all of them call up to this one: Godot sends a notification to every
+## script in the chain regardless. Deferred, so the field is added after the
+## room has built everything it is going to light.
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_READY:
+		_light_the_room.call_deferred()
+
+
+## A room that belongs to an act gets that act's dark (`LightField`). A bench
+## belongs to none and stays lit evenly, because it is an instrument.
+func _light_the_room() -> void:
+	var act_state := get_node_or_null("/root/ActState")
+	if act_state == null or scene_file_path.is_empty():
+		return
+	var act: ActConfig = act_state.act_of(scene_file_path)
+	if act == null or act.ambient_light == Color.WHITE:
+		return
+	var field := LightField.new()
+	field.setup(act.ambient_light, act.ceiling_dim)
+	add_child(field)
+
+
 func _add_solid(rect: Rect2) -> StaticBody2D:
 	_solids.append(rect)
 	var body := StaticBody2D.new()

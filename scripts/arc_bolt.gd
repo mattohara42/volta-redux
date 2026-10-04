@@ -27,6 +27,8 @@ func setup(from: Vector2, to: Vector2, start_seed: int = 1) -> void:
 	_from = from
 	_to = to
 	_seed = start_seed
+	# An arc is light, so it draws over the room's dark (`LightField`).
+	LightField.emissive(self)
 	add_child(_sparks(from))
 	add_child(_sparks(to))
 	var radius := CONFIG.light_arc_radius + from.distance_to(to) * 0.35

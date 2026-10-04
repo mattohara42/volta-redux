@@ -11,6 +11,8 @@ func setup(rect: Rect2) -> void:
 	position = rect.position
 	size = rect.size
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
+	# Current is light, so it draws over the room's dark (`LightField`).
+	LightField.emissive(self)
 	var shader_material := ShaderMaterial.new()
 	shader_material.shader = SHADER
 	shader_material.set_shader_parameter("base_colour", Palette.STONE_DEEP)

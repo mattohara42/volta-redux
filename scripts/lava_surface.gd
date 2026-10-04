@@ -20,10 +20,19 @@ const GLOW_SHADER: Shader = preload("res://shaders/glow.gdshader")
 ## back to front: the wall's glow, the lava, the embers, the haze over the top.
 func setup(rect: Rect2) -> void:
 	position = rect.position
-	add_child(_glow(rect.size.x))
-	add_child(_body(rect.size))
-	add_child(_embers(rect.size.x))
+	# The glow, the lava and the embers are light, so they draw over the room's
+	# dark (`LightField`). The haze stays under it and above everything else
+	# in the room, because it shifts what is already drawn.
+	for layer: CanvasItem in [_glow(rect.size.x), _body(rect.size), _embers(rect.size.x)]:
+		LightField.emissive(layer)
+		add_child(layer)
 	add_child(_haze(rect.size.x))
+	# Its light along the whole surface, so the room's dark draws back from the
+	# pit end to end rather than from one spot over its middle (`LightField`).
+	add_child(LightSource.line(
+		Vector2.ZERO, Vector2(rect.size.x, 0.0), CONFIG.light_lava_radius,
+		Palette.FIRE_CORE, CONFIG.light_lava_strength
+	))
 
 
 func _rect(at: Vector2, size: Vector2, shader: Shader) -> ColorRect:

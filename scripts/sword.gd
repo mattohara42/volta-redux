@@ -23,6 +23,7 @@ signal destroyed
 ## How deep the standable surface of an embedded sword is, px. Thin, because a
 ## sword is thin, and the player stands on its top edge.
 const LEDGE_THICKNESS: float = 4.0
+const ATMOSPHERE: AtmosphereConfig = preload("res://config/atmosphere.tres")
 ## Set by a room's `CircuitNetwork`: this sword is wired into a live circuit.
 ## Embedded is the state; conducting is what the circuit says about it.
 var conducting := false:
@@ -70,6 +71,9 @@ func _ready() -> void:
 	_ledge.disabled = true
 	body_entered.connect(_on_body_entered)
 	area_entered.connect(_on_area_entered)
+	# A glint, so the most important shape on screen is never lost in a dark
+	# corner of a room (`LightField`).
+	add_child(LightSource.point(ATMOSPHERE.light_sword_radius, Palette.GOLD_FACE, ATMOSPHERE.light_sword_strength))
 
 
 ## Wood is a group rather than a physics layer, because wood is ordinary solid

@@ -9,6 +9,7 @@ class_name Gem
 extends Area2D
 
 const SIZE := Vector2(10.0, 12.0)
+const ATMOSPHERE: AtmosphereConfig = preload("res://config/atmosphere.tres")
 
 
 func _ready() -> void:
@@ -23,6 +24,9 @@ func _ready() -> void:
 	collision_mask = 4
 	monitorable = false
 	body_entered.connect(_on_body_entered)
+	var light := LightSource.point(ATMOSPHERE.light_gem_radius, Palette.ARC, ATMOSPHERE.light_gem_strength)
+	light.position = Vector2(0.0, -SIZE.y * 0.5)
+	add_child(light)
 
 
 func _on_body_entered(body: Node2D) -> void:

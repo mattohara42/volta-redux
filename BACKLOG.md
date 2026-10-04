@@ -85,13 +85,10 @@ committed to.
   `bench.gd`, both platforms, the geyser and the sword, which is why it did not
   happen inside a hazard change.
 
-- **A falling slab is drawn over the lava it sinks into.** A room paints itself
-  before any of its children, so every mechanism paints over the lava rectangle
-  and a slab on its way out crosses the surface rather than entering it. Grey
-  box, and M9 replaces the rectangle with a shader and an emitter anyway, so the
-  fix belongs there along with whatever a slab hitting molten rock should look
-  like. A ferry's rail is the same thing standing still: it is drawn over the
-  moat it spans rather than into it.
+- **A falling slab was drawn over the lava it sinks into.** **Resolved
+  2026-10-04:** lava draws over the room since `LightField` (it is light, so it
+  sits above the dark), and a slab or a hero going in now passes under the
+  surface. A ferry's rail is above the surface and unaffected.
 
 - **The avian ally as a mid-game traversal tool** rather than only the ending.
   Risk: it is a second verb, and the game is about having one.

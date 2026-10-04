@@ -13,3 +13,12 @@ extends Resource
 @export var complete_card_seconds: float = 2.5
 ## The card's lettering, in the same size as the death messages.
 @export var card_font_size: int = 24
+
+@export_group("Light")
+## What the dark is in this act: everything no light reaches is multiplied by
+## this (`LightField`). White is no dark at all. A coloured dark, never a grey
+## one (`ART_DIRECTION.md`), and `test_light_field.gd` holds it to that.
+@export var ambient_light: Color = Color.WHITE
+## How much darker the top of a room is than its floor, 0 to 1. Light in this
+## game comes from below.
+@export_range(0.0, 1.0) var ceiling_dim: float = 0.0
