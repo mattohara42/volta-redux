@@ -3,33 +3,28 @@
 > **Rewrite this file, never append.** State snapshot and pointers only. No
 > session narrative, that is what `git log` is for. Keep it under 80 lines.
 
-**Updated:** 2026-10-04 · **Phase:** 3, the game · **Active:** M13, Act 4.
-M10, M11 and M12 are built and wait only on Matt's play.
+**Updated:** 2026-10-04 · **Phase:** 3, the game · **Active:** M13, Act 4,
+built and waiting on Matt's play, like M10 to M12. **Next: M14**, the pass.
 **M13 done when:** the game can be completed from a new save (`BUILD_PLAN.md`).
-Act 4's design is decided (`SPEC.md` → *Act 4*).
+The game now launches into `Act1Bank` and runs to "The end."; F2 still
+reaches the benches.
 
 ## Where this is
 
-**Credits: 645.** Random HTTP 403s cost nothing; retry once.
+**Credits: 615.** Random HTTP 403s cost nothing; retry once.
 Spend in small batches, each looked at before the next (`ART.md` → *What is
 left to generate*). Enemies and characters wait on `RoomM7Sheet`'s verdict.
 
-**Act 1's four rooms** (`Act1Bank`, `Act1Wall`, `Act1Bailey`, `Act1Gate`) are
-built, connected and wired with art. Real rooms extend `Bench` and draw with
-`TileArt` (`Bench`'s class comment says why).
-
 ## The next action
 
-Acts 1 to 3 are built and connected, each ending in its boss (`Act2Lair`'s
-chained dragon, `Act3Generator`). **M13 step 1 is in**: `Gem`, `GemHolder`
-and gems carried by `ActState`, proven on `RoomM13Gems`. Act 4 rooms 1
-and 2 built (`Act4Gallery`, a gem cut down from a shelf; `Act4Guard`, a gem
-carried by a scorpion), on Act 3's tiles until Act 4's exist. `Act4Throne`
-is room 3: three gems close the rail, a sword in the dais seam burns the
-chains, Volta's pulls tear swords out, and the freed dragon puts him in the
-fire. Next: the ridden flight and the end card. Volta is drawn in code
-until his art is generated. **Act 2 needs a painted background** (Matt,
-Gemini); until then its rooms show a plain backdrop under a rock ceiling.
+**All four acts are built and connected**, each room extending `Bench` and
+drawn with `TileArt` (`Bench`'s class comment says why). Act 4 (`SPEC.md` →
+*Act 4*): gems close circuits (`Gem`, `GemHolder`, `RoomM13Gems`); one gem
+each in `Act4Gallery` and `Act4Guard`; `Act4Throne`, where Volta pulls swords
+and the freed dragon puts him in the fire; `Act4Flight`, the ending. Act 4
+uses Act 3's tiles, and Volta is drawn in code, until their art exists.
+**Next is M14**, which starts with Matt playing it through. **Act 2 needs a
+painted background** (Matt, Gemini); until then it is a plain backdrop.
 
 ## Blocked on Matt
 

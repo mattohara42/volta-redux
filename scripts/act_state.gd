@@ -4,7 +4,7 @@
 ## A room ends at a `RoomExit`, which hands the hero over here. This finds the
 ## room in its act, carries the swords in hand into the next room, and at the
 ## end of an act shows its card and moves on to the next act's first room, or
-## plays the last act again until there is an ending. Rooms loaded any other way (F2, a bench,
+## after the last act shows the ending and starts a new game. Rooms loaded any other way (F2, a bench,
 ## `tools/dev.sh play`) start as they always did.
 extends Node
 
@@ -70,7 +70,9 @@ func _finish(act: ActConfig, swords_held: int, max_swords: int) -> void:
 	backdrop.set_anchors_preset(Control.PRESET_FULL_RECT)
 	card.add_child(backdrop)
 	var label := Label.new()
-	label.text = act.title
+	var index := ACTS.find(act)
+	var ending := ActRoute.is_ending(index, ACTS.size())
+	label.text = act.title + ("\n\nThe end." if ending else "")
 	label.add_theme_font_size_override("font_size", act.card_font_size)
 	label.add_theme_color_override("font_color", Palette.FIRE_HOT)
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -82,6 +84,7 @@ func _finish(act: ActConfig, swords_held: int, max_swords: int) -> void:
 	await get_tree().create_timer(act.complete_card_seconds, true).timeout
 	get_tree().paused = false
 	card.queue_free()
-	var next := ACTS[ActRoute.act_after(ACTS.find(act), ACTS.size())]
-	_carried = ActRoute.carried(swords_held, max_swords)
+	var next := ACTS[ActRoute.act_after(index, ACTS.size())]
+	# A new game after the ending carries nothing in.
+	_carried = -1 if ending else ActRoute.carried(swords_held, max_swords)
 	get_tree().change_scene_to_file(next.rooms[0])

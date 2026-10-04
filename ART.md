@@ -1197,3 +1197,13 @@ smoke (`generator_dead_px.png`, pick 0, 2.3% neutral darks in the soot fixed
 with `tools/recolour-darks.py`). The arc between the horns is now an
 `ArcBolt` in code while it is live, as `CLAUDE.md` asks. "Overloading" was
 not generated: the arc warning already says it, in code.
+
+## The dragon in flight (2026-10-04, 30 credits)
+
+An `edit` of `dragon_px.png` to a level flying profile facing right (pick 1
+of 2: legs tucked, broad back, 112x67; pick 0 was taller and less level),
+written with the positive-plus-negation framing the bat needed, which held
+this time. Then a 4-frame `animate` wing beat (`dragon_flight_sheet.png`):
+the body stays level, slight boiling on the downstroke. 0 neutral darks in
+both. The hero sits on it as the hero sprite, so no rider art was needed.
+

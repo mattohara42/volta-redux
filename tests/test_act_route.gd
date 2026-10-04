@@ -26,7 +26,9 @@ func test_a_room_outside_the_act_goes_nowhere() -> void:
 
 func test_an_act_leads_to_the_next_and_the_last_plays_again() -> void:
 	check_eq(ActRoute.act_after(0, 2), 1, "Act 1 leads to Act 2")
-	check_eq(ActRoute.act_after(1, 2), 1, "the last act plays again until there is an ending")
+	check_eq(ActRoute.act_after(1, 2), 0, "after the last act and its ending, a new game")
+	check(ActRoute.is_ending(1, 2), "finishing the last act is the ending")
+	check(not ActRoute.is_ending(0, 2), "finishing any other is not")
 
 
 func test_act_two_lists_rooms_that_exist() -> void:

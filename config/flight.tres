@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="FlightConfig" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://config/flight_config.gd" id="1_flight"]
+
+[resource]
+script = ExtResource("1_flight")
+forward_speed = 150.0
+vertical_speed = 170.0

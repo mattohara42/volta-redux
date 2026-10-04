@@ -131,8 +131,7 @@ func _ready() -> void:
 	_add_lava(PIT)
 	_dragon = DRAGON_SCENE.instantiate() as Node2D
 	_dragon.position = DRAGON_AT - Vector2(0.0, DRAGON_FEET_BELOW)
-	# The sprite faces left; Volta is to its right.
-	_dragon.scale.x = -1.0
+	# The strip faces right, toward Volta.
 	add_child(_dragon)
 	(_dragon.get_node("AnimationTree") as AnimationTree)["parameters/playback"].travel("chained")
 	_volta = Volta.new()
@@ -182,6 +181,8 @@ func _on_volta_fallen() -> void:
 	# The dragon comes down to the floor, and walking to it is the way out.
 	var tween := create_tween()
 	tween.tween_property(_dragon, "position", DRAGON_LANDS - Vector2(0.0, DRAGON_FEET_BELOW), 0.8).set_trans(Tween.TRANS_SINE)
+	# Turned to face the hero, who comes from the left.
+	tween.tween_property(_dragon, "scale:x", -1.0, 0.1)
 	tween.tween_callback(func() -> void:
 		_add_exit(Rect2(DRAGON_LANDS.x - 4.0, FLOOR_TOP - 48.0, 8.0, 48.0))
 	)
