@@ -252,3 +252,10 @@ committed to.
   are shaders and particles, and M9 already has one (`ArcBolt`). At M12, either
   regenerate the still without the arc and hang an `ArcBolt` between the horns,
   or keep the painted flicker as idle hum and add the shader arc for the fight.
+
+## Raised during M12's generator (2026-10-04), not judged
+
+- **Death lines ignore the cause.** `DeathMessages` draws from one pool, so
+  an arc in Act 3 can say "THE GEYSER HAD OTHER PLANS". Either key lines to
+  what killed you or keep the pool free of named hazards.
+- **The two generator entries above are one item written twice.**
