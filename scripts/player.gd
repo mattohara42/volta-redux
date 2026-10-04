@@ -66,6 +66,11 @@ var swords_held := 0
 ## lower it: M2's switch room needs you to hold exactly one, or recall is not
 ## the only way to get your sword back and the puzzle has a second solution.
 var swords_at_spawn := 0
+## Act 4's gems in hand (`Gem`, `GemHolder`). Carried between rooms like swords
+## and never lost to a death.
+var gems_held := 0
+## What a room loaded on its own starts with. A real run carries the count in.
+@export var starting_gems := 0
 ## Which way a throw goes. Held rather than derived from velocity, or a standing
 ## player would have no facing to throw along.
 var facing := 1.0
@@ -147,6 +152,9 @@ func _ready() -> void:
 	if act_state != null:
 		swords_at_spawn = act_state.arriving_swords(swords_at_spawn)
 	swords_held = swords_at_spawn
+	gems_held = starting_gems
+	if act_state != null:
+		gems_held = act_state.arriving_gems(starting_gems)
 	if SPRITE_SCENE != null:
 		_sprite = SPRITE_SCENE.instantiate()
 		add_child(_sprite)

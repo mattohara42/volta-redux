@@ -903,4 +903,37 @@ SCENARIOS: list[dict] = [
 				"message": "nobody should have died"},
 		],
 	},
+	{
+		"name": "M13 bench: one gem set leaves the gate shut",
+		"scene": "res://scenes/rooms/room_m13_gems.tscn",
+		"out": "room_m13_one_gem.png",
+		"input": "move_right:120;-:10",
+		"zoom": 1.0,
+		"centre": (500, 220),
+		"checks": [
+			{"type": "contains", "pattern": "2 gem(s) held",
+				"message": "three picked up, one set"},
+			{"type": "count_regex", "pattern": r"holder FILLED", "count": 1,
+				"message": "only the first holder should have its gem"},
+			{"type": "contains_regex", "pattern": r"gate at .* SHUT",
+				"message": "one break closed of three opens nothing"},
+		],
+	},
+	{
+		"name": "M13 bench: three gems close the circuit and open the gate",
+		"scene": "res://scenes/rooms/room_m13_gems.tscn",
+		"out": "room_m13_three_gems.png",
+		"input": (
+			"move_right:120;move_right,jump:14;move_right:30;move_right,jump:14;"
+			"move_right:30;move_right,jump:14;move_right:60"
+		),
+		"zoom": 1.0,
+		"centre": (500, 220),
+		"checks": [
+			{"type": "count_regex", "pattern": r"holder FILLED", "count": 3,
+				"message": "every holder should have its gem"},
+			{"type": "contains_regex", "pattern": r"gate at .* OPEN",
+				"message": "and current should reach the switch"},
+		],
+	},
 ]

@@ -12,6 +12,8 @@ const ACTS: Array[ActConfig] = [preload("res://config/act1.tres"), preload("res:
 
 ## Swords to arrive with, or -1 for none carried. Read once, by the next hero.
 var _carried := -1
+## Gems to arrive with, or -1 for none carried. Read once, by the next hero.
+var _carried_gems := -1
 ## Set between an exit and the next room, so an exit cannot fire twice.
 var _leaving := false
 
@@ -24,8 +26,16 @@ func arriving_swords(default: int) -> int:
 	return count
 
 
-## The hero walked into the exit of `room_path` holding `swords_held`.
-func leave_room(room_path: String, swords_held: int, max_swords: int) -> void:
+## What gems the hero arriving in a room holds. Called by `Player._ready`.
+func arriving_gems(default: int) -> int:
+	var count := _carried_gems if _carried_gems >= 0 else default
+	_carried_gems = -1
+	return count
+
+
+## The hero walked into the exit of `room_path` holding `swords_held` and
+## `gems_held`. Gems belong to an act, so a new act starts with none.
+func leave_room(room_path: String, swords_held: int, max_swords: int, gems_held: int = 0) -> void:
 	if _leaving:
 		return
 	var act := act_of(room_path)
@@ -35,6 +45,7 @@ func leave_room(room_path: String, swords_held: int, max_swords: int) -> void:
 	var next := ActRoute.next_room(act.rooms, room_path)
 	if next != "":
 		_carried = ActRoute.carried(swords_held, max_swords)
+		_carried_gems = gems_held
 		get_tree().change_scene_to_file.call_deferred(next)
 	else:
 		_finish(act, swords_held, max_swords)

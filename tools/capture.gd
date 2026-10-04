@@ -178,6 +178,7 @@ class CaptureAgent:
 		_report_geysers()
 		_report_enemies()
 		_report_generators()
+		_report_holders()
 		_report_mechanisms()
 
 		_hold_exactly(PackedStringArray())
@@ -359,6 +360,18 @@ class CaptureAgent:
 				print("capture: geyser at %s, column %s, %s" % [
 					geyser.global_position, geyser.column(), geyser.status()
 				])
+
+
+	## Whether each gem holder has its gem, and how many gems the hero holds:
+	## a set gem is a few pixels in a still, and a gem in hand is none.
+	func _report_holders() -> void:
+		var player := get_tree().get_first_node_in_group("player") as Player
+		if player != null and player.gems_held > 0:
+			print("capture: %d gem(s) held" % player.gems_held)
+		for node in get_tree().get_nodes_in_group("gem_holders"):
+			var holder := node as GemHolder
+			if holder != null:
+				print("capture: %s at %s" % [holder.status(), holder.global_position])
 
 
 	## Whether each generator is still live, and which phase of its arc it is

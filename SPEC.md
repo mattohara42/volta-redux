@@ -213,6 +213,19 @@ generator is the act boss and the fight is a circuit, not a damage race.
 **Act 4: the Hall of Volta** (3 rooms). Three gems, three holders, kept from the
 original because it is a good ending. Volta himself, then current run through the
 right conductor lets the chains go, and the dragon finishes him. You ride it out.
+Decided by Matt, 2026-10-04:
+
+- **Gems are conductors.** Each holder is a break in the circuit to the
+  dragon's chains, and a set gem closes it, as a sword closes a seam. A break
+  is wider than a sword can reach, so only a gem will do.
+- **One gem per room**: rooms 1 and 2 each hold one behind a distinct use of
+  the sword, and room 3 holds the last and the fight. Gems ride from room to
+  room like swords in hand and are never lost to a death.
+- **Volta casts and pulls swords.** He throws aimed bolts, and now and then
+  he drags every embedded sword out of the walls toward himself, undoing your
+  circuit. He cannot be beaten by throwing.
+- **The ending is a short playable flight**: you ride the dragon out through
+  one scrolling room, steering only up and down, then a card.
 
 **The jump owns a scale, and it is not the storey.** A 56 px jump is for holes
 in the floor, plinths, low ledges and the short steps between them. Those are

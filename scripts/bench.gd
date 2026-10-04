@@ -318,6 +318,24 @@ func _add_barrier(rect: Rect2, source: bool = true) -> Barrier:
 	return barrier
 
 
+## One of Act 4's gems, lying on `base`.
+func _add_gem(base: Vector2) -> Gem:
+	var gem := Gem.new()
+	gem.position = base
+	add_child(gem)
+	return gem
+
+
+## A pedestal that takes a gem and joins `a` to `b` in `network` (`GemHolder`).
+## Solid, so it is something you walk up to, and short enough to jump.
+func _add_gem_holder(network: CircuitNetwork, rect: Rect2, a: Conductor, b: Conductor) -> GemHolder:
+	_add_solid(rect)
+	var holder := GemHolder.new()
+	add_child(holder)
+	holder.configure(rect, network, a, b)
+	return holder
+
+
 ## A switch that needs current, in `network`, wired to nothing yet.
 func _add_current_switch(network: CircuitNetwork, rect: Rect2) -> CurrentSwitch:
 	var switch := CurrentSwitch.new()

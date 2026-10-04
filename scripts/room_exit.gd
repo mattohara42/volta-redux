@@ -32,7 +32,7 @@ func _on_body_entered(body: Node2D) -> void:
 	if state == null:
 		return
 	var scene := get_tree().current_scene
-	state.leave_room(scene.scene_file_path, player.swords_held, player.sword_config.max_swords)
+	state.leave_room(scene.scene_file_path, player.swords_held, player.sword_config.max_swords, player.gems_held)
 
 
 func _draw() -> void:
