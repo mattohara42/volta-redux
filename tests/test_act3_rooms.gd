@@ -67,3 +67,34 @@ func test_the_series_room_needs_both_seams() -> void:
 	check(not Circuit.connected(0, 2, links_low), "the low seam alone leaves the stub dead")
 	check(not Circuit.connected(0, 2, links_high), "the high seam alone leaves the stub dead")
 	check(Circuit.connected(0, 2, links_low + links_high), "both together make it live")
+
+
+func test_the_toll_takes_all_three_swords() -> void:
+	var move: MovementConfig = load("res://config/movement.tres")
+	var sword: SwordConfig = load(SWORD)
+	var pieces := Act3Toll.pieces()
+	var stands: Array[float] = [Act3Toll.STEP_HIGH.position.y, Act3Toll.STEP_LOW.position.y, Bench.FLOOR_TOP]
+	for i in stands.size():
+		check(_spans(_throw_y(stands[i]), pieces[i], pieces[i + 1]), "the throw from %.0f bridges seam %d" % [stands[i], i])
+		for j in pieces.size() - 1:
+			if j != i:
+				check(not _spans(_throw_y(stands[i]), pieces[j], pieces[j + 1]), "and only seam %d, not %d" % [i, j])
+	check(Bench.FLOOR_TOP - Act3Toll.STEP_LOW.position.y < move.jump_height, "the low step is a jump up")
+	check(Act3Toll.STEP_LOW.position.y - Act3Toll.STEP_HIGH.position.y < move.jump_height, "and so is the high one")
+	check(Act3Toll.STEP_HIGH.end.x - Act3Toll.FACE_X < sword.max_range, "the face is in range from the far end of the stair")
+	var links: Array = []
+	for i in pieces.size() - 1:
+		var some := Circuit.links_through([i, i + 1])
+		check(not Circuit.connected(0, pieces.size() - 1, some), "seam %d alone leaves the stub dead" % i)
+		links.append_array(some)
+	check(Circuit.connected(0, pieces.size() - 1, links), "all three make it live")
+
+
+func test_the_toll_way_out_needs_one_sword_back() -> void:
+	var move: MovementConfig = load("res://config/movement.tres")
+	var climb := Act3Toll.CLIMB
+	check(climb.size.y > move.jump_height, "the ledge cannot be jumped from the floor")
+	var ledge_top := _throw_y(Bench.FLOOR_TOP) - Sword.LEDGE_THICKNESS * 0.5
+	check(ledge_top - climb.position.y < move.jump_height, "but a sword in the wood is a step to it")
+	check(Act3Toll.wood().end.y == Bench.FLOOR_TOP, "and the wood reaches the throw")
+	check(Act3Toll.GATE.end.x < climb.position.x, "the climb is past the gate")
