@@ -5,7 +5,7 @@ class_name Act4Flight
 extends Node2D
 
 const FLIGHT: FlightConfig = preload("res://config/flight.tres")
-const TILES: ActTiles = preload("res://assets/art/act3/act3_tiles.tres")
+const TILES: ActTiles = preload("res://assets/art/act4/act4_tiles.tres")
 const ROOM_WIDTH: float = 2400.0
 const CEILING: float = 32.0
 const FLOOR: float = Bench.FLOOR_TOP

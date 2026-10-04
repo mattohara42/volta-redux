@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="ActTiles" load_steps=12 format=3]
+
+[ext_resource type="Script" path="res://scripts/act_tiles.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/art/act4/tiles_px/floor_top_0.png" id="2"]
+[ext_resource type="Texture2D" path="res://assets/art/act4/tiles_px/floor_top_1.png" id="3"]
+[ext_resource type="Texture2D" path="res://assets/art/act4/tiles_px/floor_top_2.png" id="4"]
+[ext_resource type="Texture2D" path="res://assets/art/act4/tiles_px/floor_top_3.png" id="5"]
+[ext_resource type="Texture2D" path="res://assets/art/act4/tiles_px/wall_fill_0.png" id="6"]
+[ext_resource type="Texture2D" path="res://assets/art/act4/tiles_px/wall_fill_1.png" id="7"]
+[ext_resource type="Texture2D" path="res://assets/art/act4/tiles_px/wall_fill_2.png" id="8"]
+[ext_resource type="Texture2D" path="res://assets/art/act4/tiles_px/wall_fill_3.png" id="9"]
+[ext_resource type="Texture2D" path="res://assets/art/act4/tiles_px/wall_fill_4.png" id="10"]
+[ext_resource type="Texture2D" path="res://assets/art/act4/tiles_px/wall_fill_5.png" id="11"]
+
+[resource]
+script = ExtResource("1")
+floor_tiles = Array[Texture2D]([ExtResource("2"), ExtResource("3"), ExtResource("4"), ExtResource("5")])
+wall_tiles = Array[Texture2D]([ExtResource("6"), ExtResource("7"), ExtResource("8"), ExtResource("9"), ExtResource("10"), ExtResource("11")])

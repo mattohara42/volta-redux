@@ -11,7 +11,7 @@ reaches the benches. `tools/dev.sh route` walks every exit in order (CI).
 
 ## Where this is
 
-**Credits: 615.** Random HTTP 403s cost nothing; retry once.
+**Credits: 510.** Random HTTP 403s cost nothing; retry once.
 Spend in small batches, each looked at before the next (`ART.md` → *What is
 left to generate*). Enemies and characters wait on `RoomM7Sheet`'s verdict.
 
@@ -21,8 +21,8 @@ left to generate*). Enemies and characters wait on `RoomM7Sheet`'s verdict.
 drawn with `TileArt` (`Bench`'s class comment says why). Act 4 (`SPEC.md` →
 *Act 4*): gems close circuits (`Gem`, `GemHolder`, `RoomM13Gems`); one gem
 each in `Act4Gallery` and `Act4Guard`; `Act4Throne`, where Volta pulls swords
-and the freed dragon puts him in the fire; `Act4Flight`, the ending. Act 4
-uses Act 3's tiles, and Volta is drawn in code, until their art exists.
+and the freed dragon puts him in the fire; `Act4Flight`, the ending. Act 4 has
+its own hall tiles and a generated Volta.
 **Next is M14**, which starts with Matt playing it through. **Act 2 needs a
 painted background** (Matt, Gemini); until then it is a plain backdrop.
 
