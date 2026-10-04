@@ -24,8 +24,9 @@ built, connected and wired with art. Real rooms extend `Bench` and draw with
 recall overpowers the dragon and chains it (`Dragon._defeat`, generated
 chained art), costing no sword. **Act 3's current is built** (`SPEC.md` → *Conduct*): `Circuit`,
 `Conductor`, `CurrentSwitch`, `CircuitNetwork`, proven on `RoomM12Circuit`.
-Act 3 rooms 1 to 5 built (`Act3Hall`, `Act3Insulator`, `Act3Floor`,
-`Act3Series`, `Act3Toll`). Next: room 6, then the generator. **Act 2 needs a painted background** (Matt, Gemini);
+All six Act 3 rooms built (`Act3Hall` to `Act3Rungs`; room 6 adds live
+rungs and the first `Barrier`). Next: the generator, three breaks at three
+heights (Matt, 2026-10-04). **Act 2 needs a painted background** (Matt, Gemini);
 until then its rooms show a plain backdrop under a rock ceiling.
 
 ## Blocked on Matt

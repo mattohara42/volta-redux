@@ -44,6 +44,9 @@ var _landed := false
 ## Set by `recall()` and spent on the next step, so the player can ask without
 ## knowing which state the sword happens to be in.
 var _recalled := false
+## Set by a live `Barrier` the sword's path crossed, and acted on at the next
+## step like any other contact.
+var _fried := false
 
 @onready var _shape: CollisionShape2D = $CollisionShape2D
 ## The one-tile ledge an embedded sword becomes. A separate body because an
@@ -94,6 +97,12 @@ func _on_area_entered(area: Area2D) -> void:
 		_contact = SwordFlight.Contact.SOLID
 
 
+## Crossed live current (`Barrier`). The sword is gone at its next step,
+## whatever it was doing.
+func fry() -> void:
+	_fried = true
+
+
 ## Bring it home. Only an embedded sword answers; the rest ignore it, so the
 ## player can shout at every sword on screen and let the machine sort it out.
 func recall() -> void:
@@ -131,7 +140,7 @@ func _physics_process(delta: float) -> void:
 		SwordFlight.return_spent(_return_distance, config.max_return_distance),
 		caught,
 		picked_up,
-		_contact,
+		SwordFlight.Contact.LIVE if _fried else _contact,
 		state == SwordFlight.State.RETURNING and SwordFlight.has_overshot(
 			offset_before, offset_after
 		),
@@ -140,6 +149,8 @@ func _physics_process(delta: float) -> void:
 	)
 	_contact = SwordFlight.Contact.NONE
 	_recalled = false
+	_fried = false
+	_shock_whoever_touches_it()
 
 	if next != state:
 		_enter(next, caught)
@@ -305,6 +316,23 @@ func _enter(next: SwordFlight.State, caught_in_flight: bool = false) -> void:
 		SwordFlight.State.DESTROYED:
 			destroyed.emit()
 			queue_free()
+
+
+## A sword carrying current is live metal like any other (`SPEC.md` →
+## *Conduct*): standing on it or against it kills, which is what makes a rung
+## in live copper a trap.
+func _shock_whoever_touches_it() -> void:
+	if not conducting or state != SwordFlight.State.EMBEDDED:
+		return
+	var blade := Rect2(
+		global_position - Vector2(world.sword_length, LEDGE_THICKNESS) * 0.5,
+		Vector2(world.sword_length, LEDGE_THICKNESS)
+	).grow(Conductor.TOUCH)
+	var hero_size := Vector2(world.hero_width, world.hero_height)
+	for node in get_tree().get_nodes_in_group("player"):
+		var player := node as Player
+		if player != null and Rect2(player.global_position - hero_size * 0.5, hero_size).intersects(blade):
+			player.die()
 
 
 ## Where the sword is trying to get back to: where you are now, not where you

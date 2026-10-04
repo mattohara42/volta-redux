@@ -309,6 +309,15 @@ func _add_conductor(
 	return piece
 
 
+## A live field that kills the hero and destroys any sword crossing it
+## (`Barrier`). A source unless a room wires it into a circuit.
+func _add_barrier(rect: Rect2, source: bool = true) -> Barrier:
+	var barrier := Barrier.new()
+	barrier.configure(rect, source)
+	add_child(barrier)
+	return barrier
+
+
 ## A switch that needs current, in `network`, wired to nothing yet.
 func _add_current_switch(network: CircuitNetwork, rect: Rect2) -> CurrentSwitch:
 	var switch := CurrentSwitch.new()

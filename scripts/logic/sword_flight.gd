@@ -40,6 +40,9 @@ enum Contact {
 	## Wood, which bites and holds. SPEC.md: this is the move that turns a
 	## weapon into a traversal tool.
 	WOOD,
+	## Current: a live barrier (`SPEC.md` → *Conduct*). Whatever the sword was
+	## doing, thrown, returning or recalled, that is the end of it.
+	LIVE,
 }
 
 
@@ -57,7 +60,9 @@ enum Contact {
 ## not which direction the sword happened to be going.
 ##
 ## A recall cannot fail. It steers through geometry and ends in your hand, and
-## the price of it is the ledge you just gave up, not the sword.
+## the price of it is the ledge you just gave up, not the sword. The one
+## exception is current: a sword that crosses a live barrier is destroyed
+## whatever it was doing (Matt, 2026-10-04).
 static func next_state(
 	state: State,
 	at_max_range: bool,
@@ -69,6 +74,8 @@ static func next_state(
 	on_floor: bool,
 	recalled: bool
 ) -> State:
+	if contact == Contact.LIVE and state != State.CAUGHT and state != State.DESTROYED:
+		return State.DESTROYED
 	match state:
 		State.FLYING:
 			if contact == Contact.WOOD:

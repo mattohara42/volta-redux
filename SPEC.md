@@ -95,6 +95,14 @@ and the level geometry to serve it. Concretely, the sword does five things:
    hit by a sword: its own current runs out through broken rails, and bridging
    every break at once closes the loop back into it and shorts it out.
 
+   **A sword carrying current is live metal** too: a rung thrown into live
+   copper kills whoever steps on it. **A barrier** (Matt, 2026-10-04) is a live
+   field fed from a source. It kills the hero, and any sword whose path crosses
+   it while it is live is destroyed, recalled ones included: the one exception
+   to "a recall cannot fail". Recall calls every sword at once, so a barrier
+   held open by a sword would always cost that sword; barriers are therefore
+   always on, and the decision is where you stand when you recall.
+
 **The sword count is the difficulty dial and it is small.** Start with three,
 cap at five. Ten was too many to make any single throw matter.
 
