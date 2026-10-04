@@ -54,6 +54,9 @@ extends Resource
 ## room) are brought up to this, never past it. Matt, 2026-10-03: early rooms
 ## resupply from a chest of three, later rooms from hidden swords or a mechanism.
 @export var chest_fill: int = 3
+## How far past its blade an embedded sword reaches for metal, px. This is what
+## lets a sword thrown into an insulating seam touch the conductors either side.
+@export var conduct_reach: float = 3.0
 
 @export_group("Sound")
 ## BUILD_PLAN.md M15: "The throw, the catch, the embed and the recall need

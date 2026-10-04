@@ -23,6 +23,13 @@ signal destroyed
 ## How deep the standable surface of an embedded sword is, px. Thin, because a
 ## sword is thin, and the player stands on its top edge.
 const LEDGE_THICKNESS: float = 4.0
+## Set by a room's `CircuitNetwork`: this sword is wired into a live circuit.
+## Embedded is the state; conducting is what the circuit says about it.
+var conducting := false:
+	set(value):
+		if value != conducting:
+			conducting = value
+			queue_redraw()
 
 var state: SwordFlight.State = SwordFlight.State.FLYING
 
@@ -68,7 +75,10 @@ func _on_body_entered(body: Node2D) -> void:
 		# Two bodies in one frame: wood wins, rather than whichever signal was
 		# emitted second.
 		return
-	_contact = SwordFlight.Contact.WOOD if body.is_in_group("wood") else SwordFlight.Contact.SOLID
+	# Metal bites like wood (`SPEC.md` → *Conduct*): a sword has to embed in a
+	# conductor to carry its current.
+	var bites := body.is_in_group("wood") or body.is_in_group("metal")
+	_contact = SwordFlight.Contact.WOOD if bites else SwordFlight.Contact.SOLID
 
 
 ## An enemy is its own physics layer rather than a body, because touching it
@@ -225,11 +235,17 @@ func sound_status() -> String:
 func _settle_against_the_surface(direction: float) -> void:
 	var step := Vector2(signf(direction) * world.sword_length, 0.0)
 	var space := get_world_2d().direct_space_state
-	var query := PhysicsRayQueryParameters2D.create(
-		global_position - step * 2.0, global_position + step
-	)
-	query.collision_mask = 1
-	var hit := space.intersect_ray(query)
+	var hit := {}
+	# The centre line first, then the blade's top and bottom edges: a sword
+	# thrown into an insulating seam (`SPEC.md` → *Conduct*) bites the metal
+	# either side, and its centre line runs down the gap between them.
+	for lift in [0.0, -LEDGE_THICKNESS * 0.5, LEDGE_THICKNESS * 0.5]:
+		var origin := global_position + Vector2(0.0, lift)
+		var query := PhysicsRayQueryParameters2D.create(origin - step * 2.0, origin + step)
+		query.collision_mask = 1
+		hit = space.intersect_ray(query)
+		if not hit.is_empty():
+			break
 	if hit.is_empty():
 		# Nothing found, so leave it where it stopped rather than teleport it
 		# somewhere arbitrary. Visible as a ledge overlapping the plank.
@@ -329,3 +345,7 @@ func _draw() -> void:
 			Vector2.ZERO, config.pickup_radius, 0.0, TAU, 24,
 			Color(Palette.GOLD_FACE, 0.35), 1.0
 		)
+	# Current running through it: a hard cyan line along the blade, the arc's
+	# colour, so a wired sword reads as wired.
+	if conducting:
+		draw_line(Vector2(-half * 0.28, 0.0), Vector2(half, 0.0), Palette.ARC, 1.0)
