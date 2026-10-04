@@ -482,8 +482,8 @@ call.
 | insulator post | prop | 1 |
 | cable and conduit dressing | prop | 1 |
 | insulated door | prop | 1 |
-| the generator without its painted arc (`BACKLOG.md`) | `animate` | 1 |
-| the generator's fight states, overloading and failing | `edit` twice | 2 |
+| the generator without its painted arc (`BACKLOG.md`) | `edit`, then `animate` | done, 2 |
+| the generator burnt out after its short | `edit` | done, 1 |
 
 ### Act 4: the Hall of Volta (13)
 
@@ -1186,3 +1186,14 @@ size against the wall, and the ladder connecting the floor to the ledge with
 no gap. The same tool against `room_m4_enemies.tscn` confirms the global rig
 swap costs nothing there: the hero and the bat now show real art, the
 scorpion, ant and eyeball are unchanged.
+
+## The generator's fight art (2026-10-04, 45 credits)
+
+An `edit` of `generator_px.png` with the arc taken out (pick 0 of 2, both
+clean, 67x69 rather than 72: the known `edit` drift, anchored by its base), a
+4-frame `animate` of that (`generator_hum_sheet.png`, no boiling, 0 neutral
+darks), and an `edit` to a burnt-out still with a cold grate, dull coils and
+smoke (`generator_dead_px.png`, pick 0, 2.3% neutral darks in the soot fixed
+with `tools/recolour-darks.py`). The arc between the horns is now an
+`ArcBolt` in code while it is live, as `CLAUDE.md` asks. "Overloading" was
+not generated: the arc warning already says it, in code.

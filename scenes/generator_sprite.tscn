@@ -1,22 +1,23 @@
 [gd_scene format=3]
 
-[ext_resource type="Texture2D" path="res://assets/art/enemies/generator_sheet.png" id="1_sheet"]
+[ext_resource type="Texture2D" path="res://assets/art/enemies/generator_hum_sheet.png" id="1_sheet"]
+[ext_resource type="Texture2D" path="res://assets/art/enemies/generator_dead_px.png" id="2_dead"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_idle0"]
 atlas = ExtResource("1_sheet")
-region = Rect2(0, 0, 72, 72)
+region = Rect2(0, 0, 67, 69)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_idle1"]
 atlas = ExtResource("1_sheet")
-region = Rect2(72, 0, 72, 72)
+region = Rect2(67, 0, 67, 69)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_idle2"]
 atlas = ExtResource("1_sheet")
-region = Rect2(144, 0, 72, 72)
+region = Rect2(134, 0, 67, 69)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_idle3"]
 atlas = ExtResource("1_sheet")
-region = Rect2(216, 0, 72, 72)
+region = Rect2(201, 0, 67, 69)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_e"]
 animations = [{
@@ -35,6 +36,14 @@ animations = [{
 }],
 "loop": true,
 "name": &"idle",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_dead")
+}],
+"loop": true,
+"name": &"dead",
 "speed": 1.0
 }]
 
@@ -66,18 +75,83 @@ tracks/1/keys = {
 "update": 1,
 "values": [0, 1, 2, 3]
 }
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AnimatedSprite2D:offset")
+tracks/2/interp = 0
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2(-33, -69)]
+}
+
+[sub_resource type="Animation" id="Animation_dead"]
+resource_name = "dead"
+length = 1.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:animation")
+tracks/0/interp = 0
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"dead"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:frame")
+tracks/1/interp = 0
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AnimatedSprite2D:offset")
+tracks/2/interp = 0
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2(-33, -71)]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_e"]
 _data = {
+&"dead": SubResource("Animation_dead"),
 &"idle": SubResource("Animation_idle")
 }
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_idle"]
 animation = &"idle"
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_dead"]
+animation = &"dead"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="Transition_start_idle"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="Transition_idle_dead"]
+
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_e"]
 states/idle/node = SubResource("AnimationNodeAnimation_idle")
 states/idle/position = Vector2(300, 100)
+states/dead/node = SubResource("AnimationNodeAnimation_dead")
+states/dead/position = Vector2(500, 100)
+transitions = ["Start", "idle", SubResource("Transition_start_idle"), "idle", "dead", SubResource("Transition_idle_dead")]
 
 [node name="GeneratorSprite" type="Node2D"]
 
@@ -85,7 +159,7 @@ states/idle/position = Vector2(300, 100)
 sprite_frames = SubResource("SpriteFrames_e")
 animation = &"idle"
 centered = false
-offset = Vector2(-36, -72)
+offset = Vector2(-33, -69)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

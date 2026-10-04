@@ -13,6 +13,10 @@ extends Node2D
 signal shorted
 
 const SPRITE_SCENE: PackedScene = preload("res://scenes/generator_sprite.tscn")
+## Where the horn tips sit in the sprite, from its base centre. The arc between
+## them is code (`ArcBolt`), not paint, per `CLAUDE.md`.
+const HORN_LEFT := Vector2(-19.0, -64.0)
+const HORN_RIGHT := Vector2(20.0, -64.0)
 
 var enemy_config: EnemyConfig
 var is_shorted := false
@@ -29,6 +33,7 @@ var _arc_index := -1
 var _target := Vector2.ZERO
 var _phase: GeneratorCycle.Phase = GeneratorCycle.Phase.REST
 var _arc: ArcBolt
+var _hum: ArcBolt
 var _sprite: Node2D
 
 
@@ -50,6 +55,10 @@ func configure(area: Rect2, out: Conductor, back: CurrentSwitch, config: EnemyCo
 	_sprite = SPRITE_SCENE.instantiate() as Node2D
 	_sprite.position = Vector2(area.get_center().x, area.end.y)
 	add_child(_sprite)
+	_sprite_tree()["parameters/playback"].travel("idle")
+	_hum = ArcBolt.new()
+	add_child(_hum)
+	_hum.setup(_sprite.position + HORN_LEFT, _sprite.position + HORN_RIGHT)
 	add_to_group("mechanisms")
 	add_to_group("generators")
 
@@ -116,9 +125,9 @@ func _on_loop_closed(held: bool) -> void:
 	is_shorted = true
 	_out.is_source = false
 	_show_arc(false)
-	# Burnt out: the casing goes dull. Placeholder until its failing art is
-	# generated (`ART.md` → *Act 3*).
-	_sprite.modulate = Palette.STONE_LIT
+	_hum.queue_free()
+	# Burnt out, through its AnimationTree like every state.
+	_sprite_tree()["parameters/playback"].travel("dead")
 	queue_redraw()
 	shorted.emit()
 
@@ -131,7 +140,7 @@ func _show_arc(on: bool) -> void:
 		return
 	_arc = ArcBolt.new()
 	add_child(_arc)
-	_arc.setup(Vector2(rect.get_center().x, rect.end.y), _target, _arc_index + 1)
+	_arc.setup(_sprite.position + (HORN_LEFT + HORN_RIGHT) * 0.5, _target, _arc_index + 1)
 
 
 ## The warning: the box the arc will strike, drawn in residue blue.
@@ -141,6 +150,10 @@ func _draw() -> void:
 	draw_rect(strike_box(), Palette.ARC_RESIDUE, false, 1.0)
 	var box := strike_box()
 	draw_line(Vector2(box.get_center().x, box.position.y), Vector2(box.get_center().x, box.end.y), Palette.ARC_RESIDUE, 1.0)
+
+
+func _sprite_tree() -> AnimationTree:
+	return _sprite.get_node("AnimationTree") as AnimationTree
 
 
 func _player() -> Player:
