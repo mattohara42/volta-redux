@@ -95,6 +95,7 @@ func _add_wood(rect: Rect2, drawn := true) -> void:
 func _add_lava(rect: Rect2) -> Hazard:
 	var hazard := Hazard.new()
 	hazard.configure(rect.size)
+	hazard.cause = DeathMessages.Cause.LAVA
 	hazard.position = rect.get_center()
 	add_child(hazard)
 	var surface := LavaSurface.new()
@@ -125,6 +126,7 @@ func _add_spikes(surface_y: float, x: float, count: int) -> Hazard:
 	var lethal := Spikes.lethal_box(bed, hazards.spike_tooth_pitch, hazards.spike_grace)
 	var hazard := Hazard.new()
 	hazard.configure(lethal.size)
+	hazard.cause = DeathMessages.Cause.SPIKES
 	hazard.position = lethal.get_center()
 	add_child(hazard)
 	return hazard

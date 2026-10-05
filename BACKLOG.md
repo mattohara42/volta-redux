@@ -254,9 +254,9 @@ committed to.
 
 ## Raised during M12's generator (2026-10-04), not judged
 
-- **Death lines ignore the cause.** `DeathMessages` draws from one pool, so
-  an arc in Act 3 can say "THE GEYSER HAD OTHER PLANS". Either key lines to
-  what killed you or keep the pool free of named hazards.
+- **Death lines ignored the cause.** **Resolved 2026-10-05:** lines are keyed
+  to what killed you, generic ones are said by anything (`SPEC.md`). Lava also
+  shakes the camera a little, the other thing `ART_DIRECTION.md` allows.
 - **The throne has one conductor, not a choice of two.** `SPEC.md` says
   current "through the right conductor"; every layout tried for a decoy face
   either blocked the path or needed a contrived seam. One face for now.

@@ -79,7 +79,7 @@ func _physics_process(_delta: float) -> void:
 	for body in _zap.get_overlapping_bodies():
 		var player := body as Player
 		if player != null:
-			player.die()
+			player.die(DeathMessages.Cause.CURRENT)
 
 
 ## Whether touching it while live kills. A switch overrides this: it is a

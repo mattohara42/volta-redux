@@ -431,7 +431,7 @@ func _shock_whoever_touches_it() -> void:
 	for node in get_tree().get_nodes_in_group("player"):
 		var player := node as Player
 		if player != null and Rect2(player.global_position - hero_size * 0.5, hero_size).intersects(blade):
-			player.die()
+			player.die(DeathMessages.Cause.CURRENT)
 
 
 ## Where the sword is trying to get back to: where you are now, not where you

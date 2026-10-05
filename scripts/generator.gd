@@ -94,9 +94,9 @@ func _physics_process(delta: float) -> void:
 		return
 	var hero := _hero_rect(player)
 	if hero.intersects(rect.grow(Conductor.TOUCH)):
-		player.die()
+		player.die(DeathMessages.Cause.CURRENT)
 	elif phase == GeneratorCycle.Phase.STRIKING and hero.intersects(strike_box()):
-		player.die()
+		player.die(DeathMessages.Cause.CURRENT)
 
 
 ## Where the arc lands this time, as a killing box.

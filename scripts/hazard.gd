@@ -16,6 +16,9 @@ extends Area2D
 ## `tools/capture.gd` prints this and CLAUDE.md's "draw the thing you measured"
 ## still holds. Nothing reads it to decide anything.
 var killing_box: Vector2 = Vector2.ZERO
+## What this kills you as, for the line the game says (`DeathMessages`). Lava
+## until the room says otherwise; an enemy says it is a beast.
+var cause: DeathMessages.Cause = DeathMessages.Cause.ANY
 
 
 ## `size` is the whole killing box. The room owns where it goes and what it
@@ -40,4 +43,4 @@ func configure(size: Vector2) -> void:
 func _on_body_entered(body: Node2D) -> void:
 	var player := body as Player
 	if player != null:
-		player.die()
+		player.die(cause)

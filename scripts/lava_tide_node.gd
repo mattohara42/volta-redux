@@ -30,6 +30,7 @@ func configure(span: Vector2, low_y: float, high_y: float, hazards: HazardConfig
 	var depth := Bench.ROOM_HEIGHT - high_y
 	_hazard = Hazard.new()
 	_hazard.configure(Vector2(_width, depth))
+	_hazard.cause = DeathMessages.Cause.LAVA
 	add_child(_hazard)
 	_surface = LavaSurface.new()
 	_surface.setup(Rect2(Vector2(_x, high_y), Vector2(_width, depth)))

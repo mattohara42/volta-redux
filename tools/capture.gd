@@ -272,9 +272,11 @@ class CaptureAgent:
 		if player.deaths == 0:
 			print("capture: no deaths")
 			return
-		print("capture: %d death(s), last loop %.3f s, %s" % [
+		print("capture: %d death(s), last loop %.3f s, %s, last by %s: \"%s\"" % [
 			player.deaths, player.last_downtime,
 			DeathClock.phase_name(player.death_phase()),
+			DeathMessages.Cause.keys()[player.last_cause].to_lower(),
+			DeathMessages.message_at(player.message_index),
 		])
 
 
