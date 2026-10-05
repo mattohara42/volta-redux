@@ -15,9 +15,14 @@ const SFX_BUS := &"Sfx"
 const AMBIENCE_BUS := &"Ambience"
 ## Quiet enough to start a track from and stop one at, in decibels.
 const SILENT_DB := -60.0
+## Where a player's own levels are kept between sessions.
+const SETTINGS := "user://settings.cfg"
 
 var _muffle_left := 0.0
 var _scene: Node = null
+## The player's own level for each bus they can set, 0 to 1 of the mix's
+## level in `config/audio.tres` (`level_db`). Set from the pause menu.
+var levels: Dictionary = {MUSIC_BUS: 1.0, SFX_BUS: 1.0}
 ## What each bus is playing now, by bus name.
 var _playing: Dictionary = {}
 ## The fades running now, so a quit can stop them.
@@ -26,9 +31,37 @@ var _fades: Array[Tween] = []
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	_set_bus_volume(MUSIC_BUS, CONFIG.music_volume_db)
-	_set_bus_volume(SFX_BUS, CONFIG.sfx_volume_db)
-	_set_bus_volume(AMBIENCE_BUS, CONFIG.ambience_volume_db)
+	var saved := ConfigFile.new()
+	if saved.load(SETTINGS) == OK:
+		for bus: StringName in levels:
+			levels[bus] = clampf(float(saved.get_value("audio", String(bus), 1.0)), 0.0, 1.0)
+	_apply_levels()
+
+
+## Sets a player's level for `bus`, 0 to 1, and keeps it for next time.
+func set_level(bus: StringName, level: float) -> void:
+	levels[bus] = clampf(level, 0.0, 1.0)
+	_apply_levels()
+	var saved := ConfigFile.new()
+	saved.load(SETTINGS)
+	for each: StringName in levels:
+		saved.set_value("audio", String(each), levels[each])
+	saved.save(SETTINGS)
+
+
+## A bus's level in decibels: the mix's own, scaled by what the player set.
+## Silence at nothing; the effects' level also carries the ambience, which is
+## a room sound like any other.
+static func level_db(mix_db: float, level: float) -> float:
+	if level <= 0.0:
+		return SILENT_DB
+	return mix_db + linear_to_db(level)
+
+
+func _apply_levels() -> void:
+	_set_bus_volume(MUSIC_BUS, level_db(CONFIG.music_volume_db, levels[MUSIC_BUS]))
+	_set_bus_volume(SFX_BUS, level_db(CONFIG.sfx_volume_db, levels[SFX_BUS]))
+	_set_bus_volume(AMBIENCE_BUS, level_db(CONFIG.ambience_volume_db, levels[SFX_BUS]))
 
 
 ## Quitting mid-fade leaves the fade's tween holding the track, and the track
