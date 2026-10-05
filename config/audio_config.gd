@@ -12,6 +12,8 @@ extends Resource
 ## The music and the effects buses, in decibels. 0 is the rendered level.
 @export_range(-60.0, 6.0) var music_volume_db: float = -9.0
 @export_range(-60.0, 6.0) var sfx_volume_db: float = -3.0
+## How long one act's music takes to give way to the next, seconds.
+@export var music_fade_seconds: float = 1.5
 ## A death muffles the music under the hold and the respawn, this many seconds.
 @export var death_muffle_seconds: float = 0.6
 ## How far each play of a frequent sound may wander in pitch, as a fraction,

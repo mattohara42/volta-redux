@@ -14,6 +14,10 @@ extends Resource
 ## The card's lettering, in the same size as the death messages.
 @export var card_font_size: int = 24
 
+## The act's loop (`tools/synth/music.py`), played by `Audio` in every room of
+## the act and carried across from one room to the next without a break.
+@export var music: AudioStream
+
 ## The far layers drawn by `Backdrop` while the act has no painted background:
 ## 0 none, 1 the caverns, 2 the works, 3 the hall (`Backdrop.Style`).
 @export_enum("None", "Cavern", "Works", "Hall") var backdrop: int = 0

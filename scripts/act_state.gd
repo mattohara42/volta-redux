@@ -92,6 +92,10 @@ func _finish(act: ActConfig, swords_held: int, max_swords: int) -> void:
 	get_tree().root.add_child(card)
 	if sting.stream != null:
 		sting.play()
+	# The act's music gives way to the card; the next act's room starts its own.
+	var audio := get_node_or_null("/root/Audio")
+	if audio != null:
+		audio.fade_out()
 	get_tree().paused = true
 	await get_tree().create_timer(act.complete_card_seconds, true).timeout
 	get_tree().paused = false

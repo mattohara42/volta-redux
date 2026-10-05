@@ -5,6 +5,7 @@
 extends TestCase
 
 const AUDIO := "res://config/audio.tres"
+const AUDIO_SCRIPT: GDScript = preload("res://scripts/audio.gd")
 const SWORD := "res://config/sword.tres"
 const AUDIO_FIELDS: PackedStringArray = [
 	"jump", "land", "flip", "die", "respawn", "brazier", "chest", "kill", "gem", "gem_set",
@@ -53,3 +54,30 @@ func test_the_music_and_effects_buses_exist() -> void:
 	check(text.contains("&\"%s\"" % "Music"), "a Music bus")
 	check(text.contains("&\"%s\"" % "Sfx"), "an Sfx bus")
 	check(text.contains("AudioEffectLowPassFilter"), "the Music bus can be muffled")
+
+
+## Every act has a loop of its own, and every loop loops once `Audio` plays
+## it: a track that stops after ninety seconds leaves a player in a silent
+## castle. Played through `looping`, the way `Audio` plays it, because the
+## loop flag is not in anything this repo commits.
+func test_every_act_has_music_that_loops() -> void:
+	var tracks := {}
+	for n in 4:
+		var act: ActConfig = load("res://config/act%d.tres" % (n + 1))
+		var music := AUDIO_SCRIPT.looping(act.music) as AudioStreamOggVorbis
+		check(music != null, "act %d has music" % (n + 1))
+		if music != null:
+			check(music.loop, "act %d's music loops" % (n + 1))
+			tracks[music.resource_path] = true
+	check_eq(tracks.size(), 4, "four acts, four tracks")
+
+
+## The ride out is the one room that plays its own track, and it loops in case
+## the flight takes longer than the track does.
+func test_the_flight_plays_its_own_music() -> void:
+	var flight := AUDIO_SCRIPT.looping(Act4Flight.FLIGHT_MUSIC) as AudioStreamOggVorbis
+	check(flight != null, "the flight has music")
+	if flight != null:
+		check(flight.loop, "and it loops")
+		var act4: ActConfig = load("res://config/act4.tres")
+		check(flight != act4.music, "and it is not the hall's")

@@ -8,7 +8,7 @@ would have sounded like there. So the join in the engine is inaudible.
 
 import numpy as np
 
-from dsp import SR, normalise, pan as pan_to, reverb, samples, soft_clip
+from dsp import pan as pan_to, reverb, samples
 
 
 class Song:
@@ -43,9 +43,10 @@ class Song:
         if send > 0:
             self.send[:, start:stop] += chunk * send
 
-    def render(self, room=1.0, wet=0.9, peak=0.8, drive=1.1):
+    def render(self, room=1.0, wet=0.9, loudness=0.19, ceiling=0.92):
         """The finished loop: dry plus reverb, the tail folded onto the start,
-        gently limited and normalised."""
+        brought to one loudness (RMS) so no act is louder than another, and
+        its peaks rounded off under `ceiling` rather than clipped."""
         verb = reverb(self.send, wet=wet, size=room, damp=0.4, width=1.0)
         n = self.dry.shape[1]
         mix = self.dry.copy()
@@ -57,5 +58,7 @@ class Song:
         out[:, : min(tail.shape[1], loop_n)] += tail[:, :loop_n]
         extra = verb[:, n:]
         out[:, : min(extra.shape[1], loop_n)] += extra[:, :loop_n]
-        out = soft_clip(out, drive)
-        return normalise(out, peak)
+        rms = np.sqrt(np.mean(out ** 2))
+        if rms > 0:
+            out = out * (loudness / rms)
+        return ceiling * np.tanh(out / ceiling)
