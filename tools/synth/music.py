@@ -79,8 +79,11 @@ def act1():
             s.put(ins.hat(0.5 if e % 2 else 0.3, seed=bar * 8 + e), s.at(bar, e * 0.5), gain=0.25, pan=0.3, send=0.05)
         s.put(ins.snare(0.6, seed=bar), s.at(bar, 3.0), gain=0.25, send=0.2)
         if bar % 8 == 0:
-            for k, f in enumerate([140.0, 110.0, 90.0]):
-                s.put(ins.tom(f, 0.8), s.at(bar, 3.0 + k * 0.33), gain=0.45, send=0.2)
+            # The toms are pitched, so the fill walks down the bar's chord:
+            # C major at bars 8 and 24, A major at 16 and 32.
+            fill = ["E3", "C3", "G2"] if bar % 16 == 8 else ["E3", "C#3", "A2"]
+            for k, note in enumerate(fill):
+                s.put(ins.tom(hz(note), 0.8), s.at(bar, 3.0 + k * 0.33), gain=0.45, send=0.2)
     melody = [
         ("A4", 1.5), ("G4", 0.5), ("F4", 1), ("E4", 1), ("D4", 3), ("A4", 1),
         ("Bb4", 1.5), ("A4", 0.5), ("G4", 1), ("F4", 1), ("D4", 2), ("F4", 1), ("G4", 1),
@@ -120,8 +123,9 @@ def act2():
         if bar % 2 == 0:
             s.put(ins.anvil(0.7, seed=bar), s.at(bar, 3.0), gain=0.22, pan=0.4, send=0.5)
         if bar % 4 == 0:
-            for k in range(4):
-                s.put(ins.tom(70.0 - k * 6, 0.8), s.at(bar, 2.0 + k * 0.5), gain=0.4, send=0.3)
+            # Down the mode with the riff's own turn, D C B A.
+            for k, note in enumerate(["D2", "C2", "B1", "A1"]):
+                s.put(ins.tom(hz(note), 0.8), s.at(bar, 2.0 + k * 0.5), gain=0.4, send=0.3)
     melody = [
         ("E4", 2), ("F4", 1), ("G4", 1), ("F4", 3), ("E4", 1),
         ("D4", 2), ("E4", 1), ("F4", 1), ("E4", 4),
