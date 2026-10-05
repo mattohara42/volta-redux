@@ -278,6 +278,51 @@ through `ActTiles` (`assets/art/act2/act2_tiles.tres`). Contact sheet:
 **Act 2 has no background.** It is painted in Gemini and pixelated (*Four
 layers*), which is Matt's time, not credits.
 
+**Act 2 background, attempt 1 (2026-10-05), sent to Matt.** Built on Act 1's
+landed attempt 3: the same M5 preamble (the painting is pixelated afterwards,
+so a painterly source is what `pixelate.py` wants), the same flat stage-
+backdrop framing, the same bay repeated three times. Two things are new for a
+cave. A rock shelf in a painting reads as somewhere to stand, so every form is
+vertical or hanging. Lava painted on the far wall would compete with the
+lava that kills you, so the painting shows only lava's light, from below the
+frame, as the code `Backdrop` already does with its crust-only lavafalls.
+Raw delivery to `assets/art_raw/act2_cavern_bg.*`.
+
+> [preamble] A wide painted background for a side-scrolling platformer: a
+> long horizontal strip of the far wall of a vast underground lava cavern, in
+> flat side view like a stage backdrop, camera perpendicular to the wall,
+> with no vanishing point. It is NOT a three-quarter view, NOT a tunnel
+> receding into the distance, and NOT seen from above. The same bay of rock
+> repeats three times across the width of the canvas: a heavy curtain of
+> stalactites hanging from the top edge, a tall dark column of rock where a
+> stalactite has met a stalagmite, then a deep recess where the cavern wall
+> falls back into darkness, evenly spaced, so the whole strip reads as a
+> continuous run of cavern rather than one view of one place. Rock fills the
+> full width of the canvas and the whole top edge: no sky, no opening, no
+> daylight anywhere. The cavern is lit only from below, by a red-orange glow
+> rising from beneath the bottom edge of the frame: the lower third of the
+> wall is warm, ember-lit rust and dull brick red, fading upward into cold
+> violet-blue rock, and the top of the canvas is the darkest part of the
+> image. The glow is the point of this painting: do not paint the cavern as
+> one flat dark tone. No lava is visible anywhere: no lava rivers, no
+> lavafalls, no pools, no flowing fire, only the light it throws. There are
+> no ledges, shelves, steps, bridges, platforms or flat-topped rocks anywhere
+> in the painting: every rock form is vertical or hanging, so nothing in it
+> looks like somewhere to stand. No characters, no creatures, no torches, no
+> ruins, no chains, no crystals, no foreground rocks. Large, simple shapes
+> and few small details: big masses of rock and broad, soft gradients of
+> glow. The whole painting stays dark and muted, a background meant to sit
+> behind brighter platforms. Cold rock is blue-violet grey, deep violet in
+> shadow; the warm light on it is dull rust and brick red, going to amber
+> only in its brightest touches and never to yellow or white. The image is
+> 2560 by 1440 pixels, aspect ratio 16:9.
+
+What lands then: `tools/pixelate.py` to 360 tall at 24 colours,
+`palette-check.py`, the act's `ActTiles.background`, `backdrop` to 0, and
+every Act 2 room shot before and after. Whether the code `Backdrop`'s nearer
+layer (pillars, ash) should still draw over the painting is judged from those
+shots, not decided ahead of them.
+
 ## The chained dragon (2026-10-03)
 
 Two requests, 30 credits: an `edit` of `enemies/dragon_px.png` into a chained
