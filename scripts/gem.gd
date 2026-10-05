@@ -10,6 +10,13 @@ extends Area2D
 
 const SIZE := Vector2(10.0, 12.0)
 const ATMOSPHERE: AtmosphereConfig = preload("res://config/atmosphere.tres")
+## How a lying gem bobs and catches the light: art px, and seconds a cycle.
+## Purely how it looks: what you walk into to take it does not move.
+const BOB: float = 2.0
+const BOB_SECONDS: float = 1.6
+const TWINKLE_SECONDS: float = 1.3
+
+var _clock := 0.0
 
 
 func _ready() -> void:
@@ -38,8 +45,21 @@ func _on_body_entered(body: Node2D) -> void:
 		queue_free()
 
 
+func _process(delta: float) -> void:
+	_clock += delta
+	queue_redraw()
+
+
+## Bobbing a whole pixel at a time, and now and then a glint off its top facet:
+## a gem waiting to be taken should look like it wants to be.
 func _draw() -> void:
-	draw_gem(self, Vector2(0.0, -SIZE.y * 0.5), SIZE)
+	var lift := roundf(BOB * (0.5 + 0.5 * sin(TAU * _clock / BOB_SECONDS)))
+	var centre := Vector2(0.0, -SIZE.y * 0.5 - lift)
+	draw_gem(self, centre, SIZE)
+	if fmod(_clock, TWINKLE_SECONDS) < 0.12:
+		var at := (centre + Vector2(-SIZE.x * 0.25, -SIZE.y * 0.35)).floor()
+		draw_rect(Rect2(at + Vector2(-1.0, 0.0), Vector2(3.0, 1.0)), Palette.ARC_CORE)
+		draw_rect(Rect2(at + Vector2(0.0, -1.0), Vector2(1.0, 3.0)), Palette.ARC_CORE)
 
 
 ## A cut stone, point down: a dark rim, a face and a highlight. Shared with the

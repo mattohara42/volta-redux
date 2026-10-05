@@ -10,7 +10,7 @@ extends Resource
 
 @export_group("Mix")
 ## The music and the effects buses, in decibels. 0 is the rendered level.
-@export_range(-60.0, 6.0) var music_volume_db: float = -9.0
+@export_range(-60.0, 6.0) var music_volume_db: float = -6.0
 @export_range(-60.0, 6.0) var sfx_volume_db: float = -3.0
 ## How long one act's music takes to give way to the next, seconds.
 @export var music_fade_seconds: float = 1.5

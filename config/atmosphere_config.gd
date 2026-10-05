@@ -110,6 +110,10 @@ extends Resource
 ## A gem, lying or set: small and cold.
 @export var light_gem_radius: float = 28.0
 @export_range(0.0, 1.0) var light_gem_strength: float = 0.4
+## Volta's staff: his orb lights the throne room cold.
+@export var light_volta_radius: float = 70.0
+@export_range(0.0, 1.0) var light_volta_strength: float = 0.45
+@export_range(0.0, 1.0) var light_volta_flicker: float = 0.25
 ## A sword in flight or lying loose: a glint, so the most important shape on
 ## screen is never lost in a dark corner.
 @export var light_sword_radius: float = 22.0
@@ -132,3 +136,10 @@ extends Resource
 ## white, and a frequent one would be a strobe.
 @export var backdrop_rain_speed: float = 140.0
 @export_range(0.0, 0.1) var backdrop_flash_chance: float = 0.012
+
+@export_group("Motes")
+## Dust hanging in a room's air, catching whatever light there is: how many
+## on screen at once, how long each lives, and how fast it drifts, art px/s.
+@export var motes_amount: int = 40
+@export var motes_lifetime: float = 9.0
+@export var motes_drift: float = 4.0

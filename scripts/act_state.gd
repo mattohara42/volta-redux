@@ -22,6 +22,21 @@ var _carried_gems := -1
 var _leaving_from := ""
 
 
+func _ready() -> void:
+	# Launched straight into the first room: that is a new game, and it opens
+	# with the title. Deferred, so the main scene is in the tree to be read.
+	_open_if_new_game.call_deferred()
+
+
+func _open_if_new_game() -> void:
+	# Through a variable: indexing the constant folds it at parse time, before
+	# the act's resource has its rooms, and fails to compile.
+	var first: ActConfig = ACTS[0]
+	var scene := get_tree().current_scene
+	if scene != null and first.rooms.size() > 0 and scene.scene_file_path == first.rooms[0]:
+		get_tree().root.add_child(OpeningCard.make(first.title, first.card_font_size))
+
+
 ## What the hero arriving in a room starts with. Called by `Player._ready`.
 func arriving_swords(default: int) -> int:
 	var count := _carried if _carried >= 0 else default
@@ -104,3 +119,5 @@ func _finish(act: ActConfig, swords_held: int, max_swords: int) -> void:
 	# A new game after the ending carries nothing in.
 	_carried = -1 if ending else ActRoute.carried(swords_held, max_swords)
 	get_tree().change_scene_to_file(next.rooms[0])
+	if ending:
+		get_tree().root.add_child(OpeningCard.make(next.title, next.card_font_size))
