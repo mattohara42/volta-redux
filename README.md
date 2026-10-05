@@ -52,6 +52,11 @@ tools/dev.sh play                                # the benches, F2 cycles
 tools/dev.sh test                                # headless assertions
 ```
 
+The game keeps its place, a save per act: launched plainly, it starts again
+at the first room of the act you were last in, with the swords you carried
+into it and the run's tally. NEW GAME in the pause menu (Esc) starts over.
+The save is `user://save.cfg`, and the tests and tools never read or write it.
+
 Set `GODOT` if it is somewhere unusual. The script wraps `godot --path .`,
 `godot --path . --import` and `godot --headless --path . --script
 res://tests/run_tests.gd`, so any of those still work typed out in full.

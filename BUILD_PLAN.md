@@ -208,9 +208,11 @@ done-when is still Matt's to answer.
 Title, pause, options, key remapping, save per act. Web export and desktop
 builds. Netlify or itch.io.
 
-**Two pieces pulled forward 2026-10-05**: an opening card over the first room
-(`OpeningCard`) and a pause menu with the two volume levels (`PauseMenu`). The
-title screen, key remapping, saves and export are untouched.
+**Three pieces pulled forward 2026-10-05**: an opening card over the first room
+(`OpeningCard`), a pause menu with the two volume levels (`PauseMenu`), and the
+save per act (`SavePoint`), so M14's playthroughs need not be one sitting.
+Launching resumes the act; the pause menu's NEW GAME starts over. The title
+screen, key remapping and export are untouched.
 
 **Done when**: it is at a URL and someone else has finished it.
 

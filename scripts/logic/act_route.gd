@@ -18,8 +18,7 @@ static func is_last(rooms: PackedStringArray, current: String) -> bool:
 
 
 ## The act that follows act `index` of `count`. After the last, the ending
-## has played and the game starts again from Act 1: there are no saves until
-## M16, so that is a new game.
+## has played and the game starts again from Act 1, as a new game.
 static func act_after(index: int, count: int) -> int:
 	return index + 1 if index + 1 < count else 0
 
