@@ -1,7 +1,8 @@
-[gd_resource type="Resource" script_class="ActConfig" load_steps=4 format=3]
+[gd_resource type="Resource" script_class="ActConfig" load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://config/act_config.gd" id="1_act"]
 [ext_resource type="Resource" path="res://assets/art/act2/act2_tiles.tres" id="3_tiles"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/amb_cavern.ogg" id="4_ambience"]
 [ext_resource type="AudioStream" path="res://assets/audio/music/act2.ogg" id="2_music"]
 
 [resource]
@@ -15,3 +16,4 @@ ceiling_dim = 0.3
 backdrop = 1
 music = ExtResource("2_music")
 tiles = ExtResource("3_tiles")
+ambience = ExtResource("4_ambience")

@@ -24,6 +24,8 @@ when its recipe did.
 | how loud each one peaks | `sfx.LEVELS` | rendered in |
 | the two buses' levels, the death muffle, the crossfade | | `config/audio.tres` |
 | each act's loop | `tools/synth/music.py` | `config/actN.tres` (`music`) |
+| each act's ambience bed (wind, the mountain, the works, rain) | `tools/synth/sfx.py` | `config/actN.tres` (`ambience`) |
+| loops on things (a lava pit's roar, an arc's buzz), heard only near them | `tools/synth/sfx.py` | `config/audio.tres` |
 | the ride out's loop | `tools/synth/music.py` | `Act4Flight.FLIGHT_MUSIC` |
 
 **The sword's four state sounds are built to differ in every way an ear sorts

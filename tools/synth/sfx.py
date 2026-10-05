@@ -350,3 +350,111 @@ LEVELS = {
     "gem_set": 0.75, "switch": 0.6, "gate": 0.65, "zap": 0.55, "short": 0.95,
     "geyser": 0.5, "crumble": 0.55, "roar": 0.85, "bolt": 0.7, "pull": 0.75, "card": 0.7,
 }
+
+
+# Ambience: beds that play under each act, and loops that sit on a thing in
+# the room and are heard only near it. Every one loops without a seam: it is
+# rendered long, and its tail is crossfaded into its head.
+
+def _seamless(x, fade=0.5):
+    """`x` with its last `fade` seconds folded over its first, equal power, so
+    the end runs into the start without a step."""
+    f = samples(fade)
+    body = x[:-f].copy()
+    t = np.linspace(0.0, 1.0, f)
+    body[:f] = body[:f] * np.sin(t * np.pi / 2) + x[-f:] * np.cos(t * np.pi / 2)
+    return body
+
+
+def amb_wind():
+    """Act 1: wind along the outer wall at night, gusting."""
+    dur = 14.0
+    t = time(dur)
+    gust = 0.55 + 0.45 * np.sin(2 * np.pi * t / 7.0) * np.sin(2 * np.pi * t / 3.1 + 1.0)
+    air = noise(dur, seed=100)
+    body = bandpass(air, 300.0 + 500.0 * gust, q=0.9) * (0.4 + 0.6 * gust)
+    whistle = bandpass(noise(dur, seed=101), 1400.0 + 400.0 * gust, q=6.0) * gust * 0.25
+    return _seamless(mix(body, whistle))
+
+
+def amb_cavern():
+    """Act 2: the mountain breathing, far off; the odd drip."""
+    dur = 14.0
+    t = time(dur)
+    swell = 0.6 + 0.4 * np.sin(2 * np.pi * t / 7.0)
+    rumble = lowpass(noise(dur, seed=102), 90.0) * 4.0 * swell
+    roar = lowpass(noise(dur, seed=103), 400.0) * 0.4 * swell
+    drips = []
+    rng = np.random.default_rng(104)
+    for at in np.sort(rng.uniform(0.5, dur - 1.0, 6)):
+        f = rng.uniform(900.0, 1500.0)
+        drip = osc("sine", sweep(f, f * 1.6, 0.05), 0.05) * decay(0.05, 0.015)
+        drips.append(delayed(drip * 0.3, float(at)))
+    return _seamless(pad_to(mix(rumble, roar, *drips), dur))
+
+
+def amb_works():
+    """Act 3: the generator's works, humming; a machine knocking far away."""
+    dur = 12.0
+    hum = sum(osc("sine", 60.0 * k, dur) * (0.5 / k) for k in (1, 2, 3, 5))
+    beat = 1.0 + 0.15 * np.sin(2 * np.pi * time(dur) * 0.5)
+    hum = hum * beat * 0.5
+    buzz = bandpass(osc("saw", 120.0, dur), 2000.0, q=2.0) * 0.06
+    knocks = []
+    for i in range(int(dur / 1.5)):
+        knock = inharmonic(180.0, [1.0, 2.3, 3.9], 0.4, [0.12, 0.06, 0.03], seed=110 + i)
+        knocks.append(delayed(lowpass(knock, 900.0) * 0.25, i * 1.5))
+    return _seamless(pad_to(mix(hum, buzz, *knocks), dur))
+
+
+def amb_hall():
+    """Act 4: rain on the high windows, and thunder once, a long way off."""
+    dur = 16.0
+    rain = highpass(noise(dur, seed=120), 1800.0)
+    rain = lowpass(rain, 7000.0) * 0.35
+    rng = np.random.default_rng(121)
+    drops = (rng.random(samples(dur)) > 0.9985).astype(float) * rng.uniform(0.2, 1.0, samples(dur))
+    drops = bandpass(drops, 3500.0, q=1.5) * 0.8
+    thunder = lowpass(noise(5.0, seed=122), sweep(500.0, 80.0, 5.0)) * adsr(5.0, 0.4, 1.0, 0.5, 3.0) * 2.2
+    return _seamless(pad_to(mix(rain, drops, delayed(thunder, 6.0)), dur))
+
+
+def loop_lava():
+    """On a lava pit: a low roar and bubbles breaking."""
+    dur = 7.0
+    roar = lowpass(noise(dur, seed=130), 160.0) * 2.5
+    bloops = []
+    rng = np.random.default_rng(131)
+    for at in np.sort(rng.uniform(0.0, dur - 0.5, 14)):
+        f = rng.uniform(70.0, 160.0)
+        bloop = osc("sine", sweep(f, f * 2.2, 0.12), 0.12) * decay(0.12, 0.04)
+        bloops.append(delayed(lowpass(bloop, 800.0) * rng.uniform(0.4, 0.9), float(at)))
+    return _seamless(pad_to(mix(roar, *bloops), dur), fade=0.3)
+
+
+def loop_arc():
+    """On an arc or live copper: a hard buzz, crackling."""
+    dur = 3.0
+    buzz = osc("pulse", 120.0, dur, width=0.2)
+    buzz = bandpass(buzz, 1600.0, q=1.2) * 0.35
+    rng = np.random.default_rng(132)
+    crackle = highpass(noise(dur, seed=133), 3000.0) * (rng.random(samples(dur)) > 0.985) * 1.4
+    return _seamless(mix(buzz, crackle), fade=0.2)
+
+
+RECIPES.update({
+    "amb_wind": amb_wind,
+    "amb_cavern": amb_cavern,
+    "amb_works": amb_works,
+    "amb_hall": amb_hall,
+    "loop_lava": loop_lava,
+    "loop_arc": loop_arc,
+})
+LOOPS.update({"amb_wind", "amb_cavern", "amb_works", "amb_hall", "loop_lava", "loop_arc"})
+LEVELS.update({
+    "amb_wind": 0.5, "amb_cavern": 0.6, "amb_works": 0.5, "amb_hall": 0.55,
+    "loop_lava": 0.6, "loop_arc": 0.45,
+})
+## The beds are long, so they are written as Ogg rather than WAV; the code
+## that plays them sets them looping (`Audio.looping`).
+BEDS = {"amb_wind", "amb_cavern", "amb_works", "amb_hall"}

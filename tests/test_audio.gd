@@ -10,6 +10,7 @@ const SWORD := "res://config/sword.tres"
 const AUDIO_FIELDS: PackedStringArray = [
 	"jump", "land", "flip", "die", "respawn", "brazier", "chest", "kill", "gem", "gem_set",
 	"switch", "gate", "zap", "geyser", "crumble", "roar", "short", "bolt", "pull", "card",
+	"lava_loop", "arc_loop",
 ]
 const SWORD_FIELDS: PackedStringArray = [
 	"throw_sound", "catch_sound", "embed_sound", "recall_sound",
@@ -53,6 +54,7 @@ func test_the_music_and_effects_buses_exist() -> void:
 	var text := FileAccess.get_file_as_string("res://default_bus_layout.tres")
 	check(text.contains("&\"%s\"" % "Music"), "a Music bus")
 	check(text.contains("&\"%s\"" % "Sfx"), "an Sfx bus")
+	check(text.contains("&\"%s\"" % "Ambience"), "an Ambience bus")
 	check(text.contains("AudioEffectLowPassFilter"), "the Music bus can be muffled")
 
 
@@ -81,3 +83,21 @@ func test_the_flight_plays_its_own_music() -> void:
 		check(flight.loop, "and it loops")
 		var act4: ActConfig = load("res://config/act4.tres")
 		check(flight != act4.music, "and it is not the hall's")
+
+
+## Each act has a bed of its own under the music, and the loops that sit on
+## things loop from their own files (`smpl`), as the fly sound does.
+func test_every_act_has_an_ambience_and_the_room_loops_loop() -> void:
+	var beds := {}
+	for n in 4:
+		var act: ActConfig = load("res://config/act%d.tres" % (n + 1))
+		var bed := AUDIO_SCRIPT.looping(act.ambience) as AudioStreamOggVorbis
+		check(bed != null, "act %d has an ambience" % (n + 1))
+		if bed != null:
+			check(bed.loop, "act %d's ambience loops" % (n + 1))
+			beds[bed.resource_path] = true
+	check_eq(beds.size(), 4, "four acts, four beds")
+	var audio: AudioConfig = load(AUDIO)
+	for field in ["lava_loop", "arc_loop"]:
+		var wav := audio.get(field) as AudioStreamWAV
+		check(wav != null and wav.loop_mode == AudioStreamWAV.LOOP_FORWARD, "%s loops" % field)

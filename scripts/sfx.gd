@@ -11,6 +11,25 @@ const CONFIG: AudioConfig = preload("res://config/audio.tres")
 const BUS := &"Sfx"
 
 
+## A loop that sits on `owner` at `at` (its own coordinates) and is heard
+## only near it: a lava pit's roar, an arc's buzz. `reach` widens how far it
+## carries, for a thing as long as a lava pit. It starts with the room and
+## stops with its owner; `playing` is the owner's to switch.
+static func loop_on(owner: Node2D, stream: AudioStream, at: Vector2 = Vector2.ZERO, reach: float = 0.0, playing: bool = true) -> AudioStreamPlayer2D:
+	if stream == null:
+		return null
+	var player := AudioStreamPlayer2D.new()
+	player.stream = stream
+	player.bus = BUS
+	player.position = at
+	player.max_distance = CONFIG.loop_reach + reach
+	player.attenuation = CONFIG.loop_attenuation
+	player.volume_db = CONFIG.loop_volume_db
+	player.autoplay = playing
+	owner.add_child(player)
+	return player
+
+
 ## Plays `stream` at `at`'s position. `jitter` wanders the pitch a little, for
 ## sounds heard so often that one sample would start to grate. A null stream
 ## plays nothing, which is a real state: a bench may not wire every sound.
