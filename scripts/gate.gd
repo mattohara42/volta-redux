@@ -44,6 +44,10 @@ func set_open(open: bool) -> void:
 	# Deferred because a switch reports during physics, and a body cannot change
 	# its own collision mid-step. It lands on the next frame.
 	_shape.set_deferred("disabled", is_open)
+	# Grit shaken out of the slot the bars run in.
+	var box := _shape.shape as RectangleShape2D
+	if box != null and is_inside_tree():
+		Burst.emit(get_parent(), global_position - Vector2(0.0, box.size.y * 0.5), Burst.Kind.DEBRIS)
 	queue_redraw()
 
 

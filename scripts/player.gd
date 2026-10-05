@@ -24,6 +24,9 @@ const HERO_HEIGHT_STEPS: PackedFloat32Array = [28.0, 34.0, 40.0, 46.0, 54.0]
 ## origin, so nothing here scales it.
 const SPRITE_SCENE: PackedScene = preload("res://scenes/hero_sprite.tscn")
 const ATMOSPHERE: AtmosphereConfig = preload("res://config/atmosphere.tres")
+## How fast a landing has to be, px/s, before it kicks up dust. Purely how it
+## looks: a step down off a plinth is not worth a puff, a full jump is.
+const DUST_LANDING_SPEED: float = 260.0
 
 var config: MovementConfig
 ## Null only if `SPRITE_SCENE` fails to load, in which case `_draw` falls back
@@ -236,8 +239,13 @@ func _physics_process(delta: float) -> void:
 		if Locomotion.lands_a_dive(fall_speed, config.dive_fall_speed):
 			_recovery_timer = config.dive_recovery_time
 			_landing_timer = 0.0
+			# A dive lands hard: dust both ways, twice over.
+			Burst.emit(get_parent(), _feet(), Burst.Kind.DUST)
+			Burst.emit(get_parent(), _feet(), Burst.Kind.DEBRIS)
 		else:
 			_landing_timer = _land_pose_duration
+			if fall_speed > DUST_LANDING_SPEED:
+				Burst.emit(get_parent(), _feet(), Burst.Kind.DUST)
 	else:
 		_landing_timer = maxf(_landing_timer - delta, 0.0)
 	_update_sprite()
@@ -357,6 +365,8 @@ func die() -> void:
 	_somersaulting = false
 	_recovery_timer = 0.0
 	deaths += 1
+	# What is left of you going up as embers, from where you were.
+	Burst.emit(get_parent(), global_position, Burst.Kind.EMBERS)
 	_draw_a_message()
 	queue_redraw()
 
@@ -406,6 +416,8 @@ func _step_death(delta: float) -> void:
 
 	if DeathClock.crosses_placement(before, _death_elapsed, hold):
 		_place_at_checkpoint(death_config.restore_swords)
+		# Rekindled at the brazier.
+		Burst.emit(get_parent(), global_position, Burst.Kind.KINDLE)
 
 	if DeathClock.has_control(_death_elapsed, hold, freeze):
 		# The measured figure, not the budgeted one. It overshoots config by up
@@ -447,6 +459,11 @@ func _place_at_checkpoint(restore_swords: bool) -> void:
 	# stopped paying. It is still the hero reaching into the room, which is the
 	# smell that entry is really about, and the entry says what the fix is.
 	get_tree().call_group("mechanisms", "reset", death_config.respawn_freeze)
+
+
+## Where the hero's feet meet the floor, in canvas coordinates.
+func _feet() -> Vector2:
+	return global_position + Vector2(0.0, world.hero_height * 0.5)
 
 
 func is_dead() -> bool:
@@ -523,6 +540,8 @@ func _jump(delta: float) -> void:
 	# Spend both windows, or one press keeps buying jumps all the way up.
 	_coyote_timer = 0.0
 	_buffer_timer = 0.0
+	if is_on_floor():
+		Burst.emit(get_parent(), _feet(), Burst.Kind.DUST)
 
 
 ## Records the apex of each jump so the overlay can answer "did that clear a

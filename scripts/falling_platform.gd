@@ -76,6 +76,9 @@ func _physics_process(delta: float) -> void:
 		_shape.set_deferred("disabled", not PlatformCycle.is_solid(phase))
 		if phase == PlatformCycle.Phase.STEADY:
 			_rest()
+		elif phase == PlatformCycle.Phase.SHAKING or phase == PlatformCycle.Phase.FALLING:
+			# Grit off its underside as it cracks, and again as it lets go.
+			Burst.emit(get_parent(), global_position, Burst.Kind.DEBRIS)
 		queue_redraw()
 	elif phase == PlatformCycle.Phase.SHAKING:
 		queue_redraw()

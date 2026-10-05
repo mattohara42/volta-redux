@@ -222,3 +222,11 @@ static func step_fall(
 ## For the debug overlay, and for a test failure that should say more than "2".
 static func state_name(state: State) -> String:
 	return State.keys()[state].to_lower()
+
+
+## Whether the sword is in the air under its own steam: thrown, coming back or
+## called home. What draws its wake and, in M15, what it sounds like in flight.
+## A sword falling spent is not: gravity has it, and it is not going anywhere
+## the player sent it.
+static func is_airborne(state: State) -> bool:
+	return state == State.FLYING or state == State.RETURNING or state == State.RECALLING

@@ -76,6 +76,7 @@ func _on_area_entered(area: Area2D) -> void:
 ## The dragon overrides this, because it is overpowered and chained rather than
 ## killed, and it is the same dragon you free in Act 4.
 func _defeat() -> void:
+	Burst.emit(get_parent(), global_position, Burst.Kind.CHITIN)
 	defeated.emit(global_position)
 	queue_free()
 

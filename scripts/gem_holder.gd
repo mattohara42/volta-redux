@@ -49,6 +49,7 @@ func _on_body_entered(body: Node2D) -> void:
 	player.gems_held -= 1
 	is_filled = true
 	_network.wire(_a, _b)
+	Burst.emit(get_parent(), global_position, Burst.Kind.ARC_SPARKS)
 	queue_redraw()
 	filled.emit()
 
