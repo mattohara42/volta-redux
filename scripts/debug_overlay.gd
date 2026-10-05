@@ -160,6 +160,11 @@ func _state_of(player: Player) -> String:
 
 
 func _process(_delta: float) -> void:
+	# F1 and F2 are bench tools: a release build neither shows the panel nor
+	# drops a player into the bench cycle (`BACKLOG.md`).
+	if not OS.is_debug_build():
+		_panel.visible = false
+		return
 	if Input.is_action_just_pressed("debug_next_bench"):
 		_cycle_bench()
 		return

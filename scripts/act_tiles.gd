@@ -10,3 +10,7 @@ extends Resource
 @export var wall_tiles: Array[Texture2D] = []
 ## The painted far layer, or null for a plain backdrop until one is painted.
 @export var background: Texture2D = null
+## Where the painting is itself lit (a window, a fire), in one copy of it, art
+## px. Each becomes a light in the room's `LightField`, so the dark draws back
+## around what the painter lit and the painting and the room agree.
+@export var lights: PackedVector2Array = PackedVector2Array()

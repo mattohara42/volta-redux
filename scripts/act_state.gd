@@ -20,12 +20,26 @@ var _carried_gems := -1
 ## because a room with no hero in it (the ending's flight) must still be able
 ## to leave.
 var _leaving_from := ""
+## The run so far, for the end card: deaths, and seconds played while the
+## game was not paused. A new game starts both again.
+var run_deaths := 0
+var run_seconds := 0.0
 
 
 func _ready() -> void:
 	# Launched straight into the first room: that is a new game, and it opens
 	# with the title. Deferred, so the main scene is in the tree to be read.
 	_open_if_new_game.call_deferred()
+
+
+func _process(delta: float) -> void:
+	if not get_tree().paused:
+		run_seconds += delta
+
+
+## Counted by the hero, once per death.
+func record_death() -> void:
+	run_deaths += 1
 
 
 func _open_if_new_game() -> void:
@@ -91,7 +105,7 @@ func _finish(act: ActConfig, swords_held: int, max_swords: int) -> void:
 	var label := Label.new()
 	var index := ACTS.find(act)
 	var ending := ActRoute.is_ending(index, ACTS.size())
-	label.text = act.title + ("\n\nThe end." if ending else "")
+	label.text = act.title + ("\n\nThe end.\n\n" + ActRoute.tally(run_deaths, run_seconds) if ending else "")
 	label.add_theme_font_size_override("font_size", act.card_font_size)
 	label.add_theme_color_override("font_color", Palette.FIRE_HOT)
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -120,4 +134,6 @@ func _finish(act: ActConfig, swords_held: int, max_swords: int) -> void:
 	_carried = -1 if ending else ActRoute.carried(swords_held, max_swords)
 	get_tree().change_scene_to_file(next.rooms[0])
 	if ending:
+		run_deaths = 0
+		run_seconds = 0.0
 		get_tree().root.add_child(OpeningCard.make(next.title, next.card_font_size))

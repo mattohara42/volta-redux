@@ -110,6 +110,11 @@ extends Resource
 ## A gem, lying or set: small and cold.
 @export var light_gem_radius: float = 28.0
 @export_range(0.0, 1.0) var light_gem_strength: float = 0.4
+## A lit window in a painted background (`ActTiles.lights`): the room's dark
+## draws back around it, gently, because the painting already has its glow.
+@export var light_window_radius: float = 56.0
+@export_range(0.0, 1.0) var light_window_strength: float = 0.3
+@export_range(0.0, 1.0) var light_window_flicker: float = 0.1
 ## Volta's staff: his orb lights the throne room cold.
 @export var light_volta_radius: float = 70.0
 @export_range(0.0, 1.0) var light_volta_strength: float = 0.45

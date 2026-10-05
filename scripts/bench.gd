@@ -16,6 +16,8 @@ extends Node2D
 ## Only the benches that place an enemy wire this.
 @export var enemies: EnemyConfig
 
+const ATMOSPHERE: AtmosphereConfig = preload("res://config/atmosphere.tres")
+
 const ROOM_HEIGHT: float = 360.0
 const FLOOR_TOP: float = 320.0
 const SLAB: float = 24.0
@@ -65,6 +67,11 @@ func _dress_the_room() -> void:
 		# caverns, where the air is hot.
 		var ash := act.backdrop == Backdrop.Style.CAVERN
 		add_child(Motes.make(Palette.FIRE_FALLOFF if ash else Palette.STONE_LIT))
+		# Wherever the painting behind the room is lit, the room is too.
+		for point in TileArt.painted_lights(_room_width(), act.tiles):
+			var window := LightSource.point(ATMOSPHERE.light_window_radius, Palette.FIRE_CORE, ATMOSPHERE.light_window_strength, ATMOSPHERE.light_window_flicker)
+			window.position = point
+			add_child(window)
 
 
 func _add_solid(rect: Rect2) -> StaticBody2D:
@@ -431,6 +438,17 @@ func _add_enclosure(width: float) -> void:
 	_add_solid(Rect2(-SLAB, 0.0, SLAB, ROOM_HEIGHT))
 	_add_solid(Rect2(width, 0.0, SLAB, ROOM_HEIGHT))
 	_add_solid(Rect2(-SLAB, -SLAB, width + SLAB * 2.0, SLAB))
+
+
+## How wide the room is, read off the camera bounds it set (`_frame_camera`),
+## for what is laid across the whole room after it is built.
+func _room_width() -> float:
+	for node in get_tree().get_nodes_in_group("player"):
+		for child in node.get_children():
+			var camera := child as Camera2D
+			if camera != null and camera.limit_right < 1000000:
+				return float(camera.limit_right)
+	return get_viewport_rect().size.x
 
 
 ## The room owns the camera bounds, not the player. A player scene carrying one

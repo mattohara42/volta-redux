@@ -14,6 +14,11 @@ extends Resource
 ## The card's lettering, in the same size as the death messages.
 @export var card_font_size: int = 24
 
+## The act's ground and painting (`ActTiles`). Rooms draw from their own copy;
+## this one is for what the act as a whole needs from it, the lights the
+## painting carries.
+@export var tiles: ActTiles
+
 ## The act's loop (`tools/synth/music.py`), played by `Audio` in every room of
 ## the act and carried across from one room to the next without a break.
 @export var music: AudioStream
