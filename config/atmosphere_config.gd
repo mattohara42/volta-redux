@@ -148,3 +148,10 @@ extends Resource
 @export var motes_amount: int = 40
 @export var motes_lifetime: float = 9.0
 @export var motes_drift: float = 4.0
+
+@export_group("Transitions")
+## How long a room takes to dissolve in from the dark as you enter it, and an
+## act's card to come up over the room, seconds. The room is live from its
+## first frame either way.
+@export var room_reveal_seconds: float = 0.35
+@export var card_cover_seconds: float = 0.45

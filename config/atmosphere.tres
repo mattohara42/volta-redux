@@ -72,3 +72,5 @@ motes_drift = 4.0
 light_window_radius = 56.0
 light_window_strength = 0.3
 light_window_flicker = 0.1
+room_reveal_seconds = 0.35
+card_cover_seconds = 0.45

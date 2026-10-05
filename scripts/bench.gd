@@ -55,6 +55,8 @@ func _dress_the_room() -> void:
 	var act: ActConfig = act_state.act_of(scene_file_path)
 	if act == null:
 		return
+	# The room arrives out of the dark rather than cutting in.
+	Dissolve.reveal(self, ATMOSPHERE.room_reveal_seconds)
 	if act.backdrop != Backdrop.Style.NONE:
 		var backdrop := Backdrop.new()
 		backdrop.setup(act.backdrop as Backdrop.Style, hash(scene_file_path))

@@ -9,6 +9,7 @@
 extends Node
 
 const AUDIO: AudioConfig = preload("res://config/audio.tres")
+const ATMOSPHERE: AtmosphereConfig = preload("res://config/atmosphere.tres")
 const ACTS: Array[ActConfig] = [preload("res://config/act1.tres"), preload("res://config/act2.tres"), preload("res://config/act3.tres"), preload("res://config/act4.tres")]
 
 ## Swords to arrive with, or -1 for none carried. Read once, by the next hero.
@@ -24,6 +25,8 @@ var _leaving_from := ""
 ## game was not paused. A new game starts both again.
 var run_deaths := 0
 var run_seconds := 0.0
+## `run_deaths` when the current act began, for the act's own card.
+var _act_start_deaths := 0
 
 
 func _ready() -> void:
@@ -98,14 +101,15 @@ func _finish(act: ActConfig, swords_held: int, max_swords: int) -> void:
 	var card := CanvasLayer.new()
 	card.process_mode = Node.PROCESS_MODE_ALWAYS
 	card.layer = 100
-	var backdrop := ColorRect.new()
-	backdrop.color = Palette.BACKDROP
-	backdrop.set_anchors_preset(Control.PRESET_FULL_RECT)
-	card.add_child(backdrop)
+	# The dark comes up over the frozen room, then the words over the dark.
+	var curtain := Dissolve.cover(card, ATMOSPHERE.card_cover_seconds, card.layer - 1)
 	var label := Label.new()
 	var index := ACTS.find(act)
 	var ending := ActRoute.is_ending(index, ACTS.size())
-	label.text = act.title + ("\n\nThe end.\n\n" + ActRoute.tally(run_deaths, run_seconds) if ending else "")
+	var act_deaths := run_deaths - _act_start_deaths
+	label.text = act.title + ("\n\nThe end.\n\n" + ActRoute.tally(run_deaths, run_seconds) if ending else "\n\n" + ActRoute.act_tally(act_deaths))
+	label.modulate.a = 0.0
+	create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS).tween_property(label, "modulate:a", 1.0, ATMOSPHERE.card_cover_seconds).set_delay(ATMOSPHERE.card_cover_seconds * 0.6)
 	label.add_theme_font_size_override("font_size", act.card_font_size)
 	label.add_theme_color_override("font_color", Palette.FIRE_HOT)
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -128,6 +132,8 @@ func _finish(act: ActConfig, swords_held: int, max_swords: int) -> void:
 	get_tree().paused = true
 	await get_tree().create_timer(act.complete_card_seconds, true).timeout
 	get_tree().paused = false
+	_act_start_deaths = run_deaths
+	curtain.queue_free()
 	card.queue_free()
 	var next := ACTS[ActRoute.act_after(index, ACTS.size())]
 	# A new game after the ending carries nothing in.
@@ -136,4 +142,5 @@ func _finish(act: ActConfig, swords_held: int, max_swords: int) -> void:
 	if ending:
 		run_deaths = 0
 		run_seconds = 0.0
+		_act_start_deaths = 0
 		get_tree().root.add_child(OpeningCard.make(next.title, next.card_font_size))
