@@ -275,10 +275,9 @@ and wrong for a dry cavern: worth a `--dry` flag before Act 2 ships. Drawn
 through `ActTiles` (`assets/art/act2/act2_tiles.tres`). Contact sheet:
 `_experiments/act2_batch1_contact.png`; in a room: `_experiments/act2_mouth_*.png`.
 
-**Act 2 has no background.** It is painted in Gemini and pixelated (*Four
-layers*), which is Matt's time, not credits.
+**Act 2's background is painted** (2026-10-05), and its code `Backdrop` is off.
 
-**Act 2 background, attempt 1 (2026-10-05), sent to Matt.** Built on Act 1's
+**Act 2 background, attempt 1 (2026-10-05), landed first time.** Built on Act 1's
 landed attempt 3: the same M5 preamble (the painting is pixelated afterwards,
 so a painterly source is what `pixelate.py` wants), the same flat stage-
 backdrop framing, the same bay repeated three times. Two things are new for a
@@ -317,11 +316,29 @@ Raw delivery to `assets/art_raw/act2_cavern_bg.*`.
 > only in its brightest touches and never to yellow or white. The image is
 > 2560 by 1440 pixels, aspect ratio 16:9.
 
-What lands then: `tools/pixelate.py` to 360 tall at 24 colours,
-`palette-check.py`, the act's `ActTiles.background`, `backdrop` to 0, and
-every Act 2 room shot before and after. Whether the code `Backdrop`'s nearer
-layer (pillars, ash) should still draw over the painting is judged from those
-shots, not decided ahead of them.
+**Landed.** Flat side view, three bays, stalactites, the glow from below, no
+lava, nothing to stand on. Delivered 1376x768 (ratio 1.792 again). Raw at
+`assets/art_raw/act2_cavern_bg.jpg`, untouched.
+
+**Cropped to its third column before pixelating**, because a room tiles the
+painting with every other copy mirrored and the uncropped right edge, a
+recess, met its own mirror as a symmetrical double arch that read as a
+skull. A column mirrors into a column. `pixelate.py` gained `--crop` for it:
+
+    tools/pixelate.py assets/art_raw/act2_cavern_bg.jpg assets/art/act2/cavern_bg_px.png --crop 0,1103
+
+517x360 at 24 colours; `palette-check.py` 0.00% neutral-dark. It loses to
+the playfield by a wide margin: no pixel as bright as mid stone (Act 1's
+wall has 19%), and its most saturated colour is 0.66 against lava's 0.86.
+No painted light sources, so `ActTiles.lights` stays empty; the room's own
+lava light lifting the wall above each pit is what makes it look lit.
+
+The code `Backdrop`'s nearer layer is not drawn over it: the painting has
+columns of its own, and both would be two sets of pillars. **For Matt's eye
+in play:** the mirror seam reads as a symmetrical column, a little like a
+carved totem, every 517 px; and the warm lower band is where enemies stand,
+so a dark red bat has less contrast against it than against the old purple.
+Rim light carries it in every shot so far.
 
 ## The chained dragon (2026-10-03)
 

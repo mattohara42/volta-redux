@@ -20,6 +20,13 @@ height and lets the width follow (room_m5_wall.gd's BG_SCALE).
 It works best on a painting made of large, simple shapes. Busy detail turns
 to mush at a couple of dozen colours, so ask for big forms in the prompt.
 
+A room tiles its background with every other copy mirrored, so the two
+edges are where the painting meets itself. `--crop X0,X1` keeps only that
+horizontal span of the painting (in the painting's own pixels) before
+anything else, so the edges can be put on something that mirrors well: a
+rock column mirrors into a column, a recess into a face. The raw delivery
+stays untouched.
+
 Run tools/palette-check.py on the result: reducing colours can merge a
 coloured dark into a neutral one.
 
@@ -27,7 +34,7 @@ CLAUDE.md: the destructive mode is the flag. Writing over an existing OUT
 needs --overwrite; the default refuses.
 
 Usage:
-    tools/pixelate.py PAINTING.png OUT.png [--height 360] [--colors 24] [--overwrite]
+    tools/pixelate.py PAINTING.png OUT.png [--height 360] [--colors 24] [--crop X0,X1] [--overwrite]
 
 Requires pillow (tools/requirements.txt).
 """
@@ -53,6 +60,7 @@ def main() -> None:
     parser.add_argument("out", type=Path)
     parser.add_argument("--height", type=int, default=360, help="output height in design px (default: the room's 360)")
     parser.add_argument("--colors", type=int, default=24, help="palette size (default 24)")
+    parser.add_argument("--crop", help="X0,X1: keep only this horizontal span of the painting, in its own pixels")
     parser.add_argument("--overwrite", action="store_true")
     args = parser.parse_args()
 
@@ -61,7 +69,13 @@ def main() -> None:
     if not 2 <= args.colors <= 256:
         sys.exit("pixelate.py: --colors must be 2 to 256")
 
-    result = pixelate(Image.open(args.painting), args.height, args.colors)
+    painting = Image.open(args.painting)
+    if args.crop:
+        x0, x1 = (int(v) for v in args.crop.split(","))
+        if not 0 <= x0 < x1 <= painting.width:
+            sys.exit(f"pixelate.py: --crop must lie within 0,{painting.width}")
+        painting = painting.crop((x0, 0, x1, painting.height))
+    result = pixelate(painting, args.height, args.colors)
     result.save(args.out)
     print(f"wrote {args.out}, {result.width}x{result.height}, {args.colors} colours")
 
