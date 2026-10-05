@@ -39,6 +39,17 @@ var _act_now := 0
 var _act_swords := -1
 ## Off under a tool or the tests (`SavePoint.enabled`).
 var _saving := SavePoint.enabled(OS.get_cmdline_args())
+## The room being played, for `PlayLog`: where, since when, what it has
+## cost, and the swords the hero arrived with. Empty outside an act's rooms.
+var _room_path := ""
+var _room_act := -1
+var _room_seconds := 0.0
+var _room_deaths := 0
+var _room_causes := {}
+var _room_restarts := 0
+var _room_swords_in := 0
+var _room_scene: Node = null
+var _arrived_with := 0
 ## Whether an act is being played at all, so a bench opened and closed never
 ## overwrites the save with a game it was not part of.
 var _in_game := false
@@ -54,11 +65,59 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if not get_tree().paused:
 		run_seconds += delta
+		_room_seconds += delta
+	_follow_the_room()
 
 
-## Counted by the hero, once per death.
-func record_death() -> void:
+## Counted by the hero, once per death, with what killed them.
+func record_death(cause: int = DeathMessages.Cause.ANY) -> void:
 	run_deaths += 1
+	if _room_path != "":
+		_room_deaths += 1
+		_room_causes[cause] = _room_causes.get(cause, 0) + 1
+
+
+## A new room starts a new line in the play log; the same room loaded again
+## (the pause menu's START THE ROOM AGAIN) is a restart of it.
+func _follow_the_room() -> void:
+	var scene := get_tree().current_scene
+	if scene == null or scene == _room_scene:
+		return
+	_room_scene = scene
+	var path := scene.scene_file_path
+	if path == _room_path:
+		_room_restarts += 1
+		return
+	var act := act_of(path)
+	if act == null or not _saving:
+		return
+	_room_path = path
+	_room_act = ACTS.find(act)
+	_room_seconds = 0.0
+	_room_deaths = 0
+	_room_causes = {}
+	_room_restarts = 0
+	_room_swords_in = _arrived_with
+
+
+## Ends the room's line in the play log and appends it.
+func _log_room(swords_out: int, ended: String) -> void:
+	if _room_path == "" or not _saving:
+		return
+	var line := PlayLog.row(
+		Time.get_datetime_string_from_system(false, true), _room_act, _room_path, _room_seconds,
+		_room_deaths, _room_causes, _room_swords_in, swords_out, _room_restarts, ended
+	)
+	_room_path = ""
+	var exists := FileAccess.file_exists(PlayLog.PATH)
+	var file := FileAccess.open(PlayLog.PATH, FileAccess.READ_WRITE if exists else FileAccess.WRITE)
+	if file == null:
+		return
+	if exists:
+		file.seek_end()
+	else:
+		file.store_line(PlayLog.HEADER)
+	file.store_line(line)
 
 
 func _start_or_resume() -> void:
@@ -90,6 +149,7 @@ func _start_or_resume() -> void:
 ## Starts the game again from Act 1 with nothing carried and the run's tally
 ## at nothing, and saves that. The pause menu's NEW GAME, and the ending.
 func new_game() -> void:
+	_log_room(-1, "new game")
 	run_deaths = 0
 	run_seconds = 0.0
 	_carried = -1
@@ -135,12 +195,14 @@ func _write_save() -> void:
 
 ## The tally since the last exit is kept when the game is closed mid-room.
 func _exit_tree() -> void:
+	_log_room(-1, "quit")
 	_write_save()
 
 
 ## What the hero arriving in a room starts with. Called by `Player._ready`.
 func arriving_swords(default: int) -> int:
 	var count := _carried if _carried >= 0 else default
+	_arrived_with = count
 	_carried = -1
 	_leaving_from = ""
 	return count
@@ -158,6 +220,7 @@ func arriving_gems(default: int) -> int:
 func leave_room(room_path: String, swords_held: int, max_swords: int, gems_held: int = 0) -> void:
 	if _leaving_from == room_path:
 		return
+	_log_room(swords_held, "exit")
 	var act := act_of(room_path)
 	if act == null:
 		return

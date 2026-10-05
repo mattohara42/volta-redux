@@ -57,6 +57,12 @@ at the first room of the act you were last in, with the swords you carried
 into it and the run's tally. NEW GAME in the pause menu (Esc) starts over.
 The save is `user://save.cfg`, and the tests and tools never read or write it.
 
+Playing also writes a log, one line per room: how long it took, how often it
+killed you and with what, and the swords in and out (`user://play_log.csv`,
+appended to across sessions). `python3 tools/play_log.py` sums it up per room
+and per act, which is how M14 judges difficulty and length from a real
+playthrough rather than by guessing.
+
 Set `GODOT` if it is somewhere unusual. The script wraps `godot --path .`,
 `godot --path . --import` and `godot --headless --path . --script
 res://tests/run_tests.gd`, so any of those still work typed out in full.
