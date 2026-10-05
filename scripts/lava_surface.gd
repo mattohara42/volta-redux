@@ -31,10 +31,13 @@ func setup(rect: Rect2) -> void:
 	Sfx.loop_on(self, Sfx.CONFIG.lava_loop, Vector2(rect.size.x * 0.5, 0.0), rect.size.x * 0.5)
 	# Its light along the whole surface, so the room's dark draws back from the
 	# pit end to end rather than from one spot over its middle (`LightField`).
-	add_child(LightSource.line(
+	var light := LightSource.line(
 		Vector2.ZERO, Vector2(rect.size.x, 0.0), CONFIG.light_lava_radius,
 		Palette.FIRE_CORE, CONFIG.light_lava_strength
-	))
+	)
+	# Lava breathes a little, so its light does too.
+	light.flicker = CONFIG.light_lava_flicker
+	add_child(light)
 
 
 func _rect(at: Vector2, size: Vector2, shader: Shader) -> ColorRect:

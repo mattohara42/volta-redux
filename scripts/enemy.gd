@@ -119,6 +119,7 @@ func _attach_sprite(scene: PackedScene, state: String) -> void:
 	add_child(_sprite)
 	_sprite_tree = _sprite.get_node("AnimationTree") as AnimationTree
 	_sprite_tree["parameters/playback"].travel(state)
+	RimLight.attach(_sprite.get_node_or_null("AnimatedSprite2D") as CanvasItem, self)
 
 
 ## The art faces right, so a species that walks or looks left mirrors it.

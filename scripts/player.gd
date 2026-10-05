@@ -170,6 +170,8 @@ func _ready() -> void:
 		_sprite = SPRITE_SCENE.instantiate()
 		add_child(_sprite)
 		_anim_tree = _sprite.get_node_or_null("AnimationTree")
+		# Lit along the edge from whatever real light is nearest (not its own).
+		RimLight.attach(_sprite.get_node_or_null("AnimatedSprite2D") as CanvasItem, self)
 		var anim_player := _sprite.get_node_or_null("AnimationPlayer") as AnimationPlayer
 		if anim_player != null and anim_player.has_animation("land"):
 			_land_pose_duration = anim_player.get_animation("land").length
