@@ -3,7 +3,8 @@
 ## underneath it from the first frame, so a player who already knows the game
 ## is running before the title has gone.
 ##
-## Shown by `ActState` when a game starts, at launch and after the ending.
+## Shown by `ActState` when a game starts: at launch, in the act the save
+## picks up in, after the ending, and on the pause menu's NEW GAME.
 ## A room loaded any other way (a bench, F2, the capture tool) never shows it.
 class_name OpeningCard
 extends CanvasLayer

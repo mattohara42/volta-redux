@@ -1,6 +1,6 @@
 ## The pause menu, an autoload (`Pause`). Escape or a pad's Start freezes the
 ## room and offers: go on, start the room again, the music's and the effects'
-## levels (kept between sessions by `Audio`), and leave.
+## levels (kept between sessions by `Audio`), a new game, and leave.
 ##
 ## Every colour is `Palette`'s and every box is drawn here, because Godot's
 ## default theme is neutral grey, which `ART_DIRECTION.md` does not allow.
@@ -13,11 +13,15 @@ const LAYER := 95
 const LEVEL_STEPS := 10
 const TITLE_SIZE := 28
 const ITEM_SIZE := 14
+const NEW_GAME := "NEW GAME"
+## A new game throws the saved one away, so it asks twice.
+const NEW_GAME_SURE := "NEW GAME? PRESS AGAIN"
 
 var is_open := false
 var _box: VBoxContainer
 var _music: Button
 var _effects: Button
+var _new_game: Button
 
 
 func _ready() -> void:
@@ -45,6 +49,8 @@ func _ready() -> void:
 	_item("START THE ROOM AGAIN", _restart)
 	_music = _item("", func() -> void: _step(Audio.MUSIC_BUS, 1))
 	_effects = _item("", func() -> void: _step(Audio.SFX_BUS, 1))
+	_new_game = _item(NEW_GAME, _ask_new_game)
+	_new_game.focus_exited.connect(func() -> void: _new_game.text = NEW_GAME)
 	_item("LEAVE", func() -> void: get_tree().quit())
 	_refresh()
 
@@ -96,6 +102,7 @@ func open() -> void:
 	is_open = true
 	visible = true
 	get_tree().paused = true
+	_new_game.text = NEW_GAME
 	_refresh()
 	(_box.get_child(1) as Control).grab_focus()
 
@@ -109,6 +116,15 @@ func close() -> void:
 func _restart() -> void:
 	close()
 	get_tree().reload_current_scene()
+
+
+func _ask_new_game() -> void:
+	if _new_game.text != NEW_GAME_SURE:
+		_new_game.text = NEW_GAME_SURE
+		return
+	_new_game.text = NEW_GAME
+	close()
+	ActState.new_game()
 
 
 ## Left and right on a level change it, the way a pad expects a setting to.
