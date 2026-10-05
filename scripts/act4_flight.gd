@@ -5,6 +5,7 @@ class_name Act4Flight
 extends Node2D
 
 const FLIGHT: FlightConfig = preload("res://config/flight.tres")
+const FLIGHT_MUSIC: AudioStream = preload("res://assets/audio/music/flight.ogg")
 const TILES: ActTiles = preload("res://assets/art/act4/act4_tiles.tres")
 const ROOM_WIDTH: float = 2400.0
 const CEILING: float = 32.0
@@ -24,6 +25,9 @@ const GAPS: Array[Vector3] = [
 	Vector3(1760.0, 170.0, 300.0),
 ]
 
+## The ride out has its own music, the only major key in the game, rather
+## than Act 4's (`Audio.music_for` reads this).
+var music: AudioStream = FLIGHT_MUSIC
 var _rider: DragonRider
 
 

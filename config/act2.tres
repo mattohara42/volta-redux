@@ -1,6 +1,7 @@
-[gd_resource type="Resource" script_class="ActConfig" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="ActConfig" load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://config/act_config.gd" id="1_act"]
+[ext_resource type="AudioStream" path="res://assets/audio/music/act2.ogg" id="2_music"]
 
 [resource]
 script = ExtResource("1_act")
@@ -11,3 +12,4 @@ card_font_size = 24
 ambient_light = Color(0.56, 0.46, 0.66, 1)
 ceiling_dim = 0.3
 backdrop = 1
+music = ExtResource("2_music")
