@@ -74,8 +74,8 @@ func test_every_act_has_music_that_loops() -> void:
 	check_eq(tracks.size(), 4, "four acts, four tracks")
 
 
-## The ride out is the one room that plays its own track, and it loops in case
-## the flight takes longer than the track does.
+## The ride out names its own track, and it loops in case the flight takes
+## longer than the track does.
 func test_the_flight_plays_its_own_music() -> void:
 	var flight := AUDIO_SCRIPT.looping(Act4Flight.FLIGHT_MUSIC) as AudioStreamOggVorbis
 	check(flight != null, "the flight has music")
@@ -83,6 +83,26 @@ func test_the_flight_plays_its_own_music() -> void:
 		check(flight.loop, "and it loops")
 		var act4: ActConfig = load("res://config/act4.tres")
 		check(flight != act4.music, "and it is not the hall's")
+
+
+## Acts 2 to 4 each end in a boss with a loop of its own: in the boss's room,
+## that room of that act, never a room the act does not have. Everywhere else
+## the act's own track carries on.
+func test_each_boss_room_plays_its_own_loop() -> void:
+	var bosses := {}
+	for n in [2, 3, 4]:
+		var act: ActConfig = load("res://config/act%d.tres" % n)
+		check(act.rooms.has(act.boss_room), "act %d's boss room is one of its rooms" % n)
+		var boss := AUDIO_SCRIPT.looping(act.boss_music) as AudioStreamOggVorbis
+		check(boss != null and boss.loop, "act %d's boss has a loop" % n)
+		check(boss != act.music, "and it is not the act's own")
+		check_eq(AUDIO_SCRIPT.track_for(act, act.boss_room), act.boss_music, "act %d's boss room plays it" % n)
+		check_eq(AUDIO_SCRIPT.track_for(act, act.rooms[0]), act.music, "act %d's first room plays the act's" % n)
+		bosses[act.boss_music] = true
+	check_eq(bosses.size(), 3, "three bosses, three tracks")
+	var act1: ActConfig = load("res://config/act1.tres")
+	check(act1.boss_music == null, "Act 1 ends at a gate, not a boss")
+	check_eq(AUDIO_SCRIPT.track_for(act1, act1.rooms[act1.rooms.size() - 1]), act1.music, "so its last room plays the act's")
 
 
 ## Each act has a bed of its own under the music, and the loops that sit on

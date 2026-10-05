@@ -7,6 +7,12 @@ minor, a sequencer that never stops, metal for drums. Act 4 is Volta's hall,
 C minor, organ and choir and timpani. The flight is the only major key in the
 game, and the only time the drums run.
 
+Each boss room has its own loop in its act's key, built from its act's
+material and pushed harder: the dragon is Act 2's riff at a gallop with a
+roar in it, the generator is Act 3's sequencer gone haywire, a semitone
+alarm over it, and Volta is Act 4's hall with an organ toccata that never
+draws breath.
+
 Written out note by note rather than generated, so a bar can be found and
 changed. A note is (pitch, beats); "-" is a rest.
 """
@@ -248,10 +254,184 @@ def flight():
     return s.render(room=1.0)
 
 
+# ---------------------------------------------------------------- The dragon
+
+def dragon():
+    """Act 2's lair: the caverns' riff at a gallop, a roar on the tritone."""
+    s = Song(bpm=100, bars=24)
+    total = s.length + 1.0
+    s.put(ins.rumble(total, 1.0, seed=21), 0.0, gain=0.55, send=0.2)
+    riff = [("E2", 0.5), ("E2", 0.25), ("E2", 0.25), ("F2", 0.5), ("E2", 0.5),
+            ("E2", 0.5), ("E2", 0.25), ("E2", 0.25), ("G2", 0.5), ("F2", 0.5)]
+    riff_roar = [("E2", 0.5), ("E2", 0.25), ("E2", 0.25), ("F2", 0.5), ("E2", 0.5),
+                 ("Bb1", 1.0), ("A1", 0.5), ("Bb1", 0.5)]
+    chords = [["E3", "G3", "B3"], ["F3", "A3", "C4"], ["E3", "G3", "B3"], ["D3", "F3", "A3"]]
+    for bar in range(1, 25):
+        play_line(s, ins.growl, riff_roar if bar % 4 == 0 else riff, bar, gain=0.42, pan=-0.1, send=0.12, gap=0.85)
+        # The gallop: a boom on one and three, toms running into each.
+        s.put(ins.timpani(hz("E2"), 1.0), s.at(bar, 0.0), gain=0.6, send=0.3)
+        s.put(ins.timpani(hz("E2"), 0.8), s.at(bar, 2.0), gain=0.5, send=0.3)
+        for beat in (0.75, 1.5, 2.75, 3.5):
+            s.put(ins.tom(hz("E2"), 0.7), s.at(bar, beat), gain=0.32, send=0.2)
+        # The forge, now a backbeat.
+        s.put(ins.anvil(0.8, seed=bar), s.at(bar, 1.0), gain=0.18, pan=0.35, send=0.4)
+        s.put(ins.snare(0.8, seed=bar), s.at(bar, 3.0), gain=0.3, send=0.25)
+        # Brass stabs on the chord, the last one pushed ahead of the bar.
+        tones = chords[(bar - 1) % 4]
+        if bar > 4:
+            for f in chord(tones):
+                s.put(ins.brass(f, s.beats(0.4)), s.at(bar, 0.0), gain=0.14, pan=0.2, send=0.3)
+                s.put(ins.brass(f, s.beats(0.4)), s.at(bar, 3.5), gain=0.12, pan=0.2, send=0.3)
+        if bar % 8 == 0:
+            # The toms are pitched, so the fill walks down the mode.
+            for k, note in enumerate(["B2", "A2", "G2", "F2", "E2", "D2", "C2", "B1"]):
+                s.put(ins.tom(hz(note), 0.6 + 0.05 * k), s.at(bar, 2.0 + k * 0.25), gain=0.4, send=0.25)
+            s.put(ins.riser(s.beats(2), 0.5, seed=bar), s.at(bar, 2.0), gain=0.25, send=0.4)
+    for bar in range(1, 25, 4):
+        s.put(ins.pad(chord(["E2", "B2", "F3"]), s.beats(16) + 0.5, bright=0.7, seed=bar), s.at(bar), gain=0.2, send=0.6)
+    # The roar: up a tritone and falling back, in the brass and the choir.
+    roar = [("E4", 1), ("Bb4", 2), ("A4", 0.5), ("G4", 0.5), ("F4", 2), ("E4", 2)]
+    for bar in (5, 13, 21):
+        play_line(s, ins.brass, roar, bar, gain=0.3, pan=0.0, send=0.4)
+    # Act 2's melody, driven: the choir carries it through the middle.
+    melody = [
+        ("E4", 1), ("F4", 0.5), ("G4", 0.5), ("F4", 1.5), ("E4", 0.5),
+        ("D4", 1), ("E4", 0.5), ("F4", 0.5), ("E4", 2),
+        ("G4", 1), ("A4", 0.5), ("Bb4", 0.5), ("A4", 1), ("G4", 0.5), ("F4", 0.5),
+        ("G4", 1), ("F4", 0.5), ("E4", 0.5), ("D4", 0.5), ("F4", 0.5), ("E4", 1),
+    ]
+    play_line(s, ins.choir, melody, 9, gain=0.3, pan=0.15, send=0.55, gap=1.0)
+    play_line(s, ins.choir, melody, 11, gain=0.3, pan=-0.15, send=0.55, gap=1.0)
+    high = [(p[:-1] + str(int(p[-1]) + 1), b) for p, b in melody]
+    play_line(s, ins.brass, melody, 17, gain=0.24, pan=-0.2, send=0.4)
+    play_line(s, ins.choir, high, 17, gain=0.2, pan=0.25, send=0.6, gap=1.0)
+    play_line(s, ins.brass, melody, 19, gain=0.24, pan=-0.2, send=0.4)
+    play_line(s, ins.choir, high, 19, gain=0.2, pan=0.25, send=0.6, gap=1.0)
+    return s.render(room=1.3, wet=1.0)
+
+
+# ---------------------------------------------------------------- The generator
+
+def generator():
+    """Act 3's boss: the works' sequencer gone haywire, an alarm a semitone
+    wide over it, and the floor pumping."""
+    s = Song(bpm=128, bars=32)
+    prog = [
+        ("A2", "C3", "E3"), ("A2", "C3", "E3"), ("Bb2", "D3", "F3"), ("A2", "C3", "E3"),
+        ("F2", "A2", "C3"), ("G2", "B2", "D3"), ("E2", "G#2", "B2"), ("E2", "G#2", "B2"),
+    ]
+    for bar in range(1, 33):
+        root, third, fifth = prog[(bar - 1) % 8]
+        tones = [hz(root) * 2, hz(fifth) * 2, hz(root) * 4, hz(third) * 4, hz(fifth) * 4]
+        cut = 1100.0 + 1900.0 * (0.5 - 0.5 * np.cos(2 * np.pi * ((bar - 1) % 4) / 4.0))
+        arpeggio(s, ins.seq, tones, bar, 4, 0.25, [0, 2, 1, 3, 2, 4, 3, 2, 0, 2, 4, 3, 1, 2, 3, 4], gain=0.2, pan=-0.25, send=0.2, cutoff=cut, res=4.0)
+        # The floor: octaves pumping on the eighths.
+        for e in range(8):
+            f = hz(root) * (2.0 if e % 2 else 1.0)
+            s.put(ins.bass(f, s.beats(0.35)), s.at(bar, e * 0.5), gain=0.36, send=0.04)
+        for beat in range(4):
+            s.put(ins.kick(0.9), s.at(bar, beat), gain=0.52, send=0.04)
+        for k in range(16):
+            if k % 4 == 2:
+                s.put(ins.hat(0.7, open_=True, seed=bar * 16 + k), s.at(bar, k * 0.25), gain=0.18, pan=0.3, send=0.05)
+            elif k % 2:
+                s.put(ins.hat(0.5, seed=bar * 16 + k), s.at(bar, k * 0.25), gain=0.16, pan=0.35, send=0.03)
+        s.put(ins.clank(1.0, seed=bar), s.at(bar, 1.0), gain=0.34, pan=-0.25, send=0.2)
+        s.put(ins.clank(1.0, seed=bar + 77), s.at(bar, 3.0), gain=0.34, pan=0.25, send=0.2)
+        if bar % 2 == 0:
+            s.put(ins.clank(0.6, seed=bar + 150), s.at(bar, 3.75), gain=0.22, pan=0.0, send=0.2)
+        if bar % 8 == 0:
+            s.put(ins.riser(s.beats(4), 0.7, seed=bar), s.at(bar), gain=0.3, send=0.35)
+        if bar % 8 == 1:
+            s.put(ins.anvil(1.0, seed=bar), s.at(bar), gain=0.28, send=0.5)
+    # The alarm: a semitone, high and thin, through the middle sixteen.
+    for bar in range(9, 25):
+        for half in range(2):
+            s.put(ins.glass(hz("E6"), s.beats(0.9)), s.at(bar, half * 2.0), gain=0.1, pan=0.4, send=0.35)
+            s.put(ins.glass(hz("F6"), s.beats(0.9)), s.at(bar, half * 2.0 + 1.0), gain=0.1, pan=0.4, send=0.35)
+    pads = [["A3", "C4", "E4"], ["A3", "C4", "E4"], ["Bb3", "D4", "F4"], ["A3", "C4", "E4"],
+            ["F3", "A3", "C4"], ["G3", "B3", "D4"], ["E3", "G#3", "B3"], ["E3", "G#3", "B3"]]
+    for bar in range(1, 33):
+        s.put(ins.pad(chord(pads[(bar - 1) % 8]), s.beats(4), bright=1.4, seed=bar), s.at(bar), gain=0.1, send=0.5)
+    melody = [
+        ("E5", 0.5), ("E5", 0.5), ("A5", 1), ("G5", 0.5), ("F5", 0.5), ("E5", 1),
+        ("F5", 0.5), ("F5", 0.5), ("Bb5", 1), ("A5", 0.5), ("G5", 0.5), ("F5", 1),
+        ("E5", 0.5), ("D5", 0.5), ("C5", 0.5), ("D5", 0.5), ("E5", 2),
+        ("C5", 0.5), ("D5", 0.5), ("E5", 0.5), ("F5", 0.5), ("D5", 1), ("C5", 1),
+        ("A4", 0.5), ("C5", 0.5), ("F5", 1), ("E5", 0.5), ("D5", 0.5), ("C5", 1),
+        ("B4", 0.5), ("D5", 0.5), ("G5", 1), ("F5", 0.5), ("E5", 0.5), ("D5", 1),
+        ("E5", 1), ("G#5", 1), ("B5", 1), ("E6", 1),
+        ("D6", 1), ("B5", 1), ("G#5", 1), ("E5", 1),
+    ]
+    play_line(s, ins.lead, melody, 17, gain=0.26, pan=0.2, send=0.3, width=0.3, cutoff=3200.0)
+    play_line(s, ins.lead, melody, 25, gain=0.26, pan=0.2, send=0.3, width=0.3, cutoff=3200.0)
+    low = [(p[:-1] + str(int(p[-1]) - 1), b) for p, b in melody]
+    play_line(s, ins.brass, low, 25, gain=0.18, pan=-0.2, send=0.3)
+    return s.render(room=0.8)
+
+
+# ---------------------------------------------------------------- Volta
+
+def volta():
+    """The throne: Act 4's hall with an organ toccata that never draws breath,
+    the choir full, the bell's three notes made into Volta's theme."""
+    s = Song(bpm=92, bars=32)
+    prog = [
+        (["C3", "Eb3", "G3"], "C2"), (["C3", "Eb3", "G3"], "C2"),
+        (["Ab2", "C3", "Eb3"], "Ab1"), (["F2", "Ab2", "C3"], "F1"),
+        (["G2", "B2", "D3"], "G1"), (["G2", "B2", "F3"], "G1"),
+        (["C3", "Eb3", "G3"], "C2"), (["Bb2", "D3", "F3"], "Bb1"),
+        (["Ab2", "C3", "Eb3"], "Ab1"), (["F2", "Ab2", "C3"], "F1"),
+        (["Db3", "F3", "Ab3"], "Db2"), (["G2", "B2", "D3"], "G1"),
+        (["C3", "Eb3", "G3"], "C2"), (["Ab2", "C3", "Eb3"], "Ab1"),
+        (["G2", "B2", "D3"], "G1"), (["G2", "B2", "F3"], "G1"),
+    ]
+    for rep in range(2):
+        for i, (tones, root) in enumerate(prog):
+            bar = 1 + rep * 16 + i
+            fs = chord(tones)
+            # The toccata: the chord turned over in sixteenths, an octave up,
+            # the top note struck like a mordent.
+            run = [fs[2] * 2, fs[1] * 2, fs[2] * 2, fs[0] * 2, fs[1] * 2, fs[0] * 2, fs[2], fs[0] * 2]
+            arpeggio(s, ins.organ, run, bar, 4, 0.25, list(range(8)), gain=0.13, pan=-0.15, send=0.45)
+            for f in fs:
+                s.put(ins.organ(f, s.beats(4) * 0.97), s.at(bar), gain=0.1, send=0.55)
+            # The pedal: the root in eighths, low.
+            for e in range(8):
+                s.put(ins.organ(hz(root), s.beats(0.45)), s.at(bar, e * 0.5), gain=0.14 if e % 2 else 0.2, send=0.3)
+            s.put(ins.choir(fs[0] * 2, s.beats(4), seed=bar), s.at(bar), gain=0.13, pan=-0.3, send=0.7)
+            s.put(ins.choir(fs[2] * 2, s.beats(4), seed=bar + 70), s.at(bar), gain=0.11, pan=0.3, send=0.7)
+            # Timpani on one and three, toms answering.
+            s.put(ins.timpani(hz(root) * 2, 1.0), s.at(bar, 0.0), gain=0.55, send=0.35)
+            s.put(ins.timpani(hz(root) * 2, 0.75), s.at(bar, 2.0), gain=0.42, send=0.35)
+            s.put(ins.tom(fs[2] / 2.0, 0.7), s.at(bar, 1.5), gain=0.3, send=0.25)
+            s.put(ins.tom(hz(root) * 2.0, 0.7), s.at(bar, 3.5), gain=0.3, send=0.25)
+            if i % 4 == 3:
+                for k in range(8):
+                    s.put(ins.timpani(hz(root) * 2, 0.3 + 0.08 * k), s.at(bar, 2.0 + k * 0.25), gain=0.32, send=0.35)
+    # Volta's theme: the bell's falling three, stated and then climbing.
+    for bar in range(1, 33, 4):
+        play_line(s, ins.bell, [("G5", 1), ("Eb5", 1), ("C5", 2)], bar, gain=0.15, pan=0.35, send=0.6)
+    theme = [
+        ("G4", 1), ("Eb4", 1), ("C4", 2), ("G4", 1), ("Ab4", 1), ("G4", 2),
+        ("Ab4", 1), ("F4", 1), ("C4", 2), ("F4", 1), ("G4", 1), ("Ab4", 2),
+        ("G4", 1), ("B4", 1), ("D5", 2), ("F5", 1.5), ("Eb5", 0.5), ("D5", 2),
+        ("C5", 1), ("Eb5", 1), ("G5", 2), ("F5", 1), ("D5", 1), ("B4", 2),
+    ]
+    play_line(s, ins.brass, theme, 9, gain=0.3, pan=0.0, send=0.45)
+    high = [(p[:-1] + str(int(p[-1]) + 1), b) for p, b in theme]
+    play_line(s, ins.brass, theme, 21, gain=0.24, pan=-0.15, send=0.45)
+    play_line(s, ins.choir, high, 21, gain=0.22, pan=0.2, send=0.65, gap=1.0)
+    return s.render(room=1.5, wet=1.0)
+
+
 TRACKS = {
     "act1": act1,
     "act2": act2,
     "act3": act3,
     "act4": act4,
     "flight": flight,
+    "dragon": dragon,
+    "generator": generator,
+    "volta": volta,
 }

@@ -1,9 +1,10 @@
-[gd_resource type="Resource" script_class="ActConfig" load_steps=5 format=3]
+[gd_resource type="Resource" script_class="ActConfig" load_steps=6 format=3]
 
 [ext_resource type="Script" path="res://config/act_config.gd" id="1_act"]
 [ext_resource type="Resource" path="res://assets/art/act2/act2_tiles.tres" id="3_tiles"]
 [ext_resource type="AudioStream" path="res://assets/audio/sfx/amb_cavern.ogg" id="4_ambience"]
 [ext_resource type="AudioStream" path="res://assets/audio/music/act2.ogg" id="2_music"]
+[ext_resource type="AudioStream" path="res://assets/audio/music/dragon.ogg" id="5_boss"]
 
 [resource]
 script = ExtResource("1_act")
@@ -17,3 +18,5 @@ backdrop = 1
 music = ExtResource("2_music")
 tiles = ExtResource("3_tiles")
 ambience = ExtResource("4_ambience")
+boss_room = "res://scenes/rooms/act2_lair.tscn"
+boss_music = ExtResource("5_boss")

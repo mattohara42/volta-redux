@@ -4,8 +4,9 @@
 ## dead. The effects themselves are played by whatever makes them (`Sfx`).
 ##
 ## Both follow the room: whatever the current scene's act names
-## (`ActConfig.music`, `ActConfig.ambience`), unless the room names its own
-## music in a `music` property, as the ending's flight does. Walking from one
+## (`ActConfig.music`, `ActConfig.ambience`, and `boss_music` in the act's boss
+## room), unless the room names its own music in a `music` property, as the
+## ending's flight does. Walking from one
 ## room of an act to the next leaves both running, because neither changed.
 extends Node
 
@@ -125,8 +126,17 @@ func music_for(scene: Node) -> AudioStream:
 	var own: Variant = scene.get("music")
 	if own is AudioStream:
 		return own
-	var act := _act_of(scene)
-	return act.music if act != null else null
+	return track_for(_act_of(scene), scene.scene_file_path)
+
+
+## The act's track for the room at `room_path`: the boss's in the boss's room,
+## the act's own everywhere else.
+static func track_for(act: ActConfig, room_path: String) -> AudioStream:
+	if act == null:
+		return null
+	if act.boss_music != null and room_path == act.boss_room:
+		return act.boss_music
+	return act.music
 
 
 ## The bed under a room: its act's.
