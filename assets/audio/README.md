@@ -1,0 +1,39 @@
+# Audio
+
+Every sound in the game is rendered from code by `tools/synth/` (Python,
+numpy and scipy, plus ffmpeg for the Ogg). There are no samples and no
+recordings, the same way the lava and the arcs are shaders rather than
+drawings (`CLAUDE.md`: atmosphere is code).
+
+```
+python3 tools/synth/render.py sfx              # assets/audio/sfx/*.wav
+python3 tools/synth/render.py music            # assets/audio/music/*.ogg
+python3 tools/synth/render.py sfx gem --overwrite
+```
+
+An existing file is left alone unless `--overwrite` is passed. Rendering is
+deterministic, every noise source seeded, so an overwritten file only differs
+when its recipe did.
+
+## Where each one is decided
+
+| what | recipe | wired in |
+|---|---|---|
+| the sword's eight (throw, catch, embed, recall, the fly loop, break, clatter, fry) | `tools/synth/sfx.py` | `config/sword.tres` |
+| everything else that makes a noise | `tools/synth/sfx.py` | `config/audio.tres` |
+| how loud each one peaks | `sfx.LEVELS` | rendered in |
+| the two buses' levels, the death muffle | | `config/audio.tres` |
+
+**The sword's four state sounds are built to differ in every way an ear sorts
+sounds** (`BUILD_PLAN.md` M15): the throw is noise sweeping up and away, the
+catch a short bright ring, the embed a low knock with the blade humming after
+it, the recall a rising shimmer. The fly loop plays for as long as a sword is
+in the air and the engine pans it with the sword, which is what lets you know
+where your sword is with the screen dimmed.
+
+**Nobody has listened to these yet.** They were designed and checked by
+drawing them (`tools/synth/spectro.py` draws the waveform over a
+spectrogram) and by measuring them (`tools/synth/chroma.py` checks a rendered
+track's chords against its score), not by ear. Every recipe is a short
+function and every level is one number, so fixing one that sounds wrong is a
+small edit and a re-render.

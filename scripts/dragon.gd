@@ -121,6 +121,9 @@ func _update() -> void:
 	phase = DragonBreath.phase_at(
 		_elapsed, _config.dragon_charge_time, _config.dragon_breathe_time, _config.dragon_rest_time
 	)
+	if phase != was and phase == DragonBreath.Phase.CHARGE and _elapsed > 0.0:
+		# The tell is heard as well as seen: it draws breath, then lets go.
+		Sfx.play(self, Sfx.CONFIG.roar)
 	if DragonBreath.is_lethal(phase):
 		for body in _breath.get_overlapping_bodies():
 			var player := body as Player

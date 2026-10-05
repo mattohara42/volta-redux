@@ -79,6 +79,8 @@ func _physics_process(delta: float) -> void:
 		elif phase == PlatformCycle.Phase.SHAKING or phase == PlatformCycle.Phase.FALLING:
 			# Grit off its underside as it cracks, and again as it lets go.
 			Burst.emit(get_parent(), global_position, Burst.Kind.DEBRIS)
+			if phase == PlatformCycle.Phase.SHAKING:
+				Sfx.play(self, Sfx.CONFIG.crumble, true)
 		queue_redraw()
 	elif phase == PlatformCycle.Phase.SHAKING:
 		queue_redraw()

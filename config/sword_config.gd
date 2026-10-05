@@ -61,12 +61,18 @@ extends Resource
 @export_group("Sound")
 ## BUILD_PLAN.md M15: "The throw, the catch, the embed and the recall need
 ## four distinguishable sounds, because the sword's state is information the
-## player needs without looking." Placeholder synthesized tones for now
-## (`tools/` has no audio pipeline yet; ANIMATION.md's rule that a sound and
-## its frame come off the same signal can be true architecturally well before
-## M15 supplies the real assets, so it is wired here rather than waiting).
-## `assets/audio/sword/` documents how each one was generated.
+## player needs without looking." Rendered from code by `tools/synth/`, each
+## built to differ from the other three in every way an ear sorts sounds;
+## `assets/audio/README.md` says how.
 @export var throw_sound: AudioStream
 @export var catch_sound: AudioStream
 @export var embed_sound: AudioStream
 @export var recall_sound: AudioStream
+## The rest of what a sword says, rendered with the four above
+## (`tools/synth/`). `fly_sound` loops for as long as the sword is in the
+## air and the engine pans it with the sword, which is how M15's done-when
+## (play with the screen dimmed and still know where your sword is) is met.
+@export var fly_sound: AudioStream
+@export var break_sound: AudioStream
+@export var clatter_sound: AudioStream
+@export var fry_sound: AudioStream

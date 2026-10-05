@@ -35,6 +35,7 @@ func _on_body_entered(body: Node2D) -> void:
 		player.top_up_swords(CONFIG.chest_fill)
 		if player.swords_held > before:
 			Burst.emit(get_parent(), global_position + Vector2(0.0, -SIZE.y), Burst.Kind.SPARKLE)
+			Sfx.play(self, Sfx.CONFIG.chest)
 
 
 func _draw() -> void:

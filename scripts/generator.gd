@@ -87,6 +87,8 @@ func _physics_process(delta: float) -> void:
 	if phase != _phase:
 		_phase = phase
 		_show_arc(phase == GeneratorCycle.Phase.STRIKING)
+		if phase == GeneratorCycle.Phase.STRIKING:
+			Sfx.play(self, Sfx.CONFIG.zap)
 		queue_redraw()
 	if player == null:
 		return
@@ -133,6 +135,7 @@ func _on_loop_closed(held: bool) -> void:
 	Burst.emit(get_parent(), global_position, Burst.Kind.ARC_SPARKS)
 	Burst.emit(get_parent(), global_position, Burst.Kind.SPARKS)
 	Shake.kick(self, SHORT_SHAKE, SHORT_SHAKE_SECONDS)
+	Sfx.play(self, Sfx.CONFIG.short)
 	# Burnt out, through its AnimationTree like every state.
 	_sprite_tree()["parameters/playback"].travel("dead")
 	queue_redraw()

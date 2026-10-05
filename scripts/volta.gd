@@ -76,6 +76,11 @@ func _physics_process(delta: float) -> void:
 		_travel("idle" if phase == GeneratorCycle.Phase.REST else "cast")
 		if phase == GeneratorCycle.Phase.STRIKING and _pulling():
 			_pull()
+			Sfx.play(self, Sfx.CONFIG.pull)
+		elif phase == GeneratorCycle.Phase.STRIKING:
+			Sfx.play(self, Sfx.CONFIG.zap)
+		elif phase == GeneratorCycle.Phase.WARNING and not _pulling():
+			Sfx.play(self, Sfx.CONFIG.bolt)
 		_show_bolt(phase == GeneratorCycle.Phase.STRIKING and not _pulling())
 		queue_redraw()
 	if player == null:

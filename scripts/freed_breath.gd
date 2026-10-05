@@ -21,6 +21,7 @@ func setup(from: Vector2, to: Vector2) -> void:
 	# Fire is light, so it draws over the room's dark (`LightField`), and it
 	# lights the throne room for as long as it lasts.
 	LightField.emissive(self)
+	Sfx.play(self, Sfx.CONFIG.roar)
 	add_child(LightSource.line(from, to, ATMOSPHERE.light_breath_radius, Palette.FIRE_CORE, ATMOSPHERE.light_breath_strength))
 
 

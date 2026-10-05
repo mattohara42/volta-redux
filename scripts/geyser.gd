@@ -105,6 +105,7 @@ func _physics_process(delta: float) -> void:
 	if phase != was and phase == GeyserCycle.Phase.ERUPTING:
 		# Spray thrown off the head of the jet as it arrives.
 		Burst.emit(get_parent(), global_position - Vector2(0.0, _size.y * 0.5), Burst.Kind.SPRAY)
+		Sfx.play(self, Sfx.CONFIG.geyser, true)
 
 
 ## Back to the first frame of the swell, with the freeze the respawn still owes

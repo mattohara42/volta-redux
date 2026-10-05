@@ -74,6 +74,7 @@ func _on_body_entered(body: Node2D) -> void:
 	_add_light()
 	var bowl := global_position + Vector2(0.0, -POST_HEIGHT - BOWL_HEIGHT)
 	Burst.emit(get_parent(), bowl, Burst.Kind.FLARE)
+	Sfx.play(self, Sfx.CONFIG.brazier)
 	add_child(Embers.rising(Vector2(0.0, -POST_HEIGHT - BOWL_HEIGHT - FLAME_HEIGHT * 0.5), BOWL_WIDTH * 0.3))
 	player.light_checkpoint(global_position)
 	queue_redraw()

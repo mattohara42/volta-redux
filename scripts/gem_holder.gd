@@ -50,6 +50,7 @@ func _on_body_entered(body: Node2D) -> void:
 	is_filled = true
 	_network.wire(_a, _b)
 	Burst.emit(get_parent(), global_position, Burst.Kind.ARC_SPARKS)
+	Sfx.play(self, Sfx.CONFIG.gem_set)
 	queue_redraw()
 	filled.emit()
 
