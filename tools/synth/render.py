@@ -42,7 +42,7 @@ def render_sfx(names, overwrite):
         if not _writable(path, overwrite):
             continue
         samples = sfx.RECIPES[name]()
-        write_wav(path, normalise(samples, sfx.LEVELS.get(name, 0.8)))
+        write_wav(path, normalise(samples, sfx.LEVELS.get(name, 0.8)), loop=name in sfx.LOOPS)
         print(f"wrote {os.path.relpath(path, ROOT)} ({samples.shape[-1] / 44100:.2f} s)")
 
 

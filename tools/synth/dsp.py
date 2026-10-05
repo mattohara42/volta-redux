@@ -322,14 +322,19 @@ def echo(x, time_s, feedback=0.35, wet=0.3, repeats=6):
     return out
 
 
-def write_wav(path, x, peak=None):
-    """16-bit WAV, mono or stereo."""
+def write_wav(path, x, peak=None, loop=False):
+    """16-bit WAV, mono or stereo. `loop` writes a `smpl` chunk marking the
+    whole file as a forward loop, which Godot's importer reads by default
+    ("Detect From WAV"). The loop lives in the file because `*.import` is not
+    committed here: settings put there never reach CI or a fresh checkout."""
+    import struct
     import wave
     if peak is not None:
         x = normalise(x, peak)
     x = np.clip(x, -1.0, 1.0)
     data = (x * 32767.0).astype("<i2")
     channels = 1 if data.ndim == 1 else 2
+    frames = data.shape[-1]
     if channels == 2:
         data = data.T.reshape(-1)
     with wave.open(str(path), "wb") as f:
@@ -337,6 +342,18 @@ def write_wav(path, x, peak=None):
         f.setsampwidth(2)
         f.setframerate(SR)
         f.writeframes(data.tobytes())
+    if loop:
+        smpl = struct.pack(
+            "<9I6I",
+            0, 0, int(1e9 / SR), 60, 0, 0, 0, 1, 0,
+            0, 0, 0, frames - 1, 0, 0,
+        )
+        with open(path, "r+b") as f:
+            f.seek(0, 2)
+            f.write(b"smpl" + struct.pack("<I", len(smpl)) + smpl)
+            riff_size = f.tell() - 8
+            f.seek(4)
+            f.write(struct.pack("<I", riff_size))
 
 
 def write_ogg(path, x, quality=4):
