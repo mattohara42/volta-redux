@@ -11,22 +11,20 @@ completed from a new save) is met in CI by `tools/dev.sh route`.
 ## Where this is
 
 **All four acts are built and connected, and an overnight pass (Matt's
-request, PRs #116 to #127) dressed them**: a coloured dark that lights push
-back (`LightField`), code-drawn far layers for Acts 2 to 4 (`Backdrop`),
-particles for every event (`Burst`), every sound and every act's music
-rendered from code (`tools/synth/`, `assets/audio/README.md`), ambience,
-death lines keyed to their cause (`SPEC.md`), rooms that dissolve in, an act
-card with that act's death count, an opening card and a pause menu. M15 is
-built ahead of M14; two M16 pieces are pulled forward (`BUILD_PLAN.md`).
-
-**Credits: 510**, none spent overnight. Enemies wait on `RoomM7Sheet`.
+request, PRs #116 to #133) dressed them**: light and dark (`LightField`,
+rim light), far layers (`Backdrop`), particles (`Burst`), every sound and
+all act and boss music from code (`assets/audio/README.md`), death lines by
+cause (`SPEC.md`), act cards, an opening card, a pause menu and a save per
+act. M15 is built ahead of M14; three M16 pieces are pulled forward
+(`BUILD_PLAN.md`). **Credits: 510**, none spent. Enemies wait on
+`RoomM7Sheet`.
 
 ## The next action
 
 **Matt plays it through with sound on.** That is M14's first step and the
-first time anyone hears the audio. `BACKLOG.md`'s overnight section is the
-design notes to weigh while playing (chest in every room, the unused ant and
-plate, Act 2's sword-free openers, no optional risk yet).
+first time anyone hears the audio. The game keeps its place between
+sessions; NEW GAME in the pause menu starts over. `BACKLOG.md`'s overnight
+section is the design notes to weigh while playing.
 
 ## Blocked on Matt
 
@@ -34,9 +32,9 @@ plate, Act 2's sword-free openers, no optional risk yet).
    no words, is the dark too dark anywhere, and do the four sword sounds tell
    the states apart with the screen dimmed (M15's done-when)?
 2. **Decisions made unattended, worth a yes or no**: death lines keyed to
-   cause (a change to a `SPEC.md` decision, #122); the opening card and pause
-   menu pulled from M16 (#123, #127); the ambient levels per act
-   (`config/actN.tres`).
+   cause (a change to a `SPEC.md` decision, #122); the opening card, pause
+   menu and save per act pulled from M16 (#123, #127, #130), the save per
+   act rather than per room; the ambient levels per act (`config/actN.tres`).
 3. **`RoomM7Sheet`**: are the six consistent in treatment? That closes M7.
 4. **M4 playtest feedback**: the dragon's pacing, the ledge-to-wood throw and
    the dormant scorpion's wake-to-danger gap. Blocks M14's tuning of those.
@@ -55,10 +53,10 @@ time and fails to compile: go through a typed variable.
 
 **`*.import` is gitignored**: an import setting set there (a loop flag) holds
 on one machine only: loops live in the WAV (`smpl`) or in code, and a fresh
-import is the test (#120). **Godot's
-movie writer is how to see and hear a real run**:
-`godot --path . <scene> --write-movie out/f.png --fixed-fps 30 --quit-after N`
-writes frames and the game's own mix as a WAV.
+import is the test (#120). **Godot's movie writer is how to see and hear a
+real run**: `godot --path . <scene> --write-movie out/f.png --fixed-fps 30
+--quit-after N` writes frames and the game's own mix as a WAV. **Only a
+plain launch touches the save; `--script` never does.**
 
 **Sprite Fusion**: `style-reference` ignores `size`, `animate` starts on the
 input's pose, frames can boil (filmstrip first), an SSL EOF charges nothing.
