@@ -10,6 +10,7 @@ signal finished
 
 const DRAGON_SCENE: PackedScene = preload("res://scenes/dragon_flight_sprite.tscn")
 const HERO_SCENE: PackedScene = preload("res://scenes/hero_sprite.tscn")
+const ATMOSPHERE: AtmosphereConfig = preload("res://config/atmosphere.tres")
 ## The box that has to fit through a gap: the dragon's body with the hero on
 ## its back, a little inside the drawn wings and tail as a forgiving hit box
 ## should be. Centred `BOX_OFFSET` from this node.
@@ -37,12 +38,22 @@ func configure(start: Vector2, top: float, bottom: float, finish_x: float, pilla
 	_pillars = pillars
 	config = flight
 	position = start
-	add_child(DRAGON_SCENE.instantiate())
+	var dragon := DRAGON_SCENE.instantiate() as Node2D
+	add_child(dragon)
 	var hero := HERO_SCENE.instantiate() as Node2D
 	hero.position = SEAT
 	# The rider sits on the dragon's back, drawn over it.
 	hero.z_index = 1
 	add_child(hero)
+	# The hero's own faint light rides with them, as it goes everywhere the
+	# hero goes, so the thing you steer is never lost in the cave's dark; and
+	# both take a rim from the torches and the daylight, as everything alive
+	# in the game does.
+	var light := LightSource.point(ATMOSPHERE.light_hero_radius, Palette.FIRE_CORE, ATMOSPHERE.light_hero_strength)
+	light.position = SEAT
+	add_child(light)
+	RimLight.attach(dragon.get_node_or_null("AnimatedSprite2D") as CanvasItem, self)
+	RimLight.attach(hero.get_node_or_null("AnimatedSprite2D") as CanvasItem, self)
 	var camera := Camera2D.new()
 	camera.limit_top = 0
 	camera.limit_bottom = int(Bench.ROOM_HEIGHT)
