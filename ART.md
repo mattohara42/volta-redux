@@ -95,13 +95,13 @@ the lights. Anything that is itself light (lava, glows, arcs, flames) draws
 over the dark through `LightField.emissive`, so the dark never dims the thing
 doing the lighting. Benches stay lit evenly.
 
-**Acts 2 to 4 have code-drawn far layers until theirs are painted.** A
-`Backdrop` (a shader, two layers of parallax, every colour a mix of
-`Palette`'s) draws the caverns, the generator's works and the hall, and
-`test_backdrop.gd` holds it under the stone you stand on. A painted
-background replaces it with one line: give the act's `ActTiles` its
-`background` and set the act's `backdrop` to 0, which the same test then
-expects.
+**Every act is painted now (2026-10-05)**, Acts 2 to 4 in Gemini from the
+prompts below. Before that a `Backdrop` (a shader, two layers of parallax,
+every colour a mix of `Palette`'s) drew the caverns, the generator's works
+and the hall, and it still draws the ride out's far layer. `test_backdrop.gd`
+holds it under the stone you stand on. A painted background replaces it
+with one line: give the act's `ActTiles` its `background` and set the act's
+`backdrop` to 0, which the same test then expects.
 
 **Pixelating works on large, simple shapes**, so a background prompt asks for
 big forms and few small details. Act 1's wall converted cleanly at 24
@@ -402,7 +402,7 @@ Matt's eye in play:** the thin cyan wires that show where current runs now
 sit over a teal-tinted wall; they read in every shot, about as faint as they
 were before.
 
-**Act 4 background, attempt 1 (2026-10-05), sent to Matt.** The same recipe
+**Act 4 background, attempt 1 (2026-10-05), landed first time.** The same recipe
 for Volta's hall. New traps: a window sill reads as a ledge, so the windows
 start high and have none; gold is reserved for gems and anything
 interactive, so the hall has none; and the storm outside is dark with no
@@ -445,6 +445,25 @@ Raw delivery to `assets/art_raw/act4_hall_bg.*`.
 > platforms. Stone is cold violet and plum grey in the light and deep
 > violet in shadow, never a neutral grey or black. The image is 2560 by
 > 1440 pixels, aspect ratio 16:9.
+
+**Landed.** Columns, high pointed windows on a dark storm, faded wine
+banners with a lilac zigzag; no gold, no lightning. Delivered 1376x768. Raw
+at `assets/art_raw/act4_hall_bg.jpg`, untouched. The columns repeat every
+454 px and the canvas's outer columns centre on x 6 and 1370, so cropped to
+those two centres the strip tiles as one unbroken colonnade; the only tell
+is that a mirrored banner's zigzag runs the other way:
+
+    tools/pixelate.py assets/art_raw/act4_hall_bg.jpg assets/art/act4/hall_bg_px.png --crop 6,1370
+
+639x360 at 24 colours; `palette-check.py` 0.00% neutral-dark; 1.23% of its
+pixels at or above mid stone (the window glass and frames), most saturated
+colour 0.59 against lava's 0.86. Act 4's code `Backdrop` is off. **The ride
+out keeps its cavern `Backdrop`** and draws no painting: the hall's is the
+hall, and Act 2's has rock columns the flight's pillars would be confused
+with, which is why the backdrop's own near pillars were already off there.
+**For Matt's eye in play:** each window's stone frame has a base about a
+jump above the gallery's raised blocks. It is dim and reads as wall in every
+shot, but it is the nearest thing to a ledge in any of the three paintings.
 
 ## The chained dragon (2026-10-03)
 

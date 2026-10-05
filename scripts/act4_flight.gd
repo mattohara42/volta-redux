@@ -102,7 +102,10 @@ func _on_finished() -> void:
 
 
 func _draw() -> void:
-	TileArt.draw_background_across(self, ROOM_WIDTH, TILES)
+	# No painted background: the hall's painting is the hall, and Act 2's has
+	# rock columns of its own, which the flight's pillars would be confused
+	# with. The cavern `Backdrop` above, without its near pillars, is the
+	# flight's far layer.
 	TileArt.draw_wall(self, Rect2(0.0, 0.0, ROOM_WIDTH, CEILING), TILES)
 	TileArt.draw_ground(self, Rect2(0.0, FLOOR, ROOM_WIDTH, Bench.ROOM_HEIGHT - FLOOR), TILES)
 	for pillar in pillars():
