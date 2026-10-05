@@ -402,6 +402,50 @@ Matt's eye in play:** the thin cyan wires that show where current runs now
 sit over a teal-tinted wall; they read in every shot, about as faint as they
 were before.
 
+**Act 4 background, attempt 1 (2026-10-05), sent to Matt.** The same recipe
+for Volta's hall. New traps: a window sill reads as a ledge, so the windows
+start high and have none; gold is reserved for gems and anything
+interactive, so the hall has none; and the storm outside is dark with no
+lightning, because electricity is Volta's own colour and a painted bolt
+would read as his. Evenly spaced columns give the mirror seam its column.
+Raw delivery to `assets/art_raw/act4_hall_bg.*`.
+
+> [preamble] A wide painted background for a side-scrolling platformer: a
+> long horizontal strip of the inner wall of a wizard's great hall inside a
+> dark castle, in flat side view like a stage backdrop, camera
+> perpendicular to the wall, with no vanishing point. It is NOT a
+> three-quarter view, NOT a nave receding into the distance, and NOT seen
+> from above. The same bay repeats three times across the width of the
+> canvas: a massive round stone column running from the top edge to the
+> bottom edge, then a stretch of dark masonry wall with one tall, narrow
+> pointed-arch window set high in it, and below the window a long, narrow
+> cloth banner hanging straight down, evenly spaced, so the whole strip
+> reads as a continuous run of hall rather than one view of one place. The
+> windows begin well above the middle of the canvas and have no sills, no
+> ledges and no balconies; through them is a dark, stormy night sky of
+> heavy violet and blue-grey clouds, faintly lit, with no lightning, no
+> moon and no stars. The banners are deep wine-red, worn and faded, with a
+> simple jagged zigzag emblem in dull dusty lilac. Stone fills the full
+> width of the canvas and the whole top edge: no ceiling vault seen from
+> below, no sky except through the windows. The hall is lit only by the
+> faint cold storm light coming through the windows: the stone around each
+> window and the edges of the columns catch a little of it, and the wall
+> falls into deep violet darkness toward the bottom of the canvas. That
+> fall from faint cold light high up into darkness below is the point of
+> this painting: do not paint the hall as one flat dark tone. There is no
+> lightning, no glowing light, no candles, no torches, no fire and nothing
+> that shines on its own. There is no gold, no brass and nothing yellow
+> anywhere. There are no ledges, sills, shelves, balconies, galleries,
+> stairs, beams or platforms anywhere in the painting: every form is
+> vertical, so nothing in it looks like somewhere to stand. No characters,
+> no creatures, no throne, no furniture, no statues, no doors, no
+> foreground objects. Large, simple shapes and few small details: big
+> masses of stone and broad, soft gradients of light. The whole painting
+> stays dark and muted, a background meant to sit behind brighter
+> platforms. Stone is cold violet and plum grey in the light and deep
+> violet in shadow, never a neutral grey or black. The image is 2560 by
+> 1440 pixels, aspect ratio 16:9.
+
 ## The chained dragon (2026-10-03)
 
 Two requests, 30 credits: an `edit` of `enemies/dragon_px.png` into a chained
