@@ -23,16 +23,8 @@ const VENT_HEIGHT: float = 6.0
 ## read as a mechanism before it is used, and a dormant geyser is a hole in the
 ## floor until something says otherwise.
 const VENT_NOTCHES: int = 4
-## The jet is drawn as three nested widths, outermost first, so it has a soft
-## edge and a bright middle rather than being a flat bar. ART_DIRECTION.md puts
-## soft edges on everything that is not a shape the player has to read hard, and
-## a column of water is the softest thing in the game.
-const BANDS: Array[Vector2] = [
-	# Fraction of the column's width, and how opaque that band is.
-	Vector2(1.0, 0.26),
-	Vector2(0.68, 0.38),
-	Vector2(0.34, 0.66),
-]
+const ATMOSPHERE: AtmosphereConfig = preload("res://config/atmosphere.tres")
+const STEAM: Shader = preload("res://shaders/steam.gdshader")
 ## How thick the head of the jet is drawn at the top of the column.
 const CROWN_HEIGHT: float = 5.0
 ## How visible the reach marks are when nothing is erupting. Enough to read from
@@ -56,6 +48,10 @@ var _size := Vector2.ZERO
 ## Seconds since the room started. A geyser has no trigger, so like a ferry this
 ## begins at zero and never stops.
 var _elapsed: float = 0.0
+## The jet itself, billowing (`shaders/steam.gdshader`), shown while it is up,
+## and the cool light it gives the dark around it.
+var _jet: ColorRect
+var _glow: LightSource
 
 
 func configure(size: Vector2, hazards: HazardConfig) -> void:
@@ -81,6 +77,47 @@ func configure(size: Vector2, hazards: HazardConfig) -> void:
 	# Everything a respawn puts back at the start of its clock. Platforms are in
 	# here too: see `Player._place_at_checkpoint`.
 	add_to_group("mechanisms")
+	_make_jet()
+
+
+## ART_DIRECTION.md puts soft edges on everything that is not a shape the
+## player has to read hard, and a column of water is the softest thing in the
+## game, so the jet is a shader rather than flat bars. Behind the vent's collar,
+## which is drawn by `_draw` over it.
+func _make_jet() -> void:
+	var rect := Rect2(-_size * 0.5, _size)
+	var material := ShaderMaterial.new()
+	material.shader = STEAM
+	material.set_shader_parameter("body", Palette.STEAM_BODY)
+	material.set_shader_parameter("core", Palette.STEAM_CORE)
+	material.set_shader_parameter("warm", Palette.FIRE_FALLOFF)
+	material.set_shader_parameter("size", _size)
+	material.set_shader_parameter("rise_speed", ATMOSPHERE.steam_rise_speed)
+	material.set_shader_parameter("warm_reach", ATMOSPHERE.steam_warm_reach)
+	material.set_shader_parameter("edge_alpha", ATMOSPHERE.steam_edge_alpha)
+	material.set_shader_parameter("steps", ATMOSPHERE.steam_steps)
+	material.set_shader_parameter("crown", CROWN_HEIGHT)
+	material.set_shader_parameter("seed", fmod(absf(global_position.x) * 0.013, 1.0))
+	_jet = ColorRect.new()
+	_jet.position = rect.position
+	_jet.size = rect.size
+	_jet.material = material
+	_jet.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_jet.show_behind_parent = true
+	add_child(_jet)
+	_glow = LightSource.line(
+		Vector2(0.0, rect.end.y), Vector2(0.0, rect.position.y),
+		ATMOSPHERE.light_steam_radius, Palette.STEAM_CORE, ATMOSPHERE.light_steam_strength
+	)
+	add_child(_glow)
+	_show_jet()
+
+
+func _show_jet() -> void:
+	var up := phase == GeyserCycle.Phase.ERUPTING
+	if _jet != null:
+		_jet.visible = up
+		_glow.visible = up
 
 
 func _physics_process(delta: float) -> void:
@@ -102,6 +139,7 @@ func _physics_process(delta: float) -> void:
 	# picture for as long as it is up.
 	if phase != was or phase == GeyserCycle.Phase.SWELL:
 		queue_redraw()
+		_show_jet()
 	if phase != was and phase == GeyserCycle.Phase.ERUPTING:
 		# Spray thrown off the head of the jet as it arrives.
 		Burst.emit(get_parent(), global_position - Vector2(0.0, _size.y * 0.5), Burst.Kind.SPRAY)
@@ -124,6 +162,7 @@ func reset(frozen_for: float) -> void:
 	_elapsed = -maxf(frozen_for, 0.0)
 	phase = GeyserCycle.Phase.SWELL
 	queue_redraw()
+	_show_jet()
 
 
 func status() -> String:
@@ -144,17 +183,16 @@ func column() -> Vector2:
 ##
 ## **The drawn column and the lifting box are the same rectangle.** A tapered jet
 ## would look better and would put the box outside the picture at the top, which
-## is the mistake spikes are careful about in the other direction. M9 replaces
-## this with a shader and an emitter, and that is where a jet gets to have a
-## shape that is not a rectangle.
+## is the mistake spikes are careful about in the other direction. So the jet's
+## shader billows inside the box and fills all of it at least faintly.
 func _draw() -> void:
 	var rect := Rect2(-_size * 0.5, _size)
-	_draw_reach(rect)
-	match phase:
-		GeyserCycle.Phase.ERUPTING:
-			_draw_column(rect)
-		GeyserCycle.Phase.SWELL:
-			_draw_swell(rect)
+	# While the jet is up it shows its own reach (`_jet`); the marks are for
+	# reading how far it will go before it goes.
+	if phase != GeyserCycle.Phase.ERUPTING:
+		_draw_reach(rect)
+	if phase == GeyserCycle.Phase.SWELL:
+		_draw_swell(rect)
 	_draw_vent(rect)
 
 
@@ -175,22 +213,6 @@ func _draw_reach(rect: Rect2) -> void:
 	# player standing at a lip is deciding on, and it is the only one of these a
 	# dashed line would make them measure rather than read.
 	draw_rect(Rect2(rect.position, Vector2(rect.size.x, 2.0)), faint)
-
-
-## The jet, up and carrying.
-func _draw_column(rect: Rect2) -> void:
-	for band in BANDS:
-		var width := rect.size.x * band.x
-		draw_rect(
-			Rect2(-width * 0.5, rect.position.y, width, rect.size.y),
-			Color(Palette.STEAM_BODY.lerp(Palette.STEAM_CORE, 1.0 - band.x), band.y)
-		)
-	# The head, so the top of the column is a place and not where the drawing
-	# happens to stop. It is the height the player is aiming to be carried to.
-	draw_rect(
-		Rect2(rect.position, Vector2(rect.size.x, CROWN_HEIGHT)),
-		Color(Palette.STEAM_CORE, 0.85)
-	)
 
 
 ## The tell. A mound at the mouth that grows across the warning, so the sentence

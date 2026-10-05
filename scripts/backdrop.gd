@@ -121,6 +121,8 @@ func _process(_delta: float) -> void:
 	var camera := get_viewport().get_camera_2d()
 	if camera != null:
 		centre = camera.get_screen_center_position()
+		# A camera zoomed out (the capture tool's whole-room shots) sees more.
+		view /= camera.zoom
 	var left := (centre.x - view.x * 0.5)
 	position = Vector2(floorf(left) - MARGIN, -MARGIN)
 	size = Vector2(view.x, Bench.ROOM_HEIGHT) + Vector2(MARGIN, MARGIN) * 2.0
