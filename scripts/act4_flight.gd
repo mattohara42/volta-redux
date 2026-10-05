@@ -16,6 +16,12 @@ const PILLAR_WIDTH: float = 40.0
 ## How far the daylight at the cave mouth reaches back into the cave, art px.
 const DAYLIGHT_REACH: float = 360.0
 const DAYLIGHT_GLOW: float = 150.0
+## How far inside a pillar, from the lip of its gap, a torch's foot is set:
+## far enough that the flame stays on the stone and never in the open air you
+## fly through, because warm and bright in the air reads as something that
+## kills (`ART_DIRECTION.md`).
+const TORCH_INSET: float = 6.0
+const TORCH_BELOW_LIP: float = 46.0
 ## Each gap as (x, top, bottom): the open air the dragon has to pass through.
 const GAPS: Array[Vector3] = [
 	Vector3(480.0, 60.0, 200.0),
@@ -68,11 +74,23 @@ func _ready() -> void:
 	var glow := LightGlow.make(DAYLIGHT_GLOW, Palette.FIRE_CORE, 0.7)
 	glow.position += Vector2(FINISH_X, (CEILING + FLOOR) * 0.5)
 	add_child(glow)
+	_light_the_gaps()
 	_rider = DragonRider.new()
 	add_child(_rider)
 	_rider.configure(START, CEILING, FLOOR, FINISH_X, pillars(), FLIGHT)
 	_rider.finished.connect(_on_finished)
 	queue_redraw()
+
+
+## A torch on each pillar at both lips of its gap, so the way through is the
+## lit thing ahead and each pillar a shape against its own light.
+func _light_the_gaps() -> void:
+	for gap in GAPS:
+		var centre := gap.x + PILLAR_WIDTH * 0.5 - WallTorch.HEAD.x
+		for foot in [gap.y - TORCH_INSET, gap.z + TORCH_BELOW_LIP]:
+			var torch := WallTorch.new()
+			torch.position = Vector2(centre, foot)
+			add_child(torch)
 
 
 func _on_finished() -> void:
