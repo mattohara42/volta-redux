@@ -397,7 +397,7 @@ func die(cause: DeathMessages.Cause = DeathMessages.Cause.ANY) -> void:
 		audio.muffle()
 	var act_state := get_node_or_null("/root/ActState")
 	if act_state != null:
-		act_state.record_death()
+		act_state.record_death(cause)
 	_draw_a_message(cause)
 	queue_redraw()
 
