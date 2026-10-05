@@ -38,8 +38,8 @@ section is the design notes to weigh while playing.
 3. **`RoomM7Sheet`**: are the six consistent in treatment? That closes M7.
 4. **M4 playtest feedback**: the dragon's pacing, the ledge-to-wood throw and
    the dormant scorpion's wake-to-danger gap. Blocks M14's tuning of those.
-5. **Acts 2 and 3 are painted** (`ART.md`): in play, do Act 2's mirror seam
-   and warm band, or Act 3's wires over teal, bother you? Act 4 is next.
+5. **Every act is painted** (`ART.md`): in play, do Act 2's mirror seam and
+   warm band, Act 3's wires over teal or Act 4's window bases bother you?
 
 ## Traps that will bite again
 
