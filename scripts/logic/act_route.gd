@@ -41,3 +41,18 @@ static func carried(held: int, max_swords: int) -> int:
 static func chest_top_up(held: int, out: int, fill: int, max_swords: int) -> int:
 	var wanted := mini(fill, max_swords) - out
 	return maxi(held, mini(wanted, max_swords))
+
+
+## What the end card says about the run: how many times Lothar died and how
+## long it took, in the register the death lines keep. A string a player reads.
+static func tally(deaths: int, seconds: float) -> String:
+	var fell := "Lothar never fell." if deaths <= 0 else (
+		"Lothar fell once" if deaths == 1 else "Lothar fell %d times" % deaths
+	)
+	var minutes := int(seconds / 60.0)
+	var took := "in under a minute" if minutes < 1 else (
+		"in a minute" if minutes == 1 else "in %d minutes" % minutes
+	)
+	if deaths <= 0:
+		return "%s It took %s." % [fell, took.trim_prefix("in ")]
+	return "%s, %s." % [fell, took]

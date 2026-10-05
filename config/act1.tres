@@ -1,6 +1,7 @@
-[gd_resource type="Resource" script_class="ActConfig" load_steps=3 format=3]
+[gd_resource type="Resource" script_class="ActConfig" load_steps=4 format=3]
 
 [ext_resource type="Script" path="res://config/act_config.gd" id="1_act"]
+[ext_resource type="Resource" path="res://assets/art/act1/act1_tiles.tres" id="3_tiles"]
 [ext_resource type="AudioStream" path="res://assets/audio/music/act1.ogg" id="2_music"]
 
 [resource]
@@ -12,3 +13,4 @@ card_font_size = 24
 ambient_light = Color(0.76, 0.72, 0.9, 1)
 ceiling_dim = 0.0
 music = ExtResource("2_music")
+tiles = ExtResource("3_tiles")

@@ -60,3 +60,11 @@ func test_act_one_lists_rooms_that_exist() -> void:
 	check(act.complete_card_seconds > 0.0, "a card that is on screen")
 	for room in act.rooms:
 		check(ResourceLoader.exists(room), "%s exists" % room)
+
+
+## The end card's last line: deaths and time, in words a player reads.
+func test_the_tally_says_how_the_run_went() -> void:
+	check_eq(ActRoute.tally(37, 24.5 * 60.0), "Lothar fell 37 times, in 24 minutes.", "a usual run")
+	check_eq(ActRoute.tally(1, 61.0), "Lothar fell once, in a minute.", "one death, one minute")
+	check_eq(ActRoute.tally(0, 30.0), "Lothar never fell. It took under a minute.", "a perfect run is noticed")
+	check(not ActRoute.tally(120, 7200.0).contains(String.chr(0x2014)), "no em-dash in a string a player reads")

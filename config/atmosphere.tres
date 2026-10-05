@@ -69,3 +69,6 @@ light_volta_flicker = 0.25
 motes_amount = 40
 motes_lifetime = 9.0
 motes_drift = 4.0
+light_window_radius = 56.0
+light_window_strength = 0.3
+light_window_flicker = 0.1

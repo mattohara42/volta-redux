@@ -393,6 +393,9 @@ func die(cause: DeathMessages.Cause = DeathMessages.Cause.ANY) -> void:
 	var audio := get_node_or_null("/root/Audio")
 	if audio != null:
 		audio.muffle()
+	var act_state := get_node_or_null("/root/ActState")
+	if act_state != null:
+		act_state.record_death()
 	_draw_a_message(cause)
 	queue_redraw()
 
@@ -627,6 +630,10 @@ func _update_animation(grounded: bool) -> void:
 
 
 func _handle_debug_keys() -> void:
+	# Bench tools, not a player's: an exported release build ignores them
+	# (`BACKLOG.md`), and every run from the editor or `tools/dev.sh` keeps them.
+	if not OS.is_debug_build():
+		return
 	if Input.is_action_just_pressed("debug_next_preset"):
 		config = preset_strong if config == preset_climb else preset_climb
 	if Input.is_action_just_pressed("debug_respawn"):

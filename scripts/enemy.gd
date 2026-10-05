@@ -77,6 +77,8 @@ func _on_area_entered(area: Area2D) -> void:
 ## The dragon overrides this, because it is overpowered and chained rather than
 ## killed, and it is the same dragon you free in Act 4.
 func _defeat() -> void:
+	if _sprite != null:
+		EnemyGhost.of(_sprite.get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D, get_parent())
 	Burst.emit(get_parent(), global_position, Burst.Kind.CHITIN)
 	Sfx.play(self, Sfx.CONFIG.kill, true)
 	defeated.emit(global_position)

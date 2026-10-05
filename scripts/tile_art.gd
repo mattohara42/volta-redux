@@ -64,6 +64,24 @@ static func draw_background_across(canvas: CanvasItem, width: float, tiles: ActT
 	canvas.draw_set_transform(Vector2.ZERO)
 
 
+## Every lit point of `tiles`' painting across a room `width` wide, copy by
+## copy, mirrored the way `draw_background_across` mirrors every other copy.
+static func painted_lights(width: float, tiles: ActTiles = null) -> PackedVector2Array:
+	var set := _or_act1(tiles)
+	var out := PackedVector2Array()
+	if set.background == null:
+		return out
+	var step := float(set.background.get_width())
+	var x := 0.0
+	var mirrored := false
+	while x < width:
+		for point in set.lights:
+			out.append(Vector2(x + (step - point.x if mirrored else point.x), point.y))
+		x += step
+		mirrored = not mirrored
+	return out
+
+
 ## A strip of floor tiles along the top edge of `rect`, masonry below it,
 ## stepping darker row by row the way shadow falls under a ledge.
 static func draw_ground(canvas: CanvasItem, rect: Rect2, tiles: ActTiles = null) -> void:
