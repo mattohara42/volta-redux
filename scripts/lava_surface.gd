@@ -27,6 +27,8 @@ func setup(rect: Rect2) -> void:
 		LightField.emissive(layer)
 		add_child(layer)
 	add_child(_haze(rect.size.x))
+	# Its roar, heard near it: across the whole pit, not only at its middle.
+	Sfx.loop_on(self, Sfx.CONFIG.lava_loop, Vector2(rect.size.x * 0.5, 0.0), rect.size.x * 0.5)
 	# Its light along the whole surface, so the room's dark draws back from the
 	# pit end to end rather than from one spot over its middle (`LightField`).
 	add_child(LightSource.line(

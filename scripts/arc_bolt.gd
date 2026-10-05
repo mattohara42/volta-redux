@@ -35,6 +35,7 @@ func setup(from: Vector2, to: Vector2, start_seed: int = 1) -> void:
 	_light = LightGlow.make(radius, Palette.ARC_RESIDUE, CONFIG.light_arc_strength)
 	_light.position += (from + to) * 0.5
 	add_child(_light)
+	Sfx.loop_on(self, Sfx.CONFIG.arc_loop, (from + to) * 0.5)
 	_reshape()
 
 

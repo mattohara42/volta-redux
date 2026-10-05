@@ -1,23 +1,25 @@
-## The mix and the music, an autoload (`Audio`). Sets the music and effects
-## buses to `config/audio.tres`'s levels, plays each act's loop and crossfades
-## between them, and muffles the music while the hero is dead. The effects
-## themselves are played by whatever makes them (`Sfx`).
+## The mix, the music and the ambience, an autoload (`Audio`). Sets each bus
+## to `config/audio.tres`'s level, plays the act's music and its ambience bed
+## and crossfades each between acts, and muffles the music while the hero is
+## dead. The effects themselves are played by whatever makes them (`Sfx`).
 ##
-## The music follows the room: whatever the current scene's act names
-## (`ActConfig.music`), unless the room names its own in a `music` property,
-## as the ending's flight does. Walking from one room of an act to the next
-## leaves the music running, because the track has not changed.
+## Both follow the room: whatever the current scene's act names
+## (`ActConfig.music`, `ActConfig.ambience`), unless the room names its own
+## music in a `music` property, as the ending's flight does. Walking from one
+## room of an act to the next leaves both running, because neither changed.
 extends Node
 
 const CONFIG: AudioConfig = preload("res://config/audio.tres")
 const MUSIC_BUS := &"Music"
 const SFX_BUS := &"Sfx"
+const AMBIENCE_BUS := &"Ambience"
 ## Quiet enough to start a track from and stop one at, in decibels.
 const SILENT_DB := -60.0
 
 var _muffle_left := 0.0
 var _scene: Node = null
-var _playing: AudioStreamPlayer = null
+## What each bus is playing now, by bus name.
+var _playing: Dictionary = {}
 ## The fades running now, so a quit can stop them.
 var _fades: Array[Tween] = []
 
@@ -26,11 +28,12 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	_set_bus_volume(MUSIC_BUS, CONFIG.music_volume_db)
 	_set_bus_volume(SFX_BUS, CONFIG.sfx_volume_db)
+	_set_bus_volume(AMBIENCE_BUS, CONFIG.ambience_volume_db)
 
 
 ## Quitting mid-fade leaves the fade's tween holding the track, and the track
 ## its stream, which Godot reports as a leak at exit. So the fades are killed
-## and the music stopped on the way out.
+## and the tracks stopped on the way out.
 func _exit_tree() -> void:
 	for tween in _fades:
 		if tween.is_valid():
@@ -50,16 +53,22 @@ func muffle() -> void:
 
 
 ## The music fades away under an act's card, until the next room asks again.
+## The ambience carries on: the room is still there under the card.
 func fade_out() -> void:
-	_crossfade(null)
+	_crossfade(MUSIC_BUS, null)
 
 
-## What is playing, for the capture tool and a test: the track's file, or
-## "silence".
+## What is playing, for the capture tool and a test: the music's file and the
+## ambience's, or "silence".
 func status() -> String:
-	if _playing == null or _playing.stream == null:
-		return "music: silence"
-	return "music: %s" % _playing.stream.resource_path.get_file()
+	return "music: %s, ambience: %s" % [_name_of(MUSIC_BUS), _name_of(AMBIENCE_BUS)]
+
+
+func _name_of(bus: StringName) -> String:
+	var player: AudioStreamPlayer = _playing.get(bus)
+	if player == null or player.stream == null:
+		return "silence"
+	return player.stream.resource_path.get_file()
 
 
 func _process(delta: float) -> void:
@@ -72,7 +81,8 @@ func _process(delta: float) -> void:
 	# would fade the act's music out and straight back in at every door.
 	if scene != null and scene != _scene:
 		_scene = scene
-		_crossfade(music_for(scene))
+		_crossfade(MUSIC_BUS, music_for(scene))
+		_crossfade(AMBIENCE_BUS, ambience_for(scene))
 
 
 ## The track a room plays: its own if it names one, else its act's.
@@ -82,11 +92,21 @@ func music_for(scene: Node) -> AudioStream:
 	var own: Variant = scene.get("music")
 	if own is AudioStream:
 		return own
-	var act_state := get_node_or_null("/root/ActState")
-	if act_state == null:
-		return null
-	var act: ActConfig = act_state.act_of(scene.scene_file_path)
+	var act := _act_of(scene)
 	return act.music if act != null else null
+
+
+## The bed under a room: its act's.
+func ambience_for(scene: Node) -> AudioStream:
+	var act := _act_of(scene)
+	return act.ambience if act != null else null
+
+
+func _act_of(scene: Node) -> ActConfig:
+	var act_state := get_node_or_null("/root/ActState")
+	if act_state == null or scene == null:
+		return null
+	return act_state.act_of(scene.scene_file_path)
 
 
 ## `stream`, set to loop. Music is an Ogg, and an Ogg's loop flag lives in its
@@ -100,26 +120,27 @@ static func looping(stream: AudioStream) -> AudioStream:
 	return stream
 
 
-## The playing track fades out over `music_fade_seconds` while `stream`, if
-## any, fades in from silence. The same track asked for again carries on.
-func _crossfade(stream: AudioStream) -> void:
-	if _playing != null and _playing.stream == stream:
+## What `bus` is playing fades out over `music_fade_seconds` while `stream`,
+## if any, fades in from silence. The same track asked for again carries on.
+func _crossfade(bus: StringName, stream: AudioStream) -> void:
+	var playing: AudioStreamPlayer = _playing.get(bus)
+	if playing != null and playing.stream == stream:
 		return
-	if _playing != null:
-		var leaving := _playing
+	if playing != null:
 		var out := _fade()
-		out.tween_property(leaving, "volume_db", SILENT_DB, CONFIG.music_fade_seconds)
-		out.tween_callback(leaving.queue_free)
-	_playing = null
+		out.tween_property(playing, "volume_db", SILENT_DB, CONFIG.music_fade_seconds)
+		out.tween_callback(playing.queue_free)
+	_playing.erase(bus)
 	if stream == null:
 		return
-	_playing = AudioStreamPlayer.new()
-	_playing.stream = looping(stream)
-	_playing.bus = MUSIC_BUS
-	_playing.volume_db = SILENT_DB
-	add_child(_playing)
-	_playing.play()
-	_fade().tween_property(_playing, "volume_db", 0.0, CONFIG.music_fade_seconds)
+	var player := AudioStreamPlayer.new()
+	player.stream = looping(stream)
+	player.bus = bus
+	player.volume_db = SILENT_DB
+	add_child(player)
+	player.play()
+	_playing[bus] = player
+	_fade().tween_property(player, "volume_db", 0.0, CONFIG.music_fade_seconds)
 
 
 func _fade() -> Tween:

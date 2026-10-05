@@ -38,11 +38,15 @@ def render_sfx(names, overwrite):
     import sfx
     os.makedirs(SFX_DIR, exist_ok=True)
     for name in names or list(sfx.RECIPES):
-        path = os.path.join(SFX_DIR, f"{name}.wav")
+        bed = name in sfx.BEDS
+        path = os.path.join(SFX_DIR, f"{name}.{'ogg' if bed else 'wav'}")
         if not _writable(path, overwrite):
             continue
-        samples = sfx.RECIPES[name]()
-        write_wav(path, normalise(samples, sfx.LEVELS.get(name, 0.8)), loop=name in sfx.LOOPS)
+        samples = normalise(sfx.RECIPES[name](), sfx.LEVELS.get(name, 0.8))
+        if bed:
+            write_ogg(path, samples, quality=3)
+        else:
+            write_wav(path, samples, loop=name in sfx.LOOPS)
         print(f"wrote {os.path.relpath(path, ROOT)} ({samples.shape[-1] / 44100:.2f} s)")
 
 

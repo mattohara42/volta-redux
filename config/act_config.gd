@@ -22,6 +22,9 @@ extends Resource
 ## The act's loop (`tools/synth/music.py`), played by `Audio` in every room of
 ## the act and carried across from one room to the next without a break.
 @export var music: AudioStream
+## The act's ambience bed (`tools/synth/sfx.py`), under the music: wind on the
+## wall, the mountain breathing, the works humming, rain in the hall.
+@export var ambience: AudioStream
 
 ## The far layers drawn by `Backdrop` while the act has no painted background:
 ## 0 none, 1 the caverns, 2 the works, 3 the hall (`Backdrop.Style`).

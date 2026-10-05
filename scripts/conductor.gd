@@ -19,6 +19,7 @@ var is_live := false:
 			return
 		is_live = value
 		_glow.visible = value
+		_set_buzzing(value)
 		_on_live_changed(value)
 		queue_redraw()
 ## The rect this piece occupies, in the room's coordinates.
@@ -34,6 +35,8 @@ var art: Texture2D = null:
 
 var _zap: Area2D
 var _glow: ChargedSurface
+## Live copper buzzes, heard near it (`AudioConfig.arc_loop`).
+var _buzz: AudioStreamPlayer2D
 
 
 func configure(area: Rect2, source: bool = false) -> void:
@@ -62,6 +65,7 @@ func configure(area: Rect2, source: bool = false) -> void:
 	_glow.setup(Rect2(-area.size * 0.5, area.size))
 	_glow.visible = false
 	add_child(_glow)
+	_buzz = Sfx.loop_on(self, Sfx.CONFIG.arc_loop, Vector2.ZERO, maxf(area.size.x, area.size.y) * 0.5, false)
 	# Its light, under the glow so it goes out with it: live copper lights the
 	# recess it sits in, dead copper is as dark as stone (`LightField`).
 	var along := Vector2(area.size.x, 0.0) if area.size.x >= area.size.y else Vector2(0.0, area.size.y)
@@ -80,6 +84,18 @@ func _physics_process(_delta: float) -> void:
 		var player := body as Player
 		if player != null:
 			player.die(DeathMessages.Cause.CURRENT)
+
+
+func _set_buzzing(on: bool) -> void:
+	if _buzz == null:
+		return
+	_buzz.autoplay = on
+	if not _buzz.is_inside_tree():
+		return
+	if on and not _buzz.playing:
+		_buzz.play()
+	elif not on:
+		_buzz.stop()
 
 
 ## Whether touching it while live kills. A switch overrides this: it is a
