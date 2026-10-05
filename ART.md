@@ -340,7 +340,7 @@ carved totem, every 517 px; and the warm lower band is where enemies stand,
 so a dark red bat has less contrast against it than against the old purple.
 Rim light carries it in every shot so far.
 
-**Act 3 background, attempt 1 (2026-10-05), sent to Matt.** Act 2's
+**Act 3 background, attempt 1 (2026-10-05), landed first time.** Act 2's
 recipe for the generator's works. Three exclusions are new: no electricity
 of any kind, because an arc is the act's hazard and the only cool bright in
 the game (`ART_DIRECTION.md`), so a painted one would be read as live; no
@@ -384,6 +384,23 @@ to `assets/art_raw/act3_works_bg.*`.
 > blue-violet and slate blue in the light and deep navy-violet in shadow,
 > never a neutral grey or black. The image is 2560 by 1440 pixels, aspect
 > ratio 16:9.
+
+**Landed.** Three bays of stone pier, pipe bundle and a half-sunk flywheel,
+lit cold teal from above and falling to dark below; no electricity, no
+copper, nothing horizontal. Delivered 1376x768. Raw at
+`assets/art_raw/act3_works_bg.jpg`, untouched. **No crop needed**: the bays
+repeat every 460 px and both edges of the canvas already fall within a few
+pixels of a pier's centre, so the mirror seam is a pier with a flywheel each
+side of it, which reads as built rather than as a seam:
+
+    tools/pixelate.py assets/art_raw/act3_works_bg.jpg assets/art/act3/works_bg_px.png
+
+645x360 at 24 colours; `palette-check.py` 0.00% neutral-dark; 0.62% of its
+pixels at or above mid stone (the teal-lit top of the iron), most saturated
+colour 0.62 against lava's 0.86. Act 3's code `Backdrop` is off. **For
+Matt's eye in play:** the thin cyan wires that show where current runs now
+sit over a teal-tinted wall; they read in every shot, about as faint as they
+were before.
 
 ## The chained dragon (2026-10-03)
 
