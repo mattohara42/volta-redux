@@ -24,6 +24,7 @@ when its recipe did.
 | how loud each one peaks | `sfx.LEVELS` | rendered in |
 | the two buses' levels, the death muffle, the crossfade | | `config/audio.tres` |
 | each act's loop | `tools/synth/music.py` | `config/actN.tres` (`music`) |
+| each boss's loop, played in its room in place of the act's | `tools/synth/music.py` | `config/actN.tres` (`boss_room`, `boss_music`) |
 | each act's ambience bed (wind, the mountain, the works, rain) | `tools/synth/sfx.py` | `config/actN.tres` (`ambience`) |
 | loops on things (a lava pit's roar, an arc's buzz), heard only near them | `tools/synth/sfx.py` | `config/audio.tres` |
 | the ride out's loop | `tools/synth/music.py` | `Act4Flight.FLIGHT_MUSIC` |
@@ -37,10 +38,11 @@ where your sword is with the screen dimmed.
 
 ## The music
 
-One loop per act and one for the flight, each written out note by note in
-`tools/synth/music.py` (a bar can be found and changed) and played by the
-`Audio` autoload, which carries a track across the rooms of its act and
-crossfades at an act's card.
+One loop per act, one for each of the three bosses and one for the flight,
+each written out note by note in `tools/synth/music.py` (a bar can be found
+and changed) and played by the `Audio` autoload, which carries a track across
+the rooms of its act, crossfades into a boss's loop at the boss's door, and
+fades out under an act's card.
 
 | track | key, tempo | what it is doing |
 |---|---|---|
@@ -49,6 +51,9 @@ crossfades at an act's card.
 | Act 3 | A minor, 112 | the generator: a sequencer that never stops, metal for drums |
 | Act 4 | C minor, 80 | Volta's hall: organ, choir, timpani, a bell |
 | the flight | E flat major, 132 | the only major key in the game, and the only running beat |
+| the dragon (Act 2's lair) | E Phrygian, 100 | Act 2's riff at a gallop, toms running into each beat, a roar up the tritone in the brass |
+| the generator (Act 3's last room) | A minor, 128 | Act 3's sequencer in sixteenths with a flat second in it, the floor pumping in octaves, a semitone alarm through the middle |
+| Volta (Act 4's throne) | C minor, 92 | an organ toccata that never draws breath, the choir full, the bell's three notes made into his theme |
 
 Each loop is rendered with its reverb tail folded back onto its start, so the
 join is seamless, and every loop is brought to the same loudness.

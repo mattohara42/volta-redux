@@ -22,6 +22,10 @@ extends Resource
 ## The act's loop (`tools/synth/music.py`), played by `Audio` in every room of
 ## the act and carried across from one room to the next without a break.
 @export var music: AudioStream
+## The room the act's boss is fought in, and the loop it plays there instead
+## of the act's own. Empty in an act with no boss.
+@export_file("*.tscn") var boss_room: String = ""
+@export var boss_music: AudioStream
 ## The act's ambience bed (`tools/synth/sfx.py`), under the music: wind on the
 ## wall, the mountain breathing, the works humming, rain in the hall.
 @export var ambience: AudioStream
