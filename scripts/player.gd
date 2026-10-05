@@ -27,6 +27,10 @@ const ATMOSPHERE: AtmosphereConfig = preload("res://config/atmosphere.tres")
 ## How fast a landing has to be, px/s, before it kicks up dust. Purely how it
 ## looks: a step down off a plinth is not worth a puff, a full jump is.
 const DUST_LANDING_SPEED: float = 260.0
+## The shake when lava takes you: art px, and how long it takes to settle.
+## Smaller than the generator's, because this one happens a lot.
+const LAVA_SHAKE: float = 2.0
+const LAVA_SHAKE_SECONDS: float = 0.25
 const AUDIO: AudioConfig = preload("res://config/audio.tres")
 
 var config: MovementConfig
@@ -109,11 +113,13 @@ var last_downtime := 0.0
 ## M3's done-when and counting them is how you know you did.
 var deaths := 0
 
-## The death message, which the 1984 original had fifteen of. The bag is what
-## makes the rotation unique: every line is seen once before any repeats.
-## `message_index` is read by `_draw` and by the overlay.
+## The death message, which the 1984 original had fifteen of. A bag per cause
+## is what makes the rotation unique: every line a cause can say is seen once
+## before any repeats. `message_index` is read by `_draw` and by the overlay.
 var message_index := -1
-var _message_bag: PackedInt32Array = []
+## What killed you last, for the overlay and the capture tool.
+var last_cause: DeathMessages.Cause = DeathMessages.Cause.ANY
+var _message_bags: Dictionary = {}
 var _message_timer := 0.0
 
 ## How fast something is carrying the hero upward this physics step, px/s, or
@@ -359,23 +365,35 @@ func _recall_embedded() -> void:
 ## Idempotent, because lava is one area and falling into it reports on more than
 ## one frame. A second call inside a death would otherwise restart the clock and
 ## strand you.
-func die() -> void:
+func die(cause: DeathMessages.Cause = DeathMessages.Cause.ANY) -> void:
 	if _dead:
 		return
 	_dead = true
+	last_cause = cause
 	_death_elapsed = 0.0
 	velocity = Vector2.ZERO
 	climbing = false
 	_somersaulting = false
 	_recovery_timer = 0.0
 	deaths += 1
-	# What is left of you going up as embers, from where you were.
+	# What is left of you going up as embers, from where you were, and what
+	# did it: sparks for current, the surface heaving for lava, which is one
+	# of the two things `ART_DIRECTION.md` allows a shake for.
 	Burst.emit(get_parent(), global_position, Burst.Kind.EMBERS)
+	match cause:
+		DeathMessages.Cause.CURRENT:
+			Burst.emit(get_parent(), global_position, Burst.Kind.ARC_SPARKS)
+			Sfx.play(self, AUDIO.zap)
+		DeathMessages.Cause.LAVA:
+			Burst.emit(get_parent(), _feet(), Burst.Kind.SPARKS)
+			Shake.kick(self, LAVA_SHAKE, LAVA_SHAKE_SECONDS)
+		DeathMessages.Cause.BEAST, DeathMessages.Cause.SPIKES:
+			Burst.emit(get_parent(), global_position, Burst.Kind.CHITIN)
 	Sfx.play(self, AUDIO.die)
 	var audio := get_node_or_null("/root/Audio")
 	if audio != null:
 		audio.muffle()
-	_draw_a_message()
+	_draw_a_message(cause)
 	queue_redraw()
 
 
@@ -396,20 +414,23 @@ func lift(speed: float) -> void:
 	_lift_speed = maxf(_lift_speed, speed)
 
 
-## Takes one line from the bag, refilling it when it runs dry. The message
+## Takes one line from the bag of what killed you, refilling it from every
+## line that cause may say when it runs dry. The message
 ## outlasts the loop on purpose: it is still on screen once you have the
 ## controls back, so reading it costs none of SPEC.md's one second.
-func _draw_a_message() -> void:
+func _draw_a_message(cause: DeathMessages.Cause) -> void:
 	if death_config.message_seconds <= 0.0:
 		message_index = -1
 		return
-	_message_bag = DeathMessages.refill_if_empty(_message_bag, DeathMessages.count())
-	var slot := DeathMessages.slot_for(randf(), _message_bag.size())
+	var bag: PackedInt32Array = _message_bags.get(cause, PackedInt32Array())
+	bag = DeathMessages.refill_if_empty(bag, DeathMessages.pool_for(cause))
+	var slot := DeathMessages.slot_for(randf(), bag.size())
 	if slot < 0:
 		message_index = -1
 		return
-	message_index = _message_bag[slot]
-	_message_bag.remove_at(slot)
+	message_index = bag[slot]
+	bag.remove_at(slot)
+	_message_bags[cause] = bag
 	_message_timer = death_config.message_seconds
 
 

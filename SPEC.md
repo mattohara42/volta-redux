@@ -183,10 +183,17 @@ the respawn**, fading out while you are already running. It costs nothing, and
 reading it is optional in a way the original's was not.
 
 **The lines are ours.** `CLAUDE.md` forbids shipping anything out of
-`assets/reference/`, so none of the four is used: the fifteen in
+`assets/reference/`, so none of the four is used: the lines in
 `scripts/logic/death_messages.gd` are written to that register rather than taken
-from it. They rotate from a bag, so all fifteen are seen before any repeats,
+from it. They rotate from a bag, so every line is seen before any repeats,
 which matters in a game built to be died in.
+
+**A line knows what killed you** (2026-10-05, from `BACKLOG.md`). A line that
+names a hazard (lava, spikes, a beast, current, the dragon's fire) is only
+said by that hazard, and lines about nothing in particular can be said by
+anything, so an arc never answers with a geyser. Each cause keeps its own bag.
+Fifteen lines were written first, to the original's count; the rest arrived so
+each cause has a handful of its own.
 
 **The hero being Lothar of the Hill People is doing work here.** A name that is
 a joke played straight is exactly the register these lines want.

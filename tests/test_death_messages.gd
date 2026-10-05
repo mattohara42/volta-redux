@@ -1,4 +1,4 @@
-## The death messages, and the rule that makes them rotate.
+## The death messages, and the rules that make them rotate and fit.
 ##
 ## The 1984 original had fifteen. Four survive in `assets/reference/c64/` and
 ## CLAUDE.md forbids shipping anything out of that directory, so every line here
@@ -7,10 +7,21 @@
 extends TestCase
 
 const DEATH := "res://config/death.tres"
+## Words that name a hazard. A line carrying one is about that hazard, and
+## `BACKLOG.md`'s complaint was exactly an arc answered by a geyser.
+const NAMED := {
+	DeathMessages.Cause.LAVA: ["MOLTEN", "MOUNTAIN", "MOAT", "GEYSER", "TALLOW", "WARMER", "DEEP FIRES", "SMELTED"],
+	DeathMessages.Cause.SPIKES: ["SPITTED", "IRON", "POINT", "IMPALED", "TEETH"],
+	DeathMessages.Cause.BEAST: ["VERMIN", "SUPPER", "CARAPACE", "FEAST", "BEAST", "DEVOURED"],
+	DeathMessages.Cause.CURRENT: ["VOLTA", "COPPER", "CONDUCTED", "HAIR", "GROUNDED", "CIRCUIT"],
+	DeathMessages.Cause.FIRE: ["WYRM", "ROASTED", "WARM AND FINAL", "DRAGON", "COOKED"],
+}
 
 
-func test_there_are_fifteen_as_the_original_had() -> void:
-	check_eq(DeathMessages.count(), 15, "fifteen death messages")
+## The original's fifteen are still the core of it; the rest arrived when the
+## lines learned their causes.
+func test_there_are_at_least_the_original_fifteen() -> void:
+	check(DeathMessages.count() >= 15, "%d death messages, at least fifteen" % DeathMessages.count())
 
 
 func test_no_message_is_repeated() -> void:
@@ -38,40 +49,69 @@ func test_an_index_outside_the_pool_is_blank_rather_than_a_crash() -> void:
 	check_eq(DeathMessages.message_at(DeathMessages.count()), "", "one past the end is blank")
 
 
-## The whole point of a bag rather than a random pick. "Unique, rotating" means
-## you see all fifteen before you see any of them twice, which matters in a game
-## built to be died in often: a plain random pick repeats within a few deaths
-## and the tradition stops reading as a set.
-func test_every_message_is_seen_before_any_repeats() -> void:
-	var bag: PackedInt32Array = []
-	var seen: Dictionary = {}
-	# A spread of rolls rather than one, so the test does not only ever take
-	# slot zero and miss a bag that shrinks wrongly.
-	var rolls: PackedFloat32Array = [0.0, 0.5, 0.99, 0.25, 0.75]
+## Every cause has a handful of its own, or keying lines to causes would only
+## mean the generic ones come round more often.
+func test_every_cause_has_lines_of_its_own() -> void:
+	for cause: DeathMessages.Cause in DeathMessages.Cause.values():
+		var own := 0
+		for i in DeathMessages.count():
+			if DeathMessages.cause_of(i) == cause:
+				own += 1
+		check(own >= 5, "%s has %d lines of its own" % [DeathMessages.Cause.keys()[cause], own])
+
+
+## `BACKLOG.md`: "an arc in Act 3 can say THE GEYSER HAD OTHER PLANS". A line
+## that names a hazard is only ever said by that hazard.
+func test_a_line_that_names_a_hazard_is_only_said_by_it() -> void:
+	for cause: DeathMessages.Cause in DeathMessages.Cause.values():
+		for i in DeathMessages.pool_for(cause):
+			var text := DeathMessages.message_at(i)
+			for other: DeathMessages.Cause in NAMED:
+				if other == cause:
+					continue
+				for word: String in NAMED[other]:
+					check(not text.contains(word), "%s never says \"%s\", which is about %s" % [
+						DeathMessages.Cause.keys()[cause], text, DeathMessages.Cause.keys()[other]
+					])
+
+
+## A line about nothing in particular can be said by anything.
+func test_a_line_about_nothing_is_said_by_every_cause() -> void:
 	for i in DeathMessages.count():
-		bag = DeathMessages.refill_if_empty(bag, DeathMessages.count())
-		var slot := DeathMessages.slot_for(rolls[i % rolls.size()], bag.size())
-		seen[bag[slot]] = true
-		bag.remove_at(slot)
-	check_eq(
-		seen.size(), DeathMessages.count(),
-		"all %d messages appear in the first %d deaths" % [
-			DeathMessages.count(), DeathMessages.count()
-		]
-	)
+		if DeathMessages.cause_of(i) != DeathMessages.Cause.ANY:
+			continue
+		for cause: DeathMessages.Cause in DeathMessages.Cause.values():
+			check(DeathMessages.pool_for(cause).has(i), "%s may say \"%s\"" % [
+				DeathMessages.Cause.keys()[cause], DeathMessages.message_at(i)
+			])
+
+
+## The whole point of a bag rather than a random pick. "Unique, rotating" means
+## you see every line a cause can say before you see any of them twice, which
+## matters in a game built to be died in often: a plain random pick repeats
+## within a few deaths and the tradition stops reading as a set.
+func test_every_line_a_cause_can_say_is_seen_before_any_repeats() -> void:
+	var rolls: PackedFloat32Array = [0.0, 0.5, 0.99, 0.25, 0.75]
+	for cause: DeathMessages.Cause in DeathMessages.Cause.values():
+		var pool := DeathMessages.pool_for(cause)
+		var bag: PackedInt32Array = []
+		var seen: Dictionary = {}
+		for i in pool.size():
+			bag = DeathMessages.refill_if_empty(bag, pool)
+			var slot := DeathMessages.slot_for(rolls[i % rolls.size()], bag.size())
+			seen[bag[slot]] = true
+			bag.remove_at(slot)
+		check_eq(seen.size(), pool.size(), "%s: all %d of its lines in its first %d deaths" % [
+			DeathMessages.Cause.keys()[cause], pool.size(), pool.size()
+		])
 
 
 func test_the_bag_refills_only_when_empty() -> void:
+	var pool := DeathMessages.pool_for(DeathMessages.Cause.LAVA)
 	var empty: PackedInt32Array = []
-	check_eq(
-		DeathMessages.refill_if_empty(empty, 15).size(), 15,
-		"an empty bag refills to the whole pool"
-	)
+	check_eq(DeathMessages.refill_if_empty(empty, pool).size(), pool.size(), "an empty bag refills to the whole pool")
 	var partial: PackedInt32Array = [3, 7]
-	check_eq(
-		DeathMessages.refill_if_empty(partial, 15).size(), 2,
-		"a bag with anything left in it is untouched"
-	)
+	check_eq(DeathMessages.refill_if_empty(partial, pool).size(), 2, "a bag with anything left in it is untouched")
 
 
 ## A roll of exactly 1.0 is the bug that would show up once in a few thousand

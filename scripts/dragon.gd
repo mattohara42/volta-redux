@@ -128,7 +128,7 @@ func _update() -> void:
 		for body in _breath.get_overlapping_bodies():
 			var player := body as Player
 			if player != null:
-				player.die()
+				player.die(DeathMessages.Cause.FIRE)
 	_show_flame()
 
 

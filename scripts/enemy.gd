@@ -48,6 +48,7 @@ var _sprite_tree: AnimationTree = null
 
 func configure(size: Vector2) -> void:
 	super.configure(size)
+	cause = DeathMessages.Cause.BEAST
 	add_to_group("enemies")
 	collision_layer = ENEMY_LAYER
 	# Others can find this one now: a hazard is invisible on purpose, and an
