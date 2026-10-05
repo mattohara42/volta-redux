@@ -48,7 +48,7 @@ drive it through one script that finds Godot on macOS and Linux for you:
 
 ```
 tools/dev.sh import                              # once, after a fresh clone
-tools/dev.sh play                                # the benches, F2 cycles
+tools/dev.sh play                                # the game, from where you left it
 tools/dev.sh test                                # headless assertions
 ```
 
@@ -62,6 +62,26 @@ killed you and with what, and the swords in and out (`user://play_log.csv`,
 appended to across sessions). `python3 tools/play_log.py` sums it up per room
 and per act, which is how M14 judges difficulty and length from a real
 playthrough rather than by guessing.
+
+### A playthrough, step by step
+
+Godot is not on the PATH on Matt's Mac, so `godot` typed alone fails with
+`command not found`. Go through `tools/dev.sh`, which finds the app.
+
+1. Close the Godot editor, then `git checkout main` and `git pull origin main`.
+   If the pull refuses over `project.godot`, that is the editor's rewrite:
+   `git restore project.godot` and pull again. Any other file, stop and ask.
+2. `tools/dev.sh import`, since `*.import` is gitignored and new art needs it.
+3. Sound on. `tools/dev.sh play`. For a run from the start, Esc, NEW GAME.
+4. Controls: A/D or arrows move, Space jumps, W/S climb, J throws, hold J to
+   recall, Esc pauses. F1 and F2 are bench tools: F2 leaves the game for the
+   benches, so leave both alone during a run.
+5. Play every room straight through and note anything that makes you stop.
+   What to watch for right now is `HANDOFF.md` → *Blocked on Matt*.
+6. Afterwards, `python3 tools/play_log.py`. The raw log and the save are in
+   `~/Library/Application Support/Godot/app_userdata/Volta Redux/`.
+
+Quitting while music plays prints "resources still in use at exit". Harmless.
 
 Set `GODOT` if it is somewhere unusual. The script wraps `godot --path .`,
 `godot --path . --import` and `godot --headless --path . --script

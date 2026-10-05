@@ -5,7 +5,7 @@
 #
 #   tools/dev.sh import              reimport after a fresh clone
 #   tools/dev.sh test                headless assertions
-#   tools/dev.sh play [scene]        run it, F2 cycles the benches
+#   tools/dev.sh play [scene]        run the game (F2 cycles the benches)
 #   tools/dev.sh shot SCENE OUT ...  a screenshot from a real running build
 #   tools/dev.sh scenarios [filter]  the capture-and-check scenarios CI runs
 #   tools/dev.sh route               every room's exit, in order, to the ending
