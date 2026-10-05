@@ -3,36 +3,44 @@
 > **Rewrite this file, never append.** State snapshot and pointers only. No
 > session narrative, that is what `git log` is for. Keep it under 80 lines.
 
-**Updated:** 2026-10-04 · **Phase:** 3, the game · **Active:** M13, Act 4,
-built and waiting on Matt's play, like M10 to M12. **Next: M14**, the pass.
-**M13 done when:** the game can be completed from a new save (`BUILD_PLAN.md`).
-The game now launches into `Act1Bank` and runs to "The end."; F2 still
-reaches the benches. `tools/dev.sh route` walks every exit in order (CI).
+**Updated:** 2026-10-05 · **Phase:** 3, the game · **Active:** M14, the pass,
+waiting on Matt's play. **M14 done when:** three full playthroughs with no
+note worth writing down (`BUILD_PLAN.md`). M13's done-when (the game can be
+completed from a new save) is met in CI by `tools/dev.sh route`.
 
 ## Where this is
 
-**Credits: 510.** Random HTTP 403s cost nothing; retry once.
-Spend in small batches, each looked at before the next (`ART.md` → *What is
-left to generate*). Enemies and characters wait on `RoomM7Sheet`'s verdict.
+**All four acts are built and connected, and an overnight pass (Matt's
+request, PRs #116 to #127) dressed them**: a coloured dark that lights push
+back (`LightField`), code-drawn far layers for Acts 2 to 4 (`Backdrop`),
+particles for every event (`Burst`), every sound and every act's music
+rendered from code (`tools/synth/`, `assets/audio/README.md`), ambience,
+death lines keyed to their cause (`SPEC.md`), rooms that dissolve in, an act
+card with that act's death count, an opening card and a pause menu. M15 is
+built ahead of M14; two M16 pieces are pulled forward (`BUILD_PLAN.md`).
+
+**Credits: 510**, none spent overnight. Enemies wait on `RoomM7Sheet`.
 
 ## The next action
 
-**All four acts are built and connected**, each room extending `Bench` and
-drawn with `TileArt` (`Bench`'s class comment says why). Act 4 (`SPEC.md` →
-*Act 4*): gems close circuits (`Gem`, `GemHolder`, `RoomM13Gems`); one gem
-each in `Act4Gallery` and `Act4Guard`; `Act4Throne`, where Volta pulls swords
-and the freed dragon puts him in the fire; `Act4Flight`, the ending. Act 4 has
-its own hall tiles and a generated Volta.
-**Next is M14**, which starts with Matt playing it through. **Act 2 needs a
-painted background** (Matt, Gemini); until then it is a plain backdrop.
+**Matt plays it through with sound on.** That is M14's first step and the
+first time anyone hears the audio. `BACKLOG.md`'s overnight section is the
+design notes to weigh while playing (chest in every room, the unused ant and
+plate, Act 2's sword-free openers, no optional risk yet).
 
 ## Blocked on Matt
 
-1. **Playing Act 1 through**: does each room teach its verb with no words, and
-   is the bailey's grate read as something alive in the dark?
-2. **`RoomM7Sheet`**: are the six consistent in treatment? That closes M7.
-3. **M4 playtest feedback**: the dragon's pacing, the ledge-to-wood throw and
+1. **Playing it through, sound on**: does each Act 1 room teach its verb with
+   no words, is the dark too dark anywhere, and do the four sword sounds tell
+   the states apart with the screen dimmed (M15's done-when)?
+2. **Decisions made unattended, worth a yes or no**: death lines keyed to
+   cause (a change to a `SPEC.md` decision, #122); the opening card and pause
+   menu pulled from M16 (#123, #127); the ambient levels per act
+   (`config/actN.tres`).
+3. **`RoomM7Sheet`**: are the six consistent in treatment? That closes M7.
+4. **M4 playtest feedback**: the dragon's pacing, the ledge-to-wood throw and
    the dormant scorpion's wake-to-danger gap. Blocks M14's tuning of those.
+5. **Act 2 still wants a painting** (Gemini); `Backdrop` stands in (`ART.md`).
 
 ## Traps that will bite again
 
@@ -40,35 +48,33 @@ painted background** (Matt, Gemini); until then it is a plain backdrop.
 each session. **Opening the project rewrites `project.godot`**: close the
 editor, `git diff project.godot`, restore, then pull. **A new `class_name`
 script fails every caller until a reimport, and the test runner still exits 0
-with the parse error printed**: read its output, not its exit code. The same
-goes for a `SCRIPT ERROR` mid-test. **Tests run before the tree is ready**, so
-nothing needing `get_tree()` can be tested headless.
+with the parse error printed**: read its output, not its exit code. **Tests
+run before the tree is ready**, so nothing needing `get_tree()` can be tested
+headless. **Indexing a `const` array of preloaded resources** folds at parse
+time and fails to compile: go through a typed variable.
 
-**`style-reference` ignores `size`** (58 to 71 when asked 32); `generate`
-holds it and `edit` refuses it and keeps the input's size (2026-10-03).
-`animate` starts on the input's own pose and never moves its feet. **Generated
-frames can boil**: `tools/capture.gd --filmstrip=N`, starting `--input` with
-`debug_toggle_overlay:1` or the overlay hides the hero. **A test can pass while
-a texture is missing**: load a room with `tools/dev.sh shot` after touching
-art. **`assets/art_raw/` is `.gdignore`d**: Godot cannot decode Sprite
-Fusion's animated WebP. **An SSL EOF before the API answers charges nothing**:
-check `credits`, then retry once.
+**`*.import` is gitignored**: an import setting set there (a loop flag) holds
+on one machine only: loops live in the WAV (`smpl`) or in code, and a fresh
+import is the test (#120). **Godot's
+movie writer is how to see and hear a real run**:
+`godot --path . <scene> --write-movie out/f.png --fixed-fps 30 --quit-after N`
+writes frames and the game's own mix as a WAV.
+
+**Sprite Fusion**: `style-reference` ignores `size`, `animate` starts on the
+input's pose, frames can boil (filmstrip first), an SSL EOF charges nothing.
+**A test can pass while a texture is missing**: shoot the room after art.
 
 ## Settled, do not relitigate
 
 **Pixel art.** **Straight sword, asymmetric hilt.** **M5 final quality.**
-**Moving jumps are somersaults, no throwing during one; dives cost a
-recovery pause** (Matt, 2026-09-28, and the playtest passed the somersault,
-dive, run pace, hero height 36 and lava brightness). **M4:** contact with any
-enemy kills, the dragon is vulnerable only to RECALLING. **G1:** passed.
-**Generation budget:** not a hard gate. **`LEVELS.md`'s twelve questions**
-(Matt, 2026-09-28): the caged creature is the Act 2 dragon, chained then freed
-in Act 4; the forest folds into Act 1; about 18 rooms; remix rooms wanted.
+**Moving jumps are somersaults; dives cost a recovery pause** (2026-09-28).
+**M4:** contact with any enemy kills; the dragon dies only to RECALLING.
+**G1:** passed. **`LEVELS.md`'s twelve questions** (Matt, 2026-09-28).
 
 ## Pointers
 
 `SPEC.md` what the game is · `BUILD_PLAN.md` what to build next ·
 `ART_DIRECTION.md` how it looks · `ANIMATION.md` what moves ·
-`ART.md`/`GEMINI_NOTES.md` before any art · `CLAUDE.md` how to work here ·
-`README.md` running it · `BACKLOG.md` raised and not judged · `LEVELS.md`
-Matt's expanded level vision, decided · `assets/reference/` original.
+`ART.md`/`GEMINI_NOTES.md` before any art · `assets/audio/README.md` sound ·
+`CLAUDE.md` how to work here · `README.md` running it · `BACKLOG.md` raised
+and not judged · `LEVELS.md` Matt's level vision, decided.
