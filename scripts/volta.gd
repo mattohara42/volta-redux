@@ -18,6 +18,7 @@ const SPRITE_SCENE: PackedScene = preload("res://scenes/volta_sprite.tscn")
 const SIZE := Vector2(28.0, 52.0)
 ## The orb on his staff, from his feet: where every bolt leaves from.
 const HAND := Vector2(-16.0, -48.0)
+const ATMOSPHERE: AtmosphereConfig = preload("res://config/atmosphere.tres")
 ## How long the fall into the fire takes, seconds. Presentation, not tuning.
 const FALL_TIME: float = 0.8
 
@@ -27,6 +28,7 @@ var is_defeated := false
 var is_stopped := false
 ## His feet, in the room's coordinates.
 var base := Vector2.ZERO
+var _orb: LightSource
 ## His clock waits until the hero is past this x.
 var wake_x := -INF
 
@@ -45,6 +47,11 @@ func configure(feet: Vector2, config: EnemyConfig) -> void:
 	_sprite = SPRITE_SCENE.instantiate() as Node2D
 	_sprite.position = feet
 	add_child(_sprite)
+	# His staff's orb lights the throne room cold, the only cool light in a
+	# hall of braziers (`LightField`), and goes out when he falls.
+	_orb = LightSource.point(ATMOSPHERE.light_volta_radius, Palette.ARC, ATMOSPHERE.light_volta_strength, ATMOSPHERE.light_volta_flicker)
+	_orb.position = feet + HAND
+	add_child(_orb)
 	add_to_group("mechanisms")
 	add_to_group("volta")
 	queue_redraw()
@@ -112,6 +119,7 @@ func fall_into(pit_floor: float) -> void:
 		return
 	is_defeated = true
 	_show_bolt(false)
+	_orb.visible = false
 	_travel("fall")
 	queue_redraw()
 	var tween := create_tween()

@@ -20,6 +20,17 @@ var art: Texture2D = null:
 		queue_redraw()
 ## How much of a raised portcullis still shows at the top of its opening.
 const RAISED_SHOWING: float = 6.0
+## How long the bars take to wind up, and to drop, seconds. Purely how it
+## looks: the gate is passable or solid the moment it is asked, so the drop is
+## fast, because bars still on their way down are already in the way.
+const RISE_SECONDS: float = 0.35
+const DROP_SECONDS: float = 0.08
+
+## How far down the drawn bars are, 0 raised to 1 dropped, chasing `is_open`.
+var _drop := 1.0
+## False until the first frame has drawn, so a room that opens a gate while it
+## is still setting up shows it open rather than winding up as the room appears.
+var _settled := false
 
 
 ## Builds its own collision rather than being handed one, so nothing depends on
@@ -37,6 +48,19 @@ func _ready() -> void:
 	add_to_group("gates")
 
 
+func _process(delta: float) -> void:
+	var target := 0.0 if is_open else 1.0
+	if not _settled:
+		_settled = true
+		_drop = target
+		return
+	if is_equal_approx(_drop, target):
+		return
+	var speed := 1.0 / (RISE_SECONDS if is_open else DROP_SECONDS)
+	_drop = move_toward(_drop, target, speed * delta)
+	queue_redraw()
+
+
 func set_open(open: bool) -> void:
 	if open == is_open or _shape == null:
 		return
@@ -44,9 +68,9 @@ func set_open(open: bool) -> void:
 	# Deferred because a switch reports during physics, and a body cannot change
 	# its own collision mid-step. It lands on the next frame.
 	_shape.set_deferred("disabled", is_open)
-	# Grit shaken out of the slot the bars run in.
+	# Grit shaken out of the slot the bars run in, once the room is running.
 	var box := _shape.shape as RectangleShape2D
-	if box != null and is_inside_tree():
+	if box != null and is_inside_tree() and _settled:
 		Burst.emit(get_parent(), global_position - Vector2(0.0, box.size.y * 0.5), Burst.Kind.DEBRIS)
 		Sfx.play(self, Sfx.CONFIG.gate)
 	queue_redraw()
@@ -72,7 +96,9 @@ func _draw() -> void:
 	var rect := Rect2(-shape.size * 0.5, shape.size)
 	if art != null:
 		# Raised, only its teeth show under the lintel; dropped, it fills the way.
-		var shown := Rect2(rect.position, Vector2(rect.size.x, RAISED_SHOWING)) if is_open else rect
+		# Between the two while it winds up or drops.
+		var height := lerpf(RAISED_SHOWING, rect.size.y, _drop)
+		var shown := Rect2(rect.position, Vector2(rect.size.x, height))
 		draw_texture_rect_region(art, shown, Rect2(Vector2(0.0, rect.size.y - shown.size.y), shown.size))
 		return
 	if is_open:

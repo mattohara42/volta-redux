@@ -61,6 +61,10 @@ func _dress_the_room() -> void:
 		var field := LightField.new()
 		field.setup(act.ambient_light, act.ceiling_dim)
 		add_child(field)
+		# Dust in the air, only seen where something lights it. Ash in the
+		# caverns, where the air is hot.
+		var ash := act.backdrop == Backdrop.Style.CAVERN
+		add_child(Motes.make(Palette.FIRE_FALLOFF if ash else Palette.STONE_LIT))
 
 
 func _add_solid(rect: Rect2) -> StaticBody2D:
