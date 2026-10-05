@@ -249,6 +249,14 @@ func test_recall_needs_a_hold_and_fires_once() -> void:
 	)
 
 
+## The three states the player sent it into, and none of the ones where it
+## is stuck, lying or spent.
+func test_only_a_thrown_returning_or_recalled_sword_is_airborne() -> void:
+	var airborne := [SwordFlight.State.FLYING, SwordFlight.State.RETURNING, SwordFlight.State.RECALLING]
+	for state: SwordFlight.State in SwordFlight.State.values():
+		check_eq(SwordFlight.is_airborne(state), airborne.has(state), "%s airborne" % SwordFlight.state_name(state))
+
+
 func test_every_state_has_a_readable_name() -> void:
 	for state in S.values():
 		check(not SwordFlight.state_name(state).is_empty(), "state %d is named" % state)

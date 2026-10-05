@@ -17,6 +17,10 @@ const SPRITE_SCENE: PackedScene = preload("res://scenes/generator_sprite.tscn")
 ## them is code (`ArcBolt`), not paint, per `CLAUDE.md`.
 const HORN_LEFT := Vector2(-19.0, -64.0)
 const HORN_RIGHT := Vector2(20.0, -64.0)
+## The shake when it shorts: art px, and how long it takes to settle. One of
+## the two things `ART_DIRECTION.md` allows a shake at all.
+const SHORT_SHAKE: float = 4.0
+const SHORT_SHAKE_SECONDS: float = 0.6
 
 var enemy_config: EnemyConfig
 var is_shorted := false
@@ -126,6 +130,9 @@ func _on_loop_closed(held: bool) -> void:
 	_out.is_source = false
 	_show_arc(false)
 	_hum.queue_free()
+	Burst.emit(get_parent(), global_position, Burst.Kind.ARC_SPARKS)
+	Burst.emit(get_parent(), global_position, Burst.Kind.SPARKS)
+	Shake.kick(self, SHORT_SHAKE, SHORT_SHAKE_SECONDS)
 	# Burnt out, through its AnimationTree like every state.
 	_sprite_tree()["parameters/playback"].travel("dead")
 	queue_redraw()

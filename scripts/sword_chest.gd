@@ -31,7 +31,10 @@ func _ready() -> void:
 func _on_body_entered(body: Node2D) -> void:
 	var player := body as Player
 	if player != null:
+		var before := player.swords_held
 		player.top_up_swords(CONFIG.chest_fill)
+		if player.swords_held > before:
+			Burst.emit(get_parent(), global_position + Vector2(0.0, -SIZE.y), Burst.Kind.SPARKLE)
 
 
 func _draw() -> void:

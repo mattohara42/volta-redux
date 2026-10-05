@@ -26,6 +26,7 @@ func _ready() -> void:
 	)
 	light.position += HEAD + Vector2(0.0, -FLAME_HEIGHT * 0.4)
 	add_child(light)
+	add_child(Embers.rising(HEAD + Vector2(0.0, -FLAME_HEIGHT * 0.6), FLAME_HALF_WIDTH * 0.5, 0.5))
 
 
 func _process(delta: float) -> void:

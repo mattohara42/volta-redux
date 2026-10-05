@@ -33,6 +33,7 @@ func _on_body_entered(body: Node2D) -> void:
 	var player := body as Player
 	if player != null:
 		player.gems_held += 1
+		Burst.emit(get_parent(), global_position + Vector2(0.0, -SIZE.y * 0.5), Burst.Kind.ARC_SPARKS)
 		queue_free()
 
 

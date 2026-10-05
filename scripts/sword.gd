@@ -50,6 +50,12 @@ var _recalled := false
 var _fried := false
 ## Set by `yank`: torn out of the wall at this horizontal speed, at the next step.
 var _yank_speed := 0.0
+## Whether what it last bit was metal rather than wood, for which burst it
+## throws: sparks off copper, chips off a plank.
+var _bit_metal := false
+## A short gold wake behind a sword in the air (`_make_trail`), so where a
+## throw is going reads at a glance.
+var _trail: CPUParticles2D
 
 @onready var _shape: CollisionShape2D = $CollisionShape2D
 ## The one-tile ledge an embedded sword becomes. A separate body because an
@@ -74,6 +80,8 @@ func _ready() -> void:
 	# A glint, so the most important shape on screen is never lost in a dark
 	# corner of a room (`LightField`).
 	add_child(LightSource.point(ATMOSPHERE.light_sword_radius, Palette.GOLD_FACE, ATMOSPHERE.light_sword_strength))
+	_trail = _make_trail()
+	add_child(_trail)
 
 
 ## Wood is a group rather than a physics layer, because wood is ordinary solid
@@ -88,6 +96,7 @@ func _on_body_entered(body: Node2D) -> void:
 	# conductor to carry its current.
 	var bites := body.is_in_group("wood") or body.is_in_group("metal")
 	_contact = SwordFlight.Contact.WOOD if bites else SwordFlight.Contact.SOLID
+	_bit_metal = body.is_in_group("metal")
 
 
 ## An enemy is its own physics layer rather than a body, because touching it
@@ -128,6 +137,7 @@ func launch(thrower: Node2D, direction: float) -> void:
 	global_position = thrower.global_position
 	_velocity = Vector2(signf(direction) * config.speed, 0.0)
 	state = SwordFlight.State.FLYING
+	_trail.emitting = true
 
 
 func _physics_process(delta: float) -> void:
@@ -293,12 +303,17 @@ func _settle_against_the_surface(direction: float) -> void:
 ## that could have produced CAUGHT (`caught` and `picked_up`) have already
 ## been collapsed into a single `next`.
 func _enter(next: SwordFlight.State, caught_in_flight: bool = false) -> void:
+	var was := state
 	state = next
+	_trail.emitting = SwordFlight.is_airborne(state)
 	match state:
 		SwordFlight.State.RETURNING:
 			_return_distance = 0.0
 		SwordFlight.State.EMBEDDED:
 			_settle_against_the_surface(_velocity.x)
+			# Chips off a plank, sparks off copper, out of the face it bit and
+			# back toward where it came from.
+			Burst.emit(get_parent(), _point(), Burst.Kind.SPARKS if _bit_metal else Burst.Kind.CHIPS, -signf(_velocity.x))
 			# Level, and pointing the way it was going, so the blade is in the
 			# plank and the hilt is the bit you stand on.
 			rotation = 0.0 if _velocity.x >= 0.0 else PI
@@ -311,6 +326,10 @@ func _enter(next: SwordFlight.State, caught_in_flight: bool = false) -> void:
 			# the line that makes it bad.
 			_ledge.set_deferred("disabled", true)
 			_play(config.recall_sound)
+			if was == SwordFlight.State.EMBEDDED:
+				# Pulled out of the wall: the face it was in gives a little.
+				var point := global_position + Vector2.RIGHT.rotated(rotation) * world.sword_length * 0.5
+				Burst.emit(get_parent(), point, Burst.Kind.SPARKS if _bit_metal else Burst.Kind.CHIPS, -cos(rotation))
 		SwordFlight.State.FALLING:
 			# Keeps whatever horizontal speed it had, so a sword that sailed
 			# past you lands past you.
@@ -320,6 +339,7 @@ func _enter(next: SwordFlight.State, caught_in_flight: bool = false) -> void:
 		SwordFlight.State.GROUNDED:
 			_velocity = Vector2.ZERO
 			rotation = 0.0
+			Burst.emit(get_parent(), global_position + Vector2(0.0, world.sword_length * 0.25), Burst.Kind.DUST)
 		SwordFlight.State.CAUGHT:
 			# The sword frees itself this frame, which would cut the sound off
 			# mid-play if it stayed a child of this node: `_sound` is handed to
@@ -331,11 +351,43 @@ func _enter(next: SwordFlight.State, caught_in_flight: bool = false) -> void:
 			_sound.global_position = at
 			_sound.finished.connect(_sound.queue_free)
 			_sound.play()
+			if caught_in_flight:
+				Burst.emit(get_parent(), global_position, Burst.Kind.GLINT)
 			recovered.emit(caught_in_flight)
 			queue_free()
 		SwordFlight.State.DESTROYED:
+			# Spent: its pieces, and the sparks of whatever it broke on.
+			Burst.emit(get_parent(), global_position, Burst.Kind.SHARDS)
+			Burst.emit(get_parent(), global_position, Burst.Kind.SPARKS, -signf(_velocity.x))
 			destroyed.emit()
 			queue_free()
+
+
+## Gold pixels left hanging where the sword has been for a tenth of a second,
+## so a sword in the air draws its own path. Particles left behind in the room
+## rather than carried along, which is what makes them a wake.
+func _make_trail() -> CPUParticles2D:
+	var trail := CPUParticles2D.new()
+	trail.local_coords = false
+	trail.amount = 14
+	trail.lifetime = 0.14
+	trail.initial_velocity_min = 0.0
+	trail.initial_velocity_max = 0.0
+	trail.gravity = Vector2.ZERO
+	trail.scale_amount_min = 1.0
+	trail.scale_amount_max = 2.0
+	trail.emission_shape = CPUParticles2D.EMISSION_SHAPE_SPHERE
+	trail.emission_sphere_radius = 2.0
+	var ramp := Gradient.new()
+	ramp.set_color(0, Palette.GOLD_FACE)
+	ramp.set_color(1, Color(Palette.GOLD_SHADE, 0.0))
+	trail.color_ramp = ramp
+	return trail
+
+
+## Where the blade's point is, for the burst a bite or a break throws.
+func _point() -> Vector2:
+	return global_position + Vector2(signf(_velocity.x) * world.sword_length * 0.5, 0.0)
 
 
 ## A sword carrying current is live metal like any other (`SPEC.md` →
