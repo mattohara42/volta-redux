@@ -143,6 +143,11 @@ arc and a charged surface are shaders and particles with a test that no effect
 loads an image (`ART.md`). The arc is ready for the generator to use; the
 generator itself is M12's.
 
+**Extended 2026-10-05**: a coloured dark that lights push back (`LightField`),
+code-drawn far layers for Acts 2 to 4 until they are painted (`Backdrop`), and
+bursts for every event the player should notice (`Burst`). `ART.md` has the
+light layer's write-up.
+
 ---
 
 ## Phase 3: the game (M10 to M14)
@@ -193,9 +198,19 @@ information the player needs without looking.
 **Done when**: you can play with the screen dimmed and still know where your
 sword is.
 
+**Built 2026-10-05, ahead of M14 at Matt's request**: every sound and every act's
+loop is rendered from code by `tools/synth/` (`assets/audio/README.md`), the
+sword's four states built to differ, a fly loop panned with a sword in the air,
+ambience beds and loops on lava and current. Nobody has listened yet, so the
+done-when is still Matt's to answer.
+
 ### M16: menus, saves, export
 Title, pause, options, key remapping, save per act. Web export and desktop
 builds. Netlify or itch.io.
+
+**Two pieces pulled forward 2026-10-05**: an opening card over the first room
+(`OpeningCard`) and a pause menu with the two volume levels (`PauseMenu`). The
+title screen, key remapping, saves and export are untouched.
 
 **Done when**: it is at a URL and someone else has finished it.
 

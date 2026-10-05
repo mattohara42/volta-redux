@@ -263,3 +263,40 @@ committed to.
   it cannot be picked up. The room's chest refills to three. Judge in play
   whether that cost is right or the pull should throw swords clear.
 
+
+## Raised during the overnight polish pass (2026-10-05), not judged
+
+- **Every playable room has a chest.** All twenty rooms before the flight top
+  you up to three on the way in, so a sword lost in one room costs nothing in
+  the next, and `SPEC.md`'s "swords carry between rooms" never bites. SPEC
+  already says later rooms should hide swords or offer a mechanism instead.
+  A first cut: keep chests in Act 1, in each act's first room and wherever a
+  puzzle needs three; take the rest out and see whether the carry starts to
+  matter. A difficulty change, so M14's to judge by playing.
+- **The giant ant is built and in no room.** `SPEC.md`'s ant punishes
+  "assuming the floor is where danger is", and nothing in Acts 1 to 4 walks a
+  wall or a ceiling. Act 3 is the obvious home: seven rooms with no creature
+  but the generator, where an ant on the ceiling would make standing still to
+  wire a seam a decision. Check first what an ant does when it walks into an
+  embedded sword.
+- **The floor plate and the dormant enemy on a plate are built and in no
+  room.** `room_m4_plate` and `room_m4_dormant` prove both, and `LEVELS.md`
+  liked "an enemy as a switch". A real room using one would be new rather
+  than a remix.
+- **Act 2's first two rooms never ask for the sword.** The mouth (ferries)
+  and the geyser shaft are bench crossings reskinned, and the act's lesson
+  ("a throw you have to catch before the platform you are standing on drops")
+  first appears in room 3, optionally. One beat each would fix it: a switch
+  across a moat that a throw from a moving ferry has to hit, or a vent opened
+  by a sword held in a valve.
+- **No optional risk anywhere yet.** `LEVELS.md`'s first replayability idea
+  (a harder path worth a secret, beside the one everyone solves) has no room.
+  The run tally on the end card is the cheapest place to count secrets.
+- **Act 4 is thin on danger.** Three rooms: a shelf, the Act 1 guard lesson
+  again, and Volta. Volta is the act; the other two could ask more.
+- **Quitting mid-track prints "resources still in use at exit".** The audio
+  server frees a stopped playback on its own thread and quitting does not
+  wait. Harmless; noise in CI's log.
+- **The sounds and the music have not been heard by anyone.** Designed and
+  checked by drawing and measuring them (`assets/audio/README.md`). Expect
+  some recipes and levels to need a re-render after the first listen.
