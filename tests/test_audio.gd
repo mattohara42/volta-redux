@@ -101,3 +101,16 @@ func test_every_act_has_an_ambience_and_the_room_loops_loop() -> void:
 	for field in ["lava_loop", "arc_loop"]:
 		var wav := audio.get(field) as AudioStreamWAV
 		check(wav != null and wav.loop_mode == AudioStreamWAV.LOOP_FORWARD, "%s loops" % field)
+
+
+## A player's level scales the mix's own: all of it at full, silence at none.
+func test_a_players_level_scales_the_mix() -> void:
+	check_near(AUDIO_SCRIPT.level_db(-6.0, 1.0), -6.0, 0.001, "full is the mix's own level")
+	check_near(AUDIO_SCRIPT.level_db(-6.0, 0.5), -6.0 + linear_to_db(0.5), 0.001, "half is half the power")
+	check_eq(AUDIO_SCRIPT.level_db(-6.0, 0.0), AUDIO_SCRIPT.SILENT_DB, "none is silence")
+
+
+func test_the_pause_menu_draws_a_level_as_text() -> void:
+	check_eq(PauseMenu.level_bar(0.7), "[=======---]", "seven tenths")
+	check_eq(PauseMenu.level_bar(0.0), "[----------]", "nothing")
+	check_eq(PauseMenu.level_bar(1.0), "[==========]", "everything")

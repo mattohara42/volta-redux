@@ -23,6 +23,7 @@ const KEYS_BY_ACTION := {
 	"debug_respawn": [KEY_R],
 	"debug_toggle_overlay": [KEY_F1],
 	"debug_next_bench": [KEY_F2],
+	"pause": [KEY_ESCAPE],
 }
 
 const SCRIPT_ROOTS: PackedStringArray = ["res://scripts", "res://tools"]
