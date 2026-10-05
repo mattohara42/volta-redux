@@ -74,3 +74,6 @@ light_window_strength = 0.3
 light_window_flicker = 0.1
 room_reveal_seconds = 0.35
 card_cover_seconds = 0.45
+rim_gain = 1.6
+rim_max = 0.6
+light_lava_flicker = 0.12

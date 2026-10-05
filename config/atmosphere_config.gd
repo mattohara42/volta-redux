@@ -104,6 +104,7 @@ extends Resource
 ## A lava pit lights the room along its whole surface.
 @export var light_lava_radius: float = 120.0
 @export_range(0.0, 1.0) var light_lava_strength: float = 0.75
+@export_range(0.0, 1.0) var light_lava_flicker: float = 0.12
 ## Live copper and a live barrier, along their length.
 @export var light_live_radius: float = 40.0
 @export_range(0.0, 1.0) var light_live_strength: float = 0.5
@@ -155,3 +156,10 @@ extends Resource
 ## first frame either way.
 @export var room_reveal_seconds: float = 0.35
 @export var card_cover_seconds: float = 0.45
+
+@export_group("Rim light")
+## How strongly a light reaching a sprite lights its rim: the light's own
+## strength at the sprite times this, never more than `rim_max` of the way
+## to the light's colour.
+@export var rim_gain: float = 1.6
+@export_range(0.0, 1.0) var rim_max: float = 0.6
