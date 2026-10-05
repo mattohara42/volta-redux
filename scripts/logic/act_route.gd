@@ -56,3 +56,10 @@ static func tally(deaths: int, seconds: float) -> String:
 	if deaths <= 0:
 		return "%s It took %s." % [fell, took.trim_prefix("in ")]
 	return "%s, %s." % [fell, took]
+
+
+## The line under an act's own card: how often it killed you.
+static func act_tally(deaths: int) -> String:
+	if deaths <= 0:
+		return "Not once did it kill you."
+	return "It killed you once." if deaths == 1 else "It killed you %d times." % deaths
