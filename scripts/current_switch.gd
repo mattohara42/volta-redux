@@ -14,6 +14,8 @@ func _kills() -> bool:
 
 func _on_live_changed(live: bool) -> void:
 	held_changed.emit(live)
+	if live:
+		Sfx.play(self, Sfx.CONFIG.zap)
 
 
 ## Gold, because it is used (`ART_DIRECTION.md`): a gold socket from across the

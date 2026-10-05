@@ -8,6 +8,7 @@
 ## `tools/dev.sh play`) start as they always did.
 extends Node
 
+const AUDIO: AudioConfig = preload("res://config/audio.tres")
 const ACTS: Array[ActConfig] = [preload("res://config/act1.tres"), preload("res://config/act2.tres"), preload("res://config/act3.tres"), preload("res://config/act4.tres")]
 
 ## Swords to arrive with, or -1 for none carried. Read once, by the next hero.
@@ -82,7 +83,15 @@ func _finish(act: ActConfig, swords_held: int, max_swords: int) -> void:
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	label.set_anchors_preset(Control.PRESET_FULL_RECT)
 	card.add_child(label)
+	# The act ends on three low notes, heard over the frozen room.
+	var sting := AudioStreamPlayer.new()
+	sting.stream = AUDIO.card
+	sting.bus = Sfx.BUS
+	sting.process_mode = Node.PROCESS_MODE_ALWAYS
+	card.add_child(sting)
 	get_tree().root.add_child(card)
+	if sting.stream != null:
+		sting.play()
 	get_tree().paused = true
 	await get_tree().create_timer(act.complete_card_seconds, true).timeout
 	get_tree().paused = false

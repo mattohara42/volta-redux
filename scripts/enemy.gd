@@ -77,6 +77,7 @@ func _on_area_entered(area: Area2D) -> void:
 ## killed, and it is the same dragon you free in Act 4.
 func _defeat() -> void:
 	Burst.emit(get_parent(), global_position, Burst.Kind.CHITIN)
+	Sfx.play(self, Sfx.CONFIG.kill, true)
 	defeated.emit(global_position)
 	queue_free()
 

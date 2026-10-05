@@ -1,10 +1,14 @@
-[gd_resource type="Resource" script_class="SwordConfig" load_steps=6 format=3]
+[gd_resource type="Resource" script_class="SwordConfig" load_steps=10 format=3]
 
 [ext_resource type="Script" path="res://config/sword_config.gd" id="1_sword"]
-[ext_resource type="AudioStream" path="res://assets/audio/sword/throw.wav" id="2_throw"]
-[ext_resource type="AudioStream" path="res://assets/audio/sword/catch.wav" id="3_catch"]
-[ext_resource type="AudioStream" path="res://assets/audio/sword/embed.wav" id="4_embed"]
-[ext_resource type="AudioStream" path="res://assets/audio/sword/recall.wav" id="5_recall"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/sword_throw.wav" id="2_throw"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/sword_catch.wav" id="3_catch"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/sword_embed.wav" id="4_embed"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/sword_recall.wav" id="5_recall"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/sword_fly.wav" id="6_fly"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/sword_break.wav" id="7_break"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/sword_clatter.wav" id="8_clatter"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/sword_fry.wav" id="9_fry"]
 
 [resource]
 script = ExtResource("1_sword")
@@ -28,3 +32,7 @@ throw_sound = ExtResource("2_throw")
 catch_sound = ExtResource("3_catch")
 embed_sound = ExtResource("4_embed")
 recall_sound = ExtResource("5_recall")
+fly_sound = ExtResource("6_fly")
+break_sound = ExtResource("7_break")
+clatter_sound = ExtResource("8_clatter")
+fry_sound = ExtResource("9_fry")

@@ -1,0 +1,50 @@
+[gd_resource type="Resource" script_class="AudioConfig" load_steps=22 format=3]
+
+[ext_resource type="Script" path="res://config/audio_config.gd" id="1_audio"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/hero_jump.wav" id="2_jump"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/hero_land.wav" id="3_land"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/hero_flip.wav" id="4_flip"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/hero_die.wav" id="5_die"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/hero_respawn.wav" id="6_respawn"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/brazier.wav" id="7_brazier"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/chest.wav" id="8_chest"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/kill.wav" id="9_kill"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/gem.wav" id="10_gem"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/gem_set.wav" id="11_gem_set"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/switch.wav" id="12_switch"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/gate.wav" id="13_gate"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/zap.wav" id="14_zap"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/geyser.wav" id="15_geyser"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/crumble.wav" id="16_crumble"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/roar.wav" id="17_roar"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/short.wav" id="18_short"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/bolt.wav" id="19_bolt"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/pull.wav" id="20_pull"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/card.wav" id="21_card"]
+
+[resource]
+script = ExtResource("1_audio")
+music_volume_db = -9.0
+sfx_volume_db = -3.0
+death_muffle_seconds = 0.6
+pitch_jitter = 0.05
+jump = ExtResource("2_jump")
+land = ExtResource("3_land")
+flip = ExtResource("4_flip")
+die = ExtResource("5_die")
+respawn = ExtResource("6_respawn")
+brazier = ExtResource("7_brazier")
+chest = ExtResource("8_chest")
+kill = ExtResource("9_kill")
+gem = ExtResource("10_gem")
+gem_set = ExtResource("11_gem_set")
+switch = ExtResource("12_switch")
+gate = ExtResource("13_gate")
+zap = ExtResource("14_zap")
+geyser = ExtResource("15_geyser")
+crumble = ExtResource("16_crumble")
+roar = ExtResource("17_roar")
+short = ExtResource("18_short")
+bolt = ExtResource("19_bolt")
+pull = ExtResource("20_pull")
+card = ExtResource("21_card")

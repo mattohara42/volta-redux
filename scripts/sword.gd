@@ -56,6 +56,12 @@ var _bit_metal := false
 ## A short gold wake behind a sword in the air (`_make_trail`), so where a
 ## throw is going reads at a glance.
 var _trail: CPUParticles2D
+## The whirr of a sword in the air, looping and panned with it: what says
+## where a sword is without looking (`SwordConfig.fly_sound`).
+var _hum: AudioStreamPlayer2D
+## Whether the step that destroyed it was a live barrier, which sounds
+## different from a sword breaking on stone.
+var _burnt := false
 
 @onready var _shape: CollisionShape2D = $CollisionShape2D
 ## The one-tile ledge an embedded sword becomes. A separate body because an
@@ -82,6 +88,11 @@ func _ready() -> void:
 	add_child(LightSource.point(ATMOSPHERE.light_sword_radius, Palette.GOLD_FACE, ATMOSPHERE.light_sword_strength))
 	_trail = _make_trail()
 	add_child(_trail)
+	_sound.bus = Sfx.BUS
+	_hum = AudioStreamPlayer2D.new()
+	_hum.stream = config.fly_sound
+	_hum.bus = Sfx.BUS
+	add_child(_hum)
 
 
 ## Wood is a group rather than a physics layer, because wood is ordinary solid
@@ -138,6 +149,7 @@ func launch(thrower: Node2D, direction: float) -> void:
 	_velocity = Vector2(signf(direction) * config.speed, 0.0)
 	state = SwordFlight.State.FLYING
 	_trail.emitting = true
+	_set_humming(true)
 
 
 func _physics_process(delta: float) -> void:
@@ -172,6 +184,7 @@ func _physics_process(delta: float) -> void:
 	)
 	_contact = SwordFlight.Contact.NONE
 	_recalled = false
+	_burnt = _fried
 	_fried = false
 	if next == SwordFlight.State.FALLING and state == SwordFlight.State.EMBEDDED:
 		# Torn out: falling has gravity, this gives it the throw.
@@ -306,6 +319,7 @@ func _enter(next: SwordFlight.State, caught_in_flight: bool = false) -> void:
 	var was := state
 	state = next
 	_trail.emitting = SwordFlight.is_airborne(state)
+	_set_humming(SwordFlight.is_airborne(state))
 	match state:
 		SwordFlight.State.RETURNING:
 			_return_distance = 0.0
@@ -340,6 +354,7 @@ func _enter(next: SwordFlight.State, caught_in_flight: bool = false) -> void:
 			_velocity = Vector2.ZERO
 			rotation = 0.0
 			Burst.emit(get_parent(), global_position + Vector2(0.0, world.sword_length * 0.25), Burst.Kind.DUST)
+			Sfx.play(self, config.clatter_sound, true)
 		SwordFlight.State.CAUGHT:
 			# The sword frees itself this frame, which would cut the sound off
 			# mid-play if it stayed a child of this node: `_sound` is handed to
@@ -359,6 +374,7 @@ func _enter(next: SwordFlight.State, caught_in_flight: bool = false) -> void:
 			# Spent: its pieces, and the sparks of whatever it broke on.
 			Burst.emit(get_parent(), global_position, Burst.Kind.SHARDS)
 			Burst.emit(get_parent(), global_position, Burst.Kind.SPARKS, -signf(_velocity.x))
+			Sfx.play(self, config.fry_sound if _burnt else config.break_sound, true)
 			destroyed.emit()
 			queue_free()
 
@@ -383,6 +399,17 @@ func _make_trail() -> CPUParticles2D:
 	ramp.set_color(1, Color(Palette.GOLD_SHADE, 0.0))
 	trail.color_ramp = ramp
 	return trail
+
+
+## The fly loop on while the sword is in the air and off the moment it is
+## not, from the same state change that moves it (`ANIMATION.md`).
+func _set_humming(on: bool) -> void:
+	if _hum == null or _hum.stream == null:
+		return
+	if on and not _hum.playing:
+		_hum.play()
+	elif not on and _hum.playing:
+		_hum.stop()
 
 
 ## Where the blade's point is, for the burst a bite or a break throws.

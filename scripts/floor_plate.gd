@@ -46,6 +46,8 @@ func _physics_process(_delta: float) -> void:
 		return
 	is_held = held
 	held_changed.emit(is_held)
+	if is_held:
+		Sfx.play(self, Sfx.CONFIG.switch)
 	queue_redraw()
 
 

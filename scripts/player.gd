@@ -27,6 +27,7 @@ const ATMOSPHERE: AtmosphereConfig = preload("res://config/atmosphere.tres")
 ## How fast a landing has to be, px/s, before it kicks up dust. Purely how it
 ## looks: a step down off a plinth is not worth a puff, a full jump is.
 const DUST_LANDING_SPEED: float = 260.0
+const AUDIO: AudioConfig = preload("res://config/audio.tres")
 
 var config: MovementConfig
 ## Null only if `SPRITE_SCENE` fails to load, in which case `_draw` falls back
@@ -174,6 +175,7 @@ func _ready() -> void:
 	# A faint rim of firelight that goes where the hero goes, so the thing you
 	# steer is never lost in a room's dark (`LightField`).
 	add_child(LightSource.point(ATMOSPHERE.light_hero_radius, Palette.FIRE_CORE, ATMOSPHERE.light_hero_strength))
+	_sound.bus = Sfx.BUS
 	_message_label.add_theme_font_size_override("font_size", death_config.message_font_size)
 	_message_label.add_theme_color_override("font_color", Palette.FIRE_HOT)
 	_message_label.text = ""
@@ -242,10 +244,12 @@ func _physics_process(delta: float) -> void:
 			# A dive lands hard: dust both ways, twice over.
 			Burst.emit(get_parent(), _feet(), Burst.Kind.DUST)
 			Burst.emit(get_parent(), _feet(), Burst.Kind.DEBRIS)
+			Sfx.play(self, AUDIO.land)
 		else:
 			_landing_timer = _land_pose_duration
 			if fall_speed > DUST_LANDING_SPEED:
 				Burst.emit(get_parent(), _feet(), Burst.Kind.DUST)
+				Sfx.play(self, AUDIO.land, true)
 	else:
 		_landing_timer = maxf(_landing_timer - delta, 0.0)
 	_update_sprite()
@@ -367,6 +371,10 @@ func die() -> void:
 	deaths += 1
 	# What is left of you going up as embers, from where you were.
 	Burst.emit(get_parent(), global_position, Burst.Kind.EMBERS)
+	Sfx.play(self, AUDIO.die)
+	var audio := get_node_or_null("/root/Audio")
+	if audio != null:
+		audio.muffle()
 	_draw_a_message()
 	queue_redraw()
 
@@ -418,6 +426,7 @@ func _step_death(delta: float) -> void:
 		_place_at_checkpoint(death_config.restore_swords)
 		# Rekindled at the brazier.
 		Burst.emit(get_parent(), global_position, Burst.Kind.KINDLE)
+		Sfx.play(self, AUDIO.respawn)
 
 	if DeathClock.has_control(_death_elapsed, hold, freeze):
 		# The measured figure, not the budgeted one. It overshoots config by up
@@ -542,6 +551,7 @@ func _jump(delta: float) -> void:
 	_buffer_timer = 0.0
 	if is_on_floor():
 		Burst.emit(get_parent(), _feet(), Burst.Kind.DUST)
+	Sfx.play(self, AUDIO.flip if _somersaulting else AUDIO.jump, true)
 
 
 ## Records the apex of each jump so the overlay can answer "did that clear a

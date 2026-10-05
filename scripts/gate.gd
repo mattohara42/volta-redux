@@ -48,6 +48,7 @@ func set_open(open: bool) -> void:
 	var box := _shape.shape as RectangleShape2D
 	if box != null and is_inside_tree():
 		Burst.emit(get_parent(), global_position - Vector2(0.0, box.size.y * 0.5), Burst.Kind.DEBRIS)
+		Sfx.play(self, Sfx.CONFIG.gate)
 	queue_redraw()
 
 
