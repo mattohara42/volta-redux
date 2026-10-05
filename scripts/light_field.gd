@@ -60,6 +60,8 @@ func _cover_the_view() -> void:
 	var camera := get_viewport().get_camera_2d()
 	if camera != null:
 		centre = camera.get_screen_center_position()
+		# A camera zoomed out (the capture tool's whole-room shots) sees more.
+		view /= camera.zoom
 	position = (centre - view * 0.5 - Vector2(MARGIN, MARGIN)).floor()
 	size = view + Vector2(MARGIN, MARGIN) * 2.0
 

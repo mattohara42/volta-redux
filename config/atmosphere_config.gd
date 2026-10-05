@@ -120,10 +120,25 @@ extends Resource
 @export var light_volta_radius: float = 70.0
 @export_range(0.0, 1.0) var light_volta_strength: float = 0.45
 @export_range(0.0, 1.0) var light_volta_flicker: float = 0.25
+## A geyser's jet while it is up: steam lit from the vent, cool, lifting the
+## dark around it a little so the column reads as steam and not as a slab.
+@export var light_steam_radius: float = 26.0
+@export_range(0.0, 1.0) var light_steam_strength: float = 0.35
 ## A sword in flight or lying loose: a glint, so the most important shape on
 ## screen is never lost in a dark corner.
 @export var light_sword_radius: float = 22.0
 @export_range(0.0, 1.0) var light_sword_strength: float = 0.3
+
+@export_group("Steam")
+## A geyser's jet (`shaders/steam.gdshader`): how fast its billows rise, px/s.
+@export var steam_rise_speed: float = 110.0
+## How far up from the vent the jet keeps the lava's warmth, 0 to 1 of its
+## height.
+@export_range(0.0, 1.0) var steam_warm_reach: float = 0.3
+## How dense the jet is at its thinnest, so the whole lifting box always reads.
+@export_range(0.0, 1.0) var steam_edge_alpha: float = 0.26
+## Bands between no steam and the thickest, as every soft thing is banded.
+@export var steam_steps: float = 5.0
 
 @export_group("Backdrop")
 ## How fast each of a backdrop's two layers moves against the room: 1 moves
