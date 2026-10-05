@@ -340,6 +340,51 @@ carved totem, every 517 px; and the warm lower band is where enemies stand,
 so a dark red bat has less contrast against it than against the old purple.
 Rim light carries it in every shot so far.
 
+**Act 3 background, attempt 1 (2026-10-05), sent to Matt.** Act 2's
+recipe for the generator's works. Three exclusions are new: no electricity
+of any kind, because an arc is the act's hazard and the only cool bright in
+the game (`ART_DIRECTION.md`), so a painted one would be read as live; no
+copper, brass or gold, because copper means conductive here and gold means
+interactive; and nothing horizontal, because a pipe run, a beam or a
+catwalk in a painting reads as somewhere to stand. Evenly spaced stone
+piers give the mirror seam a column to fall on, as Act 2's did. Raw delivery
+to `assets/art_raw/act3_works_bg.*`.
+
+> [preamble] A wide painted background for a side-scrolling platformer: a
+> long horizontal strip of the far wall of a vast underground machine hall
+> beneath a castle, in flat side view like a stage backdrop, camera
+> perpendicular to the wall, with no vanishing point. It is NOT a
+> three-quarter view, NOT a corridor receding into the distance, and NOT seen
+> from above. The same bay repeats three times across the width of the
+> canvas: a tall, plain pier of dark dressed stone running from the top edge
+> to the bottom edge, then a stretch of riveted dark iron wall with a bundle
+> of thick vertical pipes rising up it, and set into that wall one enormous
+> dormant flywheel, a great spoked iron wheel half sunk into the masonry,
+> evenly spaced, so the whole strip reads as a continuous run of machinery
+> rather than one view of one place. Machinery and stone fill the full width
+> of the canvas and the whole top edge: no sky, no windows, no daylight
+> anywhere. The hall is lit only by a faint, cold blue-green light falling
+> from high above the top edge of the frame: the upper part of the wall
+> catches a little of it on the edges of the iron and the curves of the
+> wheels, and the wall falls into deep cold darkness toward the bottom of
+> the canvas. That fall from a little cold light above into darkness below
+> is the point of this painting: do not paint the hall as one flat dark
+> tone. There is no electricity anywhere: no lightning, no arcs, no sparks,
+> no glowing coils, no glowing lamps, no lit gauges, nothing that shines on
+> its own. There is no copper, no brass and no gold anywhere: every metal
+> is dark blackened iron, cold blue-grey where light touches it. There are
+> no horizontal pipes, no beams, no girders, no catwalks, no walkways, no
+> ledges, no shelves and no platforms anywhere in the painting: every pipe
+> and every form runs vertically or is round, so nothing in it looks like
+> somewhere to stand. No characters, no creatures, no chains, no cables
+> strung across, no ladders, no doors, no foreground objects. Large, simple
+> shapes and few small details: big masses of stone and iron and broad,
+> soft gradients of light. The whole painting stays dark and muted, a
+> background meant to sit behind brighter platforms. Stone and iron are cold
+> blue-violet and slate blue in the light and deep navy-violet in shadow,
+> never a neutral grey or black. The image is 2560 by 1440 pixels, aspect
+> ratio 16:9.
+
 ## The chained dragon (2026-10-03)
 
 Two requests, 30 credits: an `edit` of `enemies/dragon_px.png` into a chained
