@@ -72,6 +72,9 @@ func _ready() -> void:
 		_add_solid(ground)
 	_add_solid(Rect2(0.0, 0.0, ROOM_WIDTH, CEILING_HEIGHT))
 	_add_solid(gate_wall())
+	_add_way_back(YARD_X, UPPER_TOP)
+	# The stair's high step is a drop deeper than the jump on its far side.
+	_add_ladder(STEP_HIGH.end.x, STEP_HIGH.position.y, FLOOR_TOP)
 	var network := _add_network()
 	var all := pieces()
 	var out: Conductor
@@ -104,6 +107,7 @@ func _draw() -> void:
 	for ground in grounds():
 		TileArt.draw_ground(self, ground, TILES)
 	TileArt.draw_wall(self, gate_wall(), TILES)
+	_draw_ways_back()
 	for seam in seams():
 		_draw_seam(COPPER_X, seam, COPPER_WIDTH)
 	# Out from the generator to the top of the face, and back from the stub to

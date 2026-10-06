@@ -39,6 +39,9 @@ func _ready() -> void:
 		_add_solid(ground)
 	_add_wood(wood(), false)
 	_add_solid(Rect2(0.0, 0.0, ROOM_WIDTH, CEILING_HEIGHT))
+	# Off the gallery's far side is a drop no jump climbs back (`SPEC.md`: you
+	# can always walk back). The wood is the way up; this is only the way home.
+	_add_ladder(GALLERY.end.x, GALLERY.position.y, FLOOR_TOP)
 	var shelf := GemShelf.new()
 	add_child(shelf)
 	shelf.configure(SHELF, FLOOR_TOP, CEILING_HEIGHT)
@@ -56,3 +59,4 @@ func _draw() -> void:
 	for ground in grounds():
 		TileArt.draw_ground(self, ground, TILES)
 	TileArt.draw_wood(self, wood())
+	TileArt.draw_ladder(self, _ladders[0])

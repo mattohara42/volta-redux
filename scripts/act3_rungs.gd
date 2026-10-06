@@ -99,6 +99,8 @@ func _ready() -> void:
 		# The live pieces are the odd ones: each is fed from behind the wall.
 		_add_conductor(network, all[i], i % 2 == 1, COPPER)
 	_add_barrier(BARRIER)
+	# Down off the bridge is a drop no jump climbs back.
+	_add_way_back(BRIDGE_END, HIGH_TOP)
 	_add_brazier(Vector2(START_BRAZIER_X, FLOOR_TOP))
 	_add_chest(Vector2(CHEST_X, FLOOR_TOP))
 	_add_exit(Rect2(EXIT_X, STEP_HIGH.position.y - 48.0, 8.0, 48.0))
@@ -114,5 +116,6 @@ func _draw() -> void:
 		TileArt.draw_ground(self, ground, TILES)
 	for wood in woods():
 		TileArt.draw_wood(self, wood)
+	_draw_ways_back()
 	_draw_seam(LOW_FACE_X, seam(FLOOR_TOP), COPPER_WIDTH)
 	_draw_seam(HIGH_FACE_X, seam(LOW_TOP), COPPER_WIDTH)

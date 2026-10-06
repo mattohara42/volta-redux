@@ -61,13 +61,14 @@ follows are working notes for those milestones, detail the plan does not carry.
   fixture rather than furniture.
 - **R1, the cage.** Build it from `dragon_chained_sheet.png`: head and snout,
   chains on the neck, a slow breath, a curl of smoke, a growl as you pass.
-- **R1, the checker** is built (`tools/dev.sh walkback`). Acts 1 and 2 pass.
-  Nine rooms strand you: six Act 3 yards (hall, insulator, floor, series,
-  toll, generator) are a 64 px drop with no ladder, the rungs room past its
-  high tier, Act 4's gallery past the wooden block and the throne's dais
-  floor. It is not in CI yet, because it would be red until those are fixed.
-  It is generous where a room is dynamic (gates open, ferries docked), so a
-  pass is necessary, not sufficient.
+- **R1, the checker** runs in CI (`tools/dev.sh walkback`). Nine rooms
+  stranded you and each now has a ladder home: six Act 3 yards (plus the
+  stair's high step in the toll and generator rooms), the rungs room off its
+  bridge, and the gallery's far side in Act 4's gallery and throne. It is
+  generous where a room is dynamic (gates open, ferries docked), so a pass is
+  necessary, not sufficient. The rungs ladder lets a hero who recalled from
+  the wrong side of the barrier climb back and recall again, which softens
+  that lesson; judge it in play.
 - **R2, the sword.** Straight blade, asymmetric hilt (settled). Embedded has to
   read as bitten in (`SPEC.md`).
 - **R2, the door.** Each act's exit in its own material, not one gold shape.

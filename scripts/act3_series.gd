@@ -65,6 +65,7 @@ func _ready() -> void:
 		_add_solid(ground)
 	_add_solid(Rect2(0.0, 0.0, ROOM_WIDTH, CEILING_HEIGHT))
 	_add_solid(gate_wall())
+	_add_way_back(YARD_X, UPPER_TOP)
 	var network := _add_network()
 	_add_conductor(network, live_copper(), true, COPPER)
 	_add_conductor(network, middle(), false, COPPER)
@@ -88,6 +89,7 @@ func _draw() -> void:
 	for ground in grounds():
 		TileArt.draw_ground(self, ground, TILES)
 	TileArt.draw_wall(self, gate_wall(), TILES)
+	_draw_ways_back()
 	_draw_seam(COPPER_X, high_seam(), COPPER_WIDTH)
 	_draw_seam(COPPER_X, low_seam(), COPPER_WIDTH)
 	_draw_wire(Vector2(FACE_X, FLOOR_TOP - 3.0), Vector2(STEP.position.x - 4.0, FLOOR_TOP - 3.0))

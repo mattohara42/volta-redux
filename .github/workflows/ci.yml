@@ -52,6 +52,11 @@ jobs:
       - name: Walk the whole route
         run: GODOT=~/godot/godot tools/dev.sh route
 
+      # SPEC.md: you can always walk back to the start. Every surface a room
+      # lets you reach must have a way home without throwing a sword.
+      - name: Every room can be walked back
+        run: GODOT=~/godot/godot tools/dev.sh walkback
+
       # An assertion proves the code ran, not that the picture is right.
       # tools/scenarios_data.py carries the 28 capture-and-check scenarios
       # this used to run as one shell step per scenario, inline in this file:
