@@ -530,11 +530,10 @@ func set_swords_at_spawn(count: int) -> void:
 	swords_held = count
 
 
-## A sword chest: the swords you own, in hand and still out in the room, come
-## back up to `fill`. Never fewer than you hold now.
+## A sword chest: the swords in your hand come up to `fill`, whatever is still
+## out in the room. Never fewer than you hold now.
 func top_up_swords(fill: int) -> void:
-	var out := get_tree().get_nodes_in_group("swords").size()
-	swords_held = ActRoute.chest_top_up(swords_held, out, fill, sword_config.max_swords)
+	swords_held = ActRoute.chest_top_up(swords_held, fill, sword_config.max_swords)
 
 
 ## Spends a sword. The count drops now, not when the throw resolves, because

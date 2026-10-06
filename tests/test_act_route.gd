@@ -1,6 +1,7 @@
 ## How rooms connect, as rules. The claims: exits only lead forward, the last
 ## room finishes the act, only what is in your hand comes with you, and a chest
-## brings you up to its fill without ever taking a sword away or passing the cap.
+## fills your hand to its fill, ignoring swords out in the room, without ever
+## taking a sword away or passing the cap.
 extends TestCase
 
 const ACT1 := "res://config/act1.tres"
@@ -45,11 +46,18 @@ func test_only_the_swords_in_hand_carry() -> void:
 
 
 func test_a_chest_tops_you_up_and_never_takes_away() -> void:
-	check_eq(ActRoute.chest_top_up(0, 0, 3, 5), 3, "empty: up to three")
-	check_eq(ActRoute.chest_top_up(1, 1, 3, 5), 2, "one in hand, one out: two more in hand")
-	check_eq(ActRoute.chest_top_up(0, 3, 3, 5), 0, "all three out in the room: nothing")
-	check_eq(ActRoute.chest_top_up(4, 0, 3, 5), 4, "already over: keeps four")
-	check_eq(ActRoute.chest_top_up(0, 0, 9, 5), 5, "a fill past the cap stops at the cap")
+	check_eq(ActRoute.chest_top_up(0, 3, 5), 3, "empty: up to three")
+	check_eq(ActRoute.chest_top_up(1, 3, 5), 3, "one in hand: up to three")
+	check_eq(ActRoute.chest_top_up(4, 3, 5), 4, "already over: keeps four")
+	check_eq(ActRoute.chest_top_up(0, 9, 5), 5, "a fill past the cap stops at the cap")
+
+
+## The playtest's empty chest (2026-10-06): two swords left in a wall and one in
+## hand used to get nothing, because the old rule counted swords out in the
+## room as owned. A chest fills the hand and ignores what is out.
+func test_swords_left_in_the_room_do_not_shrink_a_chest() -> void:
+	check_eq(ActRoute.chest_top_up(1, 3, 5), 3, "two left in a wall, one in hand: three in hand")
+	check_eq(ActRoute.chest_top_up(0, 3, 5), 3, "all three left out: three in hand")
 
 
 func test_act_one_lists_rooms_that_exist() -> void:
