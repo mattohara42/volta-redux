@@ -34,12 +34,13 @@ static func carried(held: int, max_swords: int) -> int:
 	return clampi(held, 0, max_swords)
 
 
-## What you hold after a chest, given `out` swords of yours still in the room.
-## It brings the swords you own up to `fill` and never takes any away, so a
-## chest is never a reason not to open it.
-static func chest_top_up(held: int, out: int, fill: int, max_swords: int) -> int:
-	var wanted := mini(fill, max_swords) - out
-	return maxi(held, mini(wanted, max_swords))
+## What you hold after a chest. It fills your hand to `fill` and never takes
+## any away, so a chest is never a reason not to open it. Swords of yours still
+## out in the room do not count against it (Matt, 2026-10-06: counting them
+## made a chest give nothing, which read as broken). Recall still caps at
+## `max_swords`.
+static func chest_top_up(held: int, fill: int, max_swords: int) -> int:
+	return maxi(held, mini(fill, max_swords))
 
 
 ## What the end card says about the run: how many times Lothar died and how

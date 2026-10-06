@@ -22,11 +22,11 @@ act. M15 is built ahead of M14; three M16 pieces are pulled forward
 
 ## The next action
 
-**Start R1 with the chest rule**: a chest fills your hand to three, ignoring
-swords left out (`SPEC.md`), with the test on `ActRoute.chest_top_up`. Then the
-walk-back checker, then the switch and the cage. `BACKLOG.md`'s *Decided* section
-has working notes for R1 to R3. Matt's 2026-10-06 decisions are in `LEVELS.md`:
-levels are large text-grid scenes, Act 1 is rebuilt and played (G2) first.
+**R1 continues with the walk-back checker** (`BUILD_PLAN.md`), then the switch
+and the cage. The chest rule is done: a chest fills your hand to three and
+refills while you stand in it. `BACKLOG.md`'s *Decided* section has working
+notes for R1 to R3. Matt's 2026-10-06 decisions are in `LEVELS.md`: levels are
+large text-grid scenes, Act 1 is rebuilt and played (G2) first.
 
 ## Blocked on Matt
 

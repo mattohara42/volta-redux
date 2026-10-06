@@ -137,6 +137,10 @@ needed rather than optional, because the content is about to exist.
 
 ## To judge by playing (M14)
 
+- **A chest is now unlimited ammunition while you stand in it** (R1, the
+  chest rule). Any target in range of a chest can be thrown at forever. Fine
+  for every room today; a big level should keep chests out of throwing range
+  of a fight that is meant to cost swords.
 - **`spike_grace`** may be a dial nobody can feel. Setting it to zero moved
   the takeoff window by nothing. Keep or delete.
 - **A pull can lose a sword into the dais recess.** The room's chest refills

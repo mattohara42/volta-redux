@@ -1,7 +1,8 @@
-## A chest of swords: walk into it and the swords you own come back up to
-## `SwordConfig.chest_fill`. It never runs out, so a room can never leave you
-## stranded without anything to throw (Matt, 2026-10-03: early rooms resupply
-## from a chest of three; later rooms from hidden swords or a mechanism).
+## A chest of swords: stand in it and the swords in your hand come up to
+## `SwordConfig.chest_fill`, whatever is still out in the room. It never runs
+## out and keeps filling while you stand in it, so throwing from beside it and
+## coming back works (Matt, 2026-10-06, after a playtest where a chest that
+## counted swords left in a wall gave nothing).
 ##
 ## Gold hilts standing out of it say what it gives before it is used
 ## (`ART_DIRECTION.md`). Art: `assets/art/act1/props/sword_chest.png`.
@@ -25,10 +26,16 @@ func _ready() -> void:
 	collision_layer = 0
 	collision_mask = 4
 	monitorable = false
-	body_entered.connect(_on_body_entered)
 
 
-func _on_body_entered(body: Node2D) -> void:
+## Polls rather than listening for `body_entered`, which fires once on the way
+## in: a hero who throws while standing in the chest would never be refilled.
+func _physics_process(_delta: float) -> void:
+	for body in get_overlapping_bodies():
+		_fill(body)
+
+
+func _fill(body: Node2D) -> void:
 	var player := body as Player
 	if player != null:
 		var before := player.swords_held
