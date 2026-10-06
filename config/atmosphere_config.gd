@@ -93,6 +93,26 @@ extends Resource
 @export_range(0.0, 1.0) var light_arc_strength: float = 0.35
 
 
+@export_group("The bailey's cage and switch")
+## The caged dragon in Act 1's bailey is lit from inside, so it reads as a
+## creature behind bars rather than eyes in a black block (playtest,
+## 2026-10-06). Its own glow: reach, brightness and flicker.
+@export var cage_light_radius: float = 72.0
+@export_range(0.0, 1.0) var cage_light_strength: float = 0.5
+@export_range(0.0, 1.0) var cage_light_flicker: float = 0.2
+## Seconds on each frame of its slow breathing.
+@export var cage_breath_seconds: float = 0.9
+## Seconds between puffs of smoke from its nostrils.
+@export var cage_smoke_period: float = 3.5
+## How close the hero comes, px from the cage's middle, before it roars once.
+@export var cage_roar_range: float = 200.0
+## The first sword switch catches the light: a glint on its slot every so
+## often while it is empty, and a small warm light on it.
+@export var switch_glint_period: float = 2.2
+@export var light_switch_radius: float = 34.0
+@export_range(0.0, 1.0) var light_switch_strength: float = 0.35
+
+
 @export_group("Light field")
 ## Bands between full dark and full light in a room's light (`LightField`).
 ## Fewer is chunkier pixel-art banding, more is smoother.

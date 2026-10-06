@@ -495,6 +495,27 @@ SCENARIOS: list[dict] = [
 		],
 	},
 	{
+		"name": "Act 1: the bailey's switch is ahead of the yard, and a throw raises the gate",
+		"scene": "res://scenes/rooms/act1_bailey.tscn",
+		"out": "act1_bailey_switch.png",
+		"input": (
+			"move_right:56;move_right,jump:16;move_right:30;move_right,jump:18;move_right:20;"
+			"move_right:80;-:30;throw:4;-:90"
+		),
+		"zoom": 1.0,
+		"centre": (900, 220),
+		"checks": [
+			{"type": "player_position", "min_x": 760, "max_x": 880, "min_y": 290,
+				"message": "the hero should be down in the yard"},
+			{"type": "contains", "pattern": "switch at (892.0, 300.0) HELD",
+				"message": "a throw straight ahead from the yard should land in the switch"},
+			{"type": "contains_regex", "pattern": r"gate at .* OPEN",
+				"message": "the switch should have raised the gate"},
+			{"type": "contains", "pattern": "capture: no deaths",
+				"message": "nothing in the bailey should have killed"},
+		],
+	},
+	{
 		"name": "Act 1: a chest refills your hand while swords are left in the wood",
 		"scene": "res://scenes/rooms/act1_bailey.tscn",
 		"out": "act1_bailey_chest.png",

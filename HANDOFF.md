@@ -3,11 +3,11 @@
 > **Rewrite this file, never append.** State snapshot and pointers only. No
 > session narrative, that is what `git log` is for. Keep it under 80 lines.
 
-**Updated:** 2026-10-06 · **Phase:** 3 rebuilt, the scale · **Active:** R1,
-what the playtest hit. **R1 done when:** the chest rule and the walk-back
-checker have tests, the checker passes on every room that survives the
-rebuild, and the bailey's switch and cage are shot from a real build
-(`BUILD_PLAN.md`). M14 is paused until R4.
+**Updated:** 2026-10-06 · **Phase:** 3 rebuilt, the scale · **Active:** R2,
+the placeholders. **R2 done when:** the sword, the room exit and portcullis,
+the dragon's flame and Lothar riding the dragon are each in the game and Matt
+calls each final quality in a screenshot from a real build (`BUILD_PLAN.md`).
+R1 is built; only Matt's half of its done-when is left. M14 is paused until R4.
 
 ## Where this is
 
@@ -22,15 +22,16 @@ act. M15 is built ahead of M14; three M16 pieces are pulled forward
 
 ## The next action
 
-**R1 continues with the switch and the cage**: the first sword switch taught in
-front of the player with its gate in view and a visible link, and the caged
-dragon seen whole, away from it (`BACKLOG.md` → *Decided* has the notes). Done
-in R1: the chest rule, and the walk-back check, now in CI with every room
-passing. Matt's 2026-10-06 decisions are in `LEVELS.md`.
+**Start R2.** Art goes through `ART.md`, and `GEMINI_NOTES.md` comes first;
+the flame stays code. `BACKLOG.md` → *Decided* has working notes for each
+piece. R1 landed: the chest rule, the walk-back check in CI (`tools/dev.sh
+walkback`) with a ladder home in nine rooms, and the bailey's switch and cage
+redone after the playtest. Matt's 2026-10-06 decisions are in `LEVELS.md`.
 
 ## Blocked on Matt
 
-1. **Whether a kid finds the new switch unaided**, once R1 lands.
+1. **R1's play half**: whether a kid finds the bailey's new switch unaided, and
+   whether the caged dragon now reads as one (`BACKLOG.md` has what to watch).
 2. **The play log** from this playthrough (`user://`, #136), if it was kept.
 3. **Older and still open**: `RoomM7Sheet` consistent in treatment (closes
    M7); the unattended calls from 2026-10-05 (death lines by cause, ambient
