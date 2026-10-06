@@ -77,3 +77,28 @@ static func phase_name(phase: Phase) -> String:
 			return "breathing"
 		_:
 			return "resting"
+
+
+## How much of the box's height is left unburnt under the jet, as a fraction,
+## at `along` (0 at the jaws, 1 at the far end). The breath leaves the jaws at
+## head height, the top of the box, and spreads down to the floor as it
+## travels. The same smoothstep the shader draws with, so what burns and what
+## kills cannot drift apart.
+static func cone_gap(along: float, mouth: float, open_at: float) -> float:
+	return (1.0 - mouth) * (1.0 - smoothstep(0.0, open_at, along))
+
+
+## The breath's killing shape, `length` long and `height` tall, its jaws at
+## x = 0 and its top edge flat on y = -height / 2, at the jaws' height. Facing
+## `side` (1 is right). Narrow at the jaws, spreading down to the floor.
+static func cone(length: float, height: float, mouth: float, open_at: float, side: float) -> PackedVector2Array:
+	var points := PackedVector2Array()
+	var half := height * 0.5
+	points.append(Vector2(0.0, -half))
+	points.append(Vector2(length * side, -half))
+	points.append(Vector2(length * side, half))
+	const STEPS := 8
+	for i in range(STEPS, -1, -1):
+		var along := open_at * float(i) / float(STEPS)
+		points.append(Vector2(length * along * side, half - height * cone_gap(along, mouth, open_at)))
+	return points

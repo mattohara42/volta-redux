@@ -61,6 +61,12 @@ extends Resource
 ## goes, and the dragon fills the gap back to its own face so the fire and the
 ## kill box both leave the mouth.
 @export var dragon_snout_reach: float = 36.0
+## The breath is a cone (`SPEC.md`), not a box: at the jaws only this fraction
+## of its height burns, the top of it, at the jaws' height, and it spreads down
+## to the floor by this fraction of its reach. What kills and what is drawn burning
+## are the same shape (`DragonBreath.cone`, `shaders/flame.gdshader`).
+@export_range(0.0, 1.0) var dragon_cone_mouth: float = 0.5
+@export_range(0.01, 1.0) var dragon_cone_open: float = 0.35
 
 @export_group("Dormant")
 ## How close the hero has to come to wake a dormant enemy, px. Bigger than a

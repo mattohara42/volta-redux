@@ -72,6 +72,13 @@ extends Resource
 ## the noise's scale. Lower scale, bigger tongues.
 @export var flame_stream_speed: float = 160.0
 @export var flame_noise_scale: float = 0.09
+## How far the breath's drawn plume frays past its killing box, px, above it
+## and past its far end. Seen, never lethal: the killing box itself is
+## always solid fire at full breath (playtest, 2026-10-06: a flame that stopped
+## dead at the box's edges read as a brick, not as fire).
+@export var flame_spill: float = 10.0
+## Embers thrown from the mouth while the dragon breathes, a second.
+@export var flame_embers_per_second: float = 40.0
 
 @export_group("Light")
 ## How quickly a flickering light wobbles, radians a second.
