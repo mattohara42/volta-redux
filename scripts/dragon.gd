@@ -21,9 +21,12 @@ extends Enemy
 
 ## The pixel-art dragon (`ANIMATION.md`): a slow breathing loop, drawn at 1x,
 ## crouched and immobile. The art faces right and is mirrored to face the way
-## the breath goes. The breath is a flame shader (`shaders/flame.gdshader`) on a
-## rectangle that is exactly the one that kills: honesty about what is lethal
-## matters more than how it looks, so the fire never leaves its box.
+## the breath goes. The breath is a flame shader (`shaders/flame.gdshader`)
+## over the cone that kills (`DragonBreath.cone`). Honesty about what is lethal
+## still comes first: at full breath every pixel of that cone is fire. The plume frays
+## a few px past it (`flame_spill`) because a flame cut off square at its
+## edges read as a brick (playtest, 2026-10-06), and fire you can see but not
+## die to is a mercy, never a trap.
 const SPRITE_SCENE: PackedScene = preload("res://scenes/dragon_sprite.tscn")
 const FLAME_SHADER: Shader = preload("res://shaders/flame.gdshader")
 const ATMOSPHERE: AtmosphereConfig = preload("res://config/atmosphere.tres")
@@ -42,13 +45,15 @@ var _flame: ColorRect
 ## Overpowered: no breath, no bite, chains across it, and no longer an enemy.
 var is_chained := false
 var _light: LightGlow
+var _embers: CPUParticles2D
 
 
 ## `breath_offset` is where the cone sits relative to the dragon's own centre,
 ## and its sign is the only place this file says which way the dragon faces:
 ## the room places it, the way a ferry's span decides which way a slab goes.
 ## The room's box fixes how far the breath reaches. Its near edge is pulled back
-## to the snout, so the fire leaves the mouth and the whole visible flame kills.
+## to the snout, so the fire leaves the mouth, and within the box the cone
+## (`DragonBreath.cone`) is what kills.
 func place(size: Vector2, breath_offset: Vector2, breath_size: Vector2, enemy_config: EnemyConfig) -> void:
 	configure(size)
 	_config = enemy_config
@@ -59,9 +64,16 @@ func place(size: Vector2, breath_offset: Vector2, breath_size: Vector2, enemy_co
 	_breath_size = Vector2(far - reach, breath_size.y)
 	_breath = _make_breath_area()
 	_breath.position = _breath_offset
-	var shape := _breath.get_child(0) as CollisionShape2D
-	(shape.shape as RectangleShape2D).size = _breath_size
+	# The cone, its jaws at the near edge of the box (`DragonBreath.cone`).
+	var cone := DragonBreath.cone(
+		_breath_size.x, _breath_size.y, _config.dragon_cone_mouth, _config.dragon_cone_open, side
+	)
+	var jaws := Vector2(-side * _breath_size.x * 0.5, 0.0)
+	for i in cone.size():
+		cone[i] += jaws
+	(_breath.get_child(0) as CollisionPolygon2D).polygon = cone
 	_flame = _make_flame()
+	_embers = _make_embers()
 	_light = LightGlow.make(ATMOSPHERE.light_breath_radius, Palette.FIRE_FALLOFF, 0.0)
 	_light.position += _breath_offset
 	add_child(_light)
@@ -70,9 +82,7 @@ func place(size: Vector2, breath_offset: Vector2, breath_size: Vector2, enemy_co
 
 func _make_breath_area() -> Area2D:
 	var area := Area2D.new()
-	var shape := CollisionShape2D.new()
-	shape.shape = RectangleShape2D.new()
-	area.add_child(shape)
+	area.add_child(CollisionPolygon2D.new())
 	# The player's own layer, per `Hazard.configure`. Not monitorable: nothing
 	# needs to find the breath itself, only to be found by it.
 	area.collision_layer = 0
@@ -83,8 +93,12 @@ func _make_breath_area() -> Area2D:
 
 func _make_flame() -> ColorRect:
 	var rect := ColorRect.new()
-	rect.position = _breath_offset - _breath_size * 0.5
-	rect.size = _breath_size
+	var spill := ATMOSPHERE.flame_spill
+	var side := signf(_breath_offset.x) if not is_zero_approx(_breath_offset.x) else 1.0
+	# Grown by the spill on the top and the far end, never at the mouth, which
+	# is the snout, and never below, which is the floor.
+	rect.position = _breath_offset - _breath_size * 0.5 - Vector2(spill if side < 0.0 else 0.0, spill)
+	rect.size = _breath_size + Vector2(spill, spill)
 	rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	rect.visible = false
 	var material := ShaderMaterial.new()
@@ -92,6 +106,11 @@ func _make_flame() -> ColorRect:
 	material.set_shader_parameter("falloff_colour", Palette.FIRE_FALLOFF)
 	material.set_shader_parameter("core_colour", Palette.FIRE_CORE)
 	material.set_shader_parameter("hot_colour", Palette.FIRE_HOT)
+	material.set_shader_parameter("ember_colour", Palette.LAVA_FLOW)
+	material.set_shader_parameter("smoke_colour", Color(Palette.STONE_MID, 0.85))
+	material.set_shader_parameter("spill", spill)
+	material.set_shader_parameter("cone_mouth", _config.dragon_cone_mouth)
+	material.set_shader_parameter("cone_open", _config.dragon_cone_open)
 	material.set_shader_parameter("box_size", _breath_size)
 	# The mouth is the box's edge nearest the dragon's centre.
 	material.set_shader_parameter("direction", signf(_breath_offset.x) if not is_zero_approx(_breath_offset.x) else 1.0)
@@ -102,6 +121,31 @@ func _make_flame() -> ColorRect:
 	LightField.emissive(rect)
 	add_child(rect)
 	return rect
+
+
+## Sparks flung from the mouth along the breath while it burns. Code, not art.
+func _make_embers() -> CPUParticles2D:
+	var side := signf(_breath_offset.x) if not is_zero_approx(_breath_offset.x) else 1.0
+	var embers := CPUParticles2D.new()
+	embers.position = Vector2(_breath_offset.x - side * _breath_size.x * 0.5, _breath_offset.y)
+	embers.emitting = false
+	embers.lifetime = 0.6
+	embers.amount = maxi(int(ATMOSPHERE.flame_embers_per_second * embers.lifetime), 1)
+	embers.direction = Vector2(side, -0.15)
+	embers.spread = 14.0
+	embers.initial_velocity_min = _breath_size.x * 1.2
+	embers.initial_velocity_max = _breath_size.x * 2.0
+	embers.gravity = Vector2(0.0, -40.0)
+	embers.emission_shape = CPUParticles2D.EMISSION_SHAPE_RECTANGLE
+	embers.emission_rect_extents = Vector2(2.0, _breath_size.y * 0.3)
+	var fade := Gradient.new()
+	fade.set_color(0, Palette.FIRE_HOT)
+	fade.add_point(0.5, Palette.FIRE_CORE)
+	fade.set_color(fade.get_point_count() - 1, Color(Palette.LAVA_FLOW, 0.0))
+	embers.color_ramp = fade
+	LightField.emissive(embers)
+	add_child(embers)
+	return embers
 
 
 func _ready() -> void:
@@ -160,6 +204,7 @@ func _defeat() -> void:
 	set_deferred("monitoring", false)
 	_breath.set_deferred("monitoring", false)
 	_flame.visible = false
+	_embers.emitting = false
 	_light.set_strength(0.0)
 	# The strain loop: the generated chained dragon (`ART.md`), heaving against
 	# the rings in the floor. Through its AnimationTree, like every state.
@@ -185,5 +230,6 @@ func _show_flame() -> void:
 			_config.dragon_rest_time
 		) * 0.7
 	(_flame.material as ShaderMaterial).set_shader_parameter("intensity", intensity)
+	_embers.emitting = DragonBreath.is_lethal(phase)
 	# The flame lights the wall and floor around it, most when it is fullest.
 	_light.set_strength(ATMOSPHERE.light_breath_strength * intensity if _flame.visible else 0.0)

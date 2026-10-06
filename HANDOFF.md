@@ -22,18 +22,19 @@ act. M15 is built ahead of M14; three M16 pieces are pulled forward
 
 ## The next action
 
-**Start R2.** Art goes through `ART.md`, and `GEMINI_NOTES.md` comes first;
-the flame stays code. `BACKLOG.md` → *Decided* has working notes for each
-piece. R1 landed: the chest rule, the walk-back check in CI (`tools/dev.sh
-walkback`) with a ladder home in nine rooms, and the bailey's switch and cage
-redone after the playtest. Matt's 2026-10-06 decisions are in `LEVELS.md`.
+**R2 continues with the sword, the door and the ride**, all three art through
+`ART.md` (Sprite Fusion, credits), so `GEMINI_NOTES.md` comes first. The flame
+is done: the breath is now a cone that is both what kills and what burns.
+`BACKLOG.md` → *Decided* has working notes for each piece. R1 landed; Matt's
+2026-10-06 decisions are in `LEVELS.md`.
 
 ## Blocked on Matt
 
-1. **R1's play half**: whether a kid finds the bailey's new switch unaided, and
+1. **The new flame**: final quality? (R2's done-when).
+2. **R1's play half**: whether a kid finds the bailey's new switch unaided, and
    whether the caged dragon now reads as one (`BACKLOG.md` has what to watch).
-2. **The play log** from this playthrough (`user://`, #136), if it was kept.
-3. **Older and still open**: `RoomM7Sheet` consistent in treatment (closes
+3. **The play log** from this playthrough (`user://`, #136), if it was kept.
+4. **Older and still open**: `RoomM7Sheet` consistent in treatment (closes
    M7); the unattended calls from 2026-10-05 (death lines by cause, ambient
    levels; the save per act becomes a save at braziers in R3); M4's dragon pacing and dormant-scorpion gap; the
    painted acts' seams in play.

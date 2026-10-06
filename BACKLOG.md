@@ -69,8 +69,16 @@ follows are working notes for those milestones, detail the plan does not carry.
 - **R2, the sword.** Straight blade, asymmetric hilt (settled). Embedded has to
   read as bitten in (`SPEC.md`).
 - **R2, the door.** Each act's exit in its own material, not one gold shape.
-- **R2, the flame.** Particles, heat haze and a hot core over the shader. The
-  kill box stays straight while what you see does not.
+- **R2, the flame, is built.** The breath is a cone (`SPEC.md`'s own word),
+  not a box: it leaves the jaws at head height and spreads down to the floor
+  by a third of its reach (`DragonBreath.cone`, `dragon_cone_*` in
+  `config/enemies.tres`), and that cone is both what kills and what is drawn
+  burning. White-hot at the jaws, cooling through orange and red, frayed and
+  rising into dithered smoke past the cone's top and far end (`flame_spill`,
+  seen, never lethal), with embers thrown along it. The kill area shrank under
+  the jaws only, beside the dragon's own body. The freed dragon's breath in
+  Act 4 (`FreedBreath`) is a separate drawing and was not touched; give it the
+  same plume if it reads as flat next to this one.
 - **R2, the ride.** A seated, leaning Lothar drawn with the dragon, or a riding
   pose for the hero, in place of the standing sprite on its back.
 - **R3, respawn.** Resetting every mechanism in a ten-floor level would undo a
