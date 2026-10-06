@@ -9,6 +9,7 @@
 #   tools/dev.sh shot SCENE OUT ...  a screenshot from a real running build
 #   tools/dev.sh scenarios [filter]  the capture-and-check scenarios CI runs
 #   tools/dev.sh route               every room's exit, in order, to the ending
+#   tools/dev.sh walkback [filter]   every room can be walked back to its start
 #
 # CLAUDE.md: the destructive mode is the flag. `shot` does not pass
 # --overwrite, so replacing an existing image is something you ask for.
@@ -66,6 +67,9 @@ test)
 	;;
 route)
 	"$GODOT_BIN" --headless --path . --script res://tools/route_check.gd
+	;;
+walkback)
+	"$GODOT_BIN" --headless --path . --script res://tools/walk_back_check.gd -- "${1:-}"
 	;;
 play)
 	if [[ $# -gt 0 ]]; then

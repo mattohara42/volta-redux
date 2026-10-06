@@ -61,8 +61,13 @@ follows are working notes for those milestones, detail the plan does not carry.
   fixture rather than furniture.
 - **R1, the cage.** Build it from `dragon_chained_sheet.png`: head and snout,
   chains on the neck, a slow breath, a curl of smoke, a growl as you pass.
-- **R1, the checker.** Run it on today's rooms first: its report is the list of
-  drops the kids got stuck behind. Fix only rooms that survive as sections.
+- **R1, the checker** is built (`tools/dev.sh walkback`). Acts 1 and 2 pass.
+  Nine rooms strand you: six Act 3 yards (hall, insulator, floor, series,
+  toll, generator) are a 64 px drop with no ladder, the rungs room past its
+  high tier, Act 4's gallery past the wooden block and the throne's dais
+  floor. It is not in CI yet, because it would be red until those are fixed.
+  It is generous where a room is dynamic (gates open, ferries docked), so a
+  pass is necessary, not sufficient.
 - **R2, the sword.** Straight blade, asymmetric hilt (settled). Embedded has to
   read as bitten in (`SPEC.md`).
 - **R2, the door.** Each act's exit in its own material, not one gold shape.
