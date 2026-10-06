@@ -55,20 +55,17 @@ recommended: `LEVELS.md` → *Decisions (2026-10-06)*. The plan is now
 `BUILD_PLAN.md`'s R1 to R4 and G2, and `SPEC.md` is rewritten to match. What
 follows are working notes for those milestones, detail the plan does not carry.
 
-- **R1, the switch.** A slot that catches light, and a chain or rod from the
-  switch to the gate that moves when a blade lands, so cause and effect are
-  one picture. Fold in mounting M2's switch in a wall, so it reads as a
-  fixture rather than furniture.
-- **R1, the cage.** Build it from `dragon_chained_sheet.png`: head and snout,
-  chains on the neck, a slow breath, a curl of smoke, a growl as you pass.
-- **R1, the checker** runs in CI (`tools/dev.sh walkback`). Nine rooms
-  stranded you and each now has a ladder home: six Act 3 yards (plus the
-  stair's high step in the toll and generator rooms), the rungs room off its
-  bridge, and the gallery's far side in Act 4's gallery and throne. It is
-  generous where a room is dynamic (gates open, ferries docked), so a pass is
-  necessary, not sufficient. The rungs ladder lets a hero who recalled from
-  the wrong side of the barrier climb back and recall again, which softens
-  that lesson; judge it in play.
+- **R1 is built, all four pieces.** The chest rule; the walk-back check in
+  CI with a ladder home in nine rooms; the bailey's switch moved into the face
+  ahead of the yard, with a glinting slot, a small light, and a gold chain to
+  the gate on the level above that lights and runs when a blade lands; the
+  cage a lit, chained dragon behind sparse bars over the quiet stretch, facing
+  you, breathing, a puff of smoke every few seconds and one roar as you come.
+  To judge in play: whether the smoke is too faint, and whether the roar (the
+  Act 2 dragon's own) startles a kid in a good way. The rungs ladder softens
+  that room's barrier lesson. Act 1's gate room (room 4) still sets its switch
+  behind you after the drop; once the bailey has taught it, that may be a fair
+  twist rather than a trap, but watch for it.
 - **R2, the sword.** Straight blade, asymmetric hilt (settled). Embedded has to
   read as bitten in (`SPEC.md`).
 - **R2, the door.** Each act's exit in its own material, not one gold shape.
