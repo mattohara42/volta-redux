@@ -9,15 +9,15 @@ signal crashed
 signal finished
 
 const DRAGON_SCENE: PackedScene = preload("res://scenes/dragon_flight_sprite.tscn")
-const HERO_SCENE: PackedScene = preload("res://scenes/hero_sprite.tscn")
 const ATMOSPHERE: AtmosphereConfig = preload("res://config/atmosphere.tres")
 ## The box that has to fit through a gap: the dragon's body with the hero on
 ## its back, a little inside the drawn wings and tail as a forgiving hit box
 ## should be. Centred `BOX_OFFSET` from this node.
 const SIZE := Vector2(88.0, 58.0)
 const BOX_OFFSET := Vector2(0.0, -5.0)
-## Where the hero sits: on the saddle of the flight strip's level back.
-const SEAT := Vector2(-6.0, -17.0)
+## Where the hero sits, astride the neck: drawn into the dragon's own sheet
+## (`tools/composite-rider.py`), and where the hero's light rides.
+const SEAT := Vector2(22.0, -15.0)
 
 var config: FlightConfig
 var crashes := 0
@@ -40,11 +40,6 @@ func configure(start: Vector2, top: float, bottom: float, finish_x: float, pilla
 	position = start
 	var dragon := DRAGON_SCENE.instantiate() as Node2D
 	add_child(dragon)
-	var hero := HERO_SCENE.instantiate() as Node2D
-	hero.position = SEAT
-	# The rider sits on the dragon's back, drawn over it.
-	hero.z_index = 1
-	add_child(hero)
 	# The hero's own faint light rides with them, as it goes everywhere the
 	# hero goes, so the thing you steer is never lost in the cave's dark; and
 	# both take a rim from the torches and the daylight, as everything alive
@@ -53,7 +48,6 @@ func configure(start: Vector2, top: float, bottom: float, finish_x: float, pilla
 	light.position = SEAT
 	add_child(light)
 	RimLight.attach(dragon.get_node_or_null("AnimatedSprite2D") as CanvasItem, self)
-	RimLight.attach(hero.get_node_or_null("AnimatedSprite2D") as CanvasItem, self)
 	var camera := Camera2D.new()
 	camera.limit_top = 0
 	camera.limit_bottom = int(Bench.ROOM_HEIGHT)

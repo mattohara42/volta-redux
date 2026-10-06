@@ -66,9 +66,11 @@ follows are working notes for those milestones, detail the plan does not carry.
   that room's barrier lesson. Act 1's gate room (room 4) still sets its switch
   behind you after the drop; once the bailey has taught it, that may be a fair
   twist rather than a trap, but watch for it.
-- **R2, the sword.** Straight blade, asymmetric hilt (settled). Embedded has to
-  read as bitten in (`SPEC.md`).
-- **R2, the door.** Each act's exit in its own material, not one gold shape.
+- **R2 is built.** The sword (one sprite, spun in flight, its tip hidden in
+  the face when embedded), a doorway per act in place of the gold exit, and
+  Lothar seated astride the dragon for the ride, all in `ART.md`. To judge in
+  play: the doors' picks (a one-line swap in `config/actN.tres` to another
+  candidate), and whether the spinning 16 px sword shimmers.
 - **R2, the flame, is built.** The breath is a cone (`SPEC.md`'s own word),
   not a box: it leaves the jaws at head height and spreads down to the floor
   by a third of its reach (`DragonBreath.cone`, `dragon_cone_*` in
@@ -79,8 +81,6 @@ follows are working notes for those milestones, detail the plan does not carry.
   the jaws only, beside the dragon's own body. The freed dragon's breath in
   Act 4 (`FreedBreath`) is a separate drawing and was not touched; give it the
   same plume if it reads as flat next to this one.
-- **R2, the ride.** A seated, leaning Lothar drawn with the dragon, or a riding
-  pose for the hero, in place of the standing sprite on its back.
 - **R3, respawn.** Resetting every mechanism in a ten-floor level would undo a
   gate opened half an hour ago. Reset only what belongs to the brazier's
   section. This is the debt entry below, finally with a reason to pay it.

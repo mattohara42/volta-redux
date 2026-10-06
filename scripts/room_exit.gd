@@ -1,11 +1,16 @@
 ## Where a room ends. The hero walking into it is handed to `ActState`, which
 ## knows what comes next; the room never does.
 ##
-## Gold, because gold means interactive (`ART_DIRECTION.md`), drawn as the
-## doorway post the rooms used before they were connected.
+## Drawn as the act's doorway (`ActConfig.exit_art`), standing on the floor
+## under the exit. A bench, which belongs to no act, keeps the gold post the
+## rooms used before they were connected: gold means interactive
+## (`ART_DIRECTION.md`).
 class_name RoomExit
 extends Area2D
 
+var art: Texture2D
+## False for an exit something else already shows, like the throne's dragon.
+var drawn := true
 var _size := Vector2.ZERO
 
 
@@ -40,4 +45,9 @@ func _on_body_entered(body: Node2D) -> void:
 
 
 func _draw() -> void:
-	draw_rect(Rect2(-_size * 0.5, _size), Palette.GOLD_FACE)
+	if not drawn:
+		return
+	if art == null:
+		draw_rect(Rect2(-_size * 0.5, _size), Palette.GOLD_FACE)
+		return
+	draw_texture(art, Vector2(-art.get_width() * 0.5, _size.y * 0.5 - art.get_height()))

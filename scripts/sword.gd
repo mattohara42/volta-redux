@@ -24,6 +24,10 @@ signal destroyed
 ## sword is thin, and the player stands on its top edge.
 const LEDGE_THICKNESS: float = 4.0
 const ATMOSPHERE: AtmosphereConfig = preload("res://config/atmosphere.tres")
+const ART: Texture2D = preload("res://assets/art/hero/sword_px.png")
+## How much of the blade is hidden in the face of what it is embedded in, px.
+## Purely how it looks: the ledge you stand on is the collision, not this.
+const BITE: float = 4.0
 ## Set by a room's `CircuitNetwork`: this sword is wired into a live circuit.
 ## Embedded is the state; conducting is what the circuit says about it.
 var conducting := false:
@@ -443,21 +447,24 @@ func _target_position() -> Vector2:
 	return _thrower.global_position
 
 
-## Gold, because ART_DIRECTION.md reserves gold for things you interact with and
-## nothing else gets to use it. Drawn rather than imported: no PNG before M5.
+## The sword (`assets/art/hero/sword_px.png`, Sprite Fusion, R2 2026-10-06):
+## a straight blade with a gold edge, point along +x, one sprite for every
+## state (`ANIMATION.md`: objects move by transform). Embedded, its tip is
+## hidden in the face it hit, so it reads as bitten in rather than resting on
+## the surface by its point (`SPEC.md`).
 func _draw() -> void:
 	var half := world.sword_length * 0.5
-	var w := world.sword_length * 0.18
-	draw_rect(Rect2(-half, -w * 0.45, half * 0.72, w * 0.9), Palette.GOLD_SHADE)
-	draw_circle(Vector2(-half + w * 0.3, 0.0), w * 0.55, Palette.GOLD_SHADE)
-	draw_colored_polygon(PackedVector2Array([
-		Vector2(-half * 0.28, -w),
-		Vector2(half, 0.0),
-		Vector2(-half * 0.28, w),
-	]), Palette.GOLD_FACE)
-	# A crossguard, drawn over the blade's base. Without it the silhouette reads
-	# as a dart, and ART_DIRECTION.md makes silhouette a rule rather than taste.
-	draw_rect(Rect2(-half * 0.4, -w * 1.6, w * 0.5, w * 3.2), Palette.GOLD_SHADE)
+	var size := ART.get_size()
+	var drawn := Rect2(Vector2(-half, -size.y * 0.5), size)
+	if state == SwordFlight.State.EMBEDDED:
+		# Pushed in by `BITE` and cut off at the face, which is +half.
+		var shown := size.x - BITE
+		draw_texture_rect_region(
+			ART, Rect2(drawn.position + Vector2(BITE, 0.0), Vector2(shown, size.y)),
+			Rect2(Vector2.ZERO, Vector2(shown, size.y))
+		)
+	else:
+		draw_texture_rect(ART, drawn, false)
 	if state == SwordFlight.State.EMBEDDED:
 		# The actual collision extent, drawn. An assertion proves the ledge is
 		# there; only this proves it is where the player thinks it is.

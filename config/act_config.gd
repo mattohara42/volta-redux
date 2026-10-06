@@ -18,6 +18,9 @@ extends Resource
 ## this one is for what the act as a whole needs from it, the lights the
 ## painting carries.
 @export var tiles: ActTiles
+## The doorway every room's exit is drawn as, in this act's own material
+## (R2, 2026-10-06: the exit used to be a gold rectangle).
+@export var exit_art: Texture2D
 
 ## The act's loop (`tools/synth/music.py`), played by `Audio` in every room of
 ## the act and carried across from one room to the next without a break.

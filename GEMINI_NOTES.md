@@ -327,3 +327,20 @@ still was compact.
 of the 74x74 dragon came back 80x68 and 95x70, where the morning's re-test had
 both edits keep the input's size. Treat a size-held edit as likely, not given:
 measure every delivery, and budget for a sprite of its own size when it moves.
+
+## Sprite Fusion, measured (2026-10-06, R2)
+
+**A front-on doorway obeys "flat like a stage flat".** Four `generate`s at 64,
+one per material, and nearly every candidate came back square to the camera:
+the three-quarter prior that wins on characters did not show up on a door.
+A doorway may simply have a front-on prior of its own.
+
+**`generate` at 16 holds "level" half the time.** Six of twelve swords came
+back horizontal as asked; the other six on the usual diagonal of an inventory
+icon, despite the positive-plus-negation framing.
+
+**`animate` smears a two-figure sprite.** The dragon with a rider on it, 4
+frames: the rider held, the wing tore and left specks. The single dragon
+animated cleanly before. **A clean still plus a cut-and-composite onto an
+existing clean animation is cheaper than a reroll** (`tools/composite-rider.py`):
+diff the edited still against its source, fill holes, drop specks.
