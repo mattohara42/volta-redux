@@ -22,17 +22,18 @@ act. M15 is built ahead of M14; three M16 pieces are pulled forward
 
 ## The next action
 
-**R1 continues with the walk-back checker** (`BUILD_PLAN.md`), then the switch
-and the cage. The chest rule is done: a chest fills your hand to three and
-refills while you stand in it. `BACKLOG.md`'s *Decided* section has working
-notes for R1 to R3. Matt's 2026-10-06 decisions are in `LEVELS.md`: levels are
-large text-grid scenes, Act 1 is rebuilt and played (G2) first.
+**R1: the walk-back checker is built** (`tools/dev.sh walkback`); nine rooms in
+Acts 3 and 4 strand you (`BACKLOG.md` → *Decided*). Fixing them, and when the
+check joins CI, is Matt's call. Then the switch and the cage. The chest rule is
+done. Matt's 2026-10-06 decisions are in `LEVELS.md`: levels are large
+text-grid scenes, Act 1 is rebuilt and played (G2) first.
 
 ## Blocked on Matt
 
-1. **Whether a kid finds the new switch unaided**, once R1 lands.
-2. **The play log** from this playthrough (`user://`, #136), if it was kept.
-3. **Older and still open**: `RoomM7Sheet` consistent in treatment (closes
+1. **The nine stranding rooms**: fix them now, or as each act is rebuilt?
+2. **Whether a kid finds the new switch unaided**, once R1 lands.
+3. **The play log** from this playthrough (`user://`, #136), if it was kept.
+4. **Older and still open**: `RoomM7Sheet` consistent in treatment (closes
    M7); the unattended calls from 2026-10-05 (death lines by cause, ambient
    levels; the save per act becomes a save at braziers in R3); M4's dragon pacing and dormant-scorpion gap; the
    painted acts' seams in play.

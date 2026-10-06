@@ -34,6 +34,8 @@ var _solids: Array[Rect2] = []
 var _ladders: Array[Rect2] = []
 var _woods: Array[Rect2] = []
 var _spike_beds: Array[Rect2] = []
+## What `WalkBack` needs to know about the room, recorded as it is built.
+var _walk := WalkBack.Layout.new()
 
 
 ## A notification rather than `_ready`, because every room overrides `_ready`
@@ -78,6 +80,7 @@ func _dress_the_room() -> void:
 
 func _add_solid(rect: Rect2) -> StaticBody2D:
 	_solids.append(rect)
+	_walk.solids.append(rect)
 	var body := StaticBody2D.new()
 	var shape := CollisionShape2D.new()
 	var box := RectangleShape2D.new()
@@ -94,6 +97,7 @@ func _add_solid(rect: Rect2) -> StaticBody2D:
 ## and a layer would mean every room declaring it solid twice.
 func _add_wood(rect: Rect2, drawn := true) -> void:
 	_add_solid(rect).add_to_group("wood")
+	_walk.embeddable.append(rect)
 	# Drawn as wood rather than stone, so it comes back out of the stone list.
 	_solids.remove_at(_solids.size() - 1)
 	# `drawn` is false for wood that paints itself, like a switch, which would
@@ -109,6 +113,7 @@ func _add_lava(rect: Rect2) -> Hazard:
 	var hazard := Hazard.new()
 	hazard.configure(rect.size)
 	hazard.cause = DeathMessages.Cause.LAVA
+	_walk.deadly.append(rect)
 	hazard.position = rect.get_center()
 	add_child(hazard)
 	var surface := LavaSurface.new()
@@ -140,6 +145,7 @@ func _add_spikes(surface_y: float, x: float, count: int) -> Hazard:
 	var hazard := Hazard.new()
 	hazard.configure(lethal.size)
 	hazard.cause = DeathMessages.Cause.SPIKES
+	_walk.deadly.append(lethal)
 	hazard.position = lethal.get_center()
 	add_child(hazard)
 	return hazard
@@ -157,6 +163,7 @@ func _add_falling_platform(rect: Rect2) -> FallingPlatform:
 		# platform at all.
 		push_error("bench: a falling platform needs config/hazards.tres wired into the scene")
 		return null
+	_walk.solids.append(rect)
 	var platform := FallingPlatform.new()
 	# Far enough to be below the room, plus its own depth so nothing is left
 	# poking up into the gap it used to fill.
@@ -180,6 +187,8 @@ func _add_moving_platform(rect: Rect2, travel: Vector2) -> MovingPlatform:
 		# in it, which reads as ordinary floor over a moat nobody can cross.
 		push_error("bench: a moving platform needs config/hazards.tres wired into the scene")
 		return null
+	_walk.ferries.append(rect)
+	_walk.ferry_travel.append(travel)
 	var platform := MovingPlatform.new()
 	platform.configure(rect.size, travel, hazards)
 	platform.position = rect.get_center()
@@ -199,6 +208,7 @@ func _add_geyser(column: Rect2) -> Geyser:
 		# it, which is a way up that never comes and a room nobody can finish.
 		push_error("bench: a geyser needs config/hazards.tres wired into the scene")
 		return null
+	_walk.geysers.append(column)
 	var geyser := Geyser.new()
 	geyser.configure(column.size, hazards)
 	geyser.position = column.get_center()
@@ -345,6 +355,8 @@ func _add_network() -> CircuitNetwork:
 func _add_conductor(
 	network: CircuitNetwork, rect: Rect2, source: bool = false, art: Texture2D = null
 ) -> Conductor:
+	_walk.solids.append(rect)
+	_walk.embeddable.append(rect)
 	var piece := Conductor.new()
 	piece.configure(rect, source)
 	piece.art = art
@@ -356,6 +368,7 @@ func _add_conductor(
 ## A live field that kills the hero and destroys any sword crossing it
 ## (`Barrier`). A source unless a room wires it into a circuit.
 func _add_barrier(rect: Rect2, source: bool = true) -> Barrier:
+	_walk.deadly.append(rect)
 	var barrier := Barrier.new()
 	barrier.configure(rect, source)
 	add_child(barrier)
@@ -391,6 +404,7 @@ func _add_current_switch(network: CircuitNetwork, rect: Rect2) -> CurrentSwitch:
 
 ## Where the room ends: the hero walking into `rect` is handed to `ActState`.
 func _add_exit(rect: Rect2) -> RoomExit:
+	_walk.exit = rect
 	var exit := RoomExit.new()
 	exit.configure(rect.size)
 	exit.position = rect.get_center()
@@ -420,6 +434,7 @@ func _hand_out_swords(count: int) -> void:
 func _add_ladder(x: float, top: float, bottom: float) -> void:
 	var rect := Rect2(x, top - LADDER_OVERSHOOT, LADDER_WIDTH, bottom - top + LADDER_OVERSHOOT)
 	_ladders.append(rect)
+	_walk.ladders.append(rect)
 	var area := Area2D.new()
 	var shape := CollisionShape2D.new()
 	var box := RectangleShape2D.new()
@@ -433,6 +448,16 @@ func _add_ladder(x: float, top: float, bottom: float) -> void:
 	area.add_to_group("ladders")
 	area.add_child(shape)
 	add_child(area)
+
+
+## The room as `WalkBack` reads it: everything recorded while it was built,
+## the hero's feet where it starts them, and its exit if it has one yet.
+func walk_back_layout() -> WalkBack.Layout:
+	for node in get_tree().get_nodes_in_group("player"):
+		var player := node as Player
+		if player != null:
+			_walk.start = player.global_position + Vector2(0.0, world.hero_height * 0.5)
+	return _walk
 
 
 ## Walls and a ceiling, so nothing leaves the instrument.

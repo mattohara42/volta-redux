@@ -50,7 +50,14 @@ drive it through one script that finds Godot on macOS and Linux for you:
 tools/dev.sh import                              # once, after a fresh clone
 tools/dev.sh play                                # the game, from where you left it
 tools/dev.sh test                                # headless assertions
+tools/dev.sh walkback [filter]                   # can every room be walked back?
 ```
+
+`walkback` loads each room and reasons about it with `WalkBack`
+(`scripts/logic/walk_back.gd`): every surface you can reach and cannot walk
+back to the start from, going home without swords. A failing room is also
+drawn to `walkback_<room>.png` next to the project, stranded surfaces in
+bright blue, so it can be looked at rather than believed.
 
 The game keeps its place, a save per act: launched plainly, it starts again
 at the first room of the act you were last in, with the swords you carried
