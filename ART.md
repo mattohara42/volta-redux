@@ -1425,3 +1425,28 @@ bronze line) and wall 0, the calmest; wall 4 was too saturated to sit behind
 play. Wall 0 came back 15x15 with a transparent last row and column, filled
 with its own mortar colour before `tile-variants.py`. `act4_tiles.tres`.
 
+## R2: the sword, the doors and the ride (2026-10-06, 105 credits)
+
+Prompts approved by Matt before spending (gated). 510 credits before, 405 after.
+
+**The sword**: one `generate` at 16 (`prop_thrown_sword`). Six of twelve came
+back level as asked; the rest diagonal. Matt picked 3, a tapered pale blade
+with a gold edge and hilt, cropped to 16x9 as `assets/art/hero/sword_px.png`.
+One sprite for every state: `Sword._draw` spins it in flight and hides its
+tip `BITE` px inside the face when embedded, so it reads as bitten in.
+
+**The doors**: four `generate`s at 64 (`prop_exit_act1` to `act4`), one per
+act, each its own material. The recipe ("seen flat from the front like a
+stage flat, with no perspective and no vanishing point, filling the full
+height of the image", the door open, warm or cold light inside, a gold-bronze
+fitting so it reads as the way on) held for all four: nearly every candidate
+usable. Picks 7, 7, 0, 4, as `assets/art/actN/props/exit.png`, named by
+`ActConfig.exit_art` and drawn by `RoomExit` on the floor under the exit.
+
+**The ride**: a two-image `edit` (`ride_dragon_rider`: the flying dragon,
+then the hero still) seated Lothar astride the neck, sword raised, both picks
+clean. Animating it (`ride_dragon_rider_flap`) smeared the wing: torn holes
+and specks in two of four frames. So the rider was cut from pick 0 where it
+differs from the flying dragon and laid onto each frame of the clean
+`dragon_flight_sheet.png` (`tools/composite-rider.py`), giving
+`dragon_rider_sheet.png`, 4 frames of 112x69.

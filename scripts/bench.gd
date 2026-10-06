@@ -403,12 +403,22 @@ func _add_current_switch(network: CircuitNetwork, rect: Rect2) -> CurrentSwitch:
 
 
 ## Where the room ends: the hero walking into `rect` is handed to `ActState`.
-func _add_exit(rect: Rect2) -> RoomExit:
+## Drawn as the act's doorway, standing on the floor under `rect`, unless
+## `with_door` is false for an exit something else already shows.
+func _add_exit(rect: Rect2, with_door := true) -> RoomExit:
 	_walk.exit = rect
 	var exit := RoomExit.new()
 	exit.configure(rect.size)
 	exit.position = rect.get_center()
+	var act_state := get_node_or_null("/root/ActState")
+	if with_door and act_state != null and not scene_file_path.is_empty():
+		var act: ActConfig = act_state.act_of(scene_file_path)
+		if act != null:
+			exit.art = act.exit_art
+	exit.drawn = with_door
 	add_child(exit)
+	# Behind the hero, who walks into it, like a brazier.
+	move_child(exit, 0)
 	return exit
 
 

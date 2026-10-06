@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ActConfig" load_steps=6 format=3]
+[gd_resource type="Resource" script_class="ActConfig" load_steps=7 format=3]
 
 [ext_resource type="Script" path="res://config/act_config.gd" id="1_act"]
 [ext_resource type="Resource" path="res://assets/art/act4/act4_tiles.tres" id="3_tiles"]
@@ -6,6 +6,7 @@
 [ext_resource type="AudioStream" path="res://assets/audio/music/act4.ogg" id="2_music"]
 [ext_resource type="AudioStream" path="res://assets/audio/music/volta.ogg" id="5_boss"]
 
+[ext_resource type="Texture2D" path="res://assets/art/act4/props/exit.png" id="9_exit"]
 [resource]
 script = ExtResource("1_act")
 title = "Act 4: the Hall of Volta"
@@ -16,6 +17,7 @@ ambient_light = Color(0.62, 0.54, 0.76, 1)
 ceiling_dim = 0.2
 backdrop = 0
 music = ExtResource("2_music")
+exit_art = ExtResource("9_exit")
 tiles = ExtResource("3_tiles")
 ambience = ExtResource("4_ambience")
 boss_room = "res://scenes/rooms/act4_throne.tscn"

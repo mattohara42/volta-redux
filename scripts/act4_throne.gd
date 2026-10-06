@@ -187,7 +187,8 @@ func _on_volta_fallen() -> void:
 	# Turned to face the hero, who comes from the left.
 	tween.tween_property(_dragon, "scale:x", -1.0, 0.1)
 	tween.tween_callback(func() -> void:
-		_add_exit(Rect2(DRAGON_LANDS.x - 4.0, FLOOR_TOP - 48.0, 8.0, 48.0))
+		# The dragon, come down to the floor, is the way out: no door.
+		_add_exit(Rect2(DRAGON_LANDS.x - 4.0, FLOOR_TOP - 48.0, 8.0, 48.0), false)
 	)
 
 
