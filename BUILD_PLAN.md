@@ -186,6 +186,66 @@ good and it is not optional.
 
 **Done when**: three full playthroughs with no note worth writing down.
 
+**Paused 2026-10-06 by its own first playthrough.** Matt and the kids played it
+and the notes (`BACKLOG.md`) were bigger than tuning: the game is about a tenth
+of the size it should be. M14 resumes after R4, on the game at full size.
+
+---
+
+## Phase 3, rebuilt: the scale (R1 to R4, and G2)
+
+Decided by Matt on 2026-10-06 (`LEVELS.md`). Each act becomes two or three
+large levels, five to ten floors tall, written as text grids. The first build's
+rooms become sections of those levels rather than being thrown away. Same rule
+as everywhere else: one milestone at a time.
+
+### R1: what the playtest hit
+The chest fills your hand to three, ignoring swords left out. A walk-back
+checker, a pure function in `scripts/logic/` over a room's solids, ladders and
+`config/movement.tres`, finds every surface you can reach but not return from,
+and runs in CI on every room. The first sword switch is taught in front of the
+player with its gate in view and a visible link between them. The caged dragon
+is seen whole, in a quiet stretch away from the switch.
+
+**Done when**: the chest and the checker have tests, the checker passes on
+every room that survives the rebuild, and the bailey's switch and cage are shot
+from a real build. Whether a kid now finds the switch unaided is Matt's to
+answer by watching one.
+
+### R2: the placeholders
+The sword (in hand, flying, embedded, lying), the room exit and the
+portcullis, the dragon's flame, and Lothar riding the dragon. Art through
+`ART.md`; the flame stays code (shaders and particles), only better.
+
+**Done when**: each is in the game and Matt calls it final quality in a
+screenshot from a real build.
+
+### R3: the tools for big levels
+The text-grid level format and its parser in `scripts/logic/`, feeding the same
+`Bench` builders that exist now. The respawn reset moved out of `player.gd`: a
+level hears "the hero is back" and resets what it built near that brazier. A
+save at braziers rather than per act. A frame-time check on a ten-screen by
+five-floor grey level before any art goes on one.
+
+**Done when**: today's Act 1 rooms, re-expressed as grids, still pass
+`tools/dev.sh route`, and the grey level holds frame rate in a real build.
+
+### 🚧 G2: Act 1 at full size
+Act 1 rebuilt as one or two large levels: the forest, the moat and the outer
+wall, five to ten floors, mixed enemy groups, today's four rooms folded in as
+sections. Then Matt and the kids play it. **A gate, as G1 was.**
+
+**Done when**: it is fun at that size and the cost of one level, in sessions
+and credits, is written down. Not fun, or not affordable three more times: the
+fix goes in `SPEC.md` before anything else is built.
+
+### R4: Acts 2 to 4 at full size
+Only after G2. Each act's existing rooms become sections of its levels; the
+dragon, the generator and Volta stay. Then M14, then M16.
+
+**Done when**: the game can be completed from a new save at full size, as
+M13's was at the old one.
+
 ---
 
 ## Phase 4: ship (M15, M16)
@@ -222,6 +282,6 @@ screen, key remapping and export are untouched.
 
 Phase 1 is small and fast, and it is where the game is decided. Phase 2 is the
 one with the round trips through the image generator in it. Phase 3 is the
-longest by wall clock and the least uncertain. **If time runs short, cut rooms
-from Acts 2 and 3, never milestones from Phase 1.** A short game with a good verb
+longest by wall clock and the least uncertain. **If time runs short, cut levels
+from Acts 2 and 3, never milestones from Phase 1, and never G2.** A short game with a good verb
 is a game. A long one without is the 1984 original.

@@ -5,8 +5,8 @@ committed to until Matt says yes. Resolved entries are deleted; `git log` keeps
 them.
 
 **Reorganised 2026-10-06** around the first family playthrough (Matt and the
-kids). The playtest notes and the plan that comes out of them are first, then
-every older entry, filed under the stage of that plan it belongs to.
+kids). The playtest notes are first, then every older entry, filed by where it
+belongs in the plan (`BUILD_PLAN.md`, R1 to R4).
 
 ## The playtest, 2026-10-06
 
@@ -48,131 +48,33 @@ the puzzles. Everyone had fun. What did not, with what the code says about it:
    one eyeball, the dragon and the generator. The giant ant is in no room.
    Act 3 has no creature except its boss.
 
-## Decisions requested
+## Decided, and where the plan went
 
-Each of these changes what gets built, so none is assumed. Recommendations are
-mine and are only that.
+Matt answered all seven questions and the cage on 2026-10-06, each as
+recommended: `LEVELS.md` → *Decisions (2026-10-06)*. The plan is now
+`BUILD_PLAN.md`'s R1 to R4 and G2, and `SPEC.md` is rewritten to match. What
+follows are working notes for those milestones, detail the plan does not carry.
 
-1. **What is a "level"?** Today an act is a chain of one-screen-tall rooms with
-   exits that only lead forward. *Recommend:* a level is one large continuous
-   scene, five to ten floors tall and many screens wide, with braziers inside
-   it, and each act is two or three of them. Today's rooms become sections of
-   a level rather than being thrown away. The alternative, rooms linked both
-   ways with doors, needs every room to remember its swords, gates and dead
-   enemies while you are elsewhere, which is a save system inside the game
-   loop and much more to build.
-2. **The walk-back rule's reach.** *Recommend:* always true inside a level,
-   and a level's exit stays one way (as `SPEC.md` says of rooms now). Some
-   things should still be allowed to close behind you: a gate a sword was
-   holding, a cracked branch that fell. *Recommend* a fallen route must leave
-   another way back, so the rule holds and the trap still bites.
-3. **How rooms are authored.** Every room today is `Rect2` constants in a
-   GDScript file. That is fine for 21 small rooms and will not survive ten
-   times the area. *Recommend:* a plain-text grid per level (one character per
-   tile, a legend for wood, stone, ladders, lava, spikes, chests and each
-   enemy, plus a short list for mechanisms and wiring), parsed by a pure
-   function in `scripts/logic/` into the same `Bench` builders that exist now.
-   It diffs, it can be written and reviewed in a PR, and a test can read it.
-   The other route is painting `TileMapLayer`s in the editor, which is nicer
-   by hand but stores tiles as packed numbers nobody can review or write
-   outside the editor. Either is built into Godot, so no addon.
-4. **How much bigger, and in what order.** *Recommend* doing it the way G1
-   was done: build Act 1 as one or two big castle levels first, play them with
-   the kids, count what a level cost to make, and only then commit to the
-   other three acts at that size. Call it **G2**. Ten times the content is the
-   scope that killed the first attempt, and one finished big level answers
-   whether this one survives it.
-5. **The chest rule.** *Recommend:* a chest tops up what is *in your hand* to
-   three, ignoring swords left in the room, and refills while you stand in it.
-   That makes it possible to own more than three for a while (recall still caps
-   at five), which is a small gift, and the old rule's only point was stopping
-   it.
-6. **Enemy density and the sword economy.** Many more enemies means many more
-   swords spent, and `SPEC.md` keeps three and a cap of five. *Recommend*
-   keeping that and letting the levels pay for it: chests where a fight needs
-   them, hidden swords off the main route (the optional-risk idea below), and
-   fights built around catching rather than spending.
-7. **`SPEC.md`, `LEVELS.md` and `BUILD_PLAN.md` all say about 18 rooms.**
-   `LEVELS.md` decision 4 ("room count stays at about 18") is Matt's own and
-   this overturns it. Once 1 to 4 are answered, those three files get rewritten
-   to match, in one PR, before any level is built.
-
-## The plan, in stages
-
-Each stage is one milestone in the `BUILD_PLAN.md` sense, done one at a time.
-M14 stays the active milestone in name; this playtest is its first set of notes
-and the stages below are what it turned into.
-
-### Stage 1: fix what the playtest hit
-
-These hold whatever the answer to the scale question is, because each one is
-a rule or a component that big levels reuse.
-
-- **The chest rule** (decision 5), with a test on `ActRoute.chest_top_up`.
-- **A walk-back checker.** A pure function in `scripts/logic/` that takes a
-  room's solids, ladders and the jump from `config/movement.tres` and finds
-  every standing surface you can reach going forward but not return from.
-  Run in CI on every room, so the rule is held by a test from now on instead
-  of by playing. Run it on today's rooms and fix what it finds only in rooms
-  that survive the rebuild; the report says which drops the kids met.
-- **Teach the switch.** Put the first switch in front of the hero with the
-  gate it opens in view, right after the wooden hurdle that just taught "a
-  sword sticks in wood". Give it a slot that catches light, and a visible link
-  to the gate (a chain or rod that moves when the sword lands). Fold in the
-  older entry about mounting M2's switch in a wall so it reads as a fixture.
-- **Move the cage and make it a dragon.** Out of the switch's sightline, into a
-  quiet stretch of its own. Draw an actual creature behind the bars, from the
-  existing chained-dragon sheet: a head and snout, chains on the neck, a slow
-  breath, a curl of smoke, a growl as you pass. `LEVELS.md` said Act 1 shows
-  "something short of the whole creature"; the kids showed that a shape in the
-  dark is too short. Worth a yes from Matt, since it changes that line.
-
-### Stage 2: replace the placeholder art
-
-Independent of everything else, and it spends credits (`ART.md`, 510 left).
-`GEMINI_NOTES.md` before any prompt; filmstrip every animated delivery.
-
-- **The sword**, in hand, in flight, embedded and lying on the floor, to the
-  settled design (straight blade, asymmetric hilt). Embedded has to read as
-  bitten in (`SPEC.md`).
-- **The door**: the room exit and the portcullis. Today's gold rectangle
-  becomes a doorway in each act's own material.
-- **The flame.** Probably still code (`CLAUDE.md`: atmosphere is code), but a
-  better one: particles with heat haze and a hot core over the shader, not
-  more polygon. The kill box can stay straight while what you see is not.
-- **The ride.** A seated, leaning Lothar drawn as one frame set with the
-  dragon (or a riding pose for the hero), in place of the standing sprite on
-  its back.
-
-### Stage 3: the tools for big levels (after decisions 1 to 3)
-
-- **The level format** (decision 3) and its parser, with today's rooms
-  re-expressed in it as the proof that nothing was lost.
-- **The walk-back checker** from Stage 1, run on every level.
-- **Respawn in a big level.** Today a death resets every mechanism in the room
-  from inside `player.gd` (the older entry below). In a level ten floors tall
-  that would reset a gate opened half an hour ago. Fix the design smell now:
-  the room listens for "the hero is back" and decides what to reset, probably
-  only what is near the brazier's section.
-- **Save at braziers, not per act.** The save per act was chosen for
-  one-sitting acts. A big level needs a save that survives quitting halfway.
-- **A performance look.** `LightField`, rim light and every `_draw` were
-  measured on rooms two screens wide. Build one ten-by-five grey level and
-  check the frame time before art goes on it.
-
-### Stage 4: G2, Act 1 at full size
-
-Act 1 rebuilt as one or two big levels: the forest, the moat and the outer wall
-(`LEVELS.md` already has all three), five to ten floors, mixed enemy groups,
-the existing rooms folded in as sections. Then Matt and the kids play it.
-**Done when** it is fun at that size and the cost of one level is written down.
-If it is not fun, or the cost cannot be paid three more times, the fix goes in
-`SPEC.md` before anything else is built.
-
-### Stage 5: Acts 2 to 4 at full size
-
-Only after G2. Today's rooms become sections, the bosses stay. Then M14's pass
-proper, with three full playthroughs, then M16.
+- **R1, the switch.** A slot that catches light, and a chain or rod from the
+  switch to the gate that moves when a blade lands, so cause and effect are
+  one picture. Fold in mounting M2's switch in a wall, so it reads as a
+  fixture rather than furniture.
+- **R1, the cage.** Build it from `dragon_chained_sheet.png`: head and snout,
+  chains on the neck, a slow breath, a curl of smoke, a growl as you pass.
+- **R1, the checker.** Run it on today's rooms first: its report is the list of
+  drops the kids got stuck behind. Fix only rooms that survive as sections.
+- **R2, the sword.** Straight blade, asymmetric hilt (settled). Embedded has to
+  read as bitten in (`SPEC.md`).
+- **R2, the door.** Each act's exit in its own material, not one gold shape.
+- **R2, the flame.** Particles, heat haze and a hot core over the shader. The
+  kill box stays straight while what you see does not.
+- **R2, the ride.** A seated, leaning Lothar drawn with the dragon, or a riding
+  pose for the hero, in place of the standing sprite on its back.
+- **R3, respawn.** Resetting every mechanism in a ten-floor level would undo a
+  gate opened half an hour ago. Reset only what belongs to the brazier's
+  section. This is the debt entry below, finally with a reason to pay it.
+- **R3, a tile's collision line** becomes a per-tile property of the format,
+  which retires the one-off measuring scan (debt, below).
 
 ## Ingredients for the big levels
 
@@ -195,13 +97,14 @@ needed rather than optional, because the content is about to exist.
   exactly the monotony `SPEC.md` warns about, so this stops being a "judge
   after G1" question. Free now: geysers as routes (`room_m3_geysers` proves
   it), moving platforms as lifts (`MovingPlatform` already travels any vector),
-  vines as ladders with other art (`LEVELS.md` decision 7). New systems still
-  needing a yes: two-way portals (decision 8 kept the one-shot stump warp).
+  vines as ladders with other art (`LEVELS.md`, 2026-09-28 decision 7). New
+  systems still needing a yes: two-way portals (decision 8 kept the one-shot
+  stump warp).
 - **Spikes where lava cannot go**: teeth on top of the ledge you land on. The
   56 px jump cannot clear a bed on a 32 px step, so it wants a moving platform
   or a sword ledge to arrive on. Revisit when building a level.
 - **Every room has a chest**, so swords carrying between rooms never bites.
-  With decision 6, chests become placed for fights rather than given per room,
+  Now that chests fill your hand (`SPEC.md`), they are placed for fights rather than given per room,
   and later levels hide swords or offer a mechanism, as `SPEC.md` says.
 - **Act 2's first two rooms never ask for the sword.** One beat each: a switch
   across a moat hit from a moving ferry, or a vent opened by a sword in a
@@ -243,7 +146,7 @@ needed rather than optional, because the content is about to exist.
 - **The sounds** have now been heard and the music landed. Any sound effect
   that did not, note it here.
 - **Matt's play log** (`user://`, PR #136) from this playthrough would show
-  where the time and deaths went. Worth sharing before Stage 1.
+  where the time and deaths went. Worth sharing before R1.
 
 ## Code and tooling debt
 
@@ -252,7 +155,7 @@ needed rather than optional, because the content is about to exist.
   hands one a number from `config/death.tres`. A signal carrying "the player
   has the controls back", with the room resetting what it built, says the
   same without the hero knowing. Half a day; touches `player.gd`, `bench.gd`,
-  both platforms, the geyser and the sword. Now part of Stage 3.
+  both platforms, the geyser and the sword. Now part of R3.
 - **The test runner passes a test that crashes.** A `SCRIPT ERROR` mid-test
   aborts that test and the run still reports 0 failed. Worth making a script
   error a failure.

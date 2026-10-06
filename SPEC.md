@@ -106,17 +106,27 @@ and the level geometry to serve it. Concretely, the sword does five things:
 **The sword count is the difficulty dial and it is small.** Start with three,
 cap at five. Ten was too many to make any single throw matter.
 
-**Swords carry between rooms, and rooms resupply** (Matt, 2026-10-03). You
-walk into the next room with what is in your hand; a sword left embedded
-behind you stays there. Early rooms have a chest that tops you up to three;
-later rooms, where a puzzle may spend many, hide swords or offer a mechanism
-that gives more. Exits only lead forward.
+**Swords carry between levels, and levels resupply** (Matt, 2026-10-03,
+reworded 2026-10-06). You walk into the next level with what is in your hand; a
+sword left embedded behind you stays there. **A chest tops up what is in your
+hand to three**, ignoring any swords of yours still out in the level, and keeps
+refilling while you stand in it (Matt, 2026-10-06: the old rule counted swords
+left in a wall as owned, and to a player that read as a broken chest). Chests
+are placed where a fight or a puzzle needs them, not one per room; later levels
+also hide swords off the main route or offer a mechanism that gives more.
+Recall still caps you at five.
+
+**A level is one large scene, and you can always walk back to its start**
+(Matt, 2026-10-06). Five to ten floors tall and many screens wide, with braziers
+inside it. Every drop has a way back up, and anything that closes behind you (a
+gate a sword was holding, a branch that fell) leaves another route. A test holds
+this for every level. Only a level's exit is one way.
 
 ## What changes from 1984, and why
 
 | the original | here | because |
 |---|---|---|
-| Seven one-screen levels | **~18 rooms in four acts**, rooms that scroll | "bigger boards" means a room you move through, not a screen you memorise |
+| Seven one-screen levels | **Four acts of large levels**, five to ten floors tall, each about ten times one of today's rooms | "bigger boards" means a castle you climb through, not a screen you memorise. The first build had ~18 small rooms and a family playtest found it short and linear (2026-10-06) |
 | Committed, unsteerable jumps | Coyote time, jump buffering, variable height, real air control | The single most-cited complaint, and it is a solved problem |
 | Insta-death everywhere, few lives | **Insta-death everywhere, instant respawn** | The lethality is the good part. The punishment was the bad part |
 | Puzzles are fixed sequences to memorise | Puzzles are **uses of the sword** | A puzzle you solve by understanding a verb replays well. A sequence you memorise does not |
@@ -200,12 +210,21 @@ a joke played straight is exactly the register these lines want.
 
 ## Structure
 
-Four acts, roughly 18 rooms. Each act introduces one new thing the sword does
-and then asks a hard question about it.
+Four acts, each made of two or three large levels (Matt, 2026-10-06). Each act
+introduces one new thing the sword does and then asks a hard question about it.
+Levels mix enemies in groups rather than meeting one species at a time, and
+every species appears outside the room that introduced it.
 
-**Act 1: the moat and the outer wall** (4 rooms). Teaches throw, catch, and
-embed. The last room cannot be crossed without standing on your own sword. Ends
-at the gate.
+**The scale is proved on Act 1 first.** Act 1 is rebuilt at full size and played
+(G2, `BUILD_PLAN.md`) before Acts 2 to 4 are. Their descriptions below still
+count today's rooms; each of those rooms becomes a section of a larger level
+when its act is rebuilt.
+
+**Act 1: the forest, the moat and the outer wall** (one or two levels). Teaches
+throw, catch, embed and the sword switch, each in front of the player before it
+is ever asked for. Somewhere it cannot be crossed without standing on your own
+sword. The caged dragon is seen whole, behind bars in a quiet stretch of its
+own. Ends at the gate.
 
 **Act 2: the lava caverns** (5 rooms). Geysers that launch you, floating
 platforms, rising and falling lava. Teaches the sword under time pressure: a
@@ -252,7 +271,7 @@ that have been raised and not judged.
 
 **Gems and keys survive**, but they change meaning. A gem sits behind a distinct
 use of the sword rather than behind a memorised route, and the key is the exit.
-Three gems in the final room, as in the original.
+Three gems in the final level, as in the original.
 
 ## Enemies
 
