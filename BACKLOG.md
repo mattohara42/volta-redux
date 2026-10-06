@@ -1,302 +1,287 @@
 # BACKLOG.md
 
 Mid-build ideas land here, never in the active milestone. Nothing in this file is
-committed to.
+committed to until Matt says yes. Resolved entries are deleted; `git log` keeps
+them.
+
+**Reorganised 2026-10-06** around the first family playthrough (Matt and the
+kids). The playtest notes and the plan that comes out of them are first, then
+every older entry, filed under the stage of that plan it belongs to.
+
+## The playtest, 2026-10-06
+
+Matt and the kids each played it through. What worked: the music, the movement,
+the puzzles. Everyone had fun. What did not, with what the code says about it:
+
+1. **Some chests gave no swords.** Not a mis-wire: the rule is doing what it
+   says. `ActRoute.chest_top_up` brings the swords you *own* up to three, and
+   it counts every sword of yours still in the room, embedded in wood or lying
+   on the floor, as owned. Leave two in a wall, walk into a chest holding one,
+   and it gives nothing. To a player that is a broken chest. It also only
+   fires on walking in (`body_entered`), so a chest you are already standing in
+   never refills.
+2. **The wooden switch under the dragon did not read.** `Act1Bailey`, beat 3.
+   Nobody worked out that a sword goes in it. The room drops you into the yard
+   with the switch *behind* you ("turn round, throw"), so the first thing you
+   see is a shut portcullis and nothing pointing at the answer. It is also the
+   first switch in the game, with no room before it that shows one.
+3. **The caged dragon read as a solid block with blinking eyes.** Same room.
+   The grate is code-drawn bars over a dark rectangle with two eyes, dimmed as
+   background. Nobody knew what it was, and it sits right above the switch, so
+   it pulled attention off the one puzzle that needed it. Note that
+   `assets/art/enemies/dragon_chained_sheet.png` already exists.
+4. **Drops you cannot get back up.** A handful of places let you move forward
+   past a drop too high to jump back. **New rule from Matt: a player can always
+   walk back to the beginning of the level.**
+5. **The sword and the "door" are placeholders.** The sword is drawn in code
+   (`Sword._draw`, gold rectangles and a polygon) and the room exit is a flat
+   gold rectangle (`RoomExit._draw`). Both are below everything around them.
+6. **The dragon's flame still does not look real.** It is a shader polygon
+   clipped to the kill box (`Flame`, `shaders/flame.gdshader`).
+7. **Lothar riding the dragon does not look real.** `DragonRider` stacks the
+   standing hero sprite on the flight sheet.
+8. **It is far too short and too linear.** The headline note. Matt wants each
+   level much longer and often taller: five to ten floors of a castle, with
+   mixed enemy groups, about ten times the size. The census backs him up. The
+   whole game has 21 playable rooms, each one screen tall (360 px) and two to
+   four screens wide, and in all of them there are four scorpions, two bats,
+   one eyeball, the dragon and the generator. The giant ant is in no room.
+   Act 3 has no creature except its boss.
+
+## Decisions requested
+
+Each of these changes what gets built, so none is assumed. Recommendations are
+mine and are only that.
+
+1. **What is a "level"?** Today an act is a chain of one-screen-tall rooms with
+   exits that only lead forward. *Recommend:* a level is one large continuous
+   scene, five to ten floors tall and many screens wide, with braziers inside
+   it, and each act is two or three of them. Today's rooms become sections of
+   a level rather than being thrown away. The alternative, rooms linked both
+   ways with doors, needs every room to remember its swords, gates and dead
+   enemies while you are elsewhere, which is a save system inside the game
+   loop and much more to build.
+2. **The walk-back rule's reach.** *Recommend:* always true inside a level,
+   and a level's exit stays one way (as `SPEC.md` says of rooms now). Some
+   things should still be allowed to close behind you: a gate a sword was
+   holding, a cracked branch that fell. *Recommend* a fallen route must leave
+   another way back, so the rule holds and the trap still bites.
+3. **How rooms are authored.** Every room today is `Rect2` constants in a
+   GDScript file. That is fine for 21 small rooms and will not survive ten
+   times the area. *Recommend:* a plain-text grid per level (one character per
+   tile, a legend for wood, stone, ladders, lava, spikes, chests and each
+   enemy, plus a short list for mechanisms and wiring), parsed by a pure
+   function in `scripts/logic/` into the same `Bench` builders that exist now.
+   It diffs, it can be written and reviewed in a PR, and a test can read it.
+   The other route is painting `TileMapLayer`s in the editor, which is nicer
+   by hand but stores tiles as packed numbers nobody can review or write
+   outside the editor. Either is built into Godot, so no addon.
+4. **How much bigger, and in what order.** *Recommend* doing it the way G1
+   was done: build Act 1 as one or two big castle levels first, play them with
+   the kids, count what a level cost to make, and only then commit to the
+   other three acts at that size. Call it **G2**. Ten times the content is the
+   scope that killed the first attempt, and one finished big level answers
+   whether this one survives it.
+5. **The chest rule.** *Recommend:* a chest tops up what is *in your hand* to
+   three, ignoring swords left in the room, and refills while you stand in it.
+   That makes it possible to own more than three for a while (recall still caps
+   at five), which is a small gift, and the old rule's only point was stopping
+   it.
+6. **Enemy density and the sword economy.** Many more enemies means many more
+   swords spent, and `SPEC.md` keeps three and a cap of five. *Recommend*
+   keeping that and letting the levels pay for it: chests where a fight needs
+   them, hidden swords off the main route (the optional-risk idea below), and
+   fights built around catching rather than spending.
+7. **`SPEC.md`, `LEVELS.md` and `BUILD_PLAN.md` all say about 18 rooms.**
+   `LEVELS.md` decision 4 ("room count stays at about 18") is Matt's own and
+   this overturns it. Once 1 to 4 are answered, those three files get rewritten
+   to match, in one PR, before any level is built.
+
+## The plan, in stages
+
+Each stage is one milestone in the `BUILD_PLAN.md` sense, done one at a time.
+M14 stays the active milestone in name; this playtest is its first set of notes
+and the stages below are what it turned into.
+
+### Stage 1: fix what the playtest hit
+
+These hold whatever the answer to the scale question is, because each one is
+a rule or a component that big levels reuse.
+
+- **The chest rule** (decision 5), with a test on `ActRoute.chest_top_up`.
+- **A walk-back checker.** A pure function in `scripts/logic/` that takes a
+  room's solids, ladders and the jump from `config/movement.tres` and finds
+  every standing surface you can reach going forward but not return from.
+  Run in CI on every room, so the rule is held by a test from now on instead
+  of by playing. Run it on today's rooms and fix what it finds only in rooms
+  that survive the rebuild; the report says which drops the kids met.
+- **Teach the switch.** Put the first switch in front of the hero with the
+  gate it opens in view, right after the wooden hurdle that just taught "a
+  sword sticks in wood". Give it a slot that catches light, and a visible link
+  to the gate (a chain or rod that moves when the sword lands). Fold in the
+  older entry about mounting M2's switch in a wall so it reads as a fixture.
+- **Move the cage and make it a dragon.** Out of the switch's sightline, into a
+  quiet stretch of its own. Draw an actual creature behind the bars, from the
+  existing chained-dragon sheet: a head and snout, chains on the neck, a slow
+  breath, a curl of smoke, a growl as you pass. `LEVELS.md` said Act 1 shows
+  "something short of the whole creature"; the kids showed that a shape in the
+  dark is too short. Worth a yes from Matt, since it changes that line.
+
+### Stage 2: replace the placeholder art
+
+Independent of everything else, and it spends credits (`ART.md`, 510 left).
+`GEMINI_NOTES.md` before any prompt; filmstrip every animated delivery.
+
+- **The sword**, in hand, in flight, embedded and lying on the floor, to the
+  settled design (straight blade, asymmetric hilt). Embedded has to read as
+  bitten in (`SPEC.md`).
+- **The door**: the room exit and the portcullis. Today's gold rectangle
+  becomes a doorway in each act's own material.
+- **The flame.** Probably still code (`CLAUDE.md`: atmosphere is code), but a
+  better one: particles with heat haze and a hot core over the shader, not
+  more polygon. The kill box can stay straight while what you see is not.
+- **The ride.** A seated, leaning Lothar drawn as one frame set with the
+  dragon (or a riding pose for the hero), in place of the standing sprite on
+  its back.
+
+### Stage 3: the tools for big levels (after decisions 1 to 3)
+
+- **The level format** (decision 3) and its parser, with today's rooms
+  re-expressed in it as the proof that nothing was lost.
+- **The walk-back checker** from Stage 1, run on every level.
+- **Respawn in a big level.** Today a death resets every mechanism in the room
+  from inside `player.gd` (the older entry below). In a level ten floors tall
+  that would reset a gate opened half an hour ago. Fix the design smell now:
+  the room listens for "the hero is back" and decides what to reset, probably
+  only what is near the brazier's section.
+- **Save at braziers, not per act.** The save per act was chosen for
+  one-sitting acts. A big level needs a save that survives quitting halfway.
+- **A performance look.** `LightField`, rim light and every `_draw` were
+  measured on rooms two screens wide. Build one ten-by-five grey level and
+  check the frame time before art goes on it.
+
+### Stage 4: G2, Act 1 at full size
+
+Act 1 rebuilt as one or two big levels: the forest, the moat and the outer wall
+(`LEVELS.md` already has all three), five to ten floors, mixed enemy groups,
+the existing rooms folded in as sections. Then Matt and the kids play it.
+**Done when** it is fun at that size and the cost of one level is written down.
+If it is not fun, or the cost cannot be paid three more times, the fix goes in
+`SPEC.md` before anything else is built.
+
+### Stage 5: Acts 2 to 4 at full size
+
+Only after G2. Today's rooms become sections, the bosses stay. Then M14's pass
+proper, with three full playthroughs, then M16.
+
+## Ingredients for the big levels
+
+Older entries that were waiting for content to use them. Most are now
+needed rather than optional, because the content is about to exist.
+
+- **Mixed enemy groups.** All six species are built. Combinations to try: an
+  eyeball patrolling the catch line of a scorpion fight, so the safe throw is
+  the one it eats; bats over a sword ledge; an ant on the ceiling above a
+  switch, so standing still to throw is the risk; a dormant scorpion beside an
+  awake one. Plus the two variants `LEVELS.md` already decided: the skeleton
+  (a dormant scorpion) and the armour-flipped guard.
+- **The giant ant is in no room.** Act 3 is the obvious home: seven rooms with
+  no creature but the generator. Check first what an ant does when it walks
+  into an embedded sword.
+- **The floor plate and the dormant enemy on a plate** are built
+  (`room_m4_plate`, `room_m4_dormant`) and in no room. `LEVELS.md` liked "an
+  enemy as a switch".
+- **More ways up than ladders.** Five to ten floors climbed only by ladder is
+  exactly the monotony `SPEC.md` warns about, so this stops being a "judge
+  after G1" question. Free now: geysers as routes (`room_m3_geysers` proves
+  it), moving platforms as lifts (`MovingPlatform` already travels any vector),
+  vines as ladders with other art (`LEVELS.md` decision 7). New systems still
+  needing a yes: two-way portals (decision 8 kept the one-shot stump warp).
+- **Spikes where lava cannot go**: teeth on top of the ledge you land on. The
+  56 px jump cannot clear a bed on a 32 px step, so it wants a moving platform
+  or a sword ledge to arrive on. Revisit when building a level.
+- **Every room has a chest**, so swords carrying between rooms never bites.
+  With decision 6, chests become placed for fights rather than given per room,
+  and later levels hide swords or offer a mechanism, as `SPEC.md` says.
+- **Act 2's first two rooms never ask for the sword.** One beat each: a switch
+  across a moat hit from a moving ferry, or a vent opened by a sword in a
+  valve.
+- **Optional risk.** A harder route beside the one everyone solves, worth a
+  hidden sword or a secret (`LEVELS.md`). Big levels finally have room for it,
+  and the end card's tally is where secrets get counted.
+- **Act 4 is thin on danger.** A shelf, the Act 1 guard lesson again, and
+  Volta. The other two rooms could ask more.
+- **From `LEVELS.md`, decided and unbuilt:** siege engines on a clock (the
+  dragon's breath with other numbers), the torch carried at the cost of the
+  sword, a lock needing two switches at once, a floor that holds the first
+  time and drops the second, the wood/stone fake-out once or twice, a sword
+  graveyard for atmosphere, the one-shot stump warp, the chandelier.
+- **Remix rooms** after the credits, harder versions of early sections. Matt
+  wants them; add each idea here as it comes. After the pass.
+
+## Readability, to look at while playing
+
+- **A dormant enemy shows no tell** and a frozen sprite looks like a statue.
+  Maybe right; play once. Matters more once skeletons are in.
+- **The eyeball's pupil could track the hero**, the enemy that "looks back".
+  `animate` or `direction-set` could give it left and right frames.
+- **Enemy sprites are bigger than their killing boxes** (ant 37 px against 22,
+  bat 34 against 20). Grow the box or accept the mercy.
+- **The sword counter is gold**, which also means "interactive". Check it does
+  not compete.
+- **Tunnel walls are masonry darkened upward.** A proper wall-face tile is M8
+  work, and tall levels will need a lot more wall.
+
+## To judge by playing (M14)
+
+- **`spike_grace`** may be a dial nobody can feel. Setting it to zero moved
+  the takeoff window by nothing. Keep or delete.
+- **A pull can lose a sword into the dais recess.** The room's chest refills
+  to three. Right cost, or throw swords clear?
+- **The throne has one conductor, not a choice of two.** Every decoy layout
+  blocked the path.
+- **The sounds** have now been heard and the music landed. Any sound effect
+  that did not, note it here.
+- **Matt's play log** (`user://`, PR #136) from this playthrough would show
+  where the time and deaths went. Worth sharing before Stage 1.
+
+## Code and tooling debt
+
+- **The hero reaches into the room's mechanisms on a respawn.** It walks the
+  "mechanisms" group from inside `player.gd`, knows they have clocks, and
+  hands one a number from `config/death.tres`. A signal carrying "the player
+  has the controls back", with the room resetting what it built, says the
+  same without the hero knowing. Half a day; touches `player.gd`, `bench.gd`,
+  both platforms, the geyser and the sword. Now part of Stage 3.
+- **The test runner passes a test that crashes.** A `SCRIPT ERROR` mid-test
+  aborts that test and the run still reports 0 failed. Worth making a script
+  error a failure.
+- **No tool measures where a tile's art meets its collision line.** Done by a
+  one-off scan for `room_m5_wall`. A big level format makes this a per-tile
+  property, so solve it there.
+- **`tools/cut-rig.py` only knows named rectangles.** Mostly moot since the
+  move to frame animation; keep only if a rig ever returns.
+- **F2's bench cycle leaves out the M4 rooms.** Reachable by
+  `tools/dev.sh play` only. An oversight.
+- **Quitting mid-track prints "resources still in use at exit".** Harmless
+  noise in CI's log.
 
 ## Deferred from v1 deliberately
 
-- **A forgiving mode**, for a kid. Checkpoint density, hazard lethality and sword
-  count are already the three dials that would do it. Stays here until the game
-  exists, because a difficulty mode built before the base difficulty is tuned is
-  two untuned games.
-- **Per-hazard death animations.** v1 has one. Lava, spikes and falls all
-  deserve their own.
-- **Sword variants.** A heavier sword that does not return. A pair thrown
-  together. Both are real design space and both would dilute a single clean verb
-  before that verb has proved itself.
-- **A speedrun timer and ghost.** Fits the game's shape well. Post-ship.
-
-## Ideas not yet judged
-
-- **The debug overlay and F2 shipped in every game room.** **Resolved
-  2026-10-05:** F1, F2 and the hero's debug keys (Tab, R, [ and ]) do nothing
-  in an exported release build; every editor and `tools/dev.sh` run keeps them.
-- **Ricochet off metal surfaces**, for angle puzzles. Listed in `SPEC.md` as one
-  of the sword's five behaviours but cut down to four for v1. Add it only if Act
-  3 turns out thin.
-- **More ways up than ladders**: magical portals, elevators, and geysers used as
-  traversal rather than only as hazards. Raised when the two-scale rule went into
-  `SPEC.md`: the jump owns holes, plinths and short steps, a storey needs
-  something else, and right now that something else is almost always a ladder.
-  A single answer to every vertical problem is monotonous in a game whose pitch
-  is reasoning through unexpected furniture.
-
-  **Geysers are the cheap one and are already in `SPEC.md`** as an Act 2 hazard
-  that hurls you. Using one deliberately as a route costs no new system, only a
-  room built to mean it. Portals and elevators are new systems, and a new system
-  in a one-verb game is the exact scope risk that killed the first attempt, so
-  neither is committed to.
-
-  **M3 built the geyser, so the cheap one is no longer hypothetical.** A jet is
-  a clock with a lift speed and a room-owned shaft, and `room_m3_geysers` is two
-  storeys gained with no ladder in the room. Whether that is a good way to climb
-  rather than merely a working one is still a question for playing.
-
-  Judge this after G1, when it is known whether climbing is as dull as
-  `SPEC.md` warns it might be. If it is, this is the fix. If it is not, ladders
-  and geysers are enough.
-
-- **Spikes where lava cannot go**, which is the only reason to have both. A bed
-  bolts to any surface, so the interesting placement is teeth on top of the ledge
-  you have to land on: the landing becomes the puzzle and there is no gap to
-  read. M3's spike bench does not do this, because the arithmetic says it cannot.
-  A 32 px step with a five-tooth bed on it needs the jump to stay above 41 px for
-  50 px of travel, and the 56 px jump manages 47.2, leaving a takeoff window of
-  two or three frames. That is the 1984 complaint `SPEC.md` exists to throw away.
-
-  It wants a moving platform to arrive on, or a sword ledge, not a wider bed.
-  Revisit when the rest of M3's hazards exist. If M14 ever raises the jump this
-  becomes possible, and it is a reason to check rather than a reason to raise it.
-
-- **`spike_grace` may be a dial nobody can feel.** It holds the killing box 3 px
-  below the points so a jump that brushes them lives. Setting it to zero and
-  re-sweeping the M3 spike bench moved the takeoff window by nothing at all: the
-  only approach it can affect is a jump arc crossing a bed near its apex, and
-  nothing else meets a bed slowly from above. Either it is doing invisible good
-  work or it is a number for its own sake, and only playing tells them apart.
-  M14, or delete it.
-
-- **The hero reaches into the room's mechanisms on a respawn.** Placing the
-  player at a checkpoint frees every sword in play and resets every mechanism
-  with a clock in it, both by walking a group from inside `player.gd`. Raised
-  while building the falling platforms, and the trigger written down then was
-  that a third kind of mechanism meant fixing it.
-
-  **The third kind arrived with geysers, and this was not what got built.** What
-  got built was the cheap half: platforms and geysers share a "mechanisms" group
-  and one `call_group`, so the walk stopped growing a branch per kind. The smell
-  this entry is actually about is untouched. The hero still knows that rooms
-  contain mechanisms, still knows they have clocks, and still hands one of them a
-  number out of `config/death.tres` because a free-running clock has to sit out
-  the respawn freeze. A signal carrying "the player has the controls back", with
-  the room listening and resetting what it built, says all of that without the
-  hero knowing any of it. It is half a day and it touches `player.gd`,
-  `bench.gd`, both platforms, the geyser and the sword, which is why it did not
-  happen inside a hazard change.
-
-- **A falling slab was drawn over the lava it sinks into.** **Resolved
-  2026-10-04:** lava draws over the room since `LightField` (it is light, so it
-  sits above the dark), and a slab or a hero going in now passes under the
-  surface. A ferry's rail is above the surface and unaffected.
-
-- **The avian ally as a mid-game traversal tool** rather than only the ending.
-  Risk: it is a second verb, and the game is about having one.
-- **The floor plate is built.** `FloorPlate` + `scenes/rooms/room_m4_plate.tscn`,
-  wired to `Gate` the same way M2's wall switch is: a room connects the two
-  signals and neither mechanism knows the other exists. It senses the hero's
-  own weight, an enemy's, or a spent sword left lying on it (`SwordFlight.
-  rests_on_a_plate`, the deliberate opposite bias from `holds_a_switch`), which
-  is the third leg this entry originally asked for ("leave an enemy on it...
-  an enemy as a tool rather than an obstacle").
-
-  **The enemy case is now demonstrated too**, via the dormant-until-approached
-  idea in `LEVELS.md` (raised for the skeleton, generalised to any species):
-  `room_m4_dormant.tscn` sits a dormant scorpion exactly on a plate, so its
-  stillness holds a gate open for free until the hero gets close enough to
-  wake it.
-
-  **What is demonstrated**: standing on it yourself, missing a catch on
-  purpose (climb a ladder mid-return, which `SwordFlight`'s own docstring
-  already names as the way to miss: "you miss by changing height, not by
-  being in the wrong place") to leave a sword weighing the plate down while
-  you walk through what it opens, and a dormant enemy sitting on it before
-  the hero ever arrives.
-
-  **Mounting M2's own switch in a wall**, so it reads as a fixture rather than
-  furniture, is still just a room change and still unbuilt. Left for whoever
-  next touches that room.
-
-- **Sword abilities as upgrades**, rather than all five from the first room.
-  Recall, and embedding as a standable platform, become things you earn: better
-  throwing, a potion, gold spent somewhere. Raised while playing M2, from the
-  real observation that **the player currently gets every verb at once and
-  nothing is staged**. That observation is correct and the pacing problem is
-  real.
-
-  Three things to weigh before building it. **It changes the genre**: SPEC.md's
-  thesis is one verb and puzzles that are uses of it, and an upgrade turns "I
-  cannot do this" from a thing you solve by understanding into a thing you solve
-  by coming back later. **It is a lot of new system** (currency or items,
-  persistent unlock state, save data, UI) in a project whose first attempt died
-  of scope, and G1 has not happened. **It multiplies authoring**: every room
-  must be solvable under every capability set a player could arrive with.
-
-  The cheap version costs nothing and gets most of it: stage the **situations**
-  rather than the abilities. Act 1 simply never presents a problem that wants
-  recall; Act 2's rooms need it. SPEC.md's Structure already says each act
-  introduces one thing the sword does, so this is level design the plan has
-  asked for, not a new system.
-
-- **A jump upgrade.** Same thought applied to movement. Flagged rather than
-  filed neutrally, because it **contradicts the decision M0 just made**: ladders
-  won on the argument that a jump which cannot reach the next storey is what
-  makes an embedded sword one of only two ways to gain height. A jump that grows
-  later takes that back mid-game, and the sword goes back to being a small
-  extension in exactly the acts where SPEC.md wants it to be the whole vocabulary.
-  Worth having only if the ladders decision is being reopened with it.
-
-- **The generator, M4's second boss, is not built.** SPEC.md gives it one
-  line and BUILD_PLAN.md's M4 done-when wants all six beatable in grey box, so
-  this is the gap the dragon (below, now built) used to share. Not a small
-  reversible detail: it decides how a whole fight reads, so it is here rather
-  than guessed at in the milestone. `HANDOFF.md` carries the current state.
-
-  **Resolved 2026-10-04:** conduct and the generator's fight are in `SPEC.md`.
-  **The generator had no proposal.** SPEC.md: "cannot be hit by a sword at
-  all," and M12's done-when is "cannot be beaten by throwing," which is the
-  whole vocabulary problem: this boss is not beaten by a variant of throwing,
-  it needs the sword's sixth state. CLAUDE.md names it directly: "fly, return,
-  catch, embed, recall, **conduct**" is the sword's whole machine, and conduct
-  is the one state M3 did not build. `BACKLOG.md`'s own switches-that-need-
-  current entry is the closest thing to a spec for what conduct even does, and
-  it is not close. This one waits for M12 rather than for a session: it is Act
-  3's whole vocabulary, not a fight that can be prototyped in a corner of M4's
-  grey room.
-
-- **Volta's dialogue.** The original had none worth keeping. A wizard who
-  comments on your deaths is either very good or very bad and there is no middle.
-- **Desktop builds signed and on itch.io**, beyond the web export in M16.
-- **`tools/cut-rig.py` only knows named rectangles.** Fine for the hero,
-  where every part has a gap or a clean colour split from its neighbour.
-  The bat's wing meets its body with no silhouette gap at all, a real
-  drawn seam rather than an edge a box or a colour threshold can find, so
-  cutting it needed a one-off hand-picked polyline written outside the
-  tool (`ART.md`'s bat section has the write-up). Worth a seam-line or
-  polygon option on the tool itself if a second winged or membrane-bodied
-  enemy needs the same trick; one use doesn't justify building it yet.
-
-- **No tool measures where a tileset module's own art meets its collision
-  line.** `room_m5_wall.gd`'s floor tile needed the pale ledge lip's exact
-  pixel row so the hero's feet would read as standing on it, found with a
-  one-off Python scan of the PNG (`ART.md`'s M5 write-up has the numbers).
-  M10 is building real rooms on a real tileset from here on, and every
-  floor and ledge module will need the same measurement. Worth a small
-  `tools/` script (brightest-row or a hand-marked line, saved once per
-  module) if M10 turns out to need it more than once or twice by hand.
-
-- **`scripts/debug_overlay.gd`'s `BENCHES` list (F2's cycle) does not
-  include any of the M4 rooms.** `room_m4_enemies.tscn`, `room_m4_dragon.
-  tscn`, `room_m4_plate.tscn` and `room_m4_dormant.tscn` all exist, are all
-  covered by CI screenshots, and none of them are reachable by pressing F2
-  from another bench; only `tools/dev.sh play res://scenes/rooms/room_m4_
-  ....tscn` reaches them directly. `room_m5_wall.tscn` was added to the list
-  when it was built; the M4 gap predates this session and looks like an
-  oversight rather than a decision, noted here rather than fixed as a
-  drive-by change to unrelated rooms.
-
-## Raised during M7 (2026-09-28), not judged
-
-- **The dragon's flame was a flat orange rectangle. Now a shader**
-  (`shaders/flame.gdshader`), clipped to the same killing box, growing through
-  the charge. Its near, top and bottom edges are still straight, on purpose:
-  they are the kill box's edges. Reference: `_experiments/m9_dragon_flame.png`.
-- **The flame started 57 px from the dragon's snout** (Matt, playtest
-  2026-09-28: "a big empty block in front of the dragon's face"). Fixed: the
-  dragon pulls the kill box's near edge back to its snout
-  (`dragon_snout_reach`, 36 px, measured off the sprite), keeping each room's far
-  edge. The M4 dragon room now kills all the way to the face, 57 px more than
-  before, which is only reachable by standing against the dragon.
-- **The test runner passes a test that crashes.** A `SCRIPT ERROR` mid-test
-  aborts that test's remaining checks and the run still reports 0 failed and
-  exits 0, unless a check had already failed. Worth making a script error a
-  failure. Separately, tests run inside `_initialize`, before the tree is
-  ready, so nothing that needs `get_tree()` can be tested headless.
-- **The eyeball's pupil could track the hero.** It is the enemy that "looks
-  back" (`SPEC.md`), and the art is one forward-looking frame set. `animate`
-  or `direction-set` could give it looking-left and looking-right frames.
-- **Enemy sprites are bigger than their killing boxes.** The ant is 37 px
-  wide against a 22 px box, the bat 34 against 20. Forgiving, and deliberate
-  for the bat (`BUILD_PLAN.md`), but the ant now reads as something you can
-  touch without dying. Either grow the box or accept the mercy.
-- **A dormant enemy could show a tell.** Waking has no tell beyond starting to
-  move (`Enemy._step_dormancy`), and a frozen sprite now looks like a statue.
-  That may be exactly right; it is worth playing once.
-
-## Raised during the levels decisions (2026-09-28), wanted, not scheduled
-
-- **Remix rooms.** One or two authored, harder versions of early rooms that
-  unlock after the credits: the armour-flipped enemy, tighter timing. Matt wants
-  them and expects more ideas as combat mechanics are tuned, so add each idea
-  here as it comes. Not New Game+. Belongs after M14's tuning pass.
-
-## Raised during M10 (2026-09-28), not judged
-
-- **The sword counter** (Matt asked for it, 2026-09-28): built as `SwordCounter`,
-  top right, a gold sword per sword in hand and a dim one per sword that is out.
-  Gold because it is the sword itself; whether that competes with gold meaning
-  "interactive" is worth a look when playing.
-- **Rooms are sequenced** by `ActState` and `config/act1.tres`; swords carry
-  and chests resupply (`SPEC.md`). Resolved 2026-10-03.
-- **`RoomM2Gap` was never finishable, and a parse error hung the test
-  runner.** Both fixed 2026-10-03: the gap benches use `Act1Gate`'s hoarding,
-  held by `tests/ditch_checks.gd` and a crossing scenario, and the runner
-  reports an unloadable test file as a failure.
-- **Later rooms' resupply** (hidden swords, a mechanism that gives more) is
-  `SPEC.md`'s and not built. Design it with the first room that needs it.
-- **Tunnel walls are masonry tiles darkened upward**, the best the Act 1 tiles
-  can do for a wall a screen tall. A proper wall-face tile is M8 work.
-
-## Raised during M7's generator (2026-09-30), not judged
-
-- **The generator's arc was painted into its sprite.** **Resolved
-  2026-10-04:** regenerated without it, and an `ArcBolt` hangs between the horns.
-
-## Raised during M12's generator (2026-10-04), not judged
-
-- **Death lines ignored the cause.** **Resolved 2026-10-05:** lines are keyed
-  to what killed you, generic ones are said by anything (`SPEC.md`). Lava also
-  shakes the camera a little, the other thing `ART_DIRECTION.md` allows.
-- **The throne has one conductor, not a choice of two.** `SPEC.md` says
-  current "through the right conductor"; every layout tried for a decoy face
-  either blocked the path or needed a contrived seam. One face for now.
-- **A pull can lose a sword into the dais recess**, beside live copper, where
-  it cannot be picked up. The room's chest refills to three. Judge in play
-  whether that cost is right or the pull should throw swords clear.
-
-
-## Raised during the overnight polish pass (2026-10-05), not judged
-
-- **Every playable room has a chest.** All twenty rooms before the flight top
-  you up to three on the way in, so a sword lost in one room costs nothing in
-  the next, and `SPEC.md`'s "swords carry between rooms" never bites. SPEC
-  already says later rooms should hide swords or offer a mechanism instead.
-  A first cut: keep chests in Act 1, in each act's first room and wherever a
-  puzzle needs three; take the rest out and see whether the carry starts to
-  matter. A difficulty change, so M14's to judge by playing.
-- **The giant ant is built and in no room.** `SPEC.md`'s ant punishes
-  "assuming the floor is where danger is", and nothing in Acts 1 to 4 walks a
-  wall or a ceiling. Act 3 is the obvious home: seven rooms with no creature
-  but the generator, where an ant on the ceiling would make standing still to
-  wire a seam a decision. Check first what an ant does when it walks into an
-  embedded sword.
-- **The floor plate and the dormant enemy on a plate are built and in no
-  room.** `room_m4_plate` and `room_m4_dormant` prove both, and `LEVELS.md`
-  liked "an enemy as a switch". A real room using one would be new rather
-  than a remix.
-- **Act 2's first two rooms never ask for the sword.** The mouth (ferries)
-  and the geyser shaft are bench crossings reskinned, and the act's lesson
-  ("a throw you have to catch before the platform you are standing on drops")
-  first appears in room 3, optionally. One beat each would fix it: a switch
-  across a moat that a throw from a moving ferry has to hit, or a vent opened
-  by a sword held in a valve.
-- **No optional risk anywhere yet.** `LEVELS.md`'s first replayability idea
-  (a harder path worth a secret, beside the one everyone solves) has no room.
-  The run tally on the end card is the cheapest place to count secrets.
-- **Act 4 is thin on danger.** Three rooms: a shelf, the Act 1 guard lesson
-  again, and Volta. Volta is the act; the other two could ask more.
-- **Quitting mid-track prints "resources still in use at exit".** The audio
-  server frees a stopped playback on its own thread and quitting does not
-  wait. Harmless; noise in CI's log.
-- **The sounds and the music have not been heard by anyone.** Designed and
-  checked by drawing and measuring them (`assets/audio/README.md`). Expect
-  some recipes and levels to need a re-render after the first listen.
+- **A forgiving mode, for a kid.** Checkpoint density, hazard lethality and
+  sword count are the three dials. It stays here because a difficulty mode
+  built before the base difficulty is tuned is two untuned games. The kids
+  had fun at full difficulty, which is a data point for leaving it here.
+- **Per-hazard death animations.** v1 has one.
+- **Sword variants.** A heavy one that does not return, a pair thrown together.
+- **Ricochet off metal**, `SPEC.md`'s fifth behaviour cut to four. Only if
+  Act 3 turns out thin.
+- **The dragon as a mid-game traversal tool** rather than only the ending
+  (this was "the avian ally"). It is a second verb.
+- **Sword abilities as upgrades.** Changes the genre, needs currency and
+  unlock state, and multiplies authoring. Stage the situations instead: an act
+  that never asks for recall until the next one does.
+- **A jump upgrade.** Contradicts the ladders decision; only with it.
+- **A speedrun timer and ghost.** Post-ship (`LEVELS.md` decision 10).
+- **Volta's dialogue.** Very good or very bad, no middle.
+- **Desktop builds signed and on itch.io**, beyond M16's web export.

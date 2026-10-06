@@ -3,8 +3,8 @@
 > **Rewrite this file, never append.** State snapshot and pointers only. No
 > session narrative, that is what `git log` is for. Keep it under 80 lines.
 
-**Updated:** 2026-10-05 · **Phase:** 3, the game · **Active:** M14, the pass,
-waiting on Matt's play. **M14 done when:** three full playthroughs with no
+**Updated:** 2026-10-06 · **Phase:** 3, the game · **Active:** M14, the pass,
+waiting on Matt's answers to the playtest plan. **M14 done when:** three full playthroughs with no
 note worth writing down (`BUILD_PLAN.md`). M13's done-when (the game can be
 completed from a new save) is met in CI by `tools/dev.sh route`.
 
@@ -21,25 +21,24 @@ act. M15 is built ahead of M14; three M16 pieces are pulled forward
 
 ## The next action
 
-**Matt plays it through with sound on.** That is M14's first step and the
-first time anyone hears the audio. The game keeps its place between
-sessions; NEW GAME in the pause menu starts over. `BACKLOG.md`'s overnight
-section is the design notes to weigh while playing.
+**Matt and the kids played it through** (2026-10-06). They had fun; the music,
+movement and puzzles landed. The notes, and a five-stage plan merged with the
+old backlog, are at the top of `BACKLOG.md`. The headline: levels about ten
+times bigger and five to ten floors tall, which reopens `SPEC.md`'s ~18 rooms.
+**Nothing is built until Matt answers `BACKLOG.md` → Decisions requested.**
+Stage 1 (chest rule, walk-back checker, the switch, the cage) can start as
+soon as decision 5 and the cage change get a yes.
 
 ## Blocked on Matt
 
-1. **Playing it through, sound on**: does each Act 1 room teach its verb with
-   no words, is the dark too dark anywhere, and do the four sword sounds tell
-   the states apart with the screen dimmed (M15's done-when)?
-2. **Decisions made unattended, worth a yes or no**: death lines keyed to
-   cause (a change to a `SPEC.md` decision, #122); the opening card, pause
-   menu and save per act pulled from M16 (#123, #127, #130), the save per
-   act rather than per room; the ambient levels per act (`config/actN.tres`).
-3. **`RoomM7Sheet`**: are the six consistent in treatment? That closes M7.
-4. **M4 playtest feedback**: the dragon's pacing, the ledge-to-wood throw and
-   the dormant scorpion's wake-to-danger gap. Blocks M14's tuning of those.
-5. **Every act is painted** (`ART.md`): in play, do Act 2's mirror seam and
-   warm band, Act 3's wires over teal or Act 4's window bases bother you?
+1. **`BACKLOG.md` → Decisions requested**, seven of them: what a level is,
+   the walk-back rule, the level format, G2 before Acts 2 to 4, the chest
+   rule, the sword economy, and rewriting `SPEC.md`/`LEVELS.md`/`BUILD_PLAN.md`.
+2. **The play log** from this playthrough (`user://`, #136), if it was kept.
+3. **Older and still open**: `RoomM7Sheet` consistent in treatment (closes
+   M7); the unattended calls from 2026-10-05 (death lines by cause, the save
+   per act, ambient levels); M4's dragon pacing and dormant-scorpion gap; the
+   painted acts' seams in play.
 
 ## Traps that will bite again
 
