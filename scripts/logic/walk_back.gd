@@ -222,6 +222,10 @@ static func _fly(
 	var pos := feet
 	var w := moves.hero_width * 0.5
 	var h := moves.hero_height
+	# Nowhere a hero can be: inside a wall, or already in something that kills.
+	if _hits(Rect2(pos.x - w, pos.y - h, w * 2.0, h - 1.0), solids) \
+			or _hits(Rect2(pos.x - w, pos.y - h, w * 2.0, h), deadly):
+		return -1
 	var t := 0.0
 	while t < MAX_AIR:
 		t += DT
@@ -235,6 +239,9 @@ static func _fly(
 		if vy < 0.0 and _hits(Rect2(next_x - w, next_y - h, w * 2.0, 1.0), solids):
 			vy = 0.0
 			next_y = pos.y
+		# Death first: a step that lands also has to survive getting there.
+		if _hits(Rect2(next_x - w, next_y - h, w * 2.0, h), deadly):
+			return -1
 		if vy > 0.0:
 			for i in surfaces.size():
 				var s := surfaces[i]
@@ -242,8 +249,6 @@ static func _fly(
 						and next_x >= s.position.x and next_x <= s.end.x:
 					return i
 		pos = Vector2(next_x, next_y)
-		if _hits(Rect2(pos.x - w, pos.y - h, w * 2.0, h), deadly):
-			return -1
 		if vy > 0.0 and pos.y > 4000.0:
 			return -1
 	return -1

@@ -96,3 +96,13 @@ func test_a_low_ceiling_is_not_somewhere_to_stand() -> void:
 		if is_equal_approx(surface.position.y, FLOOR):
 			check(surface.end.x <= 100.0 or surface.position.x >= 200.0,
 				"the floor under a slab too low to stand under is not a surface")
+
+
+## A barrier from floor to ceiling cuts a room in two. Stepping off the end of
+## the floor it cuts used to "land" on the far side before the arc checked for
+## death, which let the rungs room's floor cross its barrier.
+func test_nothing_crosses_a_barrier() -> void:
+	var layout := _stepped(0.0)
+	layout.deadly = [Rect2(400.0, 0.0, 6.0, FLOOR)]
+	var report := WalkBack.check(layout, _moves())
+	check(not report.exit_reached, "the exit beyond the barrier is out of reach")

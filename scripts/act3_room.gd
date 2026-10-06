@@ -21,6 +21,19 @@ static func seam_at(stand_y: float) -> float:
 	return stand_y - WORLD_CONFIG.hero_height * 0.5 - SEAM_HEIGHT * 0.5
 
 
+## The way back up out of a yard (`SPEC.md`: you can always walk back to the
+## start). Every Act 3 yard is a drop deeper than the jump, and before the
+## family playtest none had a way out. At the foot of the drop, so it serves
+## the ledge you came off, and clear of the recessed copper.
+func _add_way_back(yard_x: float, upper_top: float) -> void:
+	_add_ladder(yard_x, upper_top, FLOOR_TOP)
+
+
+func _draw_ways_back() -> void:
+	for ladder in _ladders:
+		TileArt.draw_ladder(self, ladder)
+
+
 func _draw_seam(x: float, y: float, width: float) -> void:
 	# Insulation: the dark of a gap, so it reads as a break in the copper.
 	draw_rect(Rect2(x, y, width, SEAM_HEIGHT), Palette.BACKDROP)
