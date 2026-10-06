@@ -1,7 +1,7 @@
 # LEVELS.md: Matt's expanded vision, decided 2026-09-28
 
-This is not `SPEC.md`. `SPEC.md`'s Structure section (four acts, ~18 rooms) is
-still the settled plan and `BUILD_PLAN.md`'s "no level building before M10"
+This is not `SPEC.md`. `SPEC.md`'s Structure section (four acts of large
+levels, since 2026-10-06) is the settled plan and `BUILD_PLAN.md`'s "no level building before M10"
 still holds: nothing here gets built until it is judged, and this file is the
 judging, not the building.
 
@@ -364,8 +364,7 @@ Matt took every recommendation this file made. Items 1 to 4 unblock M10.
    room afterward.
 3. **The forest folds into Act 1**, with the moat and the outer wall. Still four
    acts.
-4. **Room count stays at about 18.** Expand each act, and cut rooms first if
-   time is short, as `BUILD_PLAN.md` already says.
+4. ~~**Room count stays at about 18.**~~ **Overturned 2026-10-06**, below.
 5. **Skeletons are a reskinned scorpion**, dormant until approached.
 6. **Carrying the torch costs the sword, not the jump.** A torch room may ask
    for any jump the hero can make.
@@ -380,10 +379,31 @@ Matt took every recommendation this file made. Items 1 to 4 unblock M10.
 
 The chandelier question was settled earlier: no second throwable.
 
-### Left to work out at M10
+### Left to work out at M10 (answered 2026-10-06, below)
 
 The dragon is caged and visible from Act 1 (`SPEC.md`), and it is also fought
 in Act 2. Those fit together only if Act 1 shows something short of the whole
 creature (chains, a shape in the dark, a shadow on a wall) and Act 2 is where it
 is met and chained. What Act 1 actually shows is a room-level decision for M10,
 not settled here.
+
+## Decisions (Matt, 2026-10-06, after the family playtest)
+
+Matt and the kids played the whole game. It was fun, and short and linear.
+`BACKLOG.md` has the notes and the plan.
+
+1. **A level is one large scene**, five to ten floors tall and many screens
+   wide, two or three per act, about ten times one of the first build's rooms.
+   The forest, the moat, the outer wall and the dungeons above get the room
+   to be what this file asked for. Replaces decision 4.
+2. **You can always walk back to the start of a level.** Anything that closes
+   behind you leaves another route. A level's exit stays one way.
+3. **Levels are written as text grids**, parsed by `scripts/logic/`, so they
+   can be reviewed in a PR and checked by a test.
+4. **Act 1 is rebuilt first and played (G2)** before Acts 2 to 4 grow.
+5. **Chests fill your hand to three**, ignoring swords left out in the level.
+6. **Three swords, cap five, unchanged.** Bigger fights are paid for by
+   placement: chests where fights are, hidden swords, fights built on catching.
+7. **The caged dragon is seen whole in Act 1**, behind bars in a quiet stretch
+   of its own, away from any puzzle. A shape and two eyes in the dark read to
+   every player as a block, which answers *Left to work out at M10*.

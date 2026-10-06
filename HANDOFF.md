@@ -3,10 +3,11 @@
 > **Rewrite this file, never append.** State snapshot and pointers only. No
 > session narrative, that is what `git log` is for. Keep it under 80 lines.
 
-**Updated:** 2026-10-06 · **Phase:** 3, the game · **Active:** M14, the pass,
-waiting on Matt's answers to the playtest plan. **M14 done when:** three full playthroughs with no
-note worth writing down (`BUILD_PLAN.md`). M13's done-when (the game can be
-completed from a new save) is met in CI by `tools/dev.sh route`.
+**Updated:** 2026-10-06 · **Phase:** 3 rebuilt, the scale · **Active:** R1,
+what the playtest hit. **R1 done when:** the chest rule and the walk-back
+checker have tests, the checker passes on every room that survives the
+rebuild, and the bailey's switch and cage are shot from a real build
+(`BUILD_PLAN.md`). M14 is paused until R4.
 
 ## Where this is
 
@@ -21,23 +22,19 @@ act. M15 is built ahead of M14; three M16 pieces are pulled forward
 
 ## The next action
 
-**Matt and the kids played it through** (2026-10-06). They had fun; the music,
-movement and puzzles landed. The notes, and a five-stage plan merged with the
-old backlog, are at the top of `BACKLOG.md`. The headline: levels about ten
-times bigger and five to ten floors tall, which reopens `SPEC.md`'s ~18 rooms.
-**Nothing is built until Matt answers `BACKLOG.md` → Decisions requested.**
-Stage 1 (chest rule, walk-back checker, the switch, the cage) can start as
-soon as decision 5 and the cage change get a yes.
+**Start R1 with the chest rule**: a chest fills your hand to three, ignoring
+swords left out (`SPEC.md`), with the test on `ActRoute.chest_top_up`. Then the
+walk-back checker, then the switch and the cage. `BACKLOG.md`'s *Decided* section
+has working notes for R1 to R3. Matt's 2026-10-06 decisions are in `LEVELS.md`:
+levels are large text-grid scenes, Act 1 is rebuilt and played (G2) first.
 
 ## Blocked on Matt
 
-1. **`BACKLOG.md` → Decisions requested**, seven of them: what a level is,
-   the walk-back rule, the level format, G2 before Acts 2 to 4, the chest
-   rule, the sword economy, and rewriting `SPEC.md`/`LEVELS.md`/`BUILD_PLAN.md`.
+1. **Whether a kid finds the new switch unaided**, once R1 lands.
 2. **The play log** from this playthrough (`user://`, #136), if it was kept.
 3. **Older and still open**: `RoomM7Sheet` consistent in treatment (closes
-   M7); the unattended calls from 2026-10-05 (death lines by cause, the save
-   per act, ambient levels); M4's dragon pacing and dormant-scorpion gap; the
+   M7); the unattended calls from 2026-10-05 (death lines by cause, ambient
+   levels; the save per act becomes a save at braziers in R3); M4's dragon pacing and dormant-scorpion gap; the
    painted acts' seams in play.
 
 ## Traps that will bite again
