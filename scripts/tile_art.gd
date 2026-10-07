@@ -115,13 +115,14 @@ static func draw_ground(canvas: CanvasItem, rect: Rect2, tiles: ActTiles = null)
 ## the dark going up, so a wall a screen tall does not outshine the floor.
 static func draw_wall(canvas: CanvasItem, rect: Rect2, tiles: ActTiles = null) -> void:
 	var set := _or_act1(tiles)
-	var rows := ceili(rect.size.y / set.wall_tiles[0].get_height())
+	var faces := set.face_tiles if not set.face_tiles.is_empty() else set.wall_tiles
+	var rows := ceili(rect.size.y / faces[0].get_height())
 	var lit := Palette.GROUND_SHADE[Palette.GROUND_SHADE.size() - 1]
 	var shades: Array[Color] = []
 	for row in rows:
 		var t := float(row) / float(maxi(rows - 1, 1))
 		shades.append(Palette.WALL_DARK.lerp(lit, t * t * t))
-	draw_tiled(canvas, set.wall_tiles, rect, shades)
+	draw_tiled(canvas, faces, rect, shades)
 	# A lintel along the bottom: the floor's own lip, upside down, so the edge
 	# you walk under is finished the way the edge you walk on is.
 	var lip := set.floor_tiles[0].get_height()
