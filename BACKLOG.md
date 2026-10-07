@@ -86,6 +86,17 @@ follows are working notes for those milestones, detail the plan does not carry.
   (`scripts/logic/`), built by `GridRoom`. The bailey is ported. Not yet in
   the legend: copper, barriers, current switches, plates, gems, the eyeball
   and the ant. Add each when the first level needs it.
+- **R3, tall rooms and frame time.** A room can now be taller than a screen
+  (`Bench.room_height`, from a level's map or its `height` line), and the
+  light field, far backdrop and dust follow. `levels/test_tall.level` is ten
+  screens by five floors; `tools/dev.sh frametime` measured it in this
+  container's software renderer at 26.3 ms mean, 32.6 ms p95, against the
+  one-screen bailey's 25.0 and 28.5: about the same cost for fifty times the
+  area. Both are over 16.7 ms only because nothing here has a GPU. Matt's
+  machine gives the number that counts.
+- **A tall level needs its own background painting.** The act's one-screen
+  painting is repeated down a tall room, every other copy flipped, as a
+  stopgap; a castle five floors tall wants a painting made for it. G2.
 - **R3, respawn.** Resetting every mechanism in a ten-floor level would undo a
   gate opened half an hour ago. Reset only what belongs to the brazier's
   section. This is the debt entry below, finally with a reason to pay it.

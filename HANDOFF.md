@@ -22,20 +22,22 @@ act. M15 is built ahead of M14; three M16 pieces are pulled forward
 
 ## The next action
 
-**R3 continues with respawn, saves and frame rate.** The level format is
-built: `levels/*.level` (16 px cells), read by `LevelGrid` and built by
-`GridRoom`; the bailey is the first room written that way. Next: the respawn
-reset out of `player.gd`, a save at braziers, and a frame-time check on a big
-grey level. R1 and R2 landed; decisions are in `LEVELS.md`.
+**R3 continues with the respawn reset and saves at braziers.** Done in R3:
+the level format (`levels/*.level`, `LevelGrid`, `GridRoom`, the bailey
+ported), rooms taller than a screen, and a frame-time tool. The big grey level
+(`levels/test_tall.level`) costs about what the bailey does per frame here;
+the absolute number needs Matt's machine (`tools/dev.sh frametime`).
 
 ## Blocked on Matt
 
 1. **R2, final quality?** The flame, the sword, the four doors and the ride
-   (`BACKLOG.md` has what to judge).
-2. **R1's play half**: whether a kid finds the bailey's new switch unaided, and
+   (`BACKLOG.md`).
+2. **Frame time on a real machine**: `tools/dev.sh frametime`, the tall test
+   level. Is p95 under 16.7 ms? That closes R3's frame-rate half.
+3. **R1's play half**: whether a kid finds the bailey's new switch unaided, and
    whether the caged dragon now reads as one (`BACKLOG.md` has what to watch).
-3. **The play log** from this playthrough (`user://`, #136), if it was kept.
-4. **Older and still open**: `RoomM7Sheet` consistent in treatment (closes
+4. **The play log** from this playthrough (`user://`, #136), if it was kept.
+5. **Older and still open**: `RoomM7Sheet` consistent in treatment (closes
    M7); the unattended calls from 2026-10-05 (death lines by cause, ambient
    levels; the save per act becomes a save at braziers in R3); M4's dragon pacing and dormant-scorpion gap; the
    painted acts' seams in play.

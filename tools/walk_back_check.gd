@@ -8,7 +8,8 @@
 ## too strict to trust), or if the hero does not start on a surface.
 ##
 ## `tools/dev.sh walkback [filter]` runs it; a filter keeps rooms whose path
-## contains it. Exits 1 on any failure.
+## contains it, and a `res://` path checks that one scene, in an act or not.
+## Exits 1 on any failure.
 extends SceneTree
 
 const MOVEMENT: MovementConfig = preload("res://config/movement.tres")
@@ -27,11 +28,15 @@ func _init() -> void:
 	var filter := ""
 	for arg in OS.get_cmdline_user_args():
 		filter = arg
-	var act_state: Script = load("res://scripts/act_state.gd")
-	for act: ActConfig in act_state.ACTS:
-		for room in act.rooms:
-			if filter.is_empty() or room.contains(filter):
-				_rooms.append(room)
+	if filter.begins_with("res://"):
+		# One scene by path, for a level in no act yet.
+		_rooms.append(filter)
+	else:
+		var act_state: Script = load("res://scripts/act_state.gd")
+		for act: ActConfig in act_state.ACTS:
+			for room in act.rooms:
+				if filter.is_empty() or room.contains(filter):
+					_rooms.append(room)
 	_next()
 
 
