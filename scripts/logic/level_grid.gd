@@ -24,7 +24,14 @@
 ##
 ## Any other capital letter or digit is an anchor: every cell carrying it
 ## makes one rectangle, and a line in `[things]` says what it is. A line is
-## `<anchor> <kind> key=value ...`.
+## `<anchor> <kind> key=value ...`. The kinds a `GridRoom` builds:
+##
+##     gate                     a portcullis
+##     switch opens=G           wood a sword holds down, opening gate G
+##     scorpion range=96        a patrol; `dormant` asleep until you come near
+##     bat                      flies about the rect it fills
+##     stump to=U               land on it, come up on stump U (one way)
+##     stump                    a stump that leads nowhere, or a warp's end
 ##
 ## Every placement stands on the bottom of its cell: a brazier, a chest, the
 ## hero's feet and the exit all sit on whatever is below. A ladder's top is the

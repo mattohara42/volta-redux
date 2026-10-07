@@ -237,6 +237,13 @@ Act 1 rebuilt as one or two large levels: the forest, the moat and the outer
 wall, five to ten floors, mixed enemy groups, today's four rooms folded in as
 sections. Then Matt and the kids play it. **A gate, as G1 was.**
 
+Matt, 2026-10-07: **two levels**, the forest and the moat (folding in the
+bank), then the outer wall to the castle gate (folding in the wall, the
+bailey and the gate). **Grey-boxed first** in today's Act 1 tiles and played
+before any art; no credits until it plays. New pieces are the cheap reskins
+(cracked branches are falling slabs, vines are ladders, skeletons are dormant
+scorpions) plus **the stump warp**, one way (`Stump`).
+
 **Done when**: it is fun at that size and the cost of one level, in sessions
 and credits, is written down. Not fun, or not affordable three more times: the
 fix goes in `SPEC.md` before anything else is built.

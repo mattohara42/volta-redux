@@ -516,6 +516,20 @@ SCENARIOS: list[dict] = [
 		],
 	},
 	{
+		"name": "G2: landing on a stump brings you up out of the one on the shelf",
+		"scene": "res://scenes/rooms/room_g2_stump.tscn",
+		"out": "room_g2_stump.png",
+		"input": "move_right:36;move_right,jump:14;move_right:8;-:40",
+		"zoom": 1.0,
+		"centre": (320, 180),
+		"checks": [
+			{"type": "player_position", "min_x": 530, "max_x": 560, "max_y": 170,
+				"message": "the hero should be standing on the shelf's stump"},
+			{"type": "contains", "pattern": "capture: no deaths",
+				"message": "a warp should not kill"},
+		],
+	},
+	{
 		"name": "Act 1: a chest refills your hand while swords are left in the wood",
 		"scene": "res://scenes/rooms/act1_bailey.tscn",
 		"out": "act1_bailey_chest.png",
