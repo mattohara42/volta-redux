@@ -27,7 +27,8 @@ func _physics_process(_delta: float) -> void:
 		if player == null or player.is_dead() or not player.is_on_floor():
 			continue
 		var feet := player.global_position + Vector2(0.0, player.world.hero_height * 0.5)
-		if absf(feet.y - rect.position.y) <= 2.0 and feet.x >= rect.position.x and feet.x <= rect.end.x:
+		var half_width := player.world.hero_width * 0.5
+		if StumpLanding.is_on_top(feet, half_width, half_width, rect):
 			standing = true
 			# Landing on it, never standing there already: a hero put on a stump
 			# by a respawn is not sent anywhere until they jump on it again.
