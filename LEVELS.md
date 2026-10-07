@@ -407,3 +407,19 @@ Matt and the kids played the whole game. It was fun, and short and linear.
 7. **The caged dragon is seen whole in Act 1**, behind bars in a quiet stretch
    of its own, away from any puzzle. A shape and two eyes in the dark read to
    every player as a block, which answers *Left to work out at M10*.
+
+## Decisions (Matt, 2026-10-07, depth before breadth)
+
+After G2's first answer, "far too short, simple, and stilted" (`BUILD_PLAN.md`,
+N0 to N3).
+
+1. **Keep the engine, the 16 px text grid and one-scene levels**; prove a new
+   way of building on the outer wall before anything else grows. R4 waits.
+2. **Matt sketches each level's beat sheet; Claude builds it in text** and
+   tests it.
+3. **A sword that kills is lost**, wherever it was: flying, embedded or lying.
+   `SPEC.md`'s "both die" holds for a planted sword too.
+4. **Levels gain a back-wall section** (text, drawn behind the hero, not
+   solid), and **decoration placed by rules is allowed**, written into the
+   level file so it can be reviewed. An authoring tool, not the procedural
+   generation `SPEC.md` rules out.
