@@ -1,5 +1,5 @@
 ## The checks every sword-step ditch has to pass, shared by the rooms built on
-## one: `Act1Gate`, `RoomM2Gap` and `RoomM2Switch`. Not a test file itself (no
+## one: `Act1Wall`'s ditch, `RoomM2Gap` and `RoomM2Switch`. Not a test file itself (no
 ## `test_` prefix); each room's test calls `run` with its own numbers.
 ##
 ## The claim is that the ditch **cannot be crossed without standing on your own

@@ -87,10 +87,10 @@ func _judge(room: String, layout: WalkBack.Layout, report: WalkBack.Report) -> v
 ## surface, and the stranded ones thick. Written next to the project, where
 ## screenshots go and git ignores them.
 func _draw(room: String, layout: WalkBack.Layout, report: WalkBack.Report) -> void:
-	var width := 0.0
+	var size := Vector2.ZERO
 	for solid in layout.solids:
-		width = maxf(width, solid.end.x)
-	var image := Image.create(int(width), int(Bench.ROOM_HEIGHT), false, Image.FORMAT_RGB8)
+		size = size.max(solid.end)
+	var image := Image.create(int(size.x), int(size.y), false, Image.FORMAT_RGB8)
 	image.fill(Palette.BACKDROP)
 	for solid in layout.solids:
 		var colour := Palette.WOOD_DEEP if layout.embeddable.has(solid) else Palette.STONE_MID

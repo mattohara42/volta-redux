@@ -8,7 +8,7 @@
 ## It used to be a post standing in a 120 px gap, and no build could finish it:
 ## a jump off the ledge cannot clear a post a jump from the floor cannot land on.
 ## The tests checked horizontal reach only. `DitchChecks` now holds every room
-## with this crossing, and a scenario crosses `Act1Gate`'s in a real build.
+## with this crossing, and a scenario crosses `Act1Wall`'s ditch in a real build.
 class_name RoomM2Gap
 extends Bench
 

@@ -3,7 +3,7 @@
 ##
 ## Two storeys, each a ditch faced with timber cribbing: the far side is out of
 ## a jump's reach, and a sword thrown into the timber is a step you stand on and
-## climb off. It is `Act1Gate`'s crossing twice, one above the other, and
+## climb off. It is the outer wall's ditch crossing twice, one above the other, and
 ## `DitchChecks` holds both. Between them, on the middle level, an eyeball
 ## drifts toward you at your height (`SPEC.md`'s anti-catch enemy). Kill it with
 ## a throw and that sword is spent; get past it some other way and it is still

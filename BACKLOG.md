@@ -123,6 +123,29 @@ follows are working notes for those milestones, detail the plan does not carry.
   Frame time here in software: 29.1 ms mean, 37.0 p95, against the tall test
   level's 23.7 and 29.8 in the same run, so about a quarter dearer (more
   enemies, more lights). Matt's GPU gives the number that counts.
+  **Played (Matt, 2026-10-07): it plays well, and the high road was found.**
+  A stump did not warp: landing on its edge never counted (fixed, #158).
+- **G2, level 2 is grey-boxed: the outer wall to the castle gate**
+  (`levels/act1_wall.level`, 260 by 48 cells, about six and a half screens by
+  two). It replaces the wall, bailey and gate rooms as sections (their tests
+  became `tests/test_act1_wall.gd`). Left to right: three storeys of wall
+  climbed by ladder with two bats round them; a skeleton (a dormant
+  scorpion) asleep on the walk; the gatehouse guard, killed head on from the
+  sill (a 12 px step the map marks and `Act1Wall` builds, since cells are
+  16 px); the breach on falling slabs. The high road climbs the gatehouse
+  tower and crosses on scaffolds past two bats, which have to die in order
+  (the first from the tower, the second from the second scaffold) and fly
+  across the line a throw takes, so they can. Then the bailey (hurdles, the
+  cage, the yard switch ahead), the ditch with a bat over the sword ledge,
+  and the castle on a plinth whose face is the switch, ahead of you, rather
+  than behind you as the old gate room had it. To judge in play: whether the
+  high road's bats are fair or just a toll, whether the skeleton reads as a
+  surprise or a scorpion, and whether the castle's plinth switch is found.
+  Not dressed: no battlements (`TileArt.draw_battlements` is unused now),
+  no torches, no siege engines. Frame time in software: 39.3 ms mean, 49.2
+  p95, against level 1's 32.0 and 44.1 in the same run, about a fifth
+  dearer (six braziers, two switch lights and the cage's). **Cost: one
+  session, no credits**, the same as level 1.
 - **R3, a tile's collision line** becomes a per-tile property of the format,
   which retires the one-off measuring scan (debt, below).
 

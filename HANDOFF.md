@@ -5,42 +5,37 @@
 
 **Updated:** 2026-10-07 · **Phase:** 3 rebuilt, the scale · **Active:** G2,
 Act 1 at full size. **G2 done when:** it is fun at that size and the cost of
-one level, in sessions and credits, is written down (`BUILD_PLAN.md`). R1, R2
-and R3 are built; only Matt's eye (and his GPU, for R3) is left on each. M14
-is paused until R4.
+one level, in sessions and credits, is written down (`BUILD_PLAN.md`). Cost
+is written down (one session, no credits, per level: `BACKLOG.md`); fun is
+Matt's to answer. M14 is paused until R4.
 
 ## Where this is
 
-**All four acts are built, connected and dressed** (light, far layers,
-particles, all sound and music from code, act cards, pause menu, saves at
-braziers). M15 is built ahead of M14 (`BUILD_PLAN.md`). **Credits: 405**
-after R2. Enemies wait on `RoomM7Sheet`.
+**Act 1 is two grey-boxed levels**: the forest and the moat
+(`levels/act1_forest.level`, played and it plays well), then the outer wall
+to the castle gate (`levels/act1_wall.level`, `Act1Wall`), which replaced
+the wall, bailey and gate rooms. Acts 2 to 4 are built, connected and
+dressed at the old room size. **Credits: 405.**
 
 ## The next action
 
-**G2, level 2: the outer wall to the castle gate**, folding in today's wall,
-bailey and gate rooms as sections, grey-boxed like level 1. Level 1, the
-forest and the moat, is built (`levels/act1_forest.level`, `BACKLOG.md` has
-what to watch) and replaces the bank as Act 1's first room. Cost so far: one
-session for the stump warp and level 1, no credits.
+**Matt plays Act 1 end to end** from a new game. Fun: G2 passes and R4
+starts. Not fun: the fix goes in `SPEC.md` first.
 
 ## Blocked on Matt
 
-1. **Play level 1**, `tools/dev.sh play` from a new game: is the forest fun
-   at this size, is the high road found, do the stumps read? Grey-box, so
-   judge the layout, not the look.
+1. **Play level 2** (after the forest, from a new game): fun at this size?
+   High road's bats fair? Plinth switch found? Judge layout, not look.
+   Blocks G2. `BACKLOG.md` has the rest to watch.
 2. **R2, final quality?** The flame, the sword, the four doors and the ride
-   (`BACKLOG.md`).
-3. **Frame time on a real machine**: `tools/dev.sh frametime`, the tall test
-   level, then `tools/dev.sh frametime res://scenes/rooms/act1_forest.tscn`.
-   Is p95 under 16.7 ms? That closes R3's frame-rate half.
-4. **R1's play half**: whether a kid finds the bailey's new switch unaided, and
-   whether the caged dragon now reads as one (`BACKLOG.md` has what to watch).
-5. **The play log** from this playthrough (`user://`, #136), if it was kept.
-6. **Older and still open**: `RoomM7Sheet` consistent in treatment (closes
+   (`BACKLOG.md`). Blocks R2.
+3. **Frame time on a real machine**: `tools/dev.sh frametime`, then with
+   `res://scenes/rooms/act1_forest.tscn` and `act1_wall.tscn`: p95 under
+   16.7 ms? Blocks R3's frame-rate half.
+4. **Older and still open**: `RoomM7Sheet` consistent in treatment (closes
    M7); the unattended calls from 2026-10-05 (death lines by cause, ambient
-   levels; the save is now at braziers); M4's dragon pacing and dormant-scorpion gap; the
-   painted acts' seams in play.
+   levels); M4's dragon pacing and dormant-scorpion gap; the painted acts'
+   seams in play; a play log (`user://`, #136) when one is to hand.
 
 ## Traps that will bite again
 
@@ -60,6 +55,10 @@ real run**: `godot --path . <scene> --write-movie out/f.png --fixed-fps 30
 --quit-after N` writes frames and the game's own mix as a WAV. **Only a
 plain launch touches the save; `--script` never does.**
 
+**A bat's box is where it can kill you**: put it across the line a throw
+takes from outside it, or it cannot be fought. **Walk-back's "exit out of
+reach" means the level is blocked**: its drawing is full height now.
+
 **Sprite Fusion**: `style-reference` ignores `size`, `animate` starts on the
 input's pose, frames can boil (filmstrip first), an SSL EOF charges nothing.
 **A test can pass while a texture is missing**: shoot the room after art.
@@ -70,6 +69,7 @@ input's pose, frames can boil (filmstrip first), an SSL EOF charges nothing.
 **Moving jumps are somersaults; dives cost a recovery pause** (2026-09-28).
 **M4:** contact with any enemy kills; the dragon dies only to RECALLING.
 **G1:** passed. **`LEVELS.md`'s twelve questions** (Matt, 2026-09-28).
+**R1's play half** (Matt, 2026-10-07): the bailey switch and the dragon read.
 
 ## Pointers
 
