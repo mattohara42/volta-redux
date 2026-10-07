@@ -14,6 +14,9 @@ const SCORPION_SIZE := Vector2(30.0, 34.0)
 const BAT_SIZE := Vector2(20.0, 14.0)
 
 @export_file("*.level") var level_file: String
+## The level's own art, if it is not its act's (the forest is Act 1 and is not
+## drawn in the castle's stone). Null draws the act's set.
+@export var tiles: ActTiles
 
 var level: LevelGrid.Level
 ## What the map's anchors built, by anchor, for a room to reach in `_built`.
@@ -39,6 +42,8 @@ func _ready() -> void:
 		var act: ActConfig = act_state.act_of(scene_file_path)
 		if act != null:
 			_tiles = act.tiles
+	if tiles != null:
+		_tiles = tiles
 	_build()
 	_built()
 	_add_enclosure(level.size.x)
@@ -51,6 +56,8 @@ func _build() -> void:
 		_add_solid(rect)
 	for rect in level.walls:
 		_add_solid(rect)
+	for rect in level.castle:
+		_add_solid(rect)
 	for rect in level.wood:
 		_add_wood(rect, false)
 	for rect in level.lava:
@@ -58,7 +65,9 @@ func _build() -> void:
 	for rect in level.spikes:
 		_add_spikes(rect.end.y, rect.position.x, int(rect.size.x / hazards.spike_tooth_pitch))
 	for rect in level.falling:
-		_add_falling_platform(rect)
+		var platform := _add_falling_platform(rect)
+		if platform != null and _tiles != null and _tiles.crumble_tile != null:
+			platform.art = _tiles.crumble_tile
 	for rect in level.ladders:
 		_add_ladder(rect.position.x, rect.position.y, rect.end.y)
 	for base in level.braziers:
@@ -121,10 +130,14 @@ func _draw() -> void:
 		TileArt.draw_ground(self, rect, _tiles)
 	for rect in level.wall_faces:
 		TileArt.draw_wall(self, rect, _tiles)
+	for rect in level.castle_faces:
+		TileArt.draw_wall(self, rect)
 	for rect in level.wood:
-		TileArt.draw_wood(self, rect)
+		TileArt.draw_wood(self, rect, _tiles)
 	for ladder in _ladders:
-		TileArt.draw_ladder(self, ladder)
+		TileArt.draw_ladder(self, ladder, _tiles)
+	for bed in _spike_beds:
+		TileArt.draw_spikes(self, bed, _tiles)
 	_draw_over()
 
 

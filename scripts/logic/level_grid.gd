@@ -18,6 +18,8 @@
 ##
 ##     .  air                    #  stone, drawn as ground
 ##     %  stone, drawn as wall   w  wood (a sword sticks in it)
+##     &  stone, drawn as the castle's wall whatever the level's art (the
+##        outer wall at the forest's end)
 ##     ~  lava                   ^  spikes, standing on the cell below
 ##     =  a falling slab         H  a ladder, filling the air it climbs
 ##     @  where the hero starts  B  a brazier   C  a chest   E  the exit
@@ -40,7 +42,7 @@ class_name LevelGrid
 extends RefCounted
 
 const AIR := "."
-const MATERIALS := "#%w~^="
+const MATERIALS := "#%&w~^="
 const MARKERS := "@BCEH"
 
 
@@ -79,6 +81,9 @@ class Level:
 	## (fewer pieces, for collision) leaves seams that would draw as ledges.
 	var ground_faces: Array[Rect2] = []
 	var wall_faces: Array[Rect2] = []
+	## Castle stone (`&`): solid like a wall, always drawn in the castle's art.
+	var castle: Array[Rect2] = []
+	var castle_faces: Array[Rect2] = []
 	var wood: Array[Rect2] = []
 	var lava: Array[Rect2] = []
 	var spikes: Array[Rect2] = []
@@ -92,11 +97,12 @@ class Level:
 	var things: Array[Thing] = []
 	var errors: Array[String] = []
 
-	## Everything solid: ground, walls and wood.
+	## Everything solid: ground, walls, castle stone and wood.
 	func solids() -> Array[Rect2]:
 		var all: Array[Rect2] = []
 		all.append_array(ground)
 		all.append_array(walls)
+		all.append_array(castle)
 		all.append_array(wood)
 		return all
 
@@ -161,6 +167,8 @@ static func parse(text: String) -> Level:
 	level.walls = _merged(rows, "%", level.cell)
 	level.ground_faces = _merged_down(rows, "#", level.cell)
 	level.wall_faces = _merged_down(rows, "%", level.cell)
+	level.castle = _merged(rows, "&", level.cell)
+	level.castle_faces = _merged_down(rows, "&", level.cell)
 	level.wood = _merged(rows, "w", level.cell)
 	level.lava = _merged(rows, "~", level.cell)
 	level.spikes = _merged(rows, "^", level.cell)
@@ -170,7 +178,7 @@ static func parse(text: String) -> Level:
 	# something solid stops the hero under it, short of the top.
 	for y in range(1, rows.size()):
 		for x in rows[y].length():
-			if rows[y][x] == "H" and x < rows[y - 1].length() and "#%w=".contains(rows[y - 1][x]):
+			if rows[y][x] == "H" and x < rows[y - 1].length() and "#%&w=".contains(rows[y - 1][x]):
 				level.errors.append("a ladder climbs into the solid above it at cell (%d, %d)" % [x, y - 1])
 
 	var anchors := {}

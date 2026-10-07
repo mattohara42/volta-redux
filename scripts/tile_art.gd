@@ -133,12 +133,12 @@ static func draw_wall(canvas: CanvasItem, rect: Rect2, tiles: ActTiles = null) -
 	canvas.draw_set_transform(Vector2.ZERO)
 
 
-static func draw_ladder(canvas: CanvasItem, rect: Rect2) -> void:
-	draw_tiled(canvas, LADDER_TILES, rect, UNSHADED)
+static func draw_ladder(canvas: CanvasItem, rect: Rect2, tiles: ActTiles = null) -> void:
+	draw_tiled(canvas, _slot(tiles, "climb_tiles", LADDER_TILES), rect, UNSHADED)
 
 
-static func draw_wood(canvas: CanvasItem, rect: Rect2) -> void:
-	draw_tiled(canvas, WOOD_TILES, rect, UNSHADED)
+static func draw_wood(canvas: CanvasItem, rect: Rect2, tiles: ActTiles = null) -> void:
+	draw_tiled(canvas, _slot(tiles, "wood_tiles", WOOD_TILES), rect, UNSHADED)
 
 
 ## A chain hanging from a shackle at `top`, down to `bottom`, centred on `x`.
@@ -164,10 +164,11 @@ static func draw_battlements(canvas: CanvasItem, x: float, walk_y: float, width:
 ## A spike bed's teeth over `bed`, the drawn rectangle `Bench._add_spikes` keeps.
 ## The tile is drawn standing on the bed's floor, so it may stand a little proud
 ## of the lethal box, never short of it.
-static func draw_spikes(canvas: CanvasItem, bed: Rect2) -> void:
-	var height := SPIKE_TILES[0].get_height()
+static func draw_spikes(canvas: CanvasItem, bed: Rect2, tiles: ActTiles = null) -> void:
+	var textures := _slot(tiles, "hazard_tiles", SPIKE_TILES)
+	var height := textures[0].get_height()
 	draw_tiled(
-		canvas, SPIKE_TILES, Rect2(bed.position.x, bed.end.y - height, bed.size.x, height), UNSHADED
+		canvas, textures, Rect2(bed.position.x, bed.end.y - height, bed.size.x, height), UNSHADED
 	)
 
 
@@ -199,3 +200,12 @@ static func draw_tiled(
 
 static func _or_act1(tiles: ActTiles) -> ActTiles:
 	return tiles if tiles != null else ACT1
+
+
+## One of a set's optional slots (`ActTiles`), or the castle's art when the set
+## leaves it empty or there is no set.
+static func _slot(tiles: ActTiles, slot: StringName, castle: Array[Texture2D]) -> Array[Texture2D]:
+	if tiles == null:
+		return castle
+	var own: Array[Texture2D] = tiles.get(slot)
+	return own if not own.is_empty() else castle

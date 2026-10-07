@@ -1,6 +1,10 @@
 ## One act's ground: the floor lip, the masonry or rock under it, and the far
 ## background. `TileArt` draws from one of these; a room passes its act's set,
-## and Act 1's is the default, so a room that passes none draws the castle.
+## and Act 1's is the default, so a room that passes none draws the castle. A
+## level can name a set of its own (`GridRoom.tiles`), as the forest does.
+##
+## The slots after the background are optional. Left empty, each draws the
+## castle's art (`TileArt`), so a set only names what it changes.
 class_name ActTiles
 extends Resource
 
@@ -14,3 +18,12 @@ extends Resource
 ## px. Each becomes a light in the room's `LightField`, so the dark draws back
 ## around what the painter lit and the painting and the room agree.
 @export var lights: PackedVector2Array = PackedVector2Array()
+## Wood a sword bites into: planks in the castle, branches in the forest.
+@export var wood_tiles: Array[Texture2D] = []
+## What a hero climbs: a ladder in the castle, a vine in the forest.
+@export var climb_tiles: Array[Texture2D] = []
+## What kills you to land on: iron spikes in the castle, thorns in the forest.
+@export var hazard_tiles: Array[Texture2D] = []
+## A slab that gives way, cropped so its top row is the surface. Null keeps a
+## grid level's falling slab drawn in code, as it was before this slot.
+@export var crumble_tile: Texture2D = null
