@@ -120,6 +120,9 @@ follows are working notes for those milestones, detail the plan does not carry.
   stumps read as stumps. Known gaps: the river is a spiked gorge because
   there is no water yet (water that kills could be lava's rule with its own
   shader), and there are no vines or bark art, so a vine is a ladder.
+  Frame time here in software: 29.1 ms mean, 37.0 p95, against the tall test
+  level's 23.7 and 29.8 in the same run, so about a quarter dearer (more
+  enemies, more lights). Matt's GPU gives the number that counts.
 - **R3, a tile's collision line** becomes a per-tile property of the format,
   which retires the one-off measuring scan (debt, below).
 
