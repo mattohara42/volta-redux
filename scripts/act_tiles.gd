@@ -30,3 +30,5 @@ extends Resource
 ## A slab that gives way, cropped so its top row is the surface. Null keeps a
 ## grid level's falling slab drawn in code, as it was before this slot.
 @export var crumble_tile: Texture2D = null
+## A stump (`Stump`), whole, at its rect's size. Null keeps it drawn in code.
+@export var stump_texture: Texture2D = null

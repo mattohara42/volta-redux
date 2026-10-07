@@ -15,6 +15,9 @@ var rect := Rect2()
 ## Where a warp puts the hero's feet, or null for a stump that goes nowhere.
 var to: Variant = null
 
+## Its picture, from the level's art (`ActTiles.stump_texture`), or null to
+## draw it in code.
+var art: Texture2D = null
 var _was_standing := false
 
 
@@ -47,9 +50,12 @@ func _send(player: Player, feet: Vector2) -> void:
 
 ## A trunk, not a crate: bark running up it, roots flaring at its foot, and a
 ## dark hollow in its top, the same on every stump, so which one a stump leads
-## to is found by jumping on it. Drawn in code until the forest has art (G2).
+## to is found by jumping on it. Drawn in code where a level has no stump art.
 func _draw() -> void:
 	var r := Rect2(rect.position - position, rect.size)
+	if art != null:
+		draw_texture_rect(art, r, false)
+		return
 	draw_rect(r, Palette.WOOD_DEEP)
 	var x := r.position.x + 3.0
 	while x < r.end.x - 2.0:
