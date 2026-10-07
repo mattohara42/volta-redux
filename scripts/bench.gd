@@ -1,7 +1,7 @@
 ## Shared plumbing for the Phase 1 grey benches, and for the real rooms.
 ##
 ## The benches are instruments, not rooms. The real rooms in Phase 3 extend this
-## too (`Act1Bank` was the first): their geometry is `Rect2` constants a test
+## too (`Act1Wall` is one): their geometry is `Rect2` constants a test
 ## can measure against `Motion.jump_reach`, drawn with `TileArt`, rather than a
 ## Godot TileMap. Rooms are written and checked in code, without the editor,
 ## and a rectangle a test can read beats tile data it cannot. Revisit if a room

@@ -96,6 +96,8 @@ def _run_scenario(godot: str, scenario: dict) -> list[str]:
 	]
 	if scenario["input"]:
 		command.insert(-1, "--input=%s" % scenario["input"])
+	if "at" in scenario:
+		command.insert(-1, "--at=%s,%s" % scenario["at"])
 	result = subprocess.run(
 		_display_wrapped(command), cwd=REPO_ROOT, capture_output=True, text=True
 	)

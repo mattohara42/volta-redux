@@ -78,10 +78,12 @@ in stone (`#`), wall (`%`), wood (`w`), lava (`~`), spikes (`^`), falling
 slabs (`=`) and ladders (`H`), with the start (`@`), braziers (`B`), chests
 (`C`) and the exit (`E`) standing on the bottom of their cells. Any other
 capital letter is an anchor, and a `[things]` line says what it is:
-`S switch opens=G`, `G gate`, `D scorpion range=180 dormant`. The full legend
+`S switch opens=G`, `G gate`, `D scorpion range=180 dormant`, `T stump to=U`. The full legend
 is at the top of `scripts/logic/level_grid.gd`. A scene whose script is
 `GridRoom` (or extends it) with `level_file` set builds the room from it;
-`levels/act1_bailey.level` is the worked example.
+`levels/act1_bailey.level` is the worked example, and
+`levels/act1_forest.level` the first full-size one. A scenario can start
+partway through a big level with `"at": (x, y)` (`capture.gd --at=x,y`).
 
 ### A playthrough, step by step
 

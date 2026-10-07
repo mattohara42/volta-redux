@@ -3,41 +3,41 @@
 > **Rewrite this file, never append.** State snapshot and pointers only. No
 > session narrative, that is what `git log` is for. Keep it under 80 lines.
 
-**Updated:** 2026-10-07 · **Phase:** 3 rebuilt, the scale · **Active:** R3,
-the tools for big levels. **R3 done when:** the bailey, re-expressed as a text
-grid, still passes its route, tests and scenarios, and a ten-screen by
-five-floor grey level holds frame rate in a real build (`BUILD_PLAN.md`). R1 and R2 are
-built; only Matt's eye is left on each. M14 is paused until R4.
+**Updated:** 2026-10-07 · **Phase:** 3 rebuilt, the scale · **Active:** G2,
+Act 1 at full size. **G2 done when:** it is fun at that size and the cost of
+one level, in sessions and credits, is written down (`BUILD_PLAN.md`). R1, R2
+and R3 are built; only Matt's eye (and his GPU, for R3) is left on each. M14
+is paused until R4.
 
 ## Where this is
 
-**All four acts are built and connected, and an overnight pass (Matt's
-request, PRs #116 to #133) dressed them**: light and dark (`LightField`,
-rim light), far layers (`Backdrop`), particles (`Burst`), every sound and
-all act and boss music from code (`assets/audio/README.md`), death lines by
-cause (`SPEC.md`), act cards, an opening card, a pause menu and a save per
-act. M15 is built ahead of M14; three M16 pieces are pulled forward
-(`BUILD_PLAN.md`). **Credits: 405** after R2. Enemies wait on
-`RoomM7Sheet`.
+**All four acts are built, connected and dressed** (light, far layers,
+particles, all sound and music from code, act cards, pause menu, saves at
+braziers). M15 is built ahead of M14 (`BUILD_PLAN.md`). **Credits: 405**
+after R2. Enemies wait on `RoomM7Sheet`.
 
 ## The next action
 
-**R3 is built; only its frame-rate half is open**, and that is Matt's machine
-(below). Done in R3: the level format (`levels/*.level`, `LevelGrid`,
-`GridRoom`, the bailey ported), rooms taller than a screen, a frame-time
-tool, and respawn and saves at braziers (`BACKLOG.md` has the rules). **Next
-is G2, Act 1 at full size**: ask Matt before starting it.
+**G2, level 2: the outer wall to the castle gate**, folding in today's wall,
+bailey and gate rooms as sections, grey-boxed like level 1. Level 1, the
+forest and the moat, is built (`levels/act1_forest.level`, `BACKLOG.md` has
+what to watch) and replaces the bank as Act 1's first room. Cost so far: one
+session for the stump warp and level 1, no credits.
 
 ## Blocked on Matt
 
-1. **R2, final quality?** The flame, the sword, the four doors and the ride
+1. **Play level 1**, `tools/dev.sh play` from a new game: is the forest fun
+   at this size, is the high road found, do the stumps read? Grey-box, so
+   judge the layout, not the look.
+2. **R2, final quality?** The flame, the sword, the four doors and the ride
    (`BACKLOG.md`).
-2. **Frame time on a real machine**: `tools/dev.sh frametime`, the tall test
-   level. Is p95 under 16.7 ms? That closes R3's frame-rate half.
-3. **R1's play half**: whether a kid finds the bailey's new switch unaided, and
+3. **Frame time on a real machine**: `tools/dev.sh frametime`, the tall test
+   level, then `tools/dev.sh frametime res://scenes/rooms/act1_forest.tscn`.
+   Is p95 under 16.7 ms? That closes R3's frame-rate half.
+4. **R1's play half**: whether a kid finds the bailey's new switch unaided, and
    whether the caged dragon now reads as one (`BACKLOG.md` has what to watch).
-4. **The play log** from this playthrough (`user://`, #136), if it was kept.
-5. **Older and still open**: `RoomM7Sheet` consistent in treatment (closes
+5. **The play log** from this playthrough (`user://`, #136), if it was kept.
+6. **Older and still open**: `RoomM7Sheet` consistent in treatment (closes
    M7); the unattended calls from 2026-10-05 (death lines by cause, ambient
    levels; the save is now at braziers); M4's dragon pacing and dormant-scorpion gap; the
    painted acts' seams in play.

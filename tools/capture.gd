@@ -23,6 +23,9 @@
 ## lets go while the sword flies. Letting go matters, because an action held too
 ## long is a different action: a held throw is a recall.
 ##
+## `--at=x,y` starts the hero with their feet at that point, lit as a checkpoint,
+## so a scenario can begin partway through a big level.
+##
 ## `--filmstrip=N` captures N frames spread evenly across the whole `--input`
 ## sequence (after the initial settle) and composites them into one wide strip
 ## image at `--out`, instead of the single end-of-run frame. This is how a
@@ -48,6 +51,7 @@ var _overwrite := false
 var _zoom := 0.0
 var _centre := Vector2.INF
 var _filmstrip_count := 0
+var _at := Vector2.INF
 
 
 func _initialize() -> void:
@@ -69,7 +73,7 @@ func _initialize() -> void:
 
 	root.add_child(packed.instantiate())
 	var agent := CaptureAgent.new()
-	agent.configure(_out_path, _phases, _until_apex, _zoom, _centre, _filmstrip_count)
+	agent.configure(_out_path, _phases, _until_apex, _zoom, _centre, _filmstrip_count, _at)
 	root.add_child(agent)
 
 
@@ -94,6 +98,10 @@ func _parse_arguments() -> void:
 			_overwrite = true
 		elif argument.begins_with("--filmstrip="):
 			_filmstrip_count = value.to_int()
+		elif argument.begins_with("--at="):
+			var at := value.split(",", false)
+			if at.size() == 2:
+				_at = Vector2(at[0].to_float(), at[1].to_float())
 
 
 ## "move_right:70;climb_up:80" becomes two phases of held actions and durations.
@@ -126,10 +134,11 @@ class CaptureAgent:
 	var _zoom := 0.0
 	var _centre := Vector2.INF
 	var _filmstrip_count := 0
+	var _at := Vector2.INF
 
 	func configure(
 		out_path: String, phases: Array[Dictionary], until_apex: bool, zoom: float,
-		centre: Vector2, filmstrip_count: int
+		centre: Vector2, filmstrip_count: int, at: Vector2
 	) -> void:
 		_out_path = out_path
 		_phases = phases
@@ -137,8 +146,16 @@ class CaptureAgent:
 		_zoom = zoom
 		_centre = centre
 		_filmstrip_count = filmstrip_count
+		_at = at
 
 	func _ready() -> void:
+		# `--at=x,y` starts the hero with their feet there, lit as a checkpoint,
+		# so a scenario can begin partway through a big level.
+		if _at.is_finite():
+			var hero := get_tree().get_first_node_in_group("player") as Player
+			if hero != null:
+				hero.warp_to(_at)
+				hero.light_checkpoint(_at)
 		if _zoom > 0.0 or _centre.is_finite():
 			_pull_the_camera_back()
 		await _wait(SETTLE_FRAMES)

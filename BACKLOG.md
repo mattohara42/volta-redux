@@ -107,6 +107,22 @@ follows are working notes for those milestones, detail the plan does not carry.
   is fresh on resume. Caveat: reach is measured from a mechanism's own
   position, and the giant ant's sits at the room origin, so check it when the
   ant goes into a big level.
+- **G2, level 1 is grey-boxed: the forest and the moat**
+  (`levels/act1_forest.level`, 316 by 56 cells, about eight screens by two
+  and a half). It replaces the bank room, whose lessons it keeps (its tests
+  became `tests/test_act1_forest.gd`, held for every scorpion in the level).
+  Two routes: low through the river branches, the hollow log and the nest of
+  three; high up the great oak, through the treetops, the canopy and over the
+  nest. A stump on the river's island joins them, and one past the nest drops
+  you at the moat. Dressed in Act 1's castle tiles, so trees are brick and
+  planks. To judge in play: whether the high road is found, whether four
+  cracked branches on the low crossing is one too many, and whether the
+  stumps read as stumps. Known gaps: the river is a spiked gorge because
+  there is no water yet (water that kills could be lava's rule with its own
+  shader), and there are no vines or bark art, so a vine is a ladder.
+  Frame time here in software: 29.1 ms mean, 37.0 p95, against the tall test
+  level's 23.7 and 29.8 in the same run, so about a quarter dearer (more
+  enemies, more lights). Matt's GPU gives the number that counts.
 - **R3, a tile's collision line** becomes a per-tile property of the format,
   which retires the one-off measuring scan (debt, below).
 
