@@ -20,6 +20,7 @@ extends Node2D
 @export var dress_as: ActConfig
 
 const ATMOSPHERE: AtmosphereConfig = preload("res://config/atmosphere.tres")
+const DEATH: DeathConfig = preload("res://config/death.tres")
 
 const ROOM_HEIGHT: float = 360.0
 const FLOOR_TOP: float = 320.0
@@ -51,6 +52,25 @@ var _walk := WalkBack.Layout.new()
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_READY:
 		_dress_the_room.call_deferred()
+		_listen_for_respawns.call_deferred()
+
+
+## The room puts its own timed mechanisms back when the hero respawns, rather
+## than the hero reaching in to do it (`BACKLOG.md`'s old smell). Only those it
+## built, and only near where the hero came back (`RespawnRules`).
+func _listen_for_respawns() -> void:
+	for node in get_tree().get_nodes_in_group("player"):
+		var player := node as Player
+		if player != null and is_ancestor_of(player) and not player.respawned.is_connected(_on_hero_respawned):
+			player.respawned.connect(_on_hero_respawned)
+
+
+func _on_hero_respawned(at: Vector2, frozen_for: float) -> void:
+	var reach := DEATH.reset_reach
+	for node in get_tree().get_nodes_in_group("mechanisms"):
+		var mechanism := node as Node2D
+		if mechanism != null and is_ancestor_of(mechanism) and RespawnRules.within_reach(at, mechanism.global_position, reach):
+			mechanism.call("reset", frozen_for)
 
 
 ## A room that belongs to an act gets that act's far layers (`Backdrop`) and

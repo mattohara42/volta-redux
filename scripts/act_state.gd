@@ -7,9 +7,10 @@
 ## after the last act shows the ending and starts a new game. Rooms loaded any other way (F2, a bench,
 ## `tools/dev.sh play`) start as they always did.
 ##
-## It also keeps the save (`SavePoint`): the act you are in and the run's
-## tally, written as each act begins and at each exit. Launching the game
-## picks up at the start of the act it was left in.
+## It also keeps the save (`SavePoint`): the act and room you are in, the
+## last brazier you lit there, what you carry, and the run's tally, written as
+## each act begins, at each exit and at each brazier. Launching the game picks
+## up at that brazier (Matt, 2026-10-07), or at the room's start.
 extends Node
 
 const AUDIO: AudioConfig = preload("res://config/audio.tres")
@@ -37,6 +38,16 @@ var _act_start_deaths := 0
 ## room's own count), which is what a save starts the act again with.
 var _act_now := 0
 var _act_swords := -1
+## Where the save picks up inside the act: the room (empty for its first),
+## the brazier last lit there, and what was carried at that point.
+var _save_room := ""
+var _save_brazier := Vector2.ZERO
+var _save_has_brazier := false
+var _save_swords := -1
+var _save_gems := -1
+## A resumed game's brazier, waiting for its room to load.
+var _resume_at := Vector2.ZERO
+var _resume_pending := false
 ## Off under a tool or the tests (`SavePoint.enabled`).
 var _saving := SavePoint.enabled(OS.get_cmdline_args())
 ## The room being played, for `PlayLog`: where, since when, what it has
@@ -85,6 +96,9 @@ func _follow_the_room() -> void:
 		return
 	_room_scene = scene
 	var path := scene.scene_file_path
+	if _resume_pending and path == _save_room:
+		_resume_pending = false
+		_put_the_hero_at(_resume_at)
 	if path == _room_path:
 		_room_restarts += 1
 		return
@@ -98,6 +112,16 @@ func _follow_the_room() -> void:
 	_room_causes = {}
 	_room_restarts = 0
 	_room_swords_in = _arrived_with
+
+
+## A resumed game's hero, at the brazier the save was made at. Standing in it
+## lights it, as walking past it did.
+func _put_the_hero_at(base: Vector2) -> void:
+	for node in get_tree().get_nodes_in_group("player"):
+		var player := node as Player
+		if player != null:
+			player.light_checkpoint(base)
+			player.global_position = player.spawn_point
 
 
 ## Ends the room's line in the play log and appends it.
@@ -138,11 +162,23 @@ func _start_or_resume() -> void:
 	_act_now = saved["act"]
 	_act_swords = saved["swords"]
 	var act: ActConfig = ACTS[_act_now]
-	if _act_now > 0:
-		_carried = _act_swords
+	var room: String = saved["room"]
+	if not act.rooms.has(room):
+		room = act.rooms[0]
+	_save_room = room
+	_save_swords = saved["swords"]
+	_save_gems = saved["gems"]
+	_save_has_brazier = saved["has_brazier"]
+	_save_brazier = saved["brazier"]
+	_carried = _save_swords
+	_carried_gems = _save_gems
+	if _save_has_brazier:
+		_resume_at = _save_brazier
+		_resume_pending = true
+	if room != scene.scene_file_path:
 		# Deferred again, so the first room finishes its own deferred setup
 		# before it is swapped out.
-		get_tree().change_scene_to_file.call_deferred(act.rooms[0])
+		get_tree().change_scene_to_file.call_deferred(room)
 	get_tree().root.add_child(OpeningCard.make(act.title, act.card_font_size))
 
 
@@ -168,6 +204,11 @@ func _begin_act(index: int, swords: int) -> void:
 	_act_now = index
 	_act_swords = swords
 	_act_start_deaths = run_deaths
+	var act: ActConfig = ACTS[index]
+	_save_room = act.rooms[0]
+	_save_has_brazier = false
+	_save_swords = swords
+	_save_gems = -1
 	_write_save()
 
 
@@ -187,7 +228,10 @@ func _write_save() -> void:
 	if not _saving or not _in_game:
 		return
 	var file := ConfigFile.new()
-	var data := SavePoint.make(_act_now, _act_swords, _act_start_deaths, run_deaths, run_seconds)
+	var data := SavePoint.make(
+		_act_now, _save_swords, _act_start_deaths, run_deaths, run_seconds,
+		_save_room, _save_brazier, _save_has_brazier, _save_gems
+	)
 	for key: String in data:
 		file.set_value(SavePoint.SECTION, key, data[key])
 	file.save(SAVE)
@@ -237,10 +281,28 @@ func leave_room(room_path: String, swords_held: int, max_swords: int, gems_held:
 	if next != "":
 		_carried = ActRoute.carried(swords_held, max_swords)
 		_carried_gems = gems_held
+		_save_room = next
+		_save_has_brazier = false
+		_save_swords = _carried
+		_save_gems = _carried_gems
 		_write_save()
 		get_tree().change_scene_to_file.call_deferred(next)
 	else:
 		_finish(act, swords_held, max_swords)
+
+
+## The hero lit the brazier at `base` in `room_path`, holding `swords` and
+## `gems`: the point a save picks up from. Called by `Player`.
+func checkpoint_lit(room_path: String, base: Vector2, swords: int, gems: int) -> void:
+	var act := act_of(room_path)
+	if act == null or ACTS.find(act) != _act_now:
+		return
+	_save_room = room_path
+	_save_brazier = base
+	_save_has_brazier = true
+	_save_swords = swords
+	_save_gems = gems
+	_write_save()
 
 
 ## The act `room_path` belongs to, or null for a bench.

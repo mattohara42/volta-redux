@@ -2,21 +2,26 @@
 ## headless test can reach it. `ActState` is the part that reads and writes
 ## the file and changes the scene.
 ##
-## A save is the act you were in, the swords you carried into it, and the
-## run's tally so far, so a game left mid-act starts that act again from its
-## first room with what you brought, and the end card still counts the whole
-## run.
+## A save is the act and the room you were in, the brazier you last lit there
+## (if any), the swords and gems you had, and the run's tally so far (Matt,
+## 2026-10-07: a save at braziers). A game picks up at that brazier, with the
+## level otherwise fresh: gates shut, swords you left in walls gone. A save
+## from before a brazier was lit picks up at the room's start.
 class_name SavePoint
 
 ## Bumped when the shape of a save changes, so an old one is ignored rather
 ## than misread.
-const VERSION := 1
+const VERSION := 2
 const SECTION := "game"
 
 
-## A save as the values `ActState` writes. `swords` is -1 when the act was
-## begun with the room's own count rather than a carried one.
-static func make(act: int, swords: int, act_deaths_before: int, deaths: int, seconds: float) -> Dictionary:
+## A save as the values `ActState` writes. `swords` and `gems` are -1 for the
+## room's own count rather than a carried one; `room` is empty for the act's
+## first room, and `has_brazier` false for a room's start.
+static func make(
+	act: int, swords: int, act_deaths_before: int, deaths: int, seconds: float,
+	room: String = "", brazier: Vector2 = Vector2.ZERO, has_brazier: bool = false, gems: int = -1
+) -> Dictionary:
 	return {
 		"version": VERSION,
 		"act": act,
@@ -24,6 +29,10 @@ static func make(act: int, swords: int, act_deaths_before: int, deaths: int, sec
 		"act_deaths_before": act_deaths_before,
 		"deaths": deaths,
 		"seconds": seconds,
+		"room": room,
+		"brazier": brazier,
+		"has_brazier": has_brazier,
+		"gems": gems,
 	}
 
 
@@ -44,6 +53,10 @@ static func resume(data: Dictionary, act_count: int, max_swords: int) -> Diction
 		clampi(int(data.get("act_deaths_before", 0)), 0, deaths),
 		deaths,
 		maxf(float(data.get("seconds", 0.0)), 0.0),
+		String(data.get("room", "")),
+		data.get("brazier", Vector2.ZERO) as Vector2,
+		bool(data.get("has_brazier", false)),
+		maxi(int(data.get("gems", -1)), -1),
 	)
 
 

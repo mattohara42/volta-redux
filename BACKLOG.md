@@ -97,9 +97,16 @@ follows are working notes for those milestones, detail the plan does not carry.
 - **A tall level needs its own background painting.** The act's one-screen
   painting is repeated down a tall room, every other copy flipped, as a
   stopgap; a castle five floors tall wants a painting made for it. G2.
-- **R3, respawn.** Resetting every mechanism in a ten-floor level would undo a
-  gate opened half an hour ago. Reset only what belongs to the brazier's
-  section. This is the debt entry below, finally with a reason to pay it.
+- **R3, respawn and saves are built** (Matt, 2026-10-07). A death keeps every
+  sword stuck in a wall or a switch and clears the loose ones; if the hand plus
+  the stuck ones would pass five, the oldest stuck ones go, so dying never
+  farms ledges (an assumption, not Matt's words). Only mechanisms within
+  `reset_reach` of the brazier reset (`RespawnRules`, `config/death.tres`),
+  and the room does it on the hero's `respawned` signal. Lighting a brazier
+  saves the room, the brazier, the swords and the gems; the rest of the level
+  is fresh on resume. Caveat: reach is measured from a mechanism's own
+  position, and the giant ant's sits at the room origin, so check it when the
+  ant goes into a big level.
 - **R3, a tile's collision line** becomes a per-tile property of the format,
   which retires the one-off measuring scan (debt, below).
 
@@ -181,12 +188,6 @@ needed rather than optional, because the content is about to exist.
 
 ## Code and tooling debt
 
-- **The hero reaches into the room's mechanisms on a respawn.** It walks the
-  "mechanisms" group from inside `player.gd`, knows they have clocks, and
-  hands one a number from `config/death.tres`. A signal carrying "the player
-  has the controls back", with the room resetting what it built, says the
-  same without the hero knowing. Half a day; touches `player.gd`, `bench.gd`,
-  both platforms, the geyser and the sword. Now part of R3.
 - **The test runner passes a test that crashes.** A `SCRIPT ERROR` mid-test
   aborts that test and the run still reports 0 failed. Worth making a script
   error a failure.

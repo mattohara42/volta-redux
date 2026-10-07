@@ -33,3 +33,7 @@ extends Resource
 ## arriving at a checkpoint empty is the punishment the modernisation removes.
 ## Exposed rather than assumed because M14 will want to try it off once.
 @export var restore_swords: bool = true
+## How far from where you respawn a timed mechanism is put back to the start
+## of its clock, px either way: about a screen. Further away, a big level
+## keeps running (Matt, 2026-10-07).
+@export var reset_reach: Vector2 = Vector2(640.0, 360.0)

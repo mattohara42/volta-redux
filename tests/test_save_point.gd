@@ -9,6 +9,14 @@ func test_a_save_reads_back_as_it_was_written() -> void:
 	check_eq(SavePoint.resume(saved, 4, 5), saved, "Act 3, four swords carried in, thirteen deaths, nine before it")
 
 
+## Matt, 2026-10-07: a save at braziers. The room and the brazier come back.
+func test_a_save_at_a_brazier_reads_back_too() -> void:
+	var saved := SavePoint.make(0, 2, 0, 5, 100.0, "res://scenes/rooms/act1_wall.tscn", Vector2(920.0, 236.0), true, 1)
+	var back := SavePoint.resume(saved, 4, 5)
+	check_eq(back, saved, "the room, the brazier, two swords and a gem")
+	check_eq(SavePoint.resume(SavePoint.make(0, 2, 0, 0, 0.0), 4, 5)["has_brazier"], false, "a room's start has no brazier")
+
+
 func test_nothing_saved_is_nothing_to_resume() -> void:
 	check(SavePoint.resume({}, 4, 5).is_empty(), "no save")
 	var old := SavePoint.make(1, 3, 0, 0, 0.0)

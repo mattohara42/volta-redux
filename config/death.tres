@@ -9,3 +9,4 @@ respawn_freeze = 0.15
 message_seconds = 2.2
 message_font_size = 24
 restore_swords = true
+reset_reach = Vector2(640, 360)
