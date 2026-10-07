@@ -227,8 +227,10 @@ level hears "the hero is back" and resets what it built near that brazier. A
 save at braziers rather than per act. A frame-time check on a ten-screen by
 five-floor grey level before any art goes on one.
 
-**Done when**: today's Act 1 rooms, re-expressed as grids, still pass
-`tools/dev.sh route`, and the grey level holds frame rate in a real build.
+**Done when**: a room re-expressed as a grid (the bailey, Matt 2026-10-07:
+16 px cells, one room ported as the proof) still passes `tools/dev.sh route`,
+its tests and its scenarios, and the grey level holds frame rate in a real
+build.
 
 ### 🚧 G2: Act 1 at full size
 Act 1 rebuilt as one or two large levels: the forest, the moat and the outer

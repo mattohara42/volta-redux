@@ -507,7 +507,7 @@ SCENARIOS: list[dict] = [
 		"checks": [
 			{"type": "player_position", "min_x": 760, "max_x": 880, "min_y": 290,
 				"message": "the hero should be down in the yard"},
-			{"type": "contains", "pattern": "switch at (892.0, 300.0) HELD",
+			{"type": "contains", "pattern": "switch at (888.0, 304.0) HELD",
 				"message": "a throw straight ahead from the yard should land in the switch"},
 			{"type": "contains_regex", "pattern": r"gate at .* OPEN",
 				"message": "the switch should have raised the gate"},

@@ -81,6 +81,11 @@ follows are working notes for those milestones, detail the plan does not carry.
   the jaws only, beside the dragon's own body. The freed dragon's breath in
   Act 4 (`FreedBreath`) is a separate drawing and was not touched; give it the
   same plume if it reads as flat next to this one.
+- **R3, the level format, is built.** `levels/*.level`, 16 px a cell
+  (Matt, 2026-10-07): a `[map]` and a `[things]` list, read by `LevelGrid`
+  (`scripts/logic/`), built by `GridRoom`. The bailey is ported. Not yet in
+  the legend: copper, barriers, current switches, plates, gems, the eyeball
+  and the ant. Add each when the first level needs it.
 - **R3, respawn.** Resetting every mechanism in a ten-floor level would undo a
   gate opened half an hour ago. Reset only what belongs to the brazier's
   section. This is the debt entry below, finally with a reason to pay it.

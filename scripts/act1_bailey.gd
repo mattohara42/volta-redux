@@ -21,26 +21,12 @@
 ## used to sit behind you after the drop, under the cage, and nobody found it;
 ## the cage was two eyes in a black block, and nobody knew what it was.
 ##
-## Built like the other Act 1 rooms: `Bench` geometry drawn with `TileArt`.
+## Its geometry is a level file, `levels/act1_bailey.level` (`GridRoom`), the
+## first room written that way (R3). The cage and the chain are this script.
 class_name Act1Bailey
-extends Bench
+extends GridRoom
 
-const ROOM_WIDTH: float = 1280.0
-
-## The upper level you arrive on, the drop into the yard, and the face across
-## the yard that rises back to the same height. The face is tall enough to set
-## a switch into its foot.
-const UPPER_TOP: float = FLOOR_TOP - 64.0
-const YARD_X: float = 760.0
-const FACE_X: float = 880.0
-
-const START_BRAZIER_X: float = 48.0
-const CHEST_X: float = 96.0
-
-## Both low enough to jump (`movement.jump_height`), both tall enough to catch a
-## standing throw. The tests hold both.
-const WOOD_BLOCK := Rect2(280.0, UPPER_TOP - 32.0, 24.0, 32.0)
-const STONE_BLOCK := Rect2(440.0, UPPER_TOP - 48.0, 24.0, 48.0)
+const LEVEL := "res://levels/act1_bailey.level"
 
 ## The barred window over the quiet stretch: the dragon's first appearance.
 const GRATE := Rect2(520.0, 120.0, 176.0, 104.0)
@@ -58,21 +44,10 @@ const DRAGON_FRAMES: int = 4
 ## flipped to face the way you come: smoke rises from here.
 const DRAGON_SNOUT := Vector2(84.0, 52.0)
 
-## The switch, set into the foot of the far face at throw height, facing you
-## as you land in the yard. The face above it is stone.
-const SWITCH := Rect2(FACE_X, FLOOR_TOP - 40.0, 24.0, 40.0)
-const LADDER_X: float = YARD_X
-const FACE_LADDER_X: float = FACE_X - Bench.LADDER_WIDTH
-const YARD_CHEST_X: float = 820.0
-
-## The portcullis on the level above the yard, in view from where you throw.
-const GATE := Rect2(1040.0, UPPER_TOP - 120.0, 32.0, 120.0)
 ## The chain from the switch to the gate: up the face, along the wall, and
 ## over a pulley down to the gate's top. How high it runs along the wall.
 const LINK_Y: float = 112.0
 const LINK_PITCH: float = 4.0
-
-const EXIT_X: float = ROOM_WIDTH - 56.0
 
 const ATMOSPHERE_CONFIG: AtmosphereConfig = preload("res://config/atmosphere.tres")
 
@@ -84,23 +59,10 @@ var _roared := false
 ## rises and falls.
 var _link_run := 0.0
 var _switch: SwordSwitch
+var _switch_rect := Rect2()
+var _gate_rect := Rect2()
 var _cage := Node2D.new()
 var _smoke := CPUParticles2D.new()
-
-
-## The solids, as the ground `TileArt` draws.
-static func grounds() -> Array[Rect2]:
-	return [
-		Rect2(0.0, UPPER_TOP, YARD_X, ROOM_HEIGHT - UPPER_TOP),
-		Rect2(YARD_X, FLOOR_TOP, FACE_X - YARD_X, ROOM_HEIGHT - FLOOR_TOP),
-		Rect2(FACE_X, UPPER_TOP, ROOM_WIDTH - FACE_X, SWITCH.position.y - UPPER_TOP),
-		Rect2(SWITCH.end.x, SWITCH.position.y, ROOM_WIDTH - SWITCH.end.x, ROOM_HEIGHT - SWITCH.position.y),
-		Rect2(FACE_X, FLOOR_TOP, SWITCH.size.x, ROOM_HEIGHT - FLOOR_TOP),
-	]
-
-
-static func gate_wall() -> Rect2:
-	return Rect2(GATE.position.x, 0.0, GATE.size.x, GATE.position.y)
 
 
 ## Where the dragon is drawn: sat on the window's sill, in the middle.
@@ -112,28 +74,19 @@ static func dragon_rect() -> Rect2:
 
 
 func _ready() -> void:
-	texture_repeat = TEXTURE_REPEAT_ENABLED
-	for ground in grounds():
-		_add_solid(ground)
-	_add_solid(gate_wall())
-	_add_wood(WOOD_BLOCK, false)
-	_add_solid(STONE_BLOCK)
-	_add_ladder(LADDER_X, UPPER_TOP, FLOOR_TOP)
-	_add_ladder(FACE_LADDER_X, UPPER_TOP, FLOOR_TOP)
+	level_file = LEVEL
+	super._ready()
 
-	_add_brazier(Vector2(START_BRAZIER_X, UPPER_TOP))
-	_add_chest(Vector2(CHEST_X, UPPER_TOP))
-	_add_chest(Vector2(YARD_CHEST_X, FLOOR_TOP))
 
-	# The room wires its own switch to its own gate, as M2's switch room does.
-	_switch = _add_switch(SWITCH)
-	var gate := _add_gate(GATE)
-	gate.art = TileArt.PORTCULLIS_TILE
-	_switch.held_changed.connect(gate.set_open)
+## The switch and gate are the map's (`S`, `G`); the light on the switch, the
+## cage and its smoke are this room's.
+func _built() -> void:
+	_switch = switches["S"]
+	_switch_rect = level.thing("S").rect
+	_gate_rect = level.thing("G").rect
 	_switch.add_child(LightSource.point(
 		ATMOSPHERE_CONFIG.light_switch_radius, Palette.FIRE_CORE, ATMOSPHERE_CONFIG.light_switch_strength
 	))
-
 	# The cage's own light, so the dark of the room does not swallow it.
 	_cage.position = dragon_rect().get_center()
 	add_child(_cage)
@@ -141,13 +94,7 @@ func _ready() -> void:
 		ATMOSPHERE_CONFIG.cage_light_radius, Palette.FIRE_CORE,
 		ATMOSPHERE_CONFIG.cage_light_strength, ATMOSPHERE_CONFIG.cage_light_flicker
 	))
-
 	_shape_smoke()
-
-	_add_exit(Rect2(EXIT_X, UPPER_TOP - 48.0, 8.0, 48.0))
-	_add_enclosure(ROOM_WIDTH)
-	_frame_camera(ROOM_WIDTH)
-	queue_redraw()
 
 
 func _process(delta: float) -> void:
@@ -161,7 +108,7 @@ func _process(delta: float) -> void:
 	if _glint_clock >= ATMOSPHERE_CONFIG.switch_glint_period:
 		_glint_clock = 0.0
 		if not _switch.is_held:
-			Burst.emit(self, Vector2(SWITCH.position.x, SWITCH.get_center().y), Burst.Kind.GLINT)
+			Burst.emit(self, Vector2(_switch_rect.position.x, _switch_rect.get_center().y), Burst.Kind.GLINT)
 	_listen_for_the_hero()
 	var target := 1.0 if _switch.is_held else 0.0
 	_link_run = move_toward(_link_run, target * LINK_PITCH * 6.0, LINK_PITCH * 6.0 * delta)
@@ -208,19 +155,11 @@ func _snout() -> Vector2:
 	return Vector2(rect.end.x - DRAGON_SNOUT.x, rect.position.y + DRAGON_SNOUT.y)
 
 
-func _draw() -> void:
-	TileArt.draw_background_across(self, ROOM_WIDTH)
+func _draw_under() -> void:
 	_draw_grate()
-	# Drawn as the levels they are, not the collision pieces: the far face runs
-	# unbroken down to the yard, with the switch set into it.
-	TileArt.draw_ground(self, grounds()[0])
-	TileArt.draw_ground(self, grounds()[1])
-	TileArt.draw_ground(self, Rect2(FACE_X, UPPER_TOP, ROOM_WIDTH - FACE_X, ROOM_HEIGHT - UPPER_TOP))
-	TileArt.draw_wall(self, gate_wall())
-	TileArt.draw_wood(self, WOOD_BLOCK)
-	TileArt.draw_ground(self, STONE_BLOCK)
-	for ladder in _ladders:
-		TileArt.draw_ladder(self, ladder)
+
+
+func _draw_over() -> void:
 	_draw_link()
 
 
@@ -250,10 +189,10 @@ func _draw_grate() -> void:
 ## links run toward the gate as it rises.
 func _draw_link() -> void:
 	var colour: Color = Palette.GOLD_FACE if _switch.is_held else Palette.GOLD_SHADE
-	var start := Vector2(SWITCH.get_center().x, SWITCH.position.y)
+	var start := Vector2(_switch_rect.get_center().x, _switch_rect.position.y)
 	var corner := Vector2(start.x, LINK_Y)
-	var pulley := Vector2(GATE.get_center().x, LINK_Y)
-	var gate_top := Vector2(pulley.x, GATE.position.y)
+	var pulley := Vector2(_gate_rect.get_center().x, LINK_Y)
+	var gate_top := Vector2(pulley.x, _gate_rect.position.y)
 	var run := 0.0
 	for leg: Array in [[start, corner], [corner, pulley], [pulley, gate_top]]:
 		run = _draw_links(leg[0], leg[1], run, colour)

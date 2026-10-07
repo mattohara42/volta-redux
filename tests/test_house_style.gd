@@ -7,7 +7,7 @@
 extends TestCase
 
 const SCANNED_EXTENSIONS: PackedStringArray = [
-	"md", "gd", "tres", "tscn", "godot", "yml", "yaml", "cfg", "txt", "json", "sh",
+	"md", "gd", "level", "tres", "tscn", "godot", "yml", "yaml", "cfg", "txt", "json", "sh",
 ]
 const SKIPPED_DIRECTORIES: PackedStringArray = [
 	".git", ".godot", "assets", "export", "build",
