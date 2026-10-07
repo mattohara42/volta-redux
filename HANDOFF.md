@@ -1,7 +1,7 @@
 # HANDOFF.md
 
 > **Rewrite this file, never append.** State snapshot and pointers only. No
-> session narrative, that is what `git log` is for. Keep it under 80 lines.
+> session narrative, that is what `git log` is for. Keep it under 150 lines.
 
 **Updated:** 2026-10-07 · **Phase:** 3 rebuilt, the scale · **Active:** G2,
 Act 1 at full size. **G2 done when:** it is fun at that size and the cost of

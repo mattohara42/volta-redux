@@ -9,7 +9,7 @@ enforce:
 - A resolved thread becomes one line or disappears entirely.
 - Never restate another doc, link it.
 - No session narrative. That is what `git log` is for.
-- Keep it under 80 lines.
+- Keep it under 150 lines.
 - No em-dashes, in this file or any other.
 
 It has to carry: the date, the phase, the active milestone and its done-when,
