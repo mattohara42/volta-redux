@@ -3,7 +3,7 @@
 > **Rewrite this file, never append.** State snapshot and pointers only. No
 > session narrative, that is what `git log` is for. Keep it under 80 lines.
 
-**Updated:** 2026-10-06 · **Phase:** 3 rebuilt, the scale · **Active:** R3,
+**Updated:** 2026-10-07 · **Phase:** 3 rebuilt, the scale · **Active:** R3,
 the tools for big levels. **R3 done when:** the bailey, re-expressed as a text
 grid, still passes its route, tests and scenarios, and a ten-screen by
 five-floor grey level holds frame rate in a real build (`BUILD_PLAN.md`). R1 and R2 are
@@ -17,16 +17,16 @@ rim light), far layers (`Backdrop`), particles (`Burst`), every sound and
 all act and boss music from code (`assets/audio/README.md`), death lines by
 cause (`SPEC.md`), act cards, an opening card, a pause menu and a save per
 act. M15 is built ahead of M14; three M16 pieces are pulled forward
-(`BUILD_PLAN.md`). **Credits: 510**, none spent. Enemies wait on
+(`BUILD_PLAN.md`). **Credits: 405** after R2. Enemies wait on
 `RoomM7Sheet`.
 
 ## The next action
 
-**R3 continues with the respawn reset and saves at braziers.** Done in R3:
-the level format (`levels/*.level`, `LevelGrid`, `GridRoom`, the bailey
-ported), rooms taller than a screen, and a frame-time tool. The big grey level
-(`levels/test_tall.level`) costs about what the bailey does per frame here;
-the absolute number needs Matt's machine (`tools/dev.sh frametime`).
+**R3 is built; only its frame-rate half is open**, and that is Matt's machine
+(below). Done in R3: the level format (`levels/*.level`, `LevelGrid`,
+`GridRoom`, the bailey ported), rooms taller than a screen, a frame-time
+tool, and respawn and saves at braziers (`BACKLOG.md` has the rules). **Next
+is G2, Act 1 at full size**: ask Matt before starting it.
 
 ## Blocked on Matt
 
@@ -39,7 +39,7 @@ the absolute number needs Matt's machine (`tools/dev.sh frametime`).
 4. **The play log** from this playthrough (`user://`, #136), if it was kept.
 5. **Older and still open**: `RoomM7Sheet` consistent in treatment (closes
    M7); the unattended calls from 2026-10-05 (death lines by cause, ambient
-   levels; the save per act becomes a save at braziers in R3); M4's dragon pacing and dormant-scorpion gap; the
+   levels; the save is now at braziers); M4's dragon pacing and dormant-scorpion gap; the
    painted acts' seams in play.
 
 ## Traps that will bite again

@@ -33,6 +33,11 @@ const LAVA_SHAKE: float = 2.0
 const LAVA_SHAKE_SECONDS: float = 0.25
 const AUDIO: AudioConfig = preload("res://config/audio.tres")
 
+
+## Back at the checkpoint, at `at`, with the controls returning after
+## `frozen_for` seconds. The room listens and resets what it built nearby.
+signal respawned(at: Vector2, frozen_for: float)
+
 var config: MovementConfig
 ## Null only if `SPRITE_SCENE` fails to load, in which case `_draw` falls back
 ## to the capsule rather than showing nothing.
@@ -479,21 +484,22 @@ func _place_at_checkpoint(restore_swords: bool) -> void:
 	_lift_speed = 0.0
 	if restore_swords:
 		swords_held = swords_at_spawn
+	# Loose swords were the failed attempt and go; a sword stuck in a wall or a
+	# switch stays, so a gate it holds far behind you stays open (Matt,
+	# 2026-10-07). `RespawnRules` keeps the total under the cap.
+	var swords: Array[Sword] = []
+	var embedded: Array[bool] = []
 	for node in get_tree().get_nodes_in_group("swords"):
-		node.queue_free()
-	# Every mechanism with a clock in it back at the start of that clock, now: a
-	# slab that let go back at home, a ferry back at the dock you respawn beside,
-	# a geyser back at the first frame of its swell. M3's bargain is that a death
-	# costs you the jump you missed and nothing else, and arriving to find the
-	# route still missing two of its steps, the only way across still out in the
-	# middle of the moat, or the vent you need just gone quiet, is a second cost.
-	# It is the wait that turns dying twenty times from annoying into tedious.
-	#
-	# One group and one call, because the third kind of mechanism arrived and
-	# `BACKLOG.md` said a third one was the point at which walking a list per kind
-	# stopped paying. It is still the hero reaching into the room, which is the
-	# smell that entry is really about, and the entry says what the fix is.
-	get_tree().call_group("mechanisms", "reset", death_config.respawn_freeze)
+		var sword := node as Sword
+		if sword != null:
+			swords.append(sword)
+			embedded.append(sword.state == SwordFlight.State.EMBEDDED)
+	for i in RespawnRules.swords_to_clear(embedded, swords_held, sword_config.max_swords):
+		swords[i].queue_free()
+	# The room puts its own clocks back (`Bench`), only near here: a slab that
+	# let go back at home, a ferry back at the dock you respawn beside. M3's
+	# bargain is that a death costs you the jump you missed and nothing else.
+	respawned.emit(global_position, death_config.respawn_freeze)
 
 
 ## Where the hero's feet meet the floor, in canvas coordinates.
@@ -521,6 +527,12 @@ func death_phase() -> DeathClock.Phase:
 func light_checkpoint(base: Vector2) -> void:
 	spawn_point = Checkpoints.stand_point(base, world.hero_height)
 	checkpoints_lit += 1
+	# The save picks up here (`ActState`). A room under a tool is not the
+	# current scene, and saves nothing.
+	var act_state := get_node_or_null("/root/ActState")
+	var scene := get_tree().current_scene
+	if act_state != null and scene != null and scene.is_ancestor_of(self):
+		act_state.checkpoint_lit(scene.scene_file_path, base, swords_held, gems_held)
 
 
 ## Set by a room that hands out a different number. Also resets what you are
