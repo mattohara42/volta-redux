@@ -68,6 +68,18 @@ func test_a_ladder_tops_out_at_the_surface_it_serves() -> void:
 	check_eq(level.ladders, [Rect2(32.0, 16.0, 16.0, 32.0)] as Array[Rect2], "from the ledge's top down to the floor")
 
 
+## A ladder with a branch over its top stops the hero under the branch (the
+## forest's first vine did, 2026-10-07), so the map refuses it.
+func test_a_ladder_under_a_solid_is_an_error() -> void:
+	var level := LevelGrid.parse("""[map]
+.www
+.H..
+.H..
+####
+""")
+	check(" ".join(level.errors).contains("ladder climbs into"), "the branch over the ladder is reported: %s" % [level.errors])
+
+
 func test_a_map_that_does_not_add_up_says_so() -> void:
 	var level := LevelGrid.parse("""[map]
 .X..q

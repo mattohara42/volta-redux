@@ -499,6 +499,32 @@ SCENARIOS: list[dict] = [
 		],
 	},
 	{
+		"name": "Act 1 forest: the first vine climbs all the way to the branch",
+		"scene": "res://scenes/rooms/act1_forest.tscn",
+		"out": "act1_forest_vine.png",
+		"at": (936, 800),
+		"input": "move_right:10;climb_up:220;move_right:12;-:20",
+		"zoom": 1.0,
+		"centre": (1000, 600),
+		"checks": [
+			{"type": "player_position", "min_x": 976, "max_x": 1104, "max_y": 530,
+				"message": "the hero should be standing on the branch at the vine's top"},
+		],
+	},
+	{
+		"name": "Act 1 forest: the oak's vine climbs to the top of the oak",
+		"scene": "res://scenes/rooms/act1_forest.tscn",
+		"out": "act1_forest_oak.png",
+		"at": (936, 800),
+		"input": "move_left:9;climb_up:400;move_left:40;-:20",
+		"zoom": 1.0,
+		"centre": (800, 400),
+		"checks": [
+			{"type": "player_position", "min_x": 576, "max_x": 896, "max_y": 275,
+				"message": "the hero should be standing on top of the oak"},
+		],
+	},
+	{
 		"name": "Act 1 forest: the first river branches, the cracked one included, can be jumped",
 		"scene": "res://scenes/rooms/act1_forest.tscn",
 		"out": "act1_forest_river.png",

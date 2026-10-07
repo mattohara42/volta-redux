@@ -166,6 +166,12 @@ static func parse(text: String) -> Level:
 	level.spikes = _merged(rows, "^", level.cell)
 	level.falling = _merged(rows, "=", level.cell)
 	level.ladders = _merged(rows, "H", level.cell)
+	# A ladder ends in air beside the surface it serves. One that runs up into
+	# something solid stops the hero under it, short of the top.
+	for y in range(1, rows.size()):
+		for x in rows[y].length():
+			if rows[y][x] == "H" and x < rows[y - 1].length() and "#%w=".contains(rows[y - 1][x]):
+				level.errors.append("a ladder climbs into the solid above it at cell (%d, %d)" % [x, y - 1])
 
 	var anchors := {}
 	for c: String in cells:
