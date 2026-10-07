@@ -152,7 +152,8 @@ needed rather than optional, because the content is about to exist.
   dragon's breath with other numbers), the torch carried at the cost of the
   sword, a lock needing two switches at once, a floor that holds the first
   time and drops the second, the wood/stone fake-out once or twice, a sword
-  graveyard for atmosphere, the one-shot stump warp, the chandelier.
+  graveyard for atmosphere, the chandelier. (The one-way stump warp is built for
+  G2: `Stump`, `room_g2_stump`.)
 - **Remix rooms** after the credits, harder versions of early sections. Matt
   wants them; add each idea here as it comes. After the pass.
 

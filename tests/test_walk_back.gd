@@ -76,6 +76,21 @@ func test_a_sword_ledge_goes_forward_and_never_home() -> void:
 	check(not WalkBack.check(layout, _moves()).exit_reached, "stone gives no ledge, so the exit is out of reach")
 
 
+## A stump on the lower level that puts you back on the upper one is the way
+## home a drop needs; the warp only runs one way, so it is no way down.
+func test_a_stump_warp_is_a_way_back_one_way() -> void:
+	var step := MOVEMENT.jump_height + 40.0
+	var layout := _stepped(step)
+	var stump := Rect2(480.0, FLOOR - 24.0, 32.0, 24.0)
+	layout.solids.append(stump)
+	layout.warps = [stump]
+	layout.warp_to = [Vector2(100.0, FLOOR - step)]
+	var report := WalkBack.check(layout, _moves())
+	check_eq(report.stranded.size(), 0, "landing on the stump takes you back up")
+	layout.warp_to = [Vector2(560.0, FLOOR)]
+	check(not WalkBack.check(layout, _moves()).stranded.is_empty(), "a stump that only moves you along the lower level does not")
+
+
 func test_lava_is_never_somewhere_to_stand() -> void:
 	var layout := _stepped(0.0)
 	var pit := Rect2(200.0, FLOOR - 1.0, 40.0, 360.0 - FLOOR)
