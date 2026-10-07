@@ -220,7 +220,7 @@ painted into the frames**, which `CLAUDE.md` says is the wrong approach
 
 ## Act 1 props (generated 2026-09-30, wired 2026-10-03)
 
-Wired into `Act1Bailey` and `Act1Gate`: wood pick 3, chain 2 and shackle 1 as
+Wired into `Act1Bailey` and `Act1Gate` (now sections of `Act1Wall`): wood pick 3, chain 2 and shackle 1 as
 listed, and portcullis **6**, because picks 1 and 5 have crossbars and a gate
 drawn with them reads as a ladder, which is a climbable thing in this game.
 The switch and brazier stay drawn in code: the switch's slot shape was found
