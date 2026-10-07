@@ -248,8 +248,67 @@ scorpions) plus **the stump warp**, one way (`Stump`).
 and credits, is written down. Not fun, or not affordable three more times: the
 fix goes in `SPEC.md` before anything else is built.
 
+### G2's first answer: not fun yet, so depth before breadth (N0 to N3)
+Matt, 2026-10-07, before playing level 2: the game is "far too short, simple,
+and stilted", the levels "simple platforms, lots of basic blocks, huge blocky
+areas, a lot of linear play". A review of the code and both levels found the
+cause is how levels are made, not the mechanics: area spent instead of ideas,
+fights decided standing still, systems built and never placeable, every
+surface drawn as one texture with a lip. Matt adopted its plan: keep the
+engine, the 16 px text grid and one-scene levels, prove a new way of building
+on the outer wall, and only then grow the rest. R4 waits.
+
+### N0: fixes and the method
+The forest's borrowed castle window lights go, `Act1Wall` stops redrawing the
+whole level every frame, grain runs along tall wood, no lintel of moss hangs
+upside down under the forest's trunks, the wrong comment about throwing from a
+ladder is corrected, and the camera looks ahead (its numbers in `config/`).
+`SPEC.md` gains *How a level is built*: a beat sheet before a map, each idea
+introduced, developed, twisted and combined, loops back to a brazier, optional
+pockets, varied gaps.
+
+**Done when**: Matt has approved that section's wording, the fixes are shot
+before and after from a real build, and the camera's feel is Matt's to judge
+by playing.
+
+### N1: everything built is placeable, and every combination is proved
+The level format gains the ant, the eyeball, the floor plate, a lift, a
+geyser, a gate that needs two switches, a slab that drops the second time you
+cross it, and a sword lying loose to be found. A sword that kills is lost
+wherever it was, embedded or lying (Matt, 2026-10-07: `SPEC.md`'s "both die").
+Each combination worth a beat (a recall kill line through a wall, a ledge
+thrown from a ladder, a sword dropped onto a plate, a throw from a falling
+slab) gets a bench and a scenario.
+
+**Done when**: each new entry has a parser test and a bench that passes
+walkback, route and scenarios, and Matt has played the benches (F2) and said
+which combinations are worth building beats around.
+
+### N2: the minimum look
+The tiles are built once rather than redrawn every frame. Solid interiors
+shade down to the act's coloured dark; edges and corners are chosen by their
+neighbours; a back-wall layer (a new `[back]` section in the level file, still
+text) stands behind the hero; decoration placed by rules is written into the
+level file, so it stays reviewable (Matt, 2026-10-07). What is solid does not
+change, so every test and scenario still holds.
+
+**Done when**: both Act 1 levels are shot before and after, frame time is no
+worse, the palette check passes, and Matt calls a shot natural-looking.
+
+### N3: the outer wall rebuilt from a beat sheet, the proof
+Matt sketches the beat sheet; Claude builds it in text, a screen-sized
+section at a time rather than painted rectangles. Towers, a guardroom, five
+floors in use, two loops back to braziers, optional pockets (a fourth sword
+off the high road). The lessons Matt approved stay. The old wall stays
+loadable to compare.
+
+**Done when**: route, walkback, tests and scenarios pass, every beat is shot
+where the sheet puts it, and Matt and the kids play Act 1 from a new game and
+say it is better. That reruns G2. Then the forest gets a density pass, and R4
+builds Acts 2 to 4 the same way, as fewer, denser levels.
+
 ### R4: Acts 2 to 4 at full size
-Only after G2. Each act's existing rooms become sections of its levels; the
+Only after N3, and G2 passing on the rebuilt Act 1. Each act's existing rooms become sections of its levels; the
 dragon, the generator and Volta stay. Then M14, then M16.
 
 **Done when**: the game can be completed from a new save at full size, as

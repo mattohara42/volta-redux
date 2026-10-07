@@ -3,43 +3,49 @@
 > **Rewrite this file, never append.** State snapshot and pointers only. No
 > session narrative, that is what `git log` is for. Keep it under 150 lines.
 
-**Updated:** 2026-10-07 · **Phase:** 3 rebuilt, the scale · **Active:** G2,
-Act 1 at full size. **G2 done when:** it is fun at that size and the cost of
-one level, in sessions and credits, is written down (`BUILD_PLAN.md`). Cost
-is written down (one session, no credits, per level: `BACKLOG.md`); fun is
-Matt's to answer. M14 is paused until R4.
+**Updated:** 2026-10-07 · **Phase:** 3 rebuilt, depth before breadth.
+**Active milestone:** N0, fixes and the method (`BUILD_PLAN.md`).
+**N0 done-when:** Matt has approved the wording of `SPEC.md`'s new *How a
+level is built*, the fixes are shot before and after from a real build, and
+the camera's feel is Matt's to judge by playing. Then N1 and N2 (they can run
+side by side), then N3, the outer wall rebuilt from Matt's beat sheet. R4 and
+M14 wait until G2 passes on the rebuilt Act 1.
 
 ## Where this is
 
-**Act 1 is two levels**: the forest and the moat (`levels/act1_forest.level`,
-played and it plays well, now in its own art bar the background: `ART.md`,
-*The forest*), then the outer wall to the castle gate, still grey-boxed
-(`levels/act1_wall.level`, `Act1Wall`), which replaced
-the wall, bailey and gate rooms. Acts 2 to 4 are built, connected and
-dressed at the old room size. **Credits: 285.**
+**G2's first answer was "not fun yet"** (Matt, 2026-10-07): too short,
+simple, stilted, blocky and linear. A review found the cause is how levels
+are made, not the mechanics; Matt adopted its plan and four rulings
+(`LEVELS.md`, *Decisions 2026-10-07*). **Act 1 is two levels**: the forest
+(`levels/act1_forest.level`, in its own art bar the background: `ART.md`,
+*The forest*) and the outer wall (`levels/act1_wall.level`, grey-boxed, the
+one N3 rebuilds). Acts 2 to 4 are still the old one-screen rooms.
+**Credits: 285.**
 
 ## The next action
 
-**Matt plays Act 1 end to end** from a new game. Fun: G2 passes and R4
-starts. Not fun: the fix goes in `SPEC.md` first.
+**N0**: the six fixes (borrowed window lights in the forest, the outer wall's
+every-frame redraw, grain along tall wood, the upside-down moss under trunks,
+the ladder-throw comment, a look-ahead camera with its numbers in `config/`),
+then a draft of *How a level is built* for Matt, including the beat-sheet
+format he will sketch in.
 
 ## Blocked on Matt
 
-1. **Play level 2** (after the forest, from a new game): fun at this size?
-   High road's bats fair? Plinth switch found? Judge layout, not look.
-   Blocks G2. `BACKLOG.md` has the rest to watch.
-2. **Paint the forest's background** in Gemini from the prompt in `ART.md`
-   (*The forest*), saved to `assets/art_raw/forest_bg.*`. Until then the
-   forest has no far layer and reads very dark. Blocks the forest's art.
-3. **R2, final quality?** The flame, the sword, the four doors and the ride
-   (`BACKLOG.md`). Blocks R2.
+1. **Approve *How a level is built*** once drafted. Blocks N0.
+2. **Sketch the outer wall's beat sheet** in that format. Blocks N3. Playing
+   today's level 2 once first is cheap evidence of what to keep.
+3. **Paint the forest's background** in Gemini from the prompt in `ART.md`
+   (*The forest*), saved to `assets/art_raw/forest_bg.*`.
 4. **Frame time on a real machine**: `tools/dev.sh frametime`, then with
    `res://scenes/rooms/act1_forest.tscn` and `act1_wall.tscn`: p95 under
    16.7 ms? Blocks R3's frame-rate half.
-5. **Older and still open**: `RoomM7Sheet` consistent in treatment (closes
-   M7); the unattended calls from 2026-10-05 (death lines by cause, ambient
-   levels); M4's dragon pacing and dormant-scorpion gap; the painted acts'
-   seams in play; a play log (`user://`, #136) when one is to hand.
+5. **Older and still open**: R2's final quality (the flame, the sword, the
+   doors, the ride); `RoomM7Sheet` consistent in treatment (closes M7); the
+   unattended calls from 2026-10-05; M4's dragon pacing; a play log (`user://`,
+   #136) when one is to hand. Three rulings wait for N1: does a found fourth
+   sword survive a death, faster ladder climbing, and a test build that lets
+   you throw mid-somersault (it reopens 2026-09-28).
 
 ## Traps that will bite again
 
@@ -60,7 +66,9 @@ real run**: `godot --path . <scene> --write-movie out/f.png --fixed-fps 30
 plain launch touches the save; `--script` never does.**
 
 **A bat's box is where it can kill you**: put it across the line a throw
-takes from outside it, or it cannot be fought. **Walk-back's "exit out of
+takes from outside it, or it cannot be fought. **A scorpion is only a sword
+fight in a tunnel**: the throw is flat at 18 px and it is 34 px tall, so a
+step before it means the top or nothing, and in the open you jump it. **Walk-back's "exit out of
 reach" means the level is blocked**: its drawing is full height now.
 
 **Sprite Fusion**: `style-reference` ignores `size`, `animate` starts on the
