@@ -108,3 +108,14 @@ func test_faces_for_drawing_break_only_at_surfaces() -> void:
 		tops[rect.position.y] = true
 	check_eq(tops.keys().size(), 2, "tops only at the floor and the hurdle: %s" % [level.ground_faces])
 	check_eq(level.ground.size(), 2, "and the row-first merge still makes two pieces for collision")
+
+
+## The forest's last wall is the castle's: solid like any wall, kept apart so
+## it is drawn in the castle's stone whatever the level's own art.
+func test_castle_stone_is_solid_and_kept_apart() -> void:
+	var level := LevelGrid.parse("size 16\n[map]\n..&&\n..&&\n####\n")
+	check_eq(level.errors.size(), 0, "reads cleanly: %s" % [level.errors])
+	check_eq(level.castle, [Rect2(32.0, 0.0, 32.0, 32.0)] as Array[Rect2], "one block of castle stone")
+	check(level.solids().has(level.castle[0]), "and it is solid")
+	check(level.walls.is_empty(), "not a wall in the level's own art")
+	check(not LevelGrid.parse("size 16\n[map]\n&\nH\n#\n").errors.is_empty(), "a ladder cannot climb into it")
