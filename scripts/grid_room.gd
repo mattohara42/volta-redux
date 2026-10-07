@@ -31,6 +31,7 @@ static func read(path: String) -> LevelGrid.Level:
 func _ready() -> void:
 	texture_repeat = TEXTURE_REPEAT_ENABLED
 	level = read(level_file)
+	room_height = level.height
 	for error in level.errors:
 		push_error("%s: %s" % [level_file, error])
 	var act_state := get_node_or_null("/root/ActState")
@@ -105,7 +106,7 @@ func _built() -> void:
 
 
 func _draw() -> void:
-	TileArt.draw_background_across(self, level.size.x, _tiles)
+	TileArt.draw_background_across(self, level.size.x, _tiles, room_height)
 	_draw_under()
 	for rect in level.ground_faces:
 		TileArt.draw_ground(self, rect, _tiles)

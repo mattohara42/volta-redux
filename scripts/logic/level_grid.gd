@@ -6,6 +6,7 @@
 ## for anything with numbers or wiring attached:
 ##
 ##     size 16
+##     height 360         (optional: the room's height, if not the map's)
 ##     [map]
 ##     ...........G........
 ##     .@.B.C..w..G.....E..
@@ -60,6 +61,10 @@ class Level:
 	extends RefCounted
 	var cell := 16.0
 	var size := Vector2.ZERO
+	## How tall the room is, if the file says (`height 360`); otherwise the
+	## map's own height. A one-screen room's map overhangs by half a row,
+	## since 360 is not a whole number of 16 px rows.
+	var height := 0.0
 	var ground: Array[Rect2] = []
 	var walls: Array[Rect2] = []
 	## The same stone, merged down each column first, for drawing: every top
@@ -123,6 +128,8 @@ static func parse(text: String) -> Level:
 			lines.append(bare)
 		elif bare.begins_with("size "):
 			level.cell = float(bare.substr(5))
+		elif bare.begins_with("height "):
+			level.height = float(bare.substr(7))
 	if rows.is_empty():
 		level.errors.append("no [map]")
 		return level
@@ -130,6 +137,8 @@ static func parse(text: String) -> Level:
 	for row in rows:
 		width = maxi(width, row.length())
 	level.size = Vector2(width, rows.size()) * level.cell
+	if level.height <= 0.0:
+		level.height = level.size.y
 
 	var cells := {}
 	for y in rows.size():

@@ -10,6 +10,7 @@
 #   tools/dev.sh scenarios [filter]  the capture-and-check scenarios CI runs
 #   tools/dev.sh route               every room's exit, in order, to the ending
 #   tools/dev.sh walkback [filter]   every room can be walked back to its start
+#   tools/dev.sh frametime [scene]   frame times in a real build (R3)
 #
 # CLAUDE.md: the destructive mode is the flag. `shot` does not pass
 # --overwrite, so replacing an existing image is something you ask for.
@@ -67,6 +68,9 @@ test)
 	;;
 route)
 	"$GODOT_BIN" --headless --path . --script res://tools/route_check.gd
+	;;
+frametime)
+	with_display "$GODOT_BIN" --path . --resolution 1280x720 --script res://tools/frame_time.gd -- "${1:-res://scenes/rooms/test_tall.tscn}"
 	;;
 walkback)
 	"$GODOT_BIN" --headless --path . --script res://tools/walk_back_check.gd -- "${1:-}"

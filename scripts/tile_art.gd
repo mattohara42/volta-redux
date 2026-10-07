@@ -39,10 +39,12 @@ static func draw_background(canvas: CanvasItem) -> void:
 	canvas.draw_texture(ACT1.background, Vector2.ZERO)
 
 
-## The painted wall repeated across a room wider than one screen. Every other
-## copy is mirrored, so the seam between two copies is the same edge meeting
-## itself rather than one edge meeting the other.
-static func draw_background_across(canvas: CanvasItem, width: float, tiles: ActTiles = null) -> void:
+## The painted wall repeated across a room wider than one screen, and down one
+## taller than a screen. Every other copy is mirrored, so the seam between two
+## copies is the same edge meeting itself rather than one edge meeting the
+## other. Down a tall room that is a stopgap: a level five floors tall wants a
+## painting of its own (`BACKLOG.md`).
+static func draw_background_across(canvas: CanvasItem, width: float, tiles: ActTiles = null, height: float = 0.0) -> void:
 	var set := _or_act1(tiles)
 	if set.background == null:
 		# Not painted yet: nothing here, so the act's `Backdrop` shows through
@@ -51,34 +53,47 @@ static func draw_background_across(canvas: CanvasItem, width: float, tiles: ActT
 		return
 	var bg := set.background
 	var step := float(bg.get_width())
-	var x := 0.0
-	var mirrored := false
-	while x < width:
-		if mirrored:
-			canvas.draw_set_transform(Vector2(x + step, 0.0), 0.0, Vector2(-1.0, 1.0))
-		else:
-			canvas.draw_set_transform(Vector2(x, 0.0))
-		canvas.draw_texture(bg, Vector2.ZERO)
-		x += step
-		mirrored = not mirrored
+	var rise := float(bg.get_height())
+	var y := 0.0
+	var flipped := false
+	while y < maxf(height, 1.0):
+		var x := 0.0
+		var mirrored := false
+		while x < width:
+			var at := Vector2(x + (step if mirrored else 0.0), y + (rise if flipped else 0.0))
+			canvas.draw_set_transform(at, 0.0, Vector2(-1.0 if mirrored else 1.0, -1.0 if flipped else 1.0))
+			canvas.draw_texture(bg, Vector2.ZERO)
+			x += step
+			mirrored = not mirrored
+		y += rise
+		flipped = not flipped
 	canvas.draw_set_transform(Vector2.ZERO)
 
 
 ## Every lit point of `tiles`' painting across a room `width` wide, copy by
 ## copy, mirrored the way `draw_background_across` mirrors every other copy.
-static func painted_lights(width: float, tiles: ActTiles = null) -> PackedVector2Array:
+static func painted_lights(width: float, tiles: ActTiles = null, height: float = 0.0) -> PackedVector2Array:
 	var set := _or_act1(tiles)
 	var out := PackedVector2Array()
 	if set.background == null:
 		return out
 	var step := float(set.background.get_width())
-	var x := 0.0
-	var mirrored := false
-	while x < width:
-		for point in set.lights:
-			out.append(Vector2(x + (step - point.x if mirrored else point.x), point.y))
-		x += step
-		mirrored = not mirrored
+	var rise := float(set.background.get_height())
+	var y := 0.0
+	var flipped := false
+	while y < maxf(height, 1.0):
+		var x := 0.0
+		var mirrored := false
+		while x < width:
+			for point in set.lights:
+				out.append(Vector2(
+					x + (step - point.x if mirrored else point.x),
+					y + (rise - point.y if flipped else point.y)
+				))
+			x += step
+			mirrored = not mirrored
+		y += rise
+		flipped = not flipped
 	return out
 
 

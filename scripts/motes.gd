@@ -44,4 +44,6 @@ func _process(_delta: float) -> void:
 	var centre := get_viewport_rect().size * 0.5
 	if camera != null:
 		centre = camera.get_screen_center_position()
-	position = Vector2(centre.x, Bench.ROOM_HEIGHT * 0.5)
+	# Follows the view both ways, so a room taller than a screen has dust
+	# wherever the camera is, not only in its first screen.
+	position = centre

@@ -30,19 +30,22 @@ const MARGIN := 16.0
 const PATTERN_SPAN := 4096
 
 var style := Style.NONE
+## How tall the room it stands behind is.
+var _room_height := Bench.ROOM_HEIGHT
 var _material: ShaderMaterial
 
 
 ## `room_seed` picks where in the pattern the room starts. Any number will do;
 ## the same number always gives the same room.
-func setup(backdrop_style: Style, room_seed: int = 0) -> void:
+func setup(backdrop_style: Style, room_seed: int = 0, height: float = Bench.ROOM_HEIGHT) -> void:
 	style = backdrop_style
+	_room_height = height
 	z_index = Z
 	z_as_relative = false
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_material = ShaderMaterial.new()
 	_material.shader = SHADERS[style]
-	_material.set_shader_parameter("room_height", Bench.ROOM_HEIGHT)
+	_material.set_shader_parameter("room_height", height)
 	_material.set_shader_parameter("pattern_offset", float(posmod(room_seed, PATTERN_SPAN)))
 	_material.set_shader_parameter("far_depth", CONFIG.backdrop_far_depth)
 	_material.set_shader_parameter("near_depth", CONFIG.backdrop_near_depth)
@@ -125,5 +128,5 @@ func _process(_delta: float) -> void:
 		view /= camera.zoom
 	var left := (centre.x - view.x * 0.5)
 	position = Vector2(floorf(left) - MARGIN, -MARGIN)
-	size = Vector2(view.x, Bench.ROOM_HEIGHT) + Vector2(MARGIN, MARGIN) * 2.0
+	size = Vector2(view.x, _room_height) + Vector2(MARGIN, MARGIN) * 2.0
 	_material.set_shader_parameter("camera_left", floorf(left))

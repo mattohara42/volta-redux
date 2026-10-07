@@ -51,6 +51,7 @@ tools/dev.sh import                              # once, after a fresh clone
 tools/dev.sh play                                # the game, from where you left it
 tools/dev.sh test                                # headless assertions
 tools/dev.sh walkback [filter]                   # can every room be walked back?
+tools/dev.sh frametime [scene]                   # frame times, in a real build
 ```
 
 `walkback` loads each room and reasons about it with `WalkBack`

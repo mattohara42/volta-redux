@@ -15,6 +15,9 @@ extends Node2D
 @export var hazards: HazardConfig
 ## Only the benches that place an enemy wire this.
 @export var enemies: EnemyConfig
+## Dressed as this act though in none of them: a test level measuring what a
+## real one costs (`tools/frame_time.gd`). Rooms in an act leave it empty.
+@export var dress_as: ActConfig
 
 const ATMOSPHERE: AtmosphereConfig = preload("res://config/atmosphere.tres")
 
@@ -34,6 +37,9 @@ var _solids: Array[Rect2] = []
 var _ladders: Array[Rect2] = []
 var _woods: Array[Rect2] = []
 var _spike_beds: Array[Rect2] = []
+## How tall this room is. One screen unless a room says otherwise: a level
+## five floors tall (`GridRoom`) sets it from its map before building.
+var room_height := ROOM_HEIGHT
 ## What `WalkBack` needs to know about the room, recorded as it is built.
 var _walk := WalkBack.Layout.new()
 
@@ -56,23 +62,25 @@ func _dress_the_room() -> void:
 		return
 	var act: ActConfig = act_state.act_of(scene_file_path)
 	if act == null:
+		act = dress_as
+	if act == null:
 		return
 	# The room arrives out of the dark rather than cutting in.
 	Dissolve.reveal(self, ATMOSPHERE.room_reveal_seconds)
 	if act.backdrop != Backdrop.Style.NONE:
 		var backdrop := Backdrop.new()
-		backdrop.setup(act.backdrop as Backdrop.Style, hash(scene_file_path))
+		backdrop.setup(act.backdrop as Backdrop.Style, hash(scene_file_path), room_height)
 		add_child(backdrop)
 	if act.ambient_light != Color.WHITE:
 		var field := LightField.new()
-		field.setup(act.ambient_light, act.ceiling_dim)
+		field.setup(act.ambient_light, act.ceiling_dim, room_height)
 		add_child(field)
 		# Dust in the air, only seen where something lights it. Ash in the
 		# caverns, where the air is hot.
 		var ash := act.backdrop == Backdrop.Style.CAVERN
 		add_child(Motes.make(Palette.FIRE_FALLOFF if ash else Palette.STONE_LIT))
 		# Wherever the painting behind the room is lit, the room is too.
-		for point in TileArt.painted_lights(_room_width(), act.tiles):
+		for point in TileArt.painted_lights(_room_width(), act.tiles, room_height):
 			var window := LightSource.point(ATMOSPHERE.light_window_radius, Palette.FIRE_CORE, ATMOSPHERE.light_window_strength, ATMOSPHERE.light_window_flicker)
 			window.position = point
 			add_child(window)
@@ -167,7 +175,7 @@ func _add_falling_platform(rect: Rect2) -> FallingPlatform:
 	var platform := FallingPlatform.new()
 	# Far enough to be below the room, plus its own depth so nothing is left
 	# poking up into the gap it used to fill.
-	platform.configure(rect.size, ROOM_HEIGHT - rect.position.y + rect.size.y, hazards)
+	platform.configure(rect.size, room_height - rect.position.y + rect.size.y, hazards)
 	platform.position = rect.get_center()
 	add_child(platform)
 	return platform
@@ -472,8 +480,8 @@ func walk_back_layout() -> WalkBack.Layout:
 
 ## Walls and a ceiling, so nothing leaves the instrument.
 func _add_enclosure(width: float) -> void:
-	_add_solid(Rect2(-SLAB, 0.0, SLAB, ROOM_HEIGHT))
-	_add_solid(Rect2(width, 0.0, SLAB, ROOM_HEIGHT))
+	_add_solid(Rect2(-SLAB, 0.0, SLAB, room_height))
+	_add_solid(Rect2(width, 0.0, SLAB, room_height))
 	_add_solid(Rect2(-SLAB, -SLAB, width + SLAB * 2.0, SLAB))
 
 
@@ -500,11 +508,11 @@ func _frame_camera(width: float) -> void:
 			camera.limit_left = 0
 			camera.limit_top = 0
 			camera.limit_right = int(width)
-			camera.limit_bottom = int(ROOM_HEIGHT)
+			camera.limit_bottom = int(room_height)
 
 
 func _draw_bench(width: float) -> void:
-	draw_rect(Rect2(0.0, 0.0, width, ROOM_HEIGHT), Palette.BACKDROP)
+	draw_rect(Rect2(0.0, 0.0, width, room_height), Palette.BACKDROP)
 	for rect in _solids:
 		draw_rect(rect, Palette.STONE_MID)
 		draw_rect(Rect2(rect.position, Vector2(rect.size.x, 3.0)), Palette.STONE_LIT)

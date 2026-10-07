@@ -3,6 +3,7 @@
 # (y 256) and the yard's is row 20 (y 320). The cage and the switch's chain
 # are the room's own code: the map cannot say them.
 size 16
+height 360
 [map]
 .................................................................%%.............
 .................................................................%%.............

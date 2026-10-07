@@ -34,7 +34,7 @@ var _material: ShaderMaterial
 
 ## `ambient` multiplies everything no light reaches. `ceiling_dim` darkens the
 ## top of the room by that fraction more than the floor.
-func setup(ambient: Color, ceiling_dim: float) -> void:
+func setup(ambient: Color, ceiling_dim: float, room_height: float = Bench.ROOM_HEIGHT) -> void:
 	z_index = Z
 	z_as_relative = false
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -42,7 +42,7 @@ func setup(ambient: Color, ceiling_dim: float) -> void:
 	_material.shader = SHADER
 	_material.set_shader_parameter("ambient", ambient)
 	_material.set_shader_parameter("ceiling_dim", ceiling_dim)
-	_material.set_shader_parameter("room_height", Bench.ROOM_HEIGHT)
+	_material.set_shader_parameter("room_height", room_height)
 	_material.set_shader_parameter("steps", CONFIG.light_field_steps)
 	_material.set_shader_parameter("flicker_speed", CONFIG.light_flicker_speed)
 	material = _material

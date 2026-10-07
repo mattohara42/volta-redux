@@ -20,6 +20,8 @@ func test_a_floor_merges_into_rectangles() -> void:
 	var level := LevelGrid.parse(MAP)
 	check_eq(level.errors.size(), 0, "reads cleanly: %s" % [level.errors])
 	check_eq(level.size, Vector2(160.0, 64.0), "ten cells by four")
+	check_eq(level.height, 64.0, "and as tall as its map, when the file does not say")
+	check_eq(LevelGrid.parse("height 360\n" + MAP).height, 360.0, "or as tall as it says")
 	check_eq(level.ground.size(), 2, "the floor either side of the pit, each one rectangle")
 	check_eq(level.ground[0], Rect2(0.0, 32.0, 64.0, 32.0), "the left side, two rows deep")
 	check_eq(level.lava, [Rect2(64.0, 48.0, 32.0, 16.0)] as Array[Rect2], "lava in the pit's bottom")
