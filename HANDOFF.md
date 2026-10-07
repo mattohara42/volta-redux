@@ -4,9 +4,9 @@
 > session narrative, that is what `git log` is for. Keep it under 80 lines.
 
 **Updated:** 2026-10-06 · **Phase:** 3 rebuilt, the scale · **Active:** R3,
-the tools for big levels. **R3 done when:** today's Act 1 rooms, re-expressed
-as text grids, still pass `tools/dev.sh route`, and a ten-screen by five-floor
-grey level holds frame rate in a real build (`BUILD_PLAN.md`). R1 and R2 are
+the tools for big levels. **R3 done when:** the bailey, re-expressed as a text
+grid, still passes its route, tests and scenarios, and a ten-screen by
+five-floor grey level holds frame rate in a real build (`BUILD_PLAN.md`). R1 and R2 are
 built; only Matt's eye is left on each. M14 is paused until R4.
 
 ## Where this is
@@ -22,11 +22,11 @@ act. M15 is built ahead of M14; three M16 pieces are pulled forward
 
 ## The next action
 
-**Start R3 with the level format**: a text grid per level, parsed by a pure
-function in `scripts/logic/` into the `Bench` builders, Act 1's rooms re-expressed
-in it first. Then the respawn reset out of `player.gd`, a save at braziers,
-and a frame-time check. R2 landed: the flame (a cone), the sword, a door per
-act and the ride (`ART.md`, 405 credits left). Decisions are in `LEVELS.md`.
+**R3 continues with respawn, saves and frame rate.** The level format is
+built: `levels/*.level` (16 px cells), read by `LevelGrid` and built by
+`GridRoom`; the bailey is the first room written that way. Next: the respawn
+reset out of `player.gd`, a save at braziers, and a frame-time check on a big
+grey level. R1 and R2 landed; decisions are in `LEVELS.md`.
 
 ## Blocked on Matt
 

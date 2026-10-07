@@ -70,6 +70,18 @@ appended to across sessions). `python3 tools/play_log.py` sums it up per room
 and per act, which is how M14 judges difficulty and length from a real
 playthrough rather than by guessing.
 
+### Writing a level
+
+A level is a text file in `levels/`, 16 px to a character: a `[map]` drawn
+in stone (`#`), wall (`%`), wood (`w`), lava (`~`), spikes (`^`), falling
+slabs (`=`) and ladders (`H`), with the start (`@`), braziers (`B`), chests
+(`C`) and the exit (`E`) standing on the bottom of their cells. Any other
+capital letter is an anchor, and a `[things]` line says what it is:
+`S switch opens=G`, `G gate`, `D scorpion range=180 dormant`. The full legend
+is at the top of `scripts/logic/level_grid.gd`. A scene whose script is
+`GridRoom` (or extends it) with `level_file` set builds the room from it;
+`levels/act1_bailey.level` is the worked example.
+
 ### A playthrough, step by step
 
 Godot is not on the PATH on Matt's Mac, so `godot` typed alone fails with
