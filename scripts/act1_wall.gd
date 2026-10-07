@@ -15,7 +15,7 @@
 ##   3. **The breach.** Past a checkpoint the walk is broken over a spike pit,
 ##      bridged by slabs that give way under you. Keep moving.
 ##
-## Built like `Act1Bank`: `Bench` geometry drawn with `TileArt`.
+## Built from `Bench` geometry drawn with `TileArt`.
 class_name Act1Wall
 extends Bench
 
