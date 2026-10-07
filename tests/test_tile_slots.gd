@@ -18,3 +18,12 @@ func test_a_filled_slot_is_used() -> void:
 	var own := ActTiles.new()
 	own.climb_tiles = [VINE] as Array[Texture2D]
 	check_eq(TileArt._slot(own, "climb_tiles", TileArt.LADDER_TILES), [VINE] as Array[Texture2D], "the set's own climb")
+
+
+## The forest's trunks are stone in the map, so their bark has to read as
+## something a sword breaks on: drawn from its own slot, not the earth's.
+func test_the_forest_faces_its_walls_with_bark() -> void:
+	var forest: ActTiles = load("res://assets/art/forest/forest_tiles.tres")
+	check(not forest.face_tiles.is_empty(), "the forest has its own wall faces")
+	check(forest.face_tiles[0] != forest.wall_tiles[0], "and they are not the earth under its floor")
+	check(TileArt.ACT1.face_tiles.is_empty(), "the castle's walls stay its masonry")

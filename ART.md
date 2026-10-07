@@ -482,6 +482,73 @@ metal stays cold and matte against the live shader). `ActTiles` set:
 `assets/art/act3/act3_tiles.tres`. Contact sheet:
 `_experiments/act3_batch1_contact.png`; in a room: `_experiments/act3_*.png`.
 
+## The forest, batches A and B (2026-10-07)
+
+Act 1's first level has art of its own (`assets/art/forest/forest_tiles.tres`,
+named by the forest's scene through `GridRoom.tiles`). **Eight requests, 120
+credits, 405 to 285**, plus two `edit`s that failed on Sprite Fusion's side
+and cost nothing: `edit` will not take a 16 px tile, so the cracked branch
+was a `generate` described to match. Contact sheets tile each variation 4x4.
+
+| delivery | size | pick | notes |
+|---|---|---|---|
+| `tile_forest_floor` | 16 | 11 | moss and roots over violet earth; four variants, top five rows locked |
+| `tile_forest_earth` | 16 | 4 | under the lip; `tile-variants.py` finds no mortar in earth, so its six variants are whole-tile shade shifts |
+| `tile_bark_cold` | 16 | 10 | the trunks (`%`, `face_tiles`) |
+| `tile_branch` | 16 | 5 | warm umber grain; 6 read more like a branch but outshone everything you stand on (Matt) |
+| `tile_branch_cracked` | 16 | 1 | the same red oak, its underside crumbling (`crumble_tile`) |
+| `tile_vine` | 16 | 2 | two stems, curled tendrils for rungs (`climb_tiles`) |
+| `tile_thorns` | 16 | 3 | the river gorge (`hazard_tiles`), the spike rule in a forest's skin |
+| `prop_stump` | 32 | 6 | the hollow reads; `recolour-darks.py` fixed 23 neutral darks |
+
+**The trunks are cold bark on purpose** (Matt, 2026-10-07). They are stone in
+the map, a thrown sword breaks on them, and the whole embed mechanic rests on
+reading wood from stone at a glance (`ART_DIRECTION.md`). So branches are warm
+umber and trunks are grey-green and blue-violet, explicitly not the colour of
+planks: warm still means a sword sticks.
+
+**To watch:** the vine is a cool green that leans cyan, and cyan is the
+electricity's colour. Fine beside the bark so far; recolour it if it ever
+reads as live. Leaves and canopy dressing are not made: there is nowhere in
+the map to put them yet.
+
+**Forest background, attempt 1: the prompt, for Matt to paint in Gemini.**
+Act 2's recipe, with two things new for a tall forest. A tall level mirrors
+the painting down as well as across (`TileArt.draw_background_across`), so
+the trunks run unbroken from the top edge to the bottom edge with no ground,
+sky or canopy band that would flip upside down. And anything horizontal reads
+as somewhere to stand and anything warm reads as fire, so there are no
+branches and no warm light: the only light is cold moonlight. Save the raw
+delivery to `assets/art_raw/forest_bg.*`; it is cropped to a column of trunk
+and pixelated the way the cavern was.
+
+> [preamble] A wide painted background for a side-scrolling platformer: a
+> long horizontal strip of the deep interior of an ancient forest at night,
+> in flat side view like a stage backdrop, camera perpendicular to the trees,
+> with no vanishing point. It is NOT a three-quarter view, NOT a path or
+> clearing receding into the distance, and NOT seen from above or below. The
+> same bay of forest repeats three times across the width of the canvas: one
+> huge dark tree trunk, a narrower trunk further back and paler with mist,
+> then a gap of deep darkness between the trees, evenly spaced, so the whole
+> strip reads as a continuous run of forest rather than one view of one
+> place. Every trunk runs straight and unbroken from the top edge of the
+> canvas to the bottom edge: no ground, no roots, no forest floor, no sky,
+> no canopy, no treetops and no leaves at the top. There are no branches,
+> no fallen logs, no stumps, no fungus shelves, no ledges and nothing
+> horizontal anywhere in the painting: every form is vertical, so nothing in
+> it looks like somewhere to stand. The only light is cold moonlight falling
+> in a few thin pale shafts between the trunks, and a low blue mist between
+> the far trees. The moonlight is the point of this painting: do not paint
+> the forest as one flat dark tone. No fire, no torches, no lanterns, no
+> warm light of any kind. No characters, no creatures, no buildings, no
+> ruins, no water. Large, simple shapes and few small details: big dark
+> masses of trunk and broad, soft gradients of mist and moonlight. The whole
+> painting stays dark and muted, a background meant to sit behind brighter
+> platforms. Bark is deep blue-violet and dark grey-green, the mist and
+> moonlight a pale cold blue-grey, never white; the darkest darks are deep
+> violet-blue, never neutral black. The image is 2560 by 1440 pixels, aspect
+> ratio 16:9.
+
 ## M9: lava, electricity and atmosphere (2026-09-28)
 
 **Nothing here is generated: no credits, no PNG.** Taken while credits were 0
@@ -604,7 +671,7 @@ known, and 210 the first time (*M5 in pixel art* above). The painted M5 took
 `tools/sprite-fusion.py credits` reads the balance: 300 after M5, 0 after M7's
 first four, 150 given by Sprite Fusion on 2026-09-30, and 0 again the same day; 900
 after Matt's top-up and the developer's matching gift on 2026-10-03, 840 after
-batch 1.
+batch 1; 405 before the forest and 285 after it (2026-10-07).
 
 ## What is left to generate (estimated 2026-10-03)
 

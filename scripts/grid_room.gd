@@ -112,7 +112,9 @@ func _build_things() -> void:
 				to = Vector2(target.rect.get_center().x, target.rect.position.y)
 			else:
 				push_error("%s: stump '%s' leads to no stump ('%s')" % [level_file, t.anchor, t.params["to"]])
-		_add_stump(t.rect, to)
+		var stump := _add_stump(t.rect, to)
+		if _tiles != null and _tiles.stump_texture != null:
+			stump.art = _tiles.stump_texture
 	for t in level.of_kind("bat"):
 		var size := t.size("size", BAT_SIZE)
 		_add_bat(Rect2(t.rect.get_center() - size * 0.5, size), t.rect.size * 0.5)

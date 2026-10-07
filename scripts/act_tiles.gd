@@ -18,6 +18,9 @@ extends Resource
 ## px. Each becomes a light in the room's `LightField`, so the dark draws back
 ## around what the painter lit and the painting and the room agree.
 @export var lights: PackedVector2Array = PackedVector2Array()
+## The face of a wall you cannot stand on (`%`): masonry in the castle, cold
+## bark on the forest's trunks. Empty draws `wall_tiles`.
+@export var face_tiles: Array[Texture2D] = []
 ## Wood a sword bites into: planks in the castle, branches in the forest.
 @export var wood_tiles: Array[Texture2D] = []
 ## What a hero climbs: a ladder in the castle, a vine in the forest.
@@ -27,3 +30,5 @@ extends Resource
 ## A slab that gives way, cropped so its top row is the surface. Null keeps a
 ## grid level's falling slab drawn in code, as it was before this slot.
 @export var crumble_tile: Texture2D = null
+## A stump (`Stump`), whole, at its rect's size. Null keeps it drawn in code.
+@export var stump_texture: Texture2D = null

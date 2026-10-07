@@ -11,11 +11,12 @@ Matt's to answer. M14 is paused until R4.
 
 ## Where this is
 
-**Act 1 is two grey-boxed levels**: the forest and the moat
-(`levels/act1_forest.level`, played and it plays well), then the outer wall
-to the castle gate (`levels/act1_wall.level`, `Act1Wall`), which replaced
+**Act 1 is two levels**: the forest and the moat (`levels/act1_forest.level`,
+played and it plays well, now in its own art bar the background: `ART.md`,
+*The forest*), then the outer wall to the castle gate, still grey-boxed
+(`levels/act1_wall.level`, `Act1Wall`), which replaced
 the wall, bailey and gate rooms. Acts 2 to 4 are built, connected and
-dressed at the old room size. **Credits: 405.**
+dressed at the old room size. **Credits: 285.**
 
 ## The next action
 
@@ -27,12 +28,15 @@ starts. Not fun: the fix goes in `SPEC.md` first.
 1. **Play level 2** (after the forest, from a new game): fun at this size?
    High road's bats fair? Plinth switch found? Judge layout, not look.
    Blocks G2. `BACKLOG.md` has the rest to watch.
-2. **R2, final quality?** The flame, the sword, the four doors and the ride
+2. **Paint the forest's background** in Gemini from the prompt in `ART.md`
+   (*The forest*), saved to `assets/art_raw/forest_bg.*`. Until then the
+   forest has no far layer and reads very dark. Blocks the forest's art.
+3. **R2, final quality?** The flame, the sword, the four doors and the ride
    (`BACKLOG.md`). Blocks R2.
-3. **Frame time on a real machine**: `tools/dev.sh frametime`, then with
+4. **Frame time on a real machine**: `tools/dev.sh frametime`, then with
    `res://scenes/rooms/act1_forest.tscn` and `act1_wall.tscn`: p95 under
    16.7 ms? Blocks R3's frame-rate half.
-4. **Older and still open**: `RoomM7Sheet` consistent in treatment (closes
+5. **Older and still open**: `RoomM7Sheet` consistent in treatment (closes
    M7); the unattended calls from 2026-10-05 (death lines by cause, ambient
    levels); M4's dragon pacing and dormant-scorpion gap; the painted acts'
    seams in play; a play log (`user://`, #136) when one is to hand.
