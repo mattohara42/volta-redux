@@ -172,3 +172,21 @@ func test_an_unknown_kind_is_an_error() -> void:
 S scorpoin range=96
 """)
 	check(" ".join(level.errors).contains("unknown kind 'scorpoin'"), "a typo is caught: %s" % [level.errors])
+
+
+## N1's second half: a slab that holds landings, and a sword to be found.
+func test_a_slab_and_a_found_sword_are_read() -> void:
+	var level := LevelGrid.parse("""size 16
+[map]
+.Q..XXX.
+########
+[things]
+Q sword
+X slab holds=1
+""")
+	check(level.errors.is_empty(), "reads cleanly: %s" % [level.errors])
+	check_eq(level.thing("X").number("holds", 0.0), 1.0, "the slab holds one landing")
+	check_eq(level.thing("X").rect, Rect2(64.0, 0.0, 48.0, 16.0), "across its cells")
+	var q := level.thing("Q")
+	check_eq(GridRoom.lying_at(Vector2(q.rect.get_center().x, q.rect.end.y), 16.0), Vector2(24.0, 12.0),
+		"the sword lies on the floor of its cell, as a dropped one does")

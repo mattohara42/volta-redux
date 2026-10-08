@@ -175,6 +175,15 @@ func test_a_live_barrier_destroys_a_sword_in_any_state() -> void:
 	check_eq(_step(S.CAUGHT, {"contact": SwordFlight.Contact.LIVE}), S.CAUGHT, "one already in hand is not")
 
 
+## A sword that kills is lost wherever it was (Matt, 2026-10-07), except on
+## its way home from a recall: a recall cannot fail, bar current.
+func test_a_sword_that_kills_is_lost_unless_it_was_recalled() -> void:
+	for state in [S.FLYING, S.RETURNING, S.EMBEDDED, S.FALLING, S.GROUNDED]:
+		check_eq(_step(state, {"contact": SwordFlight.Contact.KILL}), S.DESTROYED, "%s is lost" % SwordFlight.state_name(state))
+	check_eq(_step(S.RECALLING, {"contact": SwordFlight.Contact.KILL}), S.RECALLING, "a recalled one comes home")
+	check_eq(_step(S.CAUGHT, {"contact": SwordFlight.Contact.KILL}), S.CAUGHT, "one in hand is not")
+
+
 ## An embedded sword answers nothing except the recall, because a ledge that
 ## vanished when something brushed it would not be a ledge.
 func test_an_embedded_sword_ignores_everything_but_the_recall() -> void:

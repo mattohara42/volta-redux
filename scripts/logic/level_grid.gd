@@ -41,6 +41,10 @@
 ##                              throws as high as its top
 ##     ant                      walks the inside faces of the hollow it fills
 ##     eyeball                  roams the rect it fills, starting in the middle
+##     slab holds=1             a falling slab that holds this many landings
+##                              and goes on the next
+##     sword                    a sword lying on the floor of its cell, to be
+##                              found; a death takes it back to where it lay
 ##
 ## A gate opened by more than one switch or plate opens only while every one
 ## of them is held. Two kinds belong to the outer wall alone (`Act1Wall`):
@@ -58,7 +62,7 @@ const MATERIALS := "#%&w~^="
 const MARKERS := "@BCEH"
 const KINDS: PackedStringArray = [
 	"gate", "switch", "plate", "scorpion", "bat", "stump", "lift", "geyser", "ant",
-	"eyeball", "sill", "cage",
+	"eyeball", "slab", "sword", "sill", "cage",
 ]
 
 

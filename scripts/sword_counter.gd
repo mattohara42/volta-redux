@@ -44,7 +44,8 @@ func _process(_delta: float) -> void:
 	var out := 0
 	for node in get_tree().get_nodes_in_group("swords"):
 		var sword := node as Sword
-		if sword != null and sword.state != SwordFlight.State.CAUGHT and sword.state != SwordFlight.State.DESTROYED:
+		# One lying where the level put it is not yours until you find it.
+		if sword != null and not sword.placed and sword.state != SwordFlight.State.CAUGHT and sword.state != SwordFlight.State.DESTROYED:
 			out += 1
 	var icons := SwordTally.icons(_player.swords_held, out, _player.sword_config.max_swords)
 	if icons != _icons or _player.gems_held != _gems:

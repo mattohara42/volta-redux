@@ -70,6 +70,11 @@ func _on_area_entered(area: Area2D) -> void:
 	if not area.is_in_group("swords"):
 		return
 	if is_vulnerable_to(area):
+		# "Both die" (`SPEC.md`), wherever the sword was: flying, stuck in
+		# something this walked into, or lying where this crawled over it.
+		var sword := area as Sword
+		if sword != null:
+			sword.killed()
 		_defeat()
 
 

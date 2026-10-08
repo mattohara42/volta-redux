@@ -25,18 +25,20 @@ one N3 rebuilds). Acts 2 to 4 are still the old one-screen rooms.
 
 ## The next action
 
-**N1, first half in**: `plate`, `lift`, `geyser`, `ant` and `eyeball` are
-level-file kinds, a gate opens only while all its switches and plates are
-held, and an unknown kind is an error. `levels/bench_n1.level` (F2) has a
-section and a scenario for each. **Next**: a slab that drops the second time
-you cross it, a sword lying loose to be found, a sword that kills being lost
-wherever it was (`LEVELS.md` ruling 3), then the combination benches.
+**N1's entries are all placeable**: `plate`, `lift`, `geyser`, `ant`,
+`eyeball`, a gate that needs every switch or plate wired to it, `slab
+holds=1` (drops the second time) and `sword` (lying to be found; a death
+takes it back, `LEVELS.md` ruling 5). A sword that kills is lost wherever it
+was, except a recalled one (`SPEC.md`: a recall cannot fail). Benches:
+`bench_n1` and `bench_n1_found` (F2). **Next**: the combination benches (a
+recall kill line through a wall, a ledge thrown from a ladder, a sword
+dropped onto a plate, a throw from a falling slab), each with a scenario.
 
 ## Blocked on Matt
 
 1. **Approve *How a level is built*** (`SPEC.md`), or mark it up. Blocks N0.
-   **Play the N1 bench** (`bench_n1.tscn`, F2) when convenient; the full
-   set of combination benches comes later in N1.
+   **Play the N1 benches** (`bench_n1`, `bench_n1_found`, F2) when
+   convenient; the combination benches come next.
 2. **Play the look-ahead camera** (`config/camera.tres`: 64 px ahead, swings
    at 160 px/s, holds below 20 px/s so a turn on the spot to throw does not
    move the view). Its feel closes N0. A look down while falling is not built.
@@ -50,9 +52,9 @@ wherever it was (`LEVELS.md` ruling 3), then the combination benches.
 6. **Older and still open**: R2's final quality (the flame, the sword, the
    doors, the ride); `RoomM7Sheet` consistent in treatment (closes M7); the
    unattended calls from 2026-10-05; M4's dragon pacing; a play log (`user://`,
-   #136) when one is to hand. Three rulings wait for N1: does a found fourth
-   sword survive a death, faster ladder climbing, and a test build that lets
-   you throw mid-somersault (it reopens 2026-09-28).
+   #136) when one is to hand. Two rulings wait for N1: faster ladder
+   climbing, and a test build that lets you throw mid-somersault (it reopens
+   2026-09-28).
 
 ## Traps that will bite again
 

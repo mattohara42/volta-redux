@@ -491,7 +491,7 @@ func _place_at_checkpoint(restore_swords: bool) -> void:
 	var embedded: Array[bool] = []
 	for node in get_tree().get_nodes_in_group("swords"):
 		var sword := node as Sword
-		if sword != null:
+		if sword != null and not sword.placed:
 			swords.append(sword)
 			embedded.append(sword.state == SwordFlight.State.EMBEDDED)
 	for i in RespawnRules.swords_to_clear(embedded, swords_held, sword_config.max_swords):
@@ -577,6 +577,12 @@ func _throw() -> void:
 	if sword_config.throw_sound != null:
 		_sound.stream = sword_config.throw_sound
 		_sound.play()
+
+
+## A sword lying in the level to be found (`Sword.lie`): picking it up adds
+## to the hand like any other.
+func adopt(sword: Sword) -> void:
+	sword.recovered.connect(_on_sword_recovered)
 
 
 ## A picked-up sword refills the count exactly the same as a caught one; the

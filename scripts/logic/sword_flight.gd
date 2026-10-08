@@ -43,6 +43,10 @@ enum Contact {
 	## Current: a live barrier (`SPEC.md` → *Conduct*). Whatever the sword was
 	## doing, thrown, returning or recalled, that is the end of it.
 	LIVE,
+	## It killed something. Lost wherever it was, in the air, stuck or lying
+	## (Matt, 2026-10-07), except on its way home from a recall: a recall
+	## cannot fail, and current is that rule's only exception.
+	KILL,
 }
 
 
@@ -76,6 +80,8 @@ static func next_state(
 	yanked: bool = false
 ) -> State:
 	if contact == Contact.LIVE and state != State.CAUGHT and state != State.DESTROYED:
+		return State.DESTROYED
+	if contact == Contact.KILL and state != State.RECALLING and state != State.CAUGHT and state != State.DESTROYED:
 		return State.DESTROYED
 	match state:
 		State.FLYING:

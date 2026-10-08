@@ -122,3 +122,10 @@ static func phase_name(phase: Phase) -> String:
 			return "gone"
 		_:
 			return "steady"
+
+
+## Whether this landing (the first is 1) arms a slab that holds `holds`
+## landings before it goes (N1: a slab that drops the second time you cross
+## it holds one). Each landing it holds is only a creak.
+static func arms_on(landing: int, holds: int) -> bool:
+	return landing > maxi(holds, 0)

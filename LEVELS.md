@@ -423,3 +423,6 @@ N0 to N3).
    solid), and **decoration placed by rules is allowed**, written into the
    level file so it can be reviewed. An authoring tool, not the procedural
    generation `SPEC.md` rules out.
+5. **A found sword does not survive a death** (Matt, 2026-10-08). The hand
+   goes back to what it held arriving in the room, and the sword lies where
+   it was found again. Carried out of the room, it is yours.

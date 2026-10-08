@@ -37,6 +37,11 @@ var conducting := false:
 			queue_redraw()
 
 var state: SwordFlight.State = SwordFlight.State.FLYING
+## Lying where a level put it, to be found. A death leaves it where it is
+## (`Player`); once it is taken, a death costs it and the room lays it again
+## (`GridRoom`), since a found sword does not survive a death (Matt,
+## 2026-10-08).
+var placed := false
 
 var _thrower: Node2D
 var _velocity := Vector2.ZERO
@@ -52,6 +57,8 @@ var _recalled := false
 ## Set by a live `Barrier` the sword's path crossed, and acted on at the next
 ## step like any other contact.
 var _fried := false
+## Set by an enemy this sword killed (`Enemy`), acted on the same way.
+var _killed := false
 ## Set by `yank`: torn out of the wall at this horizontal speed, at the next step.
 var _yank_speed := 0.0
 ## Whether what it last bit was metal rather than wood, for which burst it
@@ -145,6 +152,23 @@ func recall() -> void:
 	_recalled = true
 
 
+## Laid on the floor at `at` for `finder` to walk over and pick up, as a
+## sword left lying after a missed catch is.
+func lie(finder: Node2D, at: Vector2) -> void:
+	_thrower = finder
+	global_position = at
+	placed = true
+	state = SwordFlight.State.GROUNDED
+	_trail.emitting = false
+	_set_humming(false)
+
+
+## It killed something (`Enemy`). Gone at its next step, unless it was being
+## recalled (`SwordFlight.Contact.KILL`).
+func killed() -> void:
+	_killed = true
+
+
 ## Called by whoever threw it. `direction` is -1 or 1: the sword has no arc and
 ## no vertical aim, which is the whole point of the flat return.
 func launch(thrower: Node2D, direction: float) -> void:
@@ -178,7 +202,7 @@ func _physics_process(delta: float) -> void:
 		SwordFlight.return_spent(_return_distance, config.max_return_distance),
 		caught,
 		picked_up,
-		SwordFlight.Contact.LIVE if _fried else _contact,
+		SwordFlight.Contact.LIVE if _fried else (SwordFlight.Contact.KILL if _killed else _contact),
 		state == SwordFlight.State.RETURNING and SwordFlight.has_overshot(
 			offset_before, offset_after
 		),
@@ -190,6 +214,7 @@ func _physics_process(delta: float) -> void:
 	_recalled = false
 	_burnt = _fried
 	_fried = false
+	_killed = false
 	if next == SwordFlight.State.FALLING and state == SwordFlight.State.EMBEDDED:
 		# Torn out: falling has gravity, this gives it the throw.
 		_velocity = Vector2(_yank_speed, 0.0)

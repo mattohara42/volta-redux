@@ -27,6 +27,8 @@ var level: LevelGrid.Level
 ## What the map's anchors built, by anchor, for a room to reach in `_built`.
 var switches := {}
 var gates := {}
+## Each sword the level lays, by where it lies, so a death can lay it again.
+var _loose := {}
 var _tiles: ActTiles
 
 
@@ -136,6 +138,14 @@ func _build_things() -> void:
 	for t in level.of_kind("ant"):
 		var size := t.size("size", ANT_SIZE)
 		_add_ant(size, ant_track(t.rect, size))
+	for t in level.of_kind("slab"):
+		var slab := _add_falling_platform(t.rect)
+		if slab != null:
+			slab.holds = int(t.number("holds", 1.0))
+			if _tiles != null and _tiles.crumble_tile != null:
+				slab.art = _tiles.crumble_tile
+	for t in level.of_kind("sword"):
+		_lay_sword(Vector2(t.rect.get_center().x, t.rect.end.y))
 	for t in level.of_kind("eyeball"):
 		var size := t.size("size", EYEBALL_SIZE)
 		_add_eyeball(Rect2(t.rect.get_center() - size * 0.5, size), t.rect)
@@ -163,6 +173,33 @@ func _build_things() -> void:
 
 func _art(act: ActConfig) -> ActTiles:
 	return tiles if tiles != null else act.tiles
+
+
+## A sword lying on the floor at `base`, as one left after a missed catch.
+static func lying_at(base: Vector2, sword_length: float) -> Vector2:
+	return base - Vector2(0.0, sword_length * 0.25)
+
+
+func _lay_sword(base: Vector2) -> void:
+	for node in get_tree().get_nodes_in_group("player"):
+		var player := node as Player
+		if player == null or player.sword_scene == null:
+			continue
+		var sword := player.sword_scene.instantiate() as Sword
+		add_child(sword)
+		sword.lie(player, lying_at(base, world.sword_length))
+		player.adopt(sword)
+		_loose[base] = sword
+		return
+
+
+## A found sword does not survive a death (Matt, 2026-10-08): the hand goes
+## back to what it was, and the sword goes back to where it lay.
+func _on_hero_respawned(at: Vector2, frozen_for: float) -> void:
+	super._on_hero_respawned(at, frozen_for)
+	for base: Vector2 in _loose:
+		if not is_instance_valid(_loose[base]):
+			_lay_sword(base)
 
 
 func _wire_opener(t: LevelGrid.Thing, opener: Node, openers: Dictionary) -> void:
