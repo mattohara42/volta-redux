@@ -152,3 +152,23 @@ func test_every_stump_leads_to_a_stump() -> void:
 			var target := level.thing(String(t.params["to"]))
 			check(target != null and target.kind == "stump", "stump %s leads to a stump" % t.anchor)
 	check(warps > 0, "the forest has at least one warp")
+
+
+## N0: the forest drew the castle painting's lit windows into its dark, because
+## the lights came from the act's art rather than the level's own.
+func test_the_forest_borrows_no_lights_from_the_castle_painting() -> void:
+	var room := GridRoom.new()
+	room.tiles = load("res://assets/art/forest/forest_tiles.tres")
+	var act := load("res://config/act1.tres") as ActConfig
+	check(room._art(act) == room.tiles, "the forest's lights come from the forest's own art")
+	check(
+		TileArt.painted_lights(4000.0, room._art(act), 900.0).is_empty(),
+		"and the forest's art, unpainted, has none"
+	)
+	room.free()
+
+
+## N0: the forest's lip is moss, which grows on top and never hangs under a trunk.
+func test_no_moss_lintel_under_the_forest_trunks() -> void:
+	check(not (load("res://assets/art/forest/forest_tiles.tres") as ActTiles).lintel, "forest: none")
+	check(TileArt.ACT1.lintel, "the castle's cut stone keeps its lintel")

@@ -2,8 +2,8 @@
 ## and gate rooms are its sections, left to right:
 ##
 ##   1. **The climb.** Three storeys of the outer wall, a ladder up each face
-##      and bats round them. A ladder is where you cannot throw, so the order
-##      is yours.
+##      and bats round them. You can throw from a ladder, but you climb it
+##      slowly, so which bat you take first is yours.
 ##   2. **The wall walk.** A skeleton asleep on it, then the gatehouse: a
 ##      passage roofed too low to jump its guard. The sill before it is the
 ##      lesson: standing on it, a throw lands in the top of the scorpion and
@@ -59,6 +59,9 @@ var _roared := false
 var _links: Array[Dictionary] = []
 var _grate := Rect2()
 var _cage := Node2D.new()
+## What moves (the dragon's breath, the chains) is drawn here and redrawn
+## every frame, so the level itself is drawn once rather than every frame.
+var _live := Node2D.new()
 var _smoke := CPUParticles2D.new()
 
 
@@ -92,6 +95,11 @@ func _built() -> void:
 			ATMOSPHERE_CONFIG.light_switch_radius, Palette.FIRE_CORE, ATMOSPHERE_CONFIG.light_switch_strength
 		))
 	_grate = level.thing("D").rect
+	# First child: over the level's own drawing, as `_draw_under` was, and
+	# under the hero, the creatures and the dark.
+	_live.draw.connect(_draw_live)
+	add_child(_live)
+	move_child(_live, 0)
 	# The cage's own light, so the dark of the level does not swallow it.
 	_cage.position = dragon_rect(_grate).get_center()
 	add_child(_cage)
@@ -122,7 +130,7 @@ func _process(delta: float) -> void:
 		var target := LINK_PITCH * 6.0 if switch.is_held else 0.0
 		link["run"] = move_toward(link["run"], target, LINK_PITCH * 6.0 * delta)
 	_listen_for_the_hero()
-	queue_redraw()
+	_live.queue_redraw()
 
 
 ## It roars once, as you come along the quiet stretch beneath it.
@@ -165,13 +173,13 @@ func _snout() -> Vector2:
 	return Vector2(rect.end.x - DRAGON_SNOUT.x, rect.position.y + DRAGON_SNOUT.y)
 
 
-func _draw_under() -> void:
-	_draw_grate()
-
-
 func _draw_over() -> void:
 	for t in level.of_kind("sill"):
 		TileArt.draw_ground(self, sill_rect(t.rect, t.number("height", 0.0)), _tiles)
+
+
+func _draw_live() -> void:
+	_draw_grate()
 	for link in _links:
 		_draw_link(link)
 
@@ -179,21 +187,21 @@ func _draw_over() -> void:
 ## The window into the dark: a recess darker than the wall, the dragon chained
 ## inside it and breathing, and the bars in front.
 func _draw_grate() -> void:
-	draw_rect(_grate, Palette.BACKDROP)
+	_live.draw_rect(_grate, Palette.BACKDROP)
 	var frame := int(_clock / ATMOSPHERE_CONFIG.cage_breath_seconds) % DRAGON_FRAMES
 	var source := Rect2(Vector2(DRAGON_FRAME.x * frame, 0.0), DRAGON_FRAME)
 	# Flipped, so it faces the way you come and watches you along the stretch.
 	var rect := dragon_rect(_grate)
-	draw_set_transform(Vector2(rect.end.x + rect.position.x, 0.0), 0.0, Vector2(-1.0, 1.0))
-	draw_texture_rect_region(DRAGON_SHEET, rect, source, DRAGON_SHADE)
-	draw_set_transform(Vector2.ZERO)
+	_live.draw_set_transform(Vector2(rect.end.x + rect.position.x, 0.0), 0.0, Vector2(-1.0, 1.0))
+	_live.draw_texture_rect_region(DRAGON_SHEET, rect, source, DRAGON_SHADE)
+	_live.draw_set_transform(Vector2.ZERO)
 	var x := _grate.position.x + BAR_PITCH * 0.5
 	while x < _grate.end.x:
-		draw_rect(Rect2(x - BAR_WIDTH * 0.5, _grate.position.y, BAR_WIDTH, _grate.size.y), Palette.STONE_DEEP)
-		draw_rect(Rect2(x - BAR_WIDTH * 0.5, _grate.position.y, 1.0, _grate.size.y), Palette.STONE_MID)
+		_live.draw_rect(Rect2(x - BAR_WIDTH * 0.5, _grate.position.y, BAR_WIDTH, _grate.size.y), Palette.STONE_DEEP)
+		_live.draw_rect(Rect2(x - BAR_WIDTH * 0.5, _grate.position.y, 1.0, _grate.size.y), Palette.STONE_MID)
 		x += BAR_PITCH
 	for y in [_grate.position.y, _grate.end.y - BAR_WIDTH]:
-		draw_rect(Rect2(_grate.position.x, y, _grate.size.x, BAR_WIDTH), Palette.STONE_DEEP)
+		_live.draw_rect(Rect2(_grate.position.x, y, _grate.size.x, BAR_WIDTH), Palette.STONE_DEEP)
 
 
 ## The chain that says a switch and its gate are one machine: up the face
@@ -213,8 +221,8 @@ func _draw_link(link: Dictionary) -> void:
 	var run := 0.0
 	for leg: Array in [[start, corner], [corner, pulley], [pulley, gate_top]]:
 		run = _draw_links(leg[0], leg[1], run, link["run"], colour)
-	draw_circle(pulley, 4.0, Palette.STONE_MID)
-	draw_arc(pulley, 4.0, 0.0, TAU, 12, colour, 1.0)
+	_live.draw_circle(pulley, 4.0, Palette.STONE_MID)
+	_live.draw_arc(pulley, 4.0, 0.0, TAU, 12, colour, 1.0)
 
 
 ## Links from `from` to `to`, carrying on the spacing from `run`. Returns the
@@ -229,7 +237,7 @@ func _draw_links(from: Vector2, to: Vector2, run: float, travel: float, colour: 
 		var at := from + along * d
 		# Alternate rings face on and edge on, as a chain does.
 		var half := across * (1.5 if i % 2 == 0 else 0.5) + along * 1.5
-		draw_line(at - half, at + half, colour, 1.0)
+		_live.draw_line(at - half, at + half, colour, 1.0)
 		d += LINK_PITCH
 		i += 1
 	return run + length

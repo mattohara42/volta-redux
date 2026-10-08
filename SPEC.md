@@ -273,6 +273,76 @@ that have been raised and not judged.
 use of the sword rather than behind a memorised route, and the key is the exit.
 Three gems in the final level, as in the original.
 
+## How a level is built
+
+> **Draft for Matt's approval (N0).** Nothing below is settled until he says so.
+
+G2's first answer was that the levels were area rather than ideas: long flat
+runs, big blocks, one way through. This is the method that replaces drawing a
+map and filling it.
+
+**A beat sheet comes before a map.** Matt sketches it; Claude builds it in the
+level's text and tests it (`LEVELS.md`, *Decisions 2026-10-07*). A beat is one
+thing the player has to work out, sized to about a screen (40 by 22 cells).
+A screen with no beat in it is walking, and it either gets one or gets cut.
+
+**Each idea gets four beats, in order.** It is *introduced* where failing costs
+nothing, *developed* with something at stake, *twisted* so the answer that
+worked stops working, and *combined* with an idea from earlier. An idea that
+appears once teaches nothing, so it is either given its other beats or cut.
+The levels count ideas, and length follows from them.
+
+**A fight is decided on the move.** The sword returns to where you are now,
+so the beats that use it best make you throw and then go somewhere: up a
+ladder, off a slab that falls, past the thing you just missed. A beat you can
+win by standing still and throwing is an introduction at most.
+
+**The route loops back to a brazier.** After a hard beat the way on passes
+the last brazier again, or opens a short way back to it, so a death costs the
+beat and not the walk to it. At least two loops per level.
+
+**Optional pockets are off the main line.** Each one is its own small beat with
+something worth having in it (a fourth sword, a view of the dragon, a way
+round), and nothing on the way to the exit needs one.
+
+**The level uses its height.** Several floors, with the route crossing
+between them rather than running along one. A long flat run is a smell.
+
+**Gaps vary.** No two jumps in a row of the same width and rise, and dense
+stretches alternate with a breather where nothing is trying to kill you.
+
+### The beat sheet format
+
+One text file per level, beside the level it describes
+(`levels/act1_wall.beats`), written in any editor or on paper and typed up.
+Each beat is a heading line and a few free lines under it:
+
+```
+# The outer wall: Act 1, level 2
+ideas: the sill (a throw from above), bats on ladders, the sword switch
+
+## 1. The first ladder  [introduce: bats on ladders]  floor 1
+A bat circles a ladder with nothing under it. Climb and throw, or wait.
+brazier: at the foot
+
+## 2. The sill  [introduce: the sill]  floor 2
+A sleeping skeleton below a step. From the step, a throw lands in its top.
+
+## 3. The gatehouse  [develop: the sill]  floor 2
+The same step, an awake scorpion in a passage too low to jump.
+loop: back down the ladder to the brazier at 1
+
+## 3a. Over the gatehouse  [pocket]  floor 4
+Scaffolds above the passage, two bats, a fourth sword.
+```
+
+The heading carries the number, a name, the idea and its stage in brackets,
+and the floor it is on. Under it go what happens, what can kill you, and any
+`brazier:`, `loop:` or `pocket` it has. A numbered beat with a letter (`3a`)
+is off the main line. Claude reads the sheet, flags any idea missing a stage,
+any screen with no beat and any hard beat with no loop, and asks before
+building around a gap.
+
 ## Enemies
 
 Six types, all from the original, each punishing a **different** mistake with the

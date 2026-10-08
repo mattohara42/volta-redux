@@ -100,10 +100,17 @@ func _dress_the_room() -> void:
 		var ash := act.backdrop == Backdrop.Style.CAVERN
 		add_child(Motes.make(Palette.FIRE_FALLOFF if ash else Palette.STONE_LIT))
 		# Wherever the painting behind the room is lit, the room is too.
-		for point in TileArt.painted_lights(_room_width(), act.tiles, room_height):
+		for point in TileArt.painted_lights(_room_width(), _art(act), room_height):
 			var window := LightSource.point(ATMOSPHERE.light_window_radius, Palette.FIRE_CORE, ATMOSPHERE.light_window_strength, ATMOSPHERE.light_window_flicker)
 			window.position = point
 			add_child(window)
+
+
+## The art this room is drawn in: its act's, unless the room has its own.
+## The painting's lights come from here, so a room never borrows the windows
+## of a painting it does not show.
+func _art(act: ActConfig) -> ActTiles:
+	return act.tiles
 
 
 func _add_solid(rect: Rect2) -> StaticBody2D:

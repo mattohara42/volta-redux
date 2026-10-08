@@ -3,7 +3,7 @@
 > **Rewrite this file, never append.** State snapshot and pointers only. No
 > session narrative, that is what `git log` is for. Keep it under 150 lines.
 
-**Updated:** 2026-10-07 · **Phase:** 3 rebuilt, depth before breadth.
+**Updated:** 2026-10-08 · **Phase:** 3 rebuilt, depth before breadth.
 **Active milestone:** N0, fixes and the method (`BUILD_PLAN.md`).
 **N0 done-when:** Matt has approved the wording of `SPEC.md`'s new *How a
 level is built*, the fixes are shot before and after from a real build, and
@@ -24,23 +24,25 @@ one N3 rebuilds). Acts 2 to 4 are still the old one-screen rooms.
 
 ## The next action
 
-**N0**: the six fixes (borrowed window lights in the forest, the outer wall's
-every-frame redraw, grain along tall wood, the upside-down moss under trunks,
-the ladder-throw comment, a look-ahead camera with its numbers in `config/`),
-then a draft of *How a level is built* for Matt, including the beat-sheet
-format he will sketch in.
+**N0's six fixes are in** (shot before and after; the PR has the pictures),
+and *How a level is built* is drafted in `SPEC.md`, marked as a draft, with
+the beat-sheet format. N0 now waits on Matt (below). Next for Claude: N1,
+which can start alongside.
 
 ## Blocked on Matt
 
-1. **Approve *How a level is built*** once drafted. Blocks N0.
-2. **Sketch the outer wall's beat sheet** in that format. Blocks N3. Playing
+1. **Approve *How a level is built*** (`SPEC.md`), or mark it up. Blocks N0.
+2. **Play the look-ahead camera** (`config/camera.tres`: 64 px ahead, swings
+   at 160 px/s, holds below 20 px/s so a turn on the spot to throw does not
+   move the view). Its feel closes N0. A look down while falling is not built.
+3. **Sketch the outer wall's beat sheet** in that format. Blocks N3. Playing
    today's level 2 once first is cheap evidence of what to keep.
-3. **Paint the forest's background** in Gemini from the prompt in `ART.md`
+4. **Paint the forest's background** in Gemini from the prompt in `ART.md`
    (*The forest*), saved to `assets/art_raw/forest_bg.*`.
-4. **Frame time on a real machine**: `tools/dev.sh frametime`, then with
+5. **Frame time on a real machine**: `tools/dev.sh frametime`, then with
    `res://scenes/rooms/act1_forest.tscn` and `act1_wall.tscn`: p95 under
    16.7 ms? Blocks R3's frame-rate half.
-5. **Older and still open**: R2's final quality (the flame, the sword, the
+6. **Older and still open**: R2's final quality (the flame, the sword, the
    doors, the ride); `RoomM7Sheet` consistent in treatment (closes M7); the
    unattended calls from 2026-10-05; M4's dragon pacing; a play log (`user://`,
    #136) when one is to hand. Three rulings wait for N1: does a found fourth
