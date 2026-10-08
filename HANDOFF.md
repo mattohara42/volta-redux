@@ -4,12 +4,13 @@
 > session narrative, that is what `git log` is for. Keep it under 150 lines.
 
 **Updated:** 2026-10-08 · **Phase:** 3 rebuilt, depth before breadth.
-**Active milestone:** N0, fixes and the method (`BUILD_PLAN.md`).
-**N0 done-when:** Matt has approved the wording of `SPEC.md`'s new *How a
-level is built*, the fixes are shot before and after from a real build, and
-the camera's feel is Matt's to judge by playing. Then N1 and N2 (they can run
-side by side), then N3, the outer wall rebuilt from Matt's beat sheet. R4 and
-M14 wait until G2 passes on the rebuilt Act 1.
+**Active milestone:** N1, everything built is placeable (`BUILD_PLAN.md`).
+N0 is built and waits only on Matt (below).
+**N1 done-when:** each new level-file entry has a parser test and a bench
+that passes walkback, route and scenarios, and Matt has played the benches
+(F2) and said which combinations are worth building beats around. Then N2
+(it can run alongside), then N3, the outer wall rebuilt from Matt's beat
+sheet. R4 and M14 wait until G2 passes on the rebuilt Act 1.
 
 ## Where this is
 
@@ -24,14 +25,18 @@ one N3 rebuilds). Acts 2 to 4 are still the old one-screen rooms.
 
 ## The next action
 
-**N0's six fixes are in** (shot before and after; the PR has the pictures),
-and *How a level is built* is drafted in `SPEC.md`, marked as a draft, with
-the beat-sheet format. N0 now waits on Matt (below). Next for Claude: N1,
-which can start alongside.
+**N1, first half in**: `plate`, `lift`, `geyser`, `ant` and `eyeball` are
+level-file kinds, a gate opens only while all its switches and plates are
+held, and an unknown kind is an error. `levels/bench_n1.level` (F2) has a
+section and a scenario for each. **Next**: a slab that drops the second time
+you cross it, a sword lying loose to be found, a sword that kills being lost
+wherever it was (`LEVELS.md` ruling 3), then the combination benches.
 
 ## Blocked on Matt
 
 1. **Approve *How a level is built*** (`SPEC.md`), or mark it up. Blocks N0.
+   **Play the N1 bench** (`bench_n1.tscn`, F2) when convenient; the full
+   set of combination benches comes later in N1.
 2. **Play the look-ahead camera** (`config/camera.tres`: 64 px ahead, swings
    at 160 px/s, holds below 20 px/s so a turn on the spot to throw does not
    move the view). Its feel closes N0. A look down while falling is not built.

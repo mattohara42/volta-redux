@@ -1,0 +1,23 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scripts/grid_room.gd" id="1_room"]
+[ext_resource type="Resource" path="res://config/world.tres" id="2_world"]
+[ext_resource type="Resource" path="res://config/enemies.tres" id="3_enemies"]
+[ext_resource type="Resource" path="res://config/hazards.tres" id="4_hazards"]
+[ext_resource type="PackedScene" path="res://scenes/player.tscn" id="5_player"]
+[ext_resource type="PackedScene" path="res://scenes/debug_overlay.tscn" id="6_overlay"]
+[ext_resource type="Resource" path="res://config/act1.tres" id="7_act"]
+
+[node name="BenchN1" type="Node2D"]
+script = ExtResource("1_room")
+world = ExtResource("2_world")
+enemies = ExtResource("3_enemies")
+hazards = ExtResource("4_hazards")
+dress_as = ExtResource("7_act")
+level_file = "res://levels/bench_n1.level"
+
+[node name="Player" parent="." instance=ExtResource("5_player")]
+position = Vector2(72, 300)
+
+[node name="DebugOverlay" parent="." instance=ExtResource("6_overlay")]
+starts_hidden = true

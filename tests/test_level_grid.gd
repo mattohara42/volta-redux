@@ -119,3 +119,56 @@ func test_castle_stone_is_solid_and_kept_apart() -> void:
 	check(level.solids().has(level.castle[0]), "and it is solid")
 	check(level.walls.is_empty(), "not a wall in the level's own art")
 	check(not LevelGrid.parse("size 16\n[map]\n&\nH\n#\n").errors.is_empty(), "a ladder cannot climb into it")
+
+
+## N1: the kinds that were built for hand-written rooms and are now placeable.
+const PLACEABLE := """size 16
+[map]
+%%%%%%%%%%%%%%%%%%%%
+%AAAA.......GG...YYY
+%AAAA..L....GG...YYY
+%AAAA......SGG.T.YYY
+%AAAA..PP..SGG.T.YYY
+%%%%%%%%%%%%%%%%%%%%
+[things]
+A ant
+L lift travel=4,-2
+G geyser
+P plate opens=D
+S switch opens=D
+T switch opens=D
+Y eyeball size=20x20
+"""
+
+
+func test_each_new_kind_is_read_with_its_rect_and_parameters() -> void:
+	var level := LevelGrid.parse(PLACEABLE)
+	check(level.errors.is_empty() or level.errors.all(func(e: String) -> bool: return e.contains("'D'")),
+		"only the missing gate's anchor is a problem: %s" % [level.errors])
+	check_eq(level.thing("A").rect, Rect2(16.0, 16.0, 64.0, 64.0), "the ant fills its hollow")
+	check_eq(level.thing("L").rect, Rect2(112.0, 32.0, 16.0, 16.0), "the lift at its near end")
+	check_eq(level.thing("G").rect, Rect2(192.0, 16.0, 32.0, 64.0), "the geyser's shaft")
+	check_eq(level.thing("P").rect, Rect2(112.0, 64.0, 32.0, 16.0), "the plate's air")
+	check_eq(level.of_kind("switch").size(), 2, "two switches")
+	check_eq(level.thing("Y").rect, Rect2(272.0, 16.0, 48.0, 64.0), "the eyeball's roam")
+	check_eq(level.thing("Y").size("size", Vector2.ZERO), Vector2(20.0, 20.0), "with its own size")
+
+
+func test_the_room_turns_cells_into_what_it_builds() -> void:
+	var level := LevelGrid.parse(PLACEABLE)
+	check_eq(GridRoom.plate_rect(level.thing("P").rect), Rect2(112.0, 80.0, 32.0, 8.0),
+		"a plate is set into the top of the floor under its cells")
+	check_eq(GridRoom.ant_track(level.thing("A").rect, Vector2(22.0, 16.0)), Rect2(24.0, 24.0, 48.0, 48.0),
+		"an ant's centre walks half its body in from each face")
+	check_eq(GridRoom.lift_travel(level.thing("L"), level.cell), Vector2(64.0, -32.0),
+		"a lift's travel is in cells")
+
+
+func test_an_unknown_kind_is_an_error() -> void:
+	var level := LevelGrid.parse("""[map]
+.S..
+####
+[things]
+S scorpoin range=96
+""")
+	check(" ".join(level.errors).contains("unknown kind 'scorpoin'"), "a typo is caught: %s" % [level.errors])

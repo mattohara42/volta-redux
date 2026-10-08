@@ -34,6 +34,18 @@
 ##     bat                      flies about the rect it fills
 ##     stump to=U               land on it, come up on stump U (one way)
 ##     stump                    a stump that leads nowhere, or a warp's end
+##     plate opens=G            set into the floor under it; weight holds it
+##     lift travel=0,-6         a platform at its near end, going this many
+##                              cells and back on its own clock
+##     geyser                   a shaft: the jet comes out of its floor and
+##                              throws as high as its top
+##     ant                      walks the inside faces of the hollow it fills
+##     eyeball                  roams the rect it fills, starting in the middle
+##
+## A gate opened by more than one switch or plate opens only while every one
+## of them is held. Two kinds belong to the outer wall alone (`Act1Wall`):
+## `sill height=12` and `cage`. A kind not listed here is an error, so a typo
+## does not quietly place nothing.
 ##
 ## Every placement stands on the bottom of its cell: a brazier, a chest, the
 ## hero's feet and the exit all sit on whatever is below. A ladder's top is the
@@ -44,6 +56,10 @@ extends RefCounted
 const AIR := "."
 const MATERIALS := "#%&w~^="
 const MARKERS := "@BCEH"
+const KINDS: PackedStringArray = [
+	"gate", "switch", "plate", "scorpion", "bat", "stump", "lift", "geyser", "ant",
+	"eyeball", "sill", "cage",
+]
 
 
 class Thing:
@@ -215,6 +231,8 @@ static func parse(text: String) -> Level:
 		for i in range(2, words.size()):
 			var pair := words[i].split("=")
 			t.params[pair[0]] = pair[1] if pair.size() > 1 else true
+		if not KINDS.has(t.kind):
+			level.errors.append("unknown kind '%s' for '%s'" % [t.kind, t.anchor])
 		if not anchors.has(t.anchor):
 			level.errors.append("thing '%s' has no anchor in the map" % t.anchor)
 			continue
