@@ -120,6 +120,10 @@ func _build_things() -> void:
 		_add_bat(Rect2(t.rect.get_center() - size * 0.5, size), t.rect.size * 0.5)
 
 
+func _art(act: ActConfig) -> ActTiles:
+	return tiles if tiles != null else act.tiles
+
+
 ## For a room to add what the map cannot say. Runs after the map is built.
 func _built() -> void:
 	pass

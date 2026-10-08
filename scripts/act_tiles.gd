@@ -23,6 +23,9 @@ extends Resource
 @export var face_tiles: Array[Texture2D] = []
 ## Wood a sword bites into: planks in the castle, branches in the forest.
 @export var wood_tiles: Array[Texture2D] = []
+## Whether a wall face ends in a lintel, the floor's lip upside down. True
+## for cut stone; false where the lip is something that only grows on top.
+@export var lintel := true
 ## What a hero climbs: a ladder in the castle, a vine in the forest.
 @export var climb_tiles: Array[Texture2D] = []
 ## What kills you to land on: iron spikes in the castle, thorns in the forest.

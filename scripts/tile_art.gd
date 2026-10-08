@@ -124,7 +124,11 @@ static func draw_wall(canvas: CanvasItem, rect: Rect2, tiles: ActTiles = null) -
 		shades.append(Palette.WALL_DARK.lerp(lit, t * t * t))
 	draw_tiled(canvas, faces, rect, shades)
 	# A lintel along the bottom: the floor's own lip, upside down, so the edge
-	# you walk under is finished the way the edge you walk on is.
+	# you walk under is finished the way the edge you walk on is. Only where
+	# the lip is masonry: the forest's is moss, and moss does not hang under a
+	# trunk.
+	if not set.lintel:
+		return
 	var lip := set.floor_tiles[0].get_height()
 	canvas.draw_set_transform(Vector2(0.0, rect.end.y * 2.0 - lip), 0.0, Vector2(1.0, -1.0))
 	draw_tiled(
@@ -138,8 +142,20 @@ static func draw_ladder(canvas: CanvasItem, rect: Rect2, tiles: ActTiles = null)
 	draw_tiled(canvas, _slot(tiles, "climb_tiles", LADDER_TILES), rect, UNSHADED)
 
 
+## Wood's grain runs along it, so a post or a trunk taller than it is wide is
+## drawn turned a quarter, rather than as a stack of short planks.
 static func draw_wood(canvas: CanvasItem, rect: Rect2, tiles: ActTiles = null) -> void:
-	draw_tiled(canvas, _slot(tiles, "wood_tiles", WOOD_TILES), rect, UNSHADED)
+	var textures := _slot(tiles, "wood_tiles", WOOD_TILES)
+	if rect.size.y <= rect.size.x:
+		draw_tiled(canvas, textures, rect, UNSHADED)
+		return
+	# Turned a quarter clockwise, (u, v) lands at (-v, u): this rect, in the
+	# turned frame, covers `rect` exactly.
+	canvas.draw_set_transform(Vector2.ZERO, PI * 0.5)
+	draw_tiled(
+		canvas, textures, Rect2(rect.position.y, -rect.end.x, rect.size.y, rect.size.x), UNSHADED
+	)
+	canvas.draw_set_transform(Vector2.ZERO)
 
 
 ## A chain hanging from a shackle at `top`, down to `bottom`, centred on `x`.

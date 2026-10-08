@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3]
+[gd_scene load_steps=13 format=3]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_player"]
 [ext_resource type="Resource" path="res://config/movement.tres" id="2_climb"]
@@ -8,6 +8,8 @@
 [ext_resource type="Resource" path="res://config/death.tres" id="7_death_config"]
 [ext_resource type="PackedScene" path="res://scenes/sword.tscn" id="6_sword_scene"]
 [ext_resource type="Script" path="res://scripts/sword_counter.gd" id="8_counter"]
+[ext_resource type="Script" path="res://scripts/hero_camera.gd" id="9_camera"]
+[ext_resource type="Resource" path="res://config/camera.tres" id="10_camera_config"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_body"]
 radius = 9.0
@@ -58,5 +60,5 @@ script = ExtResource("8_counter")
 volume_db = -6.0
 
 [node name="Camera2D" type="Camera2D" parent="."]
-position_smoothing_enabled = true
-position_smoothing_speed = 8.0
+script = ExtResource("9_camera")
+config = ExtResource("10_camera_config")

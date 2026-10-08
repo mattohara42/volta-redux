@@ -22,6 +22,7 @@
 script = ExtResource("1")
 floor_tiles = Array[Texture2D]([ExtResource("2"), ExtResource("3"), ExtResource("4"), ExtResource("5")])
 wall_tiles = Array[Texture2D]([ExtResource("6"), ExtResource("7"), ExtResource("8"), ExtResource("9"), ExtResource("10"), ExtResource("11")])
+lintel = false
 face_tiles = Array[Texture2D]([ExtResource("bark")])
 wood_tiles = Array[Texture2D]([ExtResource("12")])
 climb_tiles = Array[Texture2D]([ExtResource("13")])
