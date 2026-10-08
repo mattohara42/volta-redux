@@ -27,6 +27,11 @@ var phase: PlatformCycle.Phase = PlatformCycle.Phase.STEADY
 var _drop: float = 0.0
 ## Seconds since something stood on it, or -1 when nothing has.
 var _elapsed: float = -1.0
+## How many landings it takes before the one that arms it. Zero for an
+## ordinary slab; a level sets it (`slab holds=1`).
+var holds := 0
+## Landings since it was last at rest, the arming one included.
+var _landings := 0
 
 
 ## Built in code rather than handed a scene, like every other mechanism in the
@@ -91,6 +96,12 @@ func _physics_process(delta: float) -> void:
 func _on_body_entered(body: Node2D) -> void:
 	if _elapsed >= 0.0 or (body as Player) == null:
 		return
+	_landings += 1
+	if not PlatformCycle.arms_on(_landings, holds):
+		# It holds this time, and says so: grit and a creak, no shake.
+		Burst.emit(get_parent(), global_position, Burst.Kind.DEBRIS)
+		Sfx.play(self, Sfx.CONFIG.crumble, true)
+		return
 	_elapsed = 0.0
 	queue_redraw()
 
@@ -100,6 +111,7 @@ func _on_body_entered(body: Node2D) -> void:
 ## until somebody stands on it, so there is no freeze to sit out.
 func reset(_frozen_for: float) -> void:
 	_elapsed = -1.0
+	_landings = 0
 	phase = PlatformCycle.Phase.STEADY
 	if _shape != null:
 		_shape.set_deferred("disabled", false)

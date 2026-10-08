@@ -129,3 +129,12 @@ func test_the_real_numbers_make_a_platform_worth_standing_on() -> void:
 		) < 2.0,
 		"the whole cycle is under two seconds, so going back is a cost and not a queue"
 	)
+
+
+## N1: a slab that holds one landing creaks on the first and goes on the
+## second; an ordinary slab goes on the first.
+func test_a_slab_arms_on_the_landing_after_the_ones_it_holds() -> void:
+	check(PlatformCycle.arms_on(1, 0), "an ordinary slab arms on the first landing")
+	check(not PlatformCycle.arms_on(1, 1), "one that holds one creaks on the first")
+	check(PlatformCycle.arms_on(2, 1), "and goes on the second")
+	check(not PlatformCycle.arms_on(2, 2), "one that holds two holds the second too")

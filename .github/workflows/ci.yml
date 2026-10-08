@@ -57,9 +57,11 @@ jobs:
       - name: Every room can be walked back
         run: GODOT=~/godot/godot tools/dev.sh walkback
 
-      # N1's bench is in no act, so the walk above does not reach it.
-      - name: The N1 bench can be walked back
-        run: GODOT=~/godot/godot tools/dev.sh walkback res://scenes/rooms/bench_n1.tscn
+      # N1's benches are in no act, so the walk above does not reach them.
+      - name: The N1 benches can be walked back
+        run: |
+          GODOT=~/godot/godot tools/dev.sh walkback res://scenes/rooms/bench_n1.tscn
+          GODOT=~/godot/godot tools/dev.sh walkback res://scenes/rooms/bench_n1_found.tscn
 
       # An assertion proves the code ran, not that the picture is right.
       # tools/scenarios_data.py carries the 28 capture-and-check scenarios
