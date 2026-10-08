@@ -5,7 +5,7 @@
 
 **Updated:** 2026-10-08 · **Phase:** 3 rebuilt, depth before breadth.
 **Active milestone:** N1, everything built is placeable (`BUILD_PLAN.md`).
-N0 is built and waits only on Matt (below).
+N0 and N1 are both built and wait only on Matt (below).
 **N1 done-when:** each new level-file entry has a parser test and a bench
 that passes walkback, route and scenarios, and Matt has played the benches
 (F2) and said which combinations are worth building beats around. Then N2
@@ -25,20 +25,18 @@ one N3 rebuilds). Acts 2 to 4 are still the old one-screen rooms.
 
 ## The next action
 
-**N1's entries are all placeable**: `plate`, `lift`, `geyser`, `ant`,
-`eyeball`, a gate that needs every switch or plate wired to it, `slab
-holds=1` (drops the second time) and `sword` (lying to be found; a death
-takes it back, `LEVELS.md` ruling 5). A sword that kills is lost wherever it
-was, except a recalled one (`SPEC.md`: a recall cannot fail). Benches:
-`bench_n1` and `bench_n1_found` (F2). **Next**: the combination benches (a
-recall kill line through a wall, a ledge thrown from a ladder, a sword
-dropped onto a plate, a throw from a falling slab), each with a scenario.
+**N1 is built.** Every entry is placeable (`LevelGrid`'s header lists them)
+and the combinations each have a section and scenarios in `bench_n1_combos`:
+a ledge thrown from a ladder, a sword dropped onto a plate by a missed
+catch, a throw from a falling slab, a recall kill line. The walk-back model
+now lets the hero throw and jump from a ladder's rungs. **Next for Claude**:
+N2, the minimum look, which can run alongside Matt's answers.
 
 ## Blocked on Matt
 
 1. **Approve *How a level is built*** (`SPEC.md`), or mark it up. Blocks N0.
-   **Play the N1 benches** (`bench_n1`, `bench_n1_found`, F2) when
-   convenient; the combination benches come next.
+   **Play the N1 benches** (`bench_n1`, `bench_n1_found`, `bench_n1_combos`,
+   F2) and say which combinations are worth building beats around. Closes N1.
 2. **Play the look-ahead camera** (`config/camera.tres`: 64 px ahead, swings
    at 160 px/s, holds below 20 px/s so a turn on the spot to throw does not
    move the view). Its feel closes N0. A look down while falling is not built.
@@ -74,7 +72,10 @@ real run**: `godot --path . <scene> --write-movie out/f.png --fixed-fps 30
 --quit-after N` writes frames and the game's own mix as a WAV. **Only a
 plain launch touches the save; `--script` never does.**
 
-**A bat's box is where it can kill you**: put it across the line a throw
+**A ladder with nothing at its top makes the hero bob there**, climbing off
+and regrabbing, and a jump pressed mid-bob does nothing: a scenario jumps
+from a steady grip a little lower. **A missed return falls with its
+homeward speed** and lands about 140 px past the hero. **A bat's box is where it can kill you**: put it across the line a throw
 takes from outside it, or it cannot be fought. **A scorpion is only a sword
 fight in a tunnel**: the throw is flat at 18 px and it is 34 px tall, so a
 step before it means the top or nothing, and in the open you jump it. **Walk-back's "exit out of

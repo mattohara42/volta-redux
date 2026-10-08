@@ -404,12 +404,14 @@ SCENARIOS: list[dict] = [
 		],
 	},
 	{
-		"name": "Leave a sword on the plate and walk away",
+		"name": "Leave a sword on the plate from the ladder",
 		"scene": "res://scenes/rooms/room_m4_plate.tscn",
 		"out": "room_m4_plate_sword.png",
 		"input": (
-			"move_right:65;move_left:2;-:5;throw:6;-:5;climb_up:80;climb_up,move_right:20;"
-			"climb_up,move_left:20;-:30"
+			# Stays up the ladder, so it is the sword and not the hero's own
+			# weight on the plate. A missed return that arrives exactly over
+			# the hero falls rather than hanging there (N1).
+			"move_right:65;move_left:2;-:5;throw:6;-:5;climb_up:80;-:30"
 		),
 		"zoom": 1.0,
 		"centre": (250, 260),
@@ -1284,7 +1286,7 @@ SCENARIOS: list[dict] = [
 		"zoom": 2.0,
 		"centre": (330, 260),
 		"checks": [
-			{"type": "contains", "pattern": "plate at (272.0, 324.0) HELD",
+			{"type": "contains", "pattern": "plate at (272.0, 316.0) HELD",
 				"message": "the hero's weight should hold the plate"},
 			{"type": "contains_regex", "pattern": r"gate at \(424\.0, [0-9.]+\) OPEN",
 				"message": "and the gate it opens should be open"},
@@ -1295,11 +1297,11 @@ SCENARIOS: list[dict] = [
 		"scene": "res://scenes/rooms/bench_n1.tscn",
 		"out": "bench_n1_plate_off.png",
 		"at": (250, 320),
-		"input": "-:30;move_right:24;-:30",
+		"input": "-:30;move_right:30;-:30",
 		"zoom": 2.0,
 		"centre": (330, 260),
 		"checks": [
-			{"type": "contains", "pattern": "plate at (272.0, 324.0) free",
+			{"type": "contains", "pattern": "plate at (272.0, 316.0) free",
 				"message": "nothing should be on the plate"},
 			{"type": "contains_regex", "pattern": r"gate at \(424\.0, [0-9.]+\) SHUT",
 				"message": "so the gate should be shut again"},
@@ -1486,6 +1488,114 @@ SCENARIOS: list[dict] = [
 				"message": "the ant should have died on the sword in its hollow"},
 			{"type": "not_contains", "pattern": "sword grounded at (920.0",
 				"message": "and the sword should be lost with it"},
+		],
+	},
+	{
+		"name": "N1 combos: from the top of the ladder, no jump reaches the wall's top",
+		"scene": "res://scenes/rooms/bench_n1_combos.tscn",
+		"out": "bench_n1_ladder_short.png",
+		"at": (216, 320),
+		"input": "climb_up:150;climb_up,move_right,jump:14;move_right:20;-:20",
+		"zoom": 1.5,
+		"centre": (250, 180),
+		"checks": [
+			{"type": "player_position", "min_y": 200,
+				"message": "without a sword in the wall, the hero should end up back on the floor"},
+		],
+	},
+	{
+		"name": "N1 combos: a sword thrown from the ladder is the step onto the wall",
+		"scene": "res://scenes/rooms/bench_n1_combos.tscn",
+		"out": "bench_n1_ladder_ledge.png",
+		"at": (216, 320),
+		"input": (
+			"climb_up:150;climb_up,throw:4;climb_down:20;-:4;jump:2;jump,move_right:8;jump:10;-:20;"
+			"move_right,jump:14;move_right:6;-:20"
+		),
+		"zoom": 1.5,
+		"centre": (260, 110),
+		"checks": [
+			{"type": "contains", "pattern": "sword embedded at (248.0",
+				"message": "the throw from the ladder should stick in the wall"},
+			{"type": "player_position", "min_x": 250, "max_y": 40,
+				"message": "and the hero should be on the wall's top, from the sword"},
+		],
+	},
+	{
+		"name": "N1 combos: a catch missed from the ladder drops the sword onto the plate",
+		"scene": "res://scenes/rooms/bench_n1_combos.tscn",
+		"out": "bench_n1_plate_drop.png",
+		"at": (584, 320),
+		"input": "climb_up:100;-:4;throw:4;climb_down:100;-:60",
+		"zoom": 1.2,
+		"centre": (600, 220),
+		"checks": [
+			{"type": "contains_regex", "pattern": r"sword grounded at \((3[89]\d|4\d\d|5[0-3]\d)\.",
+				"message": "the missed sword should lie on the plate"},
+			{"type": "contains", "pattern": "plate at (464.0, 316.0) HELD",
+				"message": "and hold it down"},
+			{"type": "contains_regex", "pattern": r"gate at \(840\.0, [0-9.]+\) OPEN",
+				"message": "so the gate should be open"},
+		],
+	},
+	{
+		"name": "N1 combos: a throw from the last falling slab sticks in the wall",
+		"scene": "res://scenes/rooms/bench_n1_combos.tscn",
+		"out": "bench_n1_slab_throw.png",
+		"at": (850, 320),
+		"input": "move_right:10;move_right,jump:14;move_right:8;-:4;move_right,jump:14;move_right:2;-:12;move_right,jump:14;move_right:8;-:10;throw:4;-:12",
+		"zoom": 1.2,
+		"centre": (1100, 260),
+		"checks": [
+			{"type": "contains", "pattern": "sword embedded at (1208.0",
+				"message": "the throw from the slab should stick in the wall's face"},
+			{"type": "contains", "pattern": "capture: no deaths",
+				"message": "with the hero still on the slab"},
+		],
+	},
+	{
+		"name": "N1 combos: from that sword, onto the wall's top before the slab goes",
+		"scene": "res://scenes/rooms/bench_n1_combos.tscn",
+		"out": "bench_n1_slab_over.png",
+		"at": (850, 320),
+		"input": "move_right:10;move_right,jump:14;move_right:8;-:4;move_right,jump:14;move_right:2;-:12;move_right,jump:14;move_right:8;-:10;throw:4;move_right,jump:14;move_right:2;-:16;move_right,jump:14;move_right:6;-:20",
+		"zoom": 1.2,
+		"centre": (1180, 260),
+		"checks": [
+			{"type": "player_position", "min_x": 1216, "max_y": 245,
+				"message": "the hero should be on the wall's top"},
+			{"type": "contains", "pattern": "capture: no deaths",
+				"message": "and alive"},
+		],
+	},
+	{
+		"name": "N1 combos: a flat throw passes under the bat",
+		"scene": "res://scenes/rooms/bench_n1_combos.tscn",
+		"out": "bench_n1_recall_setup.png",
+		"at": (1560, 320),
+		"input": "-:10;throw:4;-:20",
+		"zoom": 1.5,
+		"centre": (1600, 240),
+		"checks": [
+			{"type": "contains", "pattern": "sword embedded at (1688.0",
+				"message": "the throw should stick in the post"},
+			{"type": "contains", "pattern": "bat alive",
+				"message": "passing under the bat"},
+		],
+	},
+	{
+		"name": "N1 combos: recalled from up the ladder, the line home runs through the bat",
+		"scene": "res://scenes/rooms/bench_n1_combos.tscn",
+		"out": "bench_n1_recall_kill.png",
+		"at": (1560, 320),
+		"input": "-:10;throw:4;-:20;move_left:30;climb_up:120;-:2;throw:40;-:30",
+		"zoom": 1.2,
+		"centre": (1580, 220),
+		"checks": [
+			{"type": "not_contains", "pattern": "bat alive",
+				"message": "the recall should have killed the bat"},
+			{"type": "contains", "pattern": "3 sword(s) held",
+				"message": "and come home: a recall cannot fail"},
 		],
 	},
 ]

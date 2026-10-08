@@ -75,7 +75,7 @@ func test_overshoot_is_a_sign_change_and_not_a_position() -> void:
 	check(not SwordFlight.has_overshot(12.0, 4.0), "still closing")
 	check(not SwordFlight.has_overshot(-12.0, -4.0), "still closing, other side")
 	check(not SwordFlight.has_overshot(0.0, -4.0), "landing exactly on you is not a miss")
-	check(not SwordFlight.has_overshot(4.0, 0.0), "nor is arriving exactly on you")
+	check(SwordFlight.has_overshot(4.0, 0.0), "arriving exactly on your x uncaught is: the catch is checked first")
 
 
 func test_the_return_always_steers_at_full_speed_toward_you() -> void:

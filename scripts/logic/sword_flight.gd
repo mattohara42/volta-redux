@@ -138,9 +138,15 @@ static func return_spent(return_distance: float, max_return_distance: float) -> 
 
 ## The sword steers in x only, so passing the player's x without catching is the
 ## miss. Compared as signs rather than positions because the player is moving.
+##
+## Arriving exactly on your x counts too. The catch is checked first, so a
+## sword that gets here uncaught is above or below you, and with nothing left
+## to steer toward it would otherwise hang in the air until you moved.
 static func has_overshot(offset_before: float, offset_after: float) -> bool:
-	if is_zero_approx(offset_before) or is_zero_approx(offset_after):
+	if is_zero_approx(offset_before):
 		return false
+	if is_zero_approx(offset_after):
+		return true
 	return signf(offset_before) != signf(offset_after)
 
 

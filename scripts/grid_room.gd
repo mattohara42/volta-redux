@@ -32,9 +32,10 @@ var _loose := {}
 var _tiles: ActTiles
 
 
-## A plate marked on the air above a floor sits in the top of that floor.
+## A plate marked on the air above a floor lies on that floor, as the
+## hand-built plate rooms have it, so a sword lying there is on it.
 static func plate_rect(cells: Rect2) -> Rect2:
-	return Rect2(cells.position.x, cells.end.y, cells.size.x, PLATE_DEPTH)
+	return Rect2(cells.position.x, cells.end.y - PLATE_DEPTH, cells.size.x, PLATE_DEPTH)
 
 
 ## An ant marked on the air of a hollow walks its inside faces, so its

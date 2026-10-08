@@ -76,6 +76,19 @@ func test_a_sword_ledge_goes_forward_and_never_home() -> void:
 	check(not WalkBack.check(layout, _moves()).exit_reached, "stone gives no ledge, so the exit is out of reach")
 
 
+## N1: a hero can stop on a ladder, throw from it and jump off it. A wooden
+## wall too tall for any ledge thrown from the floor is crossed by one thrown
+## from the top of a ladder beside it.
+func test_a_sword_thrown_from_a_ladder_is_a_ledge() -> void:
+	var layout := _stepped(0.0)
+	var wall := Rect2(300.0, 80.0, 24.0, FLOOR - 80.0)
+	layout.solids.append(wall)
+	layout.embeddable = [wall]
+	check(not WalkBack.check(layout, _moves()).exit_reached, "from the floor, no ledge reaches the top")
+	layout.ladders = [Rect2(276.0, 144.0, 16.0, FLOOR - 144.0)]
+	check(WalkBack.check(layout, _moves()).exit_reached, "from the ladder's top, one does")
+
+
 ## A stump on the lower level that puts you back on the upper one is the way
 ## home a drop needs; the warp only runs one way, so it is no way down.
 func test_a_stump_warp_is_a_way_back_one_way() -> void:
