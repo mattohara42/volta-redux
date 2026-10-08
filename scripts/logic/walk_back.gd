@@ -30,6 +30,8 @@ const MAX_AIR: float = 3.0
 const SPEEDS: Array[float] = [1.0, 0.55, 0.25, 0.0]
 ## How far a ladder may sit from a surface's end and still serve it, px.
 const LADDER_SLACK: float = 4.0
+## How far apart the places to stop on a ladder are, px: a grid cell.
+const RUNG_PITCH: float = 16.0
 ## How many rounds of sword ledges thrown from ledges.
 const LEDGE_ROUNDS: int = 3
 
@@ -92,6 +94,7 @@ static func check(layout: Layout, moves: Moves) -> Report:
 		standing.append(layout.ferries[f])
 		standing.append(Rect2(layout.ferries[f].position + layout.ferry_travel[f], layout.ferries[f].size))
 	var base := surfaces_of(standing, layout.deadly, moves.hero_height)
+	base.append_array(rungs_of(layout.ladders))
 	report.surfaces = base
 	var start := _surface_under(base, layout.start)
 	report.start_found = start >= 0
@@ -138,6 +141,21 @@ static func surfaces_of(solids: Array[Rect2], deadly: Array[Rect2], hero_height:
 			if piece.y - piece.x >= 1.0:
 				spans.append(Rect2(piece.x, y, piece.y - piece.x, 0.0))
 	return _join(spans)
+
+
+## Somewhere to be on each ladder, every `RUNG_PITCH` from its top down to
+## just above its foot, as wide as the ladder. The hero can stop on a ladder,
+## throw from it and jump off it (`Player`), so a rung is a surface like any
+## other to every move here. Climbing joins it to whatever its ladder serves
+## (`_ladders`).
+static func rungs_of(ladders: Array[Rect2]) -> Array[Rect2]:
+	var rungs: Array[Rect2] = []
+	for ladder in ladders:
+		var y := ladder.position.y
+		while y < ladder.end.y - 0.5:
+			rungs.append(Rect2(ladder.position.x, y, ladder.size.x, 0.0))
+			y += RUNG_PITCH
+	return rungs
 
 
 ## The sword ledges a throw can make: from anywhere on a surface, left or

@@ -34,7 +34,7 @@
 ##     bat                      flies about the rect it fills
 ##     stump to=U               land on it, come up on stump U (one way)
 ##     stump                    a stump that leads nowhere, or a warp's end
-##     plate opens=G            set into the floor under it; weight holds it
+##     plate opens=G            lying on the floor under it; weight holds it
 ##     lift travel=0,-6         a platform at its near end, going this many
 ##                              cells and back on its own clock
 ##     geyser                   a shaft: the jet comes out of its floor and

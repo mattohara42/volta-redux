@@ -62,6 +62,7 @@ jobs:
         run: |
           GODOT=~/godot/godot tools/dev.sh walkback res://scenes/rooms/bench_n1.tscn
           GODOT=~/godot/godot tools/dev.sh walkback res://scenes/rooms/bench_n1_found.tscn
+          GODOT=~/godot/godot tools/dev.sh walkback res://scenes/rooms/bench_n1_combos.tscn
 
       # An assertion proves the code ran, not that the picture is right.
       # tools/scenarios_data.py carries the 28 capture-and-check scenarios

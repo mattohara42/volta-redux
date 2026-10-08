@@ -156,8 +156,8 @@ func test_each_new_kind_is_read_with_its_rect_and_parameters() -> void:
 
 func test_the_room_turns_cells_into_what_it_builds() -> void:
 	var level := LevelGrid.parse(PLACEABLE)
-	check_eq(GridRoom.plate_rect(level.thing("P").rect), Rect2(112.0, 80.0, 32.0, 8.0),
-		"a plate is set into the top of the floor under its cells")
+	check_eq(GridRoom.plate_rect(level.thing("P").rect), Rect2(112.0, 72.0, 32.0, 8.0),
+		"a plate lies on the floor under its cells")
 	check_eq(GridRoom.ant_track(level.thing("A").rect, Vector2(22.0, 16.0)), Rect2(24.0, 24.0, 48.0, 48.0),
 		"an ant's centre walks half its body in from each face")
 	check_eq(GridRoom.lift_travel(level.thing("L"), level.cell), Vector2(64.0, -32.0),
