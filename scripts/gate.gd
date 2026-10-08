@@ -53,6 +53,9 @@ func _process(delta: float) -> void:
 	if not _settled:
 		_settled = true
 		_drop = target
+		# A gate opened before this first frame (a hero placed on its plate)
+		# was last drawn dropped: without this it stays drawn that way.
+		queue_redraw()
 		return
 	if is_equal_approx(_drop, target):
 		return

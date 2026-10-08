@@ -12,6 +12,11 @@ extends Bench
 ## the hand-written rooms use. A `[things]` line can set its own with `size=`.
 const SCORPION_SIZE := Vector2(30.0, 34.0)
 const BAT_SIZE := Vector2(20.0, 14.0)
+const ANT_SIZE := Vector2(22.0, 16.0)
+const EYEBALL_SIZE := Vector2(24.0, 24.0)
+## How deep a floor plate sits in the floor it is set into, as the
+## hand-written plate rooms have it.
+const PLATE_DEPTH: float = 8.0
 
 @export_file("*.level") var level_file: String
 ## The level's own art, if it is not its act's (the forest is Act 1 and is not
@@ -23,6 +28,25 @@ var level: LevelGrid.Level
 var switches := {}
 var gates := {}
 var _tiles: ActTiles
+
+
+## A plate marked on the air above a floor sits in the top of that floor.
+static func plate_rect(cells: Rect2) -> Rect2:
+	return Rect2(cells.position.x, cells.end.y, cells.size.x, PLATE_DEPTH)
+
+
+## An ant marked on the air of a hollow walks its inside faces, so its
+## centre's loop is the hollow pulled in by half its body.
+static func ant_track(cells: Rect2, size: Vector2) -> Rect2:
+	return cells.grow(-size.y * 0.5)
+
+
+## A lift's `travel=x,y` is in cells; the platform needs px.
+static func lift_travel(t: LevelGrid.Thing, cell: float) -> Vector2:
+	var parts := String(t.params.get("travel", "0,0")).split(",")
+	if parts.size() != 2:
+		return Vector2.ZERO
+	return Vector2(float(parts[0]), float(parts[1])) * cell
 
 
 ## The level a room's file describes, read the way the room reads it, for the
@@ -84,20 +108,37 @@ func _build() -> void:
 	_build_things()
 
 
-## Things that come in pairs are wired here: a switch names the gate it opens.
+## Things that come in pairs are wired here: a switch or a plate names the
+## gate it opens, and a gate with more than one opens only while all of them
+## are held.
 func _build_things() -> void:
 	for t in level.of_kind("gate"):
 		var gate := _add_gate(t.rect)
 		gate.art = TileArt.PORTCULLIS_TILE
 		gates[t.anchor] = gate
+	var openers := {}
 	for t in level.of_kind("switch"):
 		var switch := _add_switch(t.rect)
 		switches[t.anchor] = switch
-		var opens := String(t.params.get("opens", ""))
-		if gates.has(opens):
-			switch.held_changed.connect((gates[opens] as Gate).set_open)
-		else:
-			push_error("%s: switch '%s' opens no gate ('%s')" % [level_file, t.anchor, opens])
+		_wire_opener(t, switch, openers)
+	for t in level.of_kind("plate"):
+		_wire_opener(t, _add_plate(plate_rect(t.rect)), openers)
+	for opens: String in openers:
+		var held: Array = openers[opens]
+		var gate: Gate = gates[opens]
+		for opener: Node in held:
+			opener.held_changed.connect(func(_is_held: bool) -> void:
+				gate.set_open(held.all(func(o: Node) -> bool: return o.is_held)))
+	for t in level.of_kind("lift"):
+		_add_moving_platform(t.rect, lift_travel(t, level.cell))
+	for t in level.of_kind("geyser"):
+		_add_geyser(t.rect)
+	for t in level.of_kind("ant"):
+		var size := t.size("size", ANT_SIZE)
+		_add_ant(size, ant_track(t.rect, size))
+	for t in level.of_kind("eyeball"):
+		var size := t.size("size", EYEBALL_SIZE)
+		_add_eyeball(Rect2(t.rect.get_center() - size * 0.5, size), t.rect)
 	for t in level.of_kind("scorpion"):
 		var size := t.size("size", SCORPION_SIZE)
 		var base := Vector2(t.rect.get_center().x, t.rect.end.y)
@@ -122,6 +163,16 @@ func _build_things() -> void:
 
 func _art(act: ActConfig) -> ActTiles:
 	return tiles if tiles != null else act.tiles
+
+
+func _wire_opener(t: LevelGrid.Thing, opener: Node, openers: Dictionary) -> void:
+	var opens := String(t.params.get("opens", ""))
+	if not gates.has(opens):
+		push_error("%s: %s '%s' opens no gate ('%s')" % [level_file, t.kind, t.anchor, opens])
+		return
+	if not openers.has(opens):
+		openers[opens] = []
+	openers[opens].append(opener)
 
 
 ## For a room to add what the map cannot say. Runs after the map is built.
