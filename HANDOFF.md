@@ -3,9 +3,9 @@
 > **Rewrite this file, never append.** State snapshot and pointers only. No
 > session narrative, that is what `git log` is for. Keep it under 150 lines.
 
-**Updated:** 2026-10-08 · **Phase:** 3 rebuilt, depth before breadth.
+**Updated:** 2026-10-12 · **Phase:** 3 rebuilt, depth before breadth.
 **Active milestone:** N1, everything built is placeable (`BUILD_PLAN.md`).
-N0 and N1 are both built and wait only on Matt (below).
+N0, N1 and N2 are built and wait only on Matt (below).
 **N1 done-when:** each new level-file entry has a parser test and a bench
 that passes walkback, route and scenarios, and Matt has played the benches
 (F2) and said which combinations are worth building beats around. Then N2
@@ -25,29 +25,34 @@ one N3 rebuilds). Acts 2 to 4 are still the old one-screen rooms.
 
 ## The next action
 
-**N1 is built.** Every entry is placeable (`LevelGrid`'s header lists them)
-and the combinations each have a section and scenarios in `bench_n1_combos`:
-a ledge thrown from a ladder, a sword dropped onto a plate by a missed
-catch, a throw from a falling slab, a recall kill line. The walk-back model
-now lets the hero throw and jump from a ladder's rungs. **Next for Claude**:
-N2, the minimum look, which can run alongside Matt's answers.
+**N2, the minimum look, is built.** A grid level's still parts are drawn
+once into textures (`LevelBake`); solid interiors fall into the art set's
+coloured dark by depth (`TileShape`); open sides get an edge and ground you
+walk under a lintel; levels gain `[back]` and `[decor]` grids, the second
+written by rule (`tools/dev.sh decorate`, `DecorRules`). Both Act 1 levels
+have both. Before and after shots and frame times are in the N2 PR. **Next
+for Claude**: whatever Matt's answers to 1 to 4 below open; N3 needs the
+beat sheet.
 
 ## Blocked on Matt
 
 1. **Approve *How a level is built*** (`SPEC.md`), or mark it up. Blocks N0.
    **Play the N1 benches** (`bench_n1`, `bench_n1_found`, `bench_n1_combos`,
    F2) and say which combinations are worth building beats around. Closes N1.
-2. **Play the look-ahead camera** (`config/camera.tres`: 64 px ahead, swings
+2. **Look at N2's after shots** (the PR) or play either Act 1 level: is a
+   shot natural-looking? That closes N2. The back walls, torches and trunks
+   are Claude's placements, easy to move in the level text.
+3. **Play the look-ahead camera** (`config/camera.tres`: 64 px ahead, swings
    at 160 px/s, holds below 20 px/s so a turn on the spot to throw does not
    move the view). Its feel closes N0. A look down while falling is not built.
-3. **Sketch the outer wall's beat sheet** in that format. Blocks N3. Playing
+4. **Sketch the outer wall's beat sheet** in that format. Blocks N3. Playing
    today's level 2 once first is cheap evidence of what to keep.
-4. **Paint the forest's background** in Gemini from the prompt in `ART.md`
+5. **Paint the forest's background** in Gemini from the prompt in `ART.md`
    (*The forest*), saved to `assets/art_raw/forest_bg.*`.
-5. **Frame time on a real machine**: `tools/dev.sh frametime`, then with
+6. **Frame time on a real machine**: `tools/dev.sh frametime`, then with
    `res://scenes/rooms/act1_forest.tscn` and `act1_wall.tscn`: p95 under
    16.7 ms? Blocks R3's frame-rate half.
-6. **Older and still open**: R2's final quality (the flame, the sword, the
+7. **Older and still open**: R2's final quality (the flame, the sword, the
    doors, the ride); `RoomM7Sheet` consistent in treatment (closes M7); the
    unattended calls from 2026-10-05; M4's dragon pacing; a play log (`user://`,
    #136) when one is to hand. Two rulings wait for N1: faster ladder
@@ -84,6 +89,8 @@ reach" means the level is blocked**: its drawing is full height now.
 **Sprite Fusion**: `style-reference` ignores `size`, `animate` starts on the
 input's pose, frames can boil (filmstrip first), an SSL EOF charges nothing.
 **A test can pass while a texture is missing**: shoot the room after art.
+**A grid level's look is baked at load**: a change to its art or its text
+shows only on a fresh load, and headless draws nothing, so shoot it.
 
 ## Settled, do not relitigate
 

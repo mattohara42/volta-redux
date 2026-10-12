@@ -52,6 +52,7 @@ tools/dev.sh play                                # the game, from where you left
 tools/dev.sh test                                # headless assertions
 tools/dev.sh walkback [filter]                   # can every room be walked back?
 tools/dev.sh frametime [scene]                   # frame times, in a real build
+tools/dev.sh decorate LEVEL STYLE [--replace]    # a level's [decor], by rule
 ```
 
 `walkback` loads each room and reasons about it with `WalkBack`
@@ -85,6 +86,26 @@ is at the top of `scripts/logic/level_grid.gd`. A scene whose script is
 `levels/act1_wall.level` one with a script of its own (`Act1Wall`) for what
 the map cannot say. A scenario can start
 partway through a big level with `"at": (x, y)` (`capture.gd --at=x,y`).
+
+Two more grids over the same cells change how a level looks and nothing about
+how it plays. `[back]` is a wall behind the hero, never solid: `#` the art
+set's fill, `%` its face, `w` its wood. `[decor]` is one decoration a cell:
+battlements (`n`), torches (`t`), chains (`c`), grass tufts (`,`) and roots
+(`'`). Decoration is placed by rule and then edited by hand like the rest of
+the file:
+
+```
+tools/dev.sh decorate levels/act1_wall.level castle            # writes [decor]
+tools/dev.sh decorate levels/act1_wall.level castle --replace  # writes over it
+```
+
+It refuses a level that already has a `[decor]` section unless you pass
+`--replace`, since that throws away hand edits. Run it again after the map or
+the `[back]` changes. The rules are `scripts/logic/decor_rules.gd`.
+
+A grid level's still parts (back wall, stone, edges, the dark its interiors
+fall into, decoration) are drawn once when it loads, into textures
+(`LevelBake`), not every frame.
 
 ### A playthrough, step by step
 

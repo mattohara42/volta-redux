@@ -54,12 +54,27 @@
 ## Every placement stands on the bottom of its cell: a brazier, a chest, the
 ## hero's feet and the exit all sit on whatever is below. A ladder's top is the
 ## top of its highest `H`, which is the surface it serves.
+##
+## Two more grids may follow, laid over the same cells as `[map]` and no
+## bigger than it (N2, Matt 2026-10-07). Neither is solid and neither changes
+## what plays; both are how it looks, kept as text so they can be reviewed.
+##
+##     [back]    a wall behind the hero: `#` the set's fill (masonry,
+##               earth), `%` its face (castle face, bark), `w` its wood
+##     [decor]   one decoration per cell, written by `tools/dev.sh decorate`
+##               from rules or by hand (`DECOR`)
 class_name LevelGrid
 extends RefCounted
 
 const AIR := "."
 const MATERIALS := "#%&w~^="
 const MARKERS := "@BCEH"
+## What a `[back]` cell can be. Air is `.`, as in the map.
+const BACK := "#%w"
+## What a `[decor]` cell can be, and the kind each character is.
+const DECOR := {
+	"n": "battlement", "t": "torch", "c": "chain", ",": "tuft", "'": "root",
+}
 const KINDS: PackedStringArray = [
 	"gate", "switch", "plate", "scorpion", "bat", "stump", "lift", "geyser", "ant",
 	"eyeball", "slab", "sword", "sill", "cage",
@@ -115,7 +130,24 @@ class Level:
 	var chests: Array[Vector2] = []
 	var exit := Rect2()
 	var things: Array[Thing] = []
+	## The map itself, every row padded with air to the map's width, for what
+	## reads cells rather than rectangles (`TileShape`).
+	var rows: Array[String] = []
+	## The back wall, by `BACK` character, merged as a material is.
+	var back := {}
+	## The decoration, by kind (`DECOR`), each a list of cells.
+	var decor := {}
 	var errors: Array[String] = []
+
+	func back_rects(c: String) -> Array[Rect2]:
+		var found: Array[Rect2] = []
+		found.assign(back.get(c, []))
+		return found
+
+	func decor_cells(kind: String) -> Array[Vector2i]:
+		var found: Array[Vector2i] = []
+		found.assign(decor.get(kind, []))
+		return found
 
 	## Everything solid: ground, walls, castle stone and wood.
 	func solids() -> Array[Rect2]:
@@ -143,6 +175,8 @@ class Level:
 static func parse(text: String) -> Level:
 	var level := Level.new()
 	var rows: Array[String] = []
+	var back_rows: Array[String] = []
+	var decor_rows: Array[String] = []
 	var lines: Array[String] = []
 	var section := ""
 	for raw in text.split("\n"):
@@ -151,9 +185,10 @@ static func parse(text: String) -> Level:
 		if bare.begins_with("[") and bare.ends_with("]"):
 			section = bare
 			continue
-		if section == "[map]":
+		if section in ["[map]", "[back]", "[decor]"]:
 			if not bare.is_empty():
-				rows.append(line.replace(" ", AIR))
+				var grid: Array[String] = rows if section == "[map]" else back_rows if section == "[back]" else decor_rows
+				grid.append(line.replace(" ", AIR))
 			continue
 		if bare.is_empty() or bare.begins_with("#"):
 			continue
@@ -172,6 +207,10 @@ static func parse(text: String) -> Level:
 	level.size = Vector2(width, rows.size()) * level.cell
 	if level.height <= 0.0:
 		level.height = level.size.y
+	for row in rows:
+		level.rows.append(row.rpad(width, AIR))
+	_read_back(level, back_rows, width, rows.size())
+	_read_decor(level, decor_rows, width, rows.size())
 
 	var cells := {}
 	for y in rows.size():
@@ -246,6 +285,48 @@ static func parse(text: String) -> Level:
 		if level.thing(a) == null:
 			level.errors.append("anchor '%s' in the map has no line in [things]" % a)
 	return level
+
+
+static func _read_back(level: Level, grid: Array[String], width: int, height: int) -> void:
+	if not _fits(level, grid, width, height, "[back]"):
+		return
+	for y in grid.size():
+		for x in grid[y].length():
+			var c := grid[y][x]
+			if c != AIR and not BACK.contains(c):
+				level.errors.append("unknown [back] character '%s' at cell (%d, %d)" % [c, x, y])
+	for c in BACK:
+		var rects := _merged(grid, c, level.cell)
+		if not rects.is_empty():
+			level.back[c] = rects
+
+
+static func _read_decor(level: Level, grid: Array[String], width: int, height: int) -> void:
+	if not _fits(level, grid, width, height, "[decor]"):
+		return
+	for y in grid.size():
+		for x in grid[y].length():
+			var c := grid[y][x]
+			if c == AIR:
+				continue
+			if not DECOR.has(c):
+				level.errors.append("unknown [decor] character '%s' at cell (%d, %d)" % [c, x, y])
+				continue
+			var kind: String = DECOR[c]
+			if not level.decor.has(kind):
+				level.decor[kind] = []
+			level.decor[kind].append(Vector2i(x, y))
+
+
+## A grid laid over the map cannot reach past it.
+static func _fits(level: Level, grid: Array[String], width: int, height: int, name: String) -> bool:
+	var widest := 0
+	for row in grid:
+		widest = maxi(widest, row.length())
+	if grid.size() > height or widest > width:
+		level.errors.append("%s is %d by %d, bigger than the map's %d by %d" % [name, widest, grid.size(), width, height])
+		return false
+	return true
 
 
 ## Every cell of `c`, as few rectangles as a row-then-column merge makes:

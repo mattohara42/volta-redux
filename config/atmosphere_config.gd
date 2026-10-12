@@ -205,3 +205,16 @@ extends Resource
 ## to the light's colour.
 @export var rim_gain: float = 1.6
 @export_range(0.0, 1.0) var rim_max: float = 0.6
+
+
+@export_group("Ground")
+## How a level's solid interiors fall into the dark (N2, `TileShape.depths`).
+## A cell this many rings in from the air is the first to darken, so the ring
+## that touches the air, where the edges are, keeps its art whole.
+@export var ground_shade_from: float = 1.0
+## How many rings more until the dark is as deep as it goes.
+@export var ground_shade_span: float = 3.0
+## As deep as it goes: how far toward the set's `interior_dark`, 0 to 1.
+@export_range(0.0, 1.0) var ground_shade_most: float = 0.9
+## Bands between untouched and deepest, in the house dither.
+@export var ground_shade_steps: float = 4.0

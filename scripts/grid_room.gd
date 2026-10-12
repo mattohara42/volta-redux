@@ -17,6 +17,7 @@ const EYEBALL_SIZE := Vector2(24.0, 24.0)
 ## How deep a floor plate sits in the floor it is set into, as the
 ## hand-written plate rooms have it.
 const PLATE_DEPTH: float = 8.0
+const GROUND_SHADE: Shader = preload("res://shaders/ground_shade.gdshader")
 
 @export_file("*.level") var level_file: String
 ## The level's own art, if it is not its act's (the forest is Act 1 and is not
@@ -73,6 +74,7 @@ func _ready() -> void:
 		_tiles = tiles
 	_build()
 	_built()
+	_bake()
 	_add_enclosure(level.size.x)
 	_frame_camera(level.size.x)
 	queue_redraw()
@@ -167,6 +169,10 @@ func _build_things() -> void:
 		var stump := _add_stump(t.rect, to)
 		if _tiles != null and _tiles.stump_texture != null:
 			stump.art = _tiles.stump_texture
+	for at in level.decor_cells("torch"):
+		var torch := WallTorch.new()
+		torch.position = Vector2((at.x + 0.5) * level.cell, (at.y + 1) * level.cell)
+		add_child(torch)
 	for t in level.of_kind("bat"):
 		var size := t.size("size", BAT_SIZE)
 		_add_bat(Rect2(t.rect.get_center() - size * 0.5, size), t.rect.size * 0.5)
@@ -218,29 +224,58 @@ func _built() -> void:
 	pass
 
 
+## The level's still parts, drawn once (`LevelBake`), behind every mechanism,
+## creature and light the room adds.
+func _bake() -> void:
+	var bake := LevelBake.new()
+	bake.name = "Bake"
+	bake.add_layer(_draw_level)
+	var shade := ShaderMaterial.new()
+	shade.shader = GROUND_SHADE
+	shade.set_shader_parameter("steps", ATMOSPHERE.ground_shade_steps)
+	var field := TileArt.shade_field(level, ATMOSPHERE, _tiles)
+	var cells := Rect2(Vector2.ZERO, Vector2(level.rows[0].length(), level.rows.size()) * level.cell)
+	bake.add_layer(func(canvas: CanvasItem) -> void: canvas.draw_texture_rect(field, cells, false), shade, CanvasItem.TEXTURE_FILTER_LINEAR)
+	bake.add_layer(_draw_finish)
+	add_child(bake)
+	move_child(bake, 0)
+	bake.build(Vector2(level.size.x, maxf(level.size.y, room_height)))
+
+
+## The painting stays the room's own drawing, behind the bake.
 func _draw() -> void:
 	TileArt.draw_background_across(self, level.size.x, _tiles, room_height)
-	_draw_under()
+	_draw_under(self)
+
+
+func _draw_level(canvas: CanvasItem) -> void:
+	TileArt.draw_back(canvas, level, _tiles)
 	for rect in level.ground_faces:
-		TileArt.draw_ground(self, rect, _tiles)
+		TileArt.draw_ground(canvas, rect, _tiles)
 	for rect in level.wall_faces:
-		TileArt.draw_wall(self, rect, _tiles)
+		TileArt.draw_wall(canvas, rect, _tiles)
 	for rect in level.castle_faces:
-		TileArt.draw_wall(self, rect)
+		TileArt.draw_wall(canvas, rect)
 	for rect in level.wood:
-		TileArt.draw_wood(self, rect, _tiles)
+		TileArt.draw_wood(canvas, rect, _tiles)
 	for ladder in _ladders:
-		TileArt.draw_ladder(self, ladder, _tiles)
+		TileArt.draw_ladder(canvas, ladder, _tiles)
 	for bed in _spike_beds:
-		TileArt.draw_spikes(self, bed, _tiles)
-	_draw_over()
+		TileArt.draw_spikes(canvas, bed, _tiles)
+
+
+## Over the dark of the interiors: the edges, then whatever a room adds.
+func _draw_finish(canvas: CanvasItem) -> void:
+	TileArt.draw_edges(canvas, level, _tiles)
+	TileArt.draw_decor(canvas, level, _tiles)
+	_draw_over(canvas)
 
 
 ## For a room to draw behind the level's stone (a window into the dark).
-func _draw_under() -> void:
+func _draw_under(_canvas: CanvasItem) -> void:
 	pass
 
 
-## For a room to draw over it (a chain on a face).
-func _draw_over() -> void:
+## For a room to draw over it, once, into the bake (a sill on a face).
+func _draw_over(_canvas: CanvasItem) -> void:
 	pass

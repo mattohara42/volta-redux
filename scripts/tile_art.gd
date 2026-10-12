@@ -28,6 +28,9 @@ const SHACKLE: Texture2D = preload("res://assets/art/act1/props/shackle.png")
 ## A cracked slab, cropped to the stone so its top row is the surface you land on.
 const CRUMBLE_TILE: Texture2D = preload("res://assets/art/act1/tiles_px/crumble.png")
 const UNSHADED: Array[Color] = [Color.WHITE]
+## How far down its tile the forest lip's grass starts: a tuft roots there,
+## in the grass, rather than standing on the tile's empty top rows.
+const TUFT_SINK: float = 3.0
 
 ## One floor tile's width, the unit a ledge's length is counted in so its art
 ## ends on a tile edge.
@@ -123,10 +126,15 @@ static func draw_wall(canvas: CanvasItem, rect: Rect2, tiles: ActTiles = null) -
 		var t := float(row) / float(maxi(rows - 1, 1))
 		shades.append(Palette.WALL_DARK.lerp(lit, t * t * t))
 	draw_tiled(canvas, faces, rect, shades)
-	# A lintel along the bottom: the floor's own lip, upside down, so the edge
-	# you walk under is finished the way the edge you walk on is. Only where
-	# the lip is masonry: the forest's is moss, and moss does not hang under a
-	# trunk.
+	draw_lintel(canvas, Rect2(rect.position.x, rect.end.y, rect.size.x, 0.0), tiles)
+
+
+## A lintel along the bottom of `rect` (its height is ignored): the floor's own
+## lip, upside down, so the edge you walk under is finished the way the edge
+## you walk on is. Only where the lip is masonry: the forest's is moss, and
+## moss does not hang under a trunk.
+static func draw_lintel(canvas: CanvasItem, rect: Rect2, tiles: ActTiles = null) -> void:
+	var set := _or_act1(tiles)
 	if not set.lintel:
 		return
 	var lip := set.floor_tiles[0].get_height()
@@ -213,6 +221,115 @@ static func draw_tiled(
 			x += tile.x
 		y += tile.y
 		row += 1
+
+
+## A level's back wall (`[back]`): the set's own fill, face and wood, shaded
+## to stand behind everything that can be touched.
+static func draw_back(canvas: CanvasItem, level: LevelGrid.Level, tiles: ActTiles = null) -> void:
+	var set := _or_act1(tiles)
+	var faces := set.face_tiles if not set.face_tiles.is_empty() else set.wall_tiles
+	var shade: Array[Color] = [Palette.BACK_SHADE]
+	for rect in level.back_rects("#"):
+		draw_tiled(canvas, set.wall_tiles, rect, shade)
+	for rect in level.back_rects("%"):
+		draw_tiled(canvas, faces, rect, shade)
+	for rect in level.back_rects("w"):
+		draw_tiled(canvas, _slot(tiles, "wood_tiles", WOOD_TILES), rect, shade)
+	# Its sides in the set's edge, so a trunk or a wall behind ends in a line
+	# as the stone in front does.
+	for c in LevelGrid.BACK:
+		for rect in level.back_rects(c):
+			canvas.draw_rect(Rect2(rect.position, Vector2(1.0, rect.size.y)), set.edge_dark)
+			canvas.draw_rect(Rect2(rect.end.x - 1.0, rect.position.y, 1.0, rect.size.y), set.edge_dark)
+
+
+## A line of the set's edge dark along every open side of the level's stone
+## (`TileShape`), so a block ends in an outline rather than in a cut through
+## its masonry. A ground cell's top is its lip and keeps it. Castle stone
+## (`&`) takes the castle's edge, whatever the level's set.
+static func draw_edges(canvas: CanvasItem, level: LevelGrid.Level, tiles: ActTiles = null) -> void:
+	var set := _or_act1(tiles)
+	var cell := level.cell
+	# Ground you walk under ends in a lintel, as a wall face does.
+	for y in level.rows.size():
+		var x := 0
+		var row := level.rows[y]
+		while x < row.length():
+			if row[x] != "#" or not TileShape.open_sides(level.rows, x, y) & TileShape.DOWN:
+				x += 1
+				continue
+			var start := x
+			while x < row.length() and row[x] == "#" and TileShape.open_sides(level.rows, x, y) & TileShape.DOWN:
+				x += 1
+			draw_lintel(canvas, Rect2(start * cell, y * cell, (x - start) * cell, cell), tiles)
+	for y in level.rows.size():
+		var row := level.rows[y]
+		for x in row.length():
+			var sides := TileShape.open_sides(level.rows, x, y)
+			if sides == 0:
+				continue
+			var edge := ACT1.edge_dark if row[x] == "&" else set.edge_dark
+			var at := Vector2(x, y) * cell
+			if sides & TileShape.LEFT:
+				canvas.draw_rect(Rect2(at, Vector2(1.0, cell)), edge)
+			if sides & TileShape.RIGHT:
+				canvas.draw_rect(Rect2(at + Vector2(cell - 1.0, 0.0), Vector2(1.0, cell)), edge)
+			if sides & TileShape.DOWN:
+				canvas.draw_rect(Rect2(at + Vector2(0.0, cell - 1.0), Vector2(cell, 1.0)), edge)
+			if sides & TileShape.UP and row[x] != "#":
+				canvas.draw_rect(Rect2(at, Vector2(cell, 1.0)), edge)
+
+
+## The level's `[decor]` that holds still (`DecorRules`): battlements on a
+## wall walk, chains from a ceiling, tufts on grass, roots under earth. A
+## torch flickers, so it is a `WallTorch` the room adds, not drawn here. A
+## decoration whose art the set does not have is left out rather than drawn
+## as something else.
+static func draw_decor(canvas: CanvasItem, level: LevelGrid.Level, tiles: ActTiles = null) -> void:
+	var cell := level.cell
+	for at in level.decor_cells("battlement"):
+		draw_battlements(canvas, at.x * cell, (at.y + 1) * cell, cell)
+	var chains := level.decor_cells("chain")
+	for at in chains:
+		if chains.has(at - Vector2i(0, 1)):
+			continue
+		var length := 1
+		while chains.has(at + Vector2i(0, length)):
+			length += 1
+		draw_chain(canvas, (at.x + 0.5) * cell, at.y * cell, (at.y + length) * cell, Palette.GROUND_SHADE[1])
+	var set := _or_act1(tiles)
+	for at in level.decor_cells("tuft"):
+		_draw_prop(canvas, set.tuft_tiles, at, Vector2((at.x + 0.5) * cell, (at.y + 1) * cell + TUFT_SINK), true)
+	for at in level.decor_cells("root"):
+		_draw_prop(canvas, set.root_tiles, at, Vector2((at.x + 0.5) * cell, at.y * cell), false)
+
+
+## One of `textures`, picked for the cell, centred on `anchor`: standing on it,
+## or hanging from it.
+static func _draw_prop(canvas: CanvasItem, textures: Array[Texture2D], cell: Vector2i, anchor: Vector2, stands: bool) -> void:
+	if textures.is_empty():
+		return
+	var texture := textures[TileVariety.pick(cell, textures.size())]
+	var size := texture.get_size()
+	var top := anchor.y - size.y if stands else anchor.y
+	canvas.draw_texture(texture, Vector2(roundf(anchor.x - size.x * 0.5), top))
+
+
+## How dark each cell of the level's stone goes, one texel a cell: its colour
+## the dark it falls into (the castle's for castle stone, the set's for the
+## rest), its alpha how far (`shaders/ground_shade.gdshader` steps it).
+static func shade_field(level: LevelGrid.Level, config: AtmosphereConfig, tiles: ActTiles = null) -> ImageTexture:
+	var own := _or_act1(tiles).interior_dark
+	var width := level.rows[0].length()
+	var height := level.rows.size()
+	var depths := TileShape.depths(level.rows)
+	var image := Image.create(width, height, false, Image.FORMAT_RGBA8)
+	for y in height:
+		for x in width:
+			var t := clampf((depths[y * width + x] - config.ground_shade_from) / config.ground_shade_span, 0.0, 1.0)
+			var dark := ACT1.interior_dark if level.rows[y][x] == "&" else own
+			image.set_pixel(x, y, Color(dark, t * config.ground_shade_most))
+	return ImageTexture.create_from_image(image)
 
 
 static func _or_act1(tiles: ActTiles) -> ActTiles:

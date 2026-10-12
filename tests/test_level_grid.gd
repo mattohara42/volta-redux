@@ -190,3 +190,48 @@ X slab holds=1
 	var q := level.thing("Q")
 	check_eq(GridRoom.lying_at(Vector2(q.rect.get_center().x, q.rect.end.y), 16.0), Vector2(24.0, 12.0),
 		"the sword lies on the floor of its cell, as a dropped one does")
+
+
+func test_a_back_wall_is_read_and_is_not_solid() -> void:
+	var level := LevelGrid.parse("""[map]
+......
+.@....
+######
+[back]
+.####.
+.#ww#.
+[things]
+""")
+	check_eq(level.errors.size(), 0, "reads cleanly: %s" % [level.errors])
+	check_eq(level.back_rects("#").size(), 3, "the stone round the planks, as rectangles")
+	check_eq(level.back_rects("w"), [Rect2(32.0, 16.0, 32.0, 16.0)] as Array[Rect2], "the planks")
+	check_eq(level.solids().size(), 1, "and only the map's floor is solid")
+
+
+func test_decoration_is_read_by_kind() -> void:
+	var level := LevelGrid.parse("""[map]
+....
+.@..
+####
+[decor]
+n..t
+.,,.
+""")
+	check_eq(level.errors.size(), 0, "reads cleanly: %s" % [level.errors])
+	check_eq(level.decor_cells("battlement"), [Vector2i(0, 0)] as Array[Vector2i], "a battlement")
+	check_eq(level.decor_cells("torch"), [Vector2i(3, 0)] as Array[Vector2i], "a torch")
+	check_eq(level.decor_cells("tuft").size(), 2, "two tufts")
+	check_eq(level.decor_cells("root").size(), 0, "and no roots")
+
+
+func test_the_map_rows_are_kept_padded() -> void:
+	var level := LevelGrid.parse("[map]\n..\n####\n")
+	check_eq(level.rows, ["....", "####"] as Array[String], "every row as wide as the widest")
+
+
+func test_a_layer_that_does_not_add_up_says_so() -> void:
+	var bigger := LevelGrid.parse("[map]\n..\n##\n[back]\n###\n")
+	check(bigger.errors.any(func(e: String) -> bool: return e.contains("bigger than the map")), "a back wall past the map")
+	var unknown := LevelGrid.parse("[map]\n..\n##\n[back]\n.~\n[decor]\nQ.\n")
+	check(unknown.errors.any(func(e: String) -> bool: return e.contains("[back] character '~'")), "lava is not a back wall")
+	check(unknown.errors.any(func(e: String) -> bool: return e.contains("[decor] character 'Q'")), "nor Q a decoration")

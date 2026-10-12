@@ -11,6 +11,7 @@
 #   tools/dev.sh route               every room's exit, in order, to the ending
 #   tools/dev.sh walkback [filter]   every room can be walked back to its start
 #   tools/dev.sh frametime [scene]   frame times in a real build (R3)
+#   tools/dev.sh decorate LEVEL STYLE [--replace]   a level's [decor], by rule (N2)
 #
 # CLAUDE.md: the destructive mode is the flag. `shot` does not pass
 # --overwrite, so replacing an existing image is something you ask for.
@@ -75,6 +76,9 @@ frametime)
 walkback)
 	"$GODOT_BIN" --headless --path . --script res://tools/walk_back_check.gd -- "${1:-}"
 	;;
+decorate)
+	"$GODOT_BIN" --headless --path . --script res://tools/decorate.gd -- "$@"
+	;;
 play)
 	if [[ $# -gt 0 ]]; then
 		"$GODOT_BIN" --path . "$1"
@@ -102,7 +106,7 @@ scenarios)
 	python3 tools/scenarios.py "$GODOT_BIN" "${1:-}"
 	;;
 *)
-	sed -n '3,11p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'
+	sed -n '3,12p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'
 	exit 2
 	;;
 esac

@@ -35,3 +35,18 @@ extends Resource
 @export var crumble_tile: Texture2D = null
 ## A stump (`Stump`), whole, at its rect's size. Null keeps it drawn in code.
 @export var stump_texture: Texture2D = null
+
+@export_group("Edges and depth (N2)")
+## The line drawn along a solid's open side and under it (`TileShape`): the
+## darkest outline already in the fill art, so an edge reads as the art's own.
+## A coloured dark (`ART_DIRECTION.md`), and `test_level_bake.gd` holds it to that.
+@export var edge_dark: Color = Color("20194f")
+## What a solid interior falls into, away from the air: the set's own dark,
+## violet-blue in stone, umber in earth.
+@export var interior_dark: Color = Color("1c1830")
+
+@export_group("Decoration (N2)")
+## What grows on the grass and hangs under the earth (`DecorRules`, forest).
+## Empty leaves the decoration out.
+@export var tuft_tiles: Array[Texture2D] = []
+@export var root_tiles: Array[Texture2D] = []
