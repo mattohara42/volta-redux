@@ -208,6 +208,16 @@ needed rather than optional, because the content is about to exist.
   not compete.
 - **Tunnel walls are masonry darkened upward.** A proper wall-face tile is M8
   work, and tall levels will need a lot more wall.
+- **N2's forest decoration is derived, not drawn** (`tools/derive-decor.py`):
+  tufts are the lip's grass grown taller, roots are the soil's roots let out.
+  Good enough to judge the rules by. A drawn set (tufts, roots, ferns,
+  fungus) is one or two Sprite Fusion requests, gated on Matt's approval.
+- **The forest's back trunks are flat bark columns**, darkened. They give the
+  canopy something to stand on until the forest's painting (`ART.md`, *The
+  forest*) exists; with a painting they may want to go.
+- **Torches come from the rules, so they follow the back wall.** Every
+  back-wall stretch at floor level gets one each ten cells. In the gatehouse
+  passage one hangs where the guard stands. Fine in a shot; play it.
 
 ## To judge by playing (M14)
 
@@ -240,6 +250,14 @@ needed rather than optional, because the content is about to exist.
   `tools/dev.sh play` only. An oversight.
 - **Quitting mid-track prints "resources still in use at exit".** Harmless
   noise in CI's log.
+- **The castle's floor tiles are 17 by 17 on a 16 px grid**
+  (`assets/art/act1/tiles_px/floor_top_*.png`). `TileArt.draw_tiled` steps
+  by the tile, so a lip's pattern drifts a pixel a cell against the cells
+  under it and the masonry below starts a pixel low. Invisible so far;
+  cropping to 16 is the fix, and it changes every castle shot.
+- **`GridRoom` levels bake; hand-written rooms still draw every frame.** Acts
+  2 to 4 are `Bench` rooms drawn in `_draw`. They move to the level format in
+  R4, and the bake comes with it.
 
 ## Deferred from v1 deliberately
 

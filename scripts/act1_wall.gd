@@ -173,9 +173,9 @@ func _snout() -> Vector2:
 	return Vector2(rect.end.x - DRAGON_SNOUT.x, rect.position.y + DRAGON_SNOUT.y)
 
 
-func _draw_over() -> void:
+func _draw_over(canvas: CanvasItem) -> void:
 	for t in level.of_kind("sill"):
-		TileArt.draw_ground(self, sill_rect(t.rect, t.number("height", 0.0)), _tiles)
+		TileArt.draw_ground(canvas, sill_rect(t.rect, t.number("height", 0.0)), _tiles)
 
 
 func _draw_live() -> void:

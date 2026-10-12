@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ActTiles" load_steps=18 format=3]
+[gd_resource type="Resource" script_class="ActTiles" load_steps=24 format=3]
 
 [ext_resource type="Script" path="res://scripts/act_tiles.gd" id="1"]
 [ext_resource type="Texture2D" path="res://assets/art/forest/tiles_px/bark.png" id="bark"]
@@ -18,6 +18,12 @@
 [ext_resource type="Texture2D" path="res://assets/art/forest/tiles_px/branch.png" id="12"]
 [ext_resource type="Texture2D" path="res://assets/art/forest/tiles_px/vine.png" id="13"]
 
+[ext_resource type="Texture2D" path="res://assets/art/forest/props/tuft_0.png" id="tuft0"]
+[ext_resource type="Texture2D" path="res://assets/art/forest/props/tuft_1.png" id="tuft1"]
+[ext_resource type="Texture2D" path="res://assets/art/forest/props/tuft_2.png" id="tuft2"]
+[ext_resource type="Texture2D" path="res://assets/art/forest/props/root_0.png" id="root0"]
+[ext_resource type="Texture2D" path="res://assets/art/forest/props/root_1.png" id="root1"]
+[ext_resource type="Texture2D" path="res://assets/art/forest/props/root_2.png" id="root2"]
 [resource]
 script = ExtResource("1")
 floor_tiles = Array[Texture2D]([ExtResource("2"), ExtResource("3"), ExtResource("4"), ExtResource("5")])
@@ -29,3 +35,7 @@ climb_tiles = Array[Texture2D]([ExtResource("13")])
 hazard_tiles = Array[Texture2D]([ExtResource("thorns")])
 crumble_tile = ExtResource("cracked")
 stump_texture = ExtResource("stump")
+edge_dark = Color(0.141, 0.078, 0.165, 1)
+interior_dark = Color(0.208, 0.122, 0.212, 1)
+tuft_tiles = Array[Texture2D]([ExtResource("tuft0"), ExtResource("tuft1"), ExtResource("tuft2")])
+root_tiles = Array[Texture2D]([ExtResource("root0"), ExtResource("root1"), ExtResource("root2")])

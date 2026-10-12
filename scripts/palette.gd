@@ -73,6 +73,10 @@ const GROUND_SHADE: Array[Color] = [
 # of multiplier: lit from below where the hero is, falling into the dark going
 # up, so a wall a screen tall recedes behind the floor. Still a coloured dark.
 const WALL_DARK := Color(0.36, 0.35, 0.40)
+# A level's back wall (`[back]`, N2), multiplied into the set's own art: it
+# stands behind everything you can touch, so it is darker and cooler than any
+# of it ("Backgrounds lose").
+const BACK_SHADE := Color(0.30, 0.29, 0.38)
 
 
 ## Every named colour, so the rule check has something to iterate.
