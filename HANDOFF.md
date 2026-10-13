@@ -65,8 +65,8 @@ Matt's answers to 1 to 3 below open; N3 needs the beat sheet.
 **No Godot is preinstalled**; fetch the 4.7.2 Linux binary to `~/godot/godot`
 each session. **Opening the project rewrites `project.godot`**: close the
 editor, `git diff project.godot`, restore, then pull. **A new `class_name`
-script fails every caller until a reimport, and the test runner still exits 0
-with the parse error printed**: read its output, not its exit code. **Tests
+script fails every caller until a reimport**: run `tools/dev.sh import`
+first. A parse error or a script error mid-test is a test failure now. **Tests
 run before the tree is ready**, so nothing needing `get_tree()` can be tested
 headless. **Indexing a `const` array of preloaded resources** folds at parse
 time and fails to compile: go through a typed variable.

@@ -103,10 +103,6 @@ needed rather than optional, because the content is about to exist.
 
 ## Code and tooling debt
 
-- **The test runner passes a test that crashes.** A `SCRIPT ERROR` mid-test
-  aborts that test and the run still reports 0 failed. A file that will not
-  parse is now a failure (`tests/run_tests.gd`); the mid-test case is not.
-  Unverified by a run.
 - **No tool measures where a tile's art meets its collision line.** Done by a
   one-off scan for `room_m5_wall`. It belongs in the level format as a
   per-tile property; N2's `TileShape` does not do it.
