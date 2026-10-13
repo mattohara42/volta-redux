@@ -310,6 +310,32 @@ SCENARIOS: list[dict] = [
 		],
 	},
 	{
+		"name": "A kill since the brazier comes back at a respawn",
+		"scene": "res://scenes/rooms/room_m4_enemies.tscn",
+		"out": "room_m4_revive.png",
+		"input": "move_right:45;throw:6;-:40;debug_respawn:1;-:20",
+		"zoom": 1.0,
+		"centre": (280, 300),
+		"checks": [
+			{"type": "contains", "pattern": "scorpion alive",
+				"message": "a scorpion killed since the brazier should be back after a respawn"},
+		],
+	},
+	{
+		"name": "A kill before the last brazier stays dead",
+		"scene": "res://scenes/rooms/room_m4_enemies.tscn",
+		"out": "room_m4_stays_dead.png",
+		"input": "move_right:45;throw:6;-:40;move_right:110;-:10;debug_respawn:1;-:20",
+		"zoom": 1.0,
+		"centre": (280, 300),
+		"checks": [
+			{"type": "contains", "pattern": "brazier at (430.0, 320.0) LIT",
+				"message": "the run should have lit the middle brazier before respawning"},
+			{"type": "not_contains", "pattern": "scorpion alive",
+				"message": "a scorpion killed before the last brazier lit should stay dead"},
+		],
+	},
+	{
 		"name": "Bounce a sword off the scorpion's front",
 		"scene": "res://scenes/rooms/room_m4_enemies.tscn",
 		"out": "room_m4_scorpion_front.png",

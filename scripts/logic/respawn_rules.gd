@@ -9,6 +9,9 @@
 ##
 ## Only the timed mechanisms near the brazier you come back at go back to the
 ## start of their clocks. Further away, the level keeps running.
+##
+## An enemy you killed since that brazier comes back too, so a death costs the
+## beat you died on; fights won before it stay won (Matt, 2026-10-13).
 class_name RespawnRules
 
 
@@ -38,3 +41,10 @@ static func swords_to_clear(embedded: Array[bool], in_hand: int, max_swords: int
 ## reset: within `reach` either way on each axis, about a screen.
 static func within_reach(at: Vector2, point: Vector2, reach: Vector2) -> bool:
 	return absf(point.x - at.x) <= reach.x and absf(point.y - at.y) <= reach.y
+
+
+## Whether an enemy killed when `lit_then` braziers had been lit comes back
+## at a respawn, now that `lit_now` have. Only one killed since the brazier
+## you come back at, which is the last one lit.
+static func revives(lit_then: int, lit_now: int) -> bool:
+	return lit_then == lit_now

@@ -173,7 +173,9 @@ no regenerating shield.
 
 The modernisation is entirely in **the cost of dying**, not in the chance of it.
 Death restores your swords, respawns you at the last lit brazier, and takes
-under a second end to end. Checkpoint braziers are frequent and you light them
+under a second end to end. **Enemies you killed since that brazier come back
+with you** (Matt, 2026-10-13), so a death costs the beat you died on; fights won
+before it stay won. Checkpoint braziers are frequent and you light them
 by walking past. The model is Celeste and Super Meat Boy: lethal, instant,
 retried before you have finished being annoyed.
 

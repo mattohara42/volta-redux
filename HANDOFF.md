@@ -98,8 +98,10 @@ shows only on a fresh load, and headless draws nothing, so shoot it.
 **Pixel art.** **Straight sword, asymmetric hilt.** **M5 final quality.**
 **Moving jumps are somersaults; dives cost a recovery pause** (2026-09-28).
 **M4:** contact with any enemy kills; the dragon dies only to RECALLING.
-**G1:** passed. **N0:** passed (Matt, 2026-10-13: the camera feels good;
-*How a level is built* approved, open to change). **`LEVELS.md`'s twelve questions** (Matt, 2026-09-28).
+**G1:** passed. **Enemies killed since the brazier come back at a respawn**
+(Matt, 2026-10-13; `SPEC.md`, *Difficulty*). **N0:** passed (Matt,
+2026-10-13: the camera feels good; *How a level is built* approved, open to
+change). **`LEVELS.md`'s twelve questions** (Matt, 2026-09-28).
 **R1's play half** (Matt, 2026-10-07): the bailey switch and the dragon read.
 
 ## Pointers

@@ -40,6 +40,18 @@ var _config: EnemyConfig
 var is_dormant := false
 var _wake_range := 0.0
 
+## Whether this one comes back at a respawn when it was killed since the last
+## brazier (`RespawnRules.revives`). Off for one whose death leaves something
+## behind that a second death would leave again, like Act 4's guard's gem.
+var revives := true
+
+## How many braziers the hero had lit when this fell. Read by the room at a
+## respawn to decide between bringing it back and letting it go.
+var fell_at_checkpoint := 0
+
+var _starts_dormant := false
+var _fallen := false
+
 ## The frame-animated sprite a species draws itself with (`ANIMATION.md`), set
 ## by `_attach_sprite`. Art faces right; `_face_sprite` mirrors it.
 var _sprite: Node2D = null
@@ -67,7 +79,7 @@ const SWORD_LAYER: int = 1 << 3
 
 
 func _on_area_entered(area: Area2D) -> void:
-	if not area.is_in_group("swords"):
+	if _fallen or not area.is_in_group("swords"):
 		return
 	if is_vulnerable_to(area):
 		# "Both die" (`SPEC.md`), wherever the sword was: flying, stuck in
@@ -87,7 +99,42 @@ func _defeat() -> void:
 	Burst.emit(get_parent(), global_position, Burst.Kind.CHITIN)
 	Sfx.play(self, Sfx.CONFIG.kill, true)
 	defeated.emit(global_position)
-	queue_free()
+	_fall()
+
+
+## Gone from the level, but kept, hidden and switched off, so the room can
+## bring it back if the hero dies before the next brazier. Kept rather than
+## rebuilt so whatever the room wired to it stays wired.
+func _fall() -> void:
+	if not revives:
+		queue_free()
+		return
+	var hero := get_tree().get_first_node_in_group("player")
+	fell_at_checkpoint = int(hero.get("checkpoints_lit")) if hero != null else 0
+	_fallen = true
+	visible = false
+	remove_from_group("enemies")
+	remove_from_group("mechanisms")
+	add_to_group("fallen_enemies")
+	set_deferred("monitoring", false)
+	set_deferred("monitorable", false)
+	set_physics_process(false)
+
+
+## Back where the room first put it, asleep again if it started asleep, with
+## its clock parked for the hero's freeze like any other mechanism.
+func revive(frozen_for: float) -> void:
+	_fallen = false
+	visible = true
+	remove_from_group("fallen_enemies")
+	add_to_group("enemies")
+	add_to_group("mechanisms")
+	is_dormant = _starts_dormant
+	_set_sprite_animating(not is_dormant)
+	set_deferred("monitoring", true)
+	set_deferred("monitorable", true)
+	set_physics_process(true)
+	call("reset", frozen_for)
 
 
 ## Dormant decoration does not kill on touch. `Hazard`'s own signal calls
@@ -112,6 +159,7 @@ func is_vulnerable_to(_sword: Node2D) -> bool:
 ## decision the way a patrol's range is, not a fact about the species.
 func start_dormant() -> void:
 	is_dormant = true
+	_starts_dormant = true
 	_wake_range = _config.dormant_wake_range
 
 

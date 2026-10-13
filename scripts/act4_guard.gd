@@ -50,6 +50,9 @@ func _ready() -> void:
 	mark.position = Vector2(0.0, -SCORPION_SIZE.y * 0.5 - Gem.SIZE.y * 0.5)
 	guard.add_child(mark)
 	guard.defeated.connect(_drop_gem)
+	# Its gem drops once. A guard back from the dead would carry and drop a
+	# second, so this one stays dead.
+	guard.revives = false
 	_add_brazier(Vector2(START_BRAZIER_X, UPPER_TOP))
 	_add_chest(Vector2(CHEST_X, UPPER_TOP))
 	_add_exit(Rect2(EXIT_X, FLOOR_TOP - 48.0, 8.0, 48.0))
