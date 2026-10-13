@@ -1,6 +1,8 @@
 # The outer wall: Act 1, level 2
 # DRAFT by Claude for Matt to mark up (2026-10-13). Built only from pieces that
-# exist today. Cross out, reorder, rewrite: nothing here is decided.
+# exist today. Matt's first answers (2026-10-13): keep the floor that holds
+# once, with its combine on the main line; use the roost at 11; two bats and
+# an eyeball past the inner gate. The rest is still his to mark up.
 ideas: bats on ladders, the sill (a throw from above), the switch a sword holds, the floor that holds once
 carried in from the forest: throw and catch, a sword in wood is a ledge
 
@@ -53,7 +55,6 @@ Up from the gatehouse roof: scaffolds, two bats, and a fourth sword lying
 at the far end. The way back crosses planks that hold once, so the way out
 has to be planned as two crossings (a sword left in a beam as the ledge
 home is one answer).
-note: this is also the floor-that-holds-once's combine. See question 2.
 
 ## 8. The hoarding chest  [develop: the floor that holds once]  floor 3
 The chest the next fight needs sits at the end of a hoarding over spikes.
@@ -72,18 +73,23 @@ round the ladder past the gate. Hold the gate with one sword and you climb
 into a fight with two against two.
 can kill you: two bats
 
-## 11. The ditch  [combine: bats on ladders + a sword is a ledge]  floor 1
-Kept from today. Crossed by standing on your own sword, under a bat.
-can kill you: the bat, the ditch
-
-## 12. The barbican stair  [twist: bats on ladders]  floors 1 to 3
+## 11. The barbican stair  [twist: bats on ladders]  floors 1 to 3
 A ladder with nothing on it. The weapon racks along it are a roost: the
 bats wake when you are halfway up, below you and above you. The answer that
 worked (throw from the foot) is behind you now. Drop off, fight from the
 floor, climb again.
 can kill you: the roost
 
-## 13. The barbican gallery  [twist: the sill]  floor 3
+## 12. The bailey wall  [twist: the floor that holds once]  floors 2 to 1
+The only way down to the ditch is a run of planks that hold once. Until
+now they were a trap; here you want them to drop. Cross, turn, come back,
+and fall through to the ditch's edge.
+
+## 13. The ditch  [combine: bats on ladders + a sword is a ledge]  floor 1
+Kept from today. Crossed by standing on your own sword, under a bat.
+can kill you: the bat, the ditch
+
+## 14. The barbican gallery  [twist: the sill]  floor 3
 A step above a sleeping scorpion, as at 3, but an eyeball hangs where the
 sword comes home. The throw from the step kills; the catch does not, unless
 you move while it is in the air so its line home misses the eye. A fight
@@ -91,22 +97,22 @@ decided on the move.
 can kill you: the scorpion, the eyeball
 loop: a door from the gallery back down to the brazier at 9
 
-## 14. The inner gate  [twist: the switch a sword holds]  floor 3
+## 15. The inner gate  [twist: the switch a sword holds]  floor 3
 Two switches hold one gate, the second thrown at while standing on the
 sword in the first. Past it, the room needs every sword you have. The
 answer that worked (leave a sword holding it) is wrong here: go through,
 recall both, and the gate shuts behind you. The way back is the barbican
-door at 13.
-can kill you: what is past the gate (two bats and an eyeball?)
+door at 14.
+can kill you: two bats and an eyeball
 brazier: past the gate
 
-## 15. The plinth approach  [twist: the floor that holds once]  floors 2 to 1
-The only way down to the gate yard is planks that hold once. Here you want
-them to drop: cross, come back, and fall in behind the scorpion patrolling
-the yard, on its unarmoured side.
+## 16. The plinth approach  [combine: the floor that holds once + the sill]  floors 2 to 1
+Planks that hold once over the gate yard, with a scorpion patrolling below.
+Drop through them in behind it, on its unarmoured side, and throw before it
+turns. Or stay up and throw down from the planks' end, as at the sill.
 can kill you: the scorpion, if you land facing it
 
-## 16. The gate yard  [combine: the sill + the switch a sword holds]  floor 1
+## 17. The gate yard  [combine: the sill + the switch a sword holds]  floor 1
 Kept from today: the castle on a plinth whose face is the switch. A scorpion
 patrols the plinth top in front of the gate. Kill it from the yard wall's
 step, then hold the gate with a sword in the plinth's face and walk out.
