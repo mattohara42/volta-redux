@@ -88,6 +88,8 @@ design back toward the trace. `assets/reference/` is the part worth keeping.
 - **`GEMINI_NOTES.md` is required reading before writing any art prompt.**
   Art now comes from the Sprite Fusion API (`ART.md`), so treat its findings as
   hypotheses until each is tried there.
+- **Give any prompt for Matt to paste (Gemini, Sprite Fusion) in a fenced code
+  block**, never as a quote, so it copies in one click.
 - **`SPRITE_FUSION_API_KEY` lives in the environment, never in the repo.** Not
   in a file, a commit, a log line, a URL or a test fixture.
 - **An assertion proves the code ran, not that the picture is right, so draw the
