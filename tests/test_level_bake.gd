@@ -13,6 +13,7 @@ const SETS: PackedStringArray = [
 const LEVELS: PackedStringArray = [
 	"res://levels/act1_forest.level",
 	"res://levels/act1_wall.level",
+	"res://levels/act1_wall_old.level",
 ]
 
 

@@ -80,7 +80,9 @@ static func dragon_rect(grate: Rect2) -> Rect2:
 
 
 func _ready() -> void:
-	level_file = LEVEL
+	# A scene may name another level (the old wall, kept to compare in N3).
+	if level_file.is_empty():
+		level_file = LEVEL
 	super._ready()
 
 
