@@ -3,7 +3,7 @@
 > **Rewrite this file, never append.** State snapshot and pointers only. No
 > session narrative, that is what `git log` is for. Keep it under 150 lines.
 
-**Updated:** 2026-10-12 · **Phase:** 3 rebuilt, depth before breadth.
+**Updated:** 2026-10-13 · **Phase:** 3 rebuilt, depth before breadth.
 **Active milestone:** N1, everything built is placeable (`BUILD_PLAN.md`).
 N0, N1 and N2 are built and wait only on Matt (below).
 **N1 done-when:** each new level-file entry has a parser test and a bench
@@ -18,9 +18,10 @@ sheet. R4 and M14 wait until G2 passes on the rebuilt Act 1.
 simple, stilted, blocky and linear. A review found the cause is how levels
 are made, not the mechanics; Matt adopted its plan and four rulings
 (`LEVELS.md`, *Decisions 2026-10-07*). **Act 1 is two levels**: the forest
-(`levels/act1_forest.level`, in its own art bar the background: `ART.md`,
-*The forest*) and the outer wall (`levels/act1_wall.level`, grey-boxed, the
-one N3 rebuilds). Acts 2 to 4 are still the old one-screen rooms.
+(`levels/act1_forest.level`, in its own art, background attempt 1
+included: `ART.md`, *The forest*) and the outer wall
+(`levels/act1_wall.level`, grey-boxed, the one N3 rebuilds). Acts 2 to 4
+are still the old one-screen rooms.
 **Credits: 285.**
 
 ## The next action
@@ -30,9 +31,10 @@ once into textures (`LevelBake`); solid interiors fall into the art set's
 coloured dark by depth (`TileShape`); open sides get an edge and ground you
 walk under a lintel; levels gain `[back]` and `[decor]` grids, the second
 written by rule (`tools/dev.sh decorate`, `DecorRules`). Both Act 1 levels
-have both. Before and after shots and frame times are in the N2 PR. **Next
-for Claude**: whatever Matt's answers to 1 to 4 below open; N3 needs the
-beat sheet.
+have both; the forest's back grid keeps only earth, since the painting has
+trunks of its own. Before and after shots and frame times are in the N2 PR.
+F2 now cycles through the M4 benches too. **Next for Claude**: whatever
+Matt's answers to 1 to 4 below open; N3 needs the beat sheet.
 
 ## Blocked on Matt
 
@@ -47,8 +49,9 @@ beat sheet.
    move the view). Its feel closes N0. A look down while falling is not built.
 4. **Sketch the outer wall's beat sheet** in that format. Blocks N3. Playing
    today's level 2 once first is cheap evidence of what to keep.
-5. **Paint the forest's background** in Gemini from the prompt in `ART.md`
-   (*The forest*), saved to `assets/art_raw/forest_bg.*`.
+5. **Paint the forest's background, attempt 2**, in Gemini from the prompt in
+   `ART.md` (*The forest*), saved to `assets/art_raw/forest_bg_2.*`. Attempt 1
+   is in and dimmed; tall levels mirror it into X shapes when zoomed out.
 6. **Frame time on a real machine**: `tools/dev.sh frametime`, then with
    `res://scenes/rooms/act1_forest.tscn` and `act1_wall.tscn`: p95 under
    16.7 ms? Blocks R3's frame-rate half.
