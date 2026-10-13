@@ -115,8 +115,10 @@ needed rather than optional, because the content is about to exist.
   per-tile property; N2's `TileShape` does not do it.
 - **`tools/cut-rig.py` only knows named rectangles.** Mostly moot since the
   move to frame animation; keep only if a rig ever returns.
-- **F2's bench cycle leaves out the M4 rooms.** Reachable by
-  `tools/dev.sh play` only. An oversight.
+- **F2's bench cycle leaves out ten rooms**: Act 3's generator, rungs and
+  toll, all four Act 4 rooms, `room_g2_stump`, `room_m13_gems` and
+  `test_tall`. Reachable by `tools/dev.sh play` only. Deliberate or not is
+  undecided.
 - **Quitting mid-track prints "resources still in use at exit".** Harmless
   noise in CI's log.
 - **The castle's floor tiles are 17 by 17 on a 16 px grid**
