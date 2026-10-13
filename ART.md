@@ -549,6 +549,56 @@ and pixelated the way the cavern was.
 > violet-blue, never neutral black. The image is 2560 by 1440 pixels, aspect
 > ratio 16:9.
 
+**Landed (2026-10-13), shipped dimmed.** Flat side view, three bays, trunks
+top to bottom, no ground, coloured darks. Delivered 1376x768. Raw at
+`assets/art_raw/forest_bg.jpg`, untouched. Cropped to two bays between big
+trunk centres so each mirror seam falls on a trunk, and dimmed, because the
+moonlight shafts came back brighter than the platforms:
+
+    tools/pixelate.py assets/art_raw/forest_bg.jpg assets/art/forest/forest_bg_px.png --crop 100,1020 --dim 0.5
+
+431x360 at 24 colours, palette check 0.00%. Brightest pixel 90 of 255
+(181 undimmed). 0.4 went flat; 0.5 keeps the shafts. **The flaw**: a tall
+level mirrors the painting down every 360 px, and the diagonal shafts and
+flared trunk bases mirror into X shapes and hourglasses. It shows only zoomed
+out. Attempt 2 fixes it at the source.
+
+**Forest background, attempt 2: the prompt, for Matt to paint in Gemini.**
+Attempt 1's prompt with the light and the mist made symmetric top to bottom,
+so the vertical mirror has nothing to reflect: the shafts fall straight down,
+the trunks keep one width, and the mist is even. Save to
+`assets/art_raw/forest_bg_2.*`; it goes through the same crop and `--dim`.
+
+> [preamble] A wide painted background for a side-scrolling platformer: a
+> long horizontal strip of the deep interior of an ancient forest at night,
+> in flat side view like a stage backdrop, camera perpendicular to the trees,
+> with no vanishing point. It is NOT a three-quarter view, NOT a path or
+> clearing receding into the distance, and NOT seen from above or below. The
+> same bay of forest repeats three times across the width of the canvas: one
+> huge dark tree trunk, a narrower trunk further back and paler with mist,
+> then a gap of deep darkness between the trees, evenly spaced, so the whole
+> strip reads as a continuous run of forest rather than one view of one
+> place. Every trunk runs straight and unbroken from the top edge of the
+> canvas to the bottom edge and keeps the same width all the way: no flared
+> base, no roots, no ground, no forest floor, no sky, no canopy, no treetops
+> and no leaves at the top. There are no branches, no fallen logs, no stumps,
+> no fungus shelves, no ledges and nothing horizontal anywhere in the
+> painting: every form is vertical, so nothing in it looks like somewhere to
+> stand. The only light is cold moonlight falling in a few thin pale shafts
+> that come straight down, perfectly vertical, between the trunks, each as
+> bright at the top of the canvas as at the bottom, never slanting. A thin
+> blue mist hangs between the far trees, spread evenly from the top edge to
+> the bottom edge, not pooled low. The moonlight is the point of this
+> painting: do not paint the forest as one flat dark tone. No fire, no
+> torches, no lanterns, no warm light of any kind. No characters, no
+> creatures, no buildings, no ruins, no water. Large, simple shapes and few
+> small details: big dark masses of trunk and broad, soft gradients of mist
+> and moonlight. The whole painting stays dark and muted, a background meant
+> to sit behind brighter platforms. Bark is deep blue-violet and dark
+> grey-green, the mist and moonlight a pale cold blue-grey, never white; the
+> darkest darks are deep violet-blue, never neutral black. The image is 2560
+> by 1440 pixels, aspect ratio 16:9.
+
 ## M9: lava, electricity and atmosphere (2026-09-28)
 
 **Nothing here is generated: no credits, no PNG.** Taken while credits were 0

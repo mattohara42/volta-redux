@@ -27,6 +27,11 @@ anything else, so the edges can be put on something that mirrors well: a
 rock column mirrors into a column, a recess into a face. The raw delivery
 stays untouched.
 
+`--dim F` scales every pixel's brightness by F before the palette is chosen,
+for a painting that came back brighter than the playfield. The raw delivery
+stays untouched, so the dimmed copy can always be remade from it. The forest's
+moonlight shafts needed it: undimmed, they outshone the platforms.
+
 Run tools/palette-check.py on the result: reducing colours can merge a
 coloured dark into a neutral one.
 
@@ -34,7 +39,7 @@ CLAUDE.md: the destructive mode is the flag. Writing over an existing OUT
 needs --overwrite; the default refuses.
 
 Usage:
-    tools/pixelate.py PAINTING.png OUT.png [--height 360] [--colors 24] [--crop X0,X1] [--overwrite]
+    tools/pixelate.py PAINTING.png OUT.png [--height 360] [--colors 24] [--crop X0,X1] [--dim F] [--overwrite]
 
 Requires pillow (tools/requirements.txt).
 """
@@ -47,10 +52,19 @@ from pathlib import Path
 from PIL import Image
 
 
-def pixelate(painting: Image.Image, height: int, colors: int) -> Image.Image:
+def dim(image: Image.Image, factor: float) -> Image.Image:
+    """Scale every pixel's brightness (HSV value) by factor, keeping hue and saturation."""
+    h, s, v = image.convert("HSV").split()
+    v = v.point(lambda value: round(value * factor))
+    return Image.merge("HSV", (h, s, v)).convert("RGB")
+
+
+def pixelate(painting: Image.Image, height: int, colors: int, dim_factor: float = 1.0) -> Image.Image:
     rgb = painting.convert("RGB")
     width = round(rgb.width * height / rgb.height)
     small = rgb.resize((width, height), Image.BOX)
+    if dim_factor != 1.0:
+        small = dim(small, dim_factor)
     return small.quantize(colors=colors, method=Image.Quantize.FASTOCTREE, dither=Image.Dither.NONE).convert("RGB")
 
 
@@ -61,6 +75,7 @@ def main() -> None:
     parser.add_argument("--height", type=int, default=360, help="output height in design px (default: the room's 360)")
     parser.add_argument("--colors", type=int, default=24, help="palette size (default 24)")
     parser.add_argument("--crop", help="X0,X1: keep only this horizontal span of the painting, in its own pixels")
+    parser.add_argument("--dim", type=float, default=1.0, help="scale brightness by this, 0 to 1, before the palette is chosen (default 1, untouched)")
     parser.add_argument("--overwrite", action="store_true")
     args = parser.parse_args()
 
@@ -68,6 +83,8 @@ def main() -> None:
         sys.exit(f"pixelate.py: {args.out} exists. Pass --overwrite to replace it.")
     if not 2 <= args.colors <= 256:
         sys.exit("pixelate.py: --colors must be 2 to 256")
+    if not 0 < args.dim <= 1:
+        sys.exit("pixelate.py: --dim must be above 0 and at most 1")
 
     painting = Image.open(args.painting)
     if args.crop:
@@ -75,7 +92,7 @@ def main() -> None:
         if not 0 <= x0 < x1 <= painting.width:
             sys.exit(f"pixelate.py: --crop must lie within 0,{painting.width}")
         painting = painting.crop((x0, 0, x1, painting.height))
-    result = pixelate(painting, args.height, args.colors)
+    result = pixelate(painting, args.height, args.colors, args.dim)
     result.save(args.out)
     print(f"wrote {args.out}, {result.width}x{result.height}, {args.colors} colours")
 
