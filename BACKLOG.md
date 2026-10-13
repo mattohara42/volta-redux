@@ -126,6 +126,10 @@ needed rather than optional, because the content is about to exist.
 - **`GridRoom` levels bake; hand-written rooms still draw every frame.** Acts
   2 to 4 are `Bench` rooms drawn in `_draw`. They move to the level format in
   R4, and the bake comes with it.
+- **`tools/dev.sh shot` adds the room as a child, not the current scene.**
+  Anything reading `current_scene` (the debug overlay's room tag) is blank in
+  its shots; a movie-writer launch shows it. Shots may differ from play in
+  other ways that read the scene the same way.
 
 ## Deferred from v1 deliberately
 

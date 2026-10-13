@@ -5,7 +5,7 @@
 
 **Updated:** 2026-10-13 · **Phase:** 3 rebuilt, depth before breadth.
 **Active milestone:** N1, everything built is placeable (`BUILD_PLAN.md`).
-N0, N1 and N2 are built and wait only on Matt (below).
+N0 is done; N1 and N2 are built and wait only on Matt (below).
 **N1 done-when:** each new level-file entry has a parser test and a bench
 that passes walkback, route and scenarios, and Matt has played the benches
 (F2) and said which combinations are worth building beats around. Then N2
@@ -34,29 +34,26 @@ written by rule (`tools/dev.sh decorate`, `DecorRules`). Both Act 1 levels
 have both; the forest's back grid keeps only earth, since the painting has
 trunks of its own. Before and after shots and frame times are in the N2 PR.
 F2 now cycles through the M4 benches too. **Next for Claude**: whatever
-Matt's answers to 1 to 4 below open; N3 needs the beat sheet.
+Matt's answers to 1 to 3 below open; N3 needs the beat sheet.
 
 ## Blocked on Matt
 
 1. **Play the N1 benches** (`bench_n1`, `bench_n1_found`, `bench_n1_combos`,
-   F2) and say which combinations are worth building beats around. Closes N1.
+   F2; the top left names the room) and say which combinations are worth
+   building beats around. Closes N1.
 2. **Look at N2's after shots** (the PR) or play either Act 1 level: is a
    shot natural-looking? That closes N2. The back walls, torches and trunks
    are Claude's placements, easy to move in the level text.
-3. **Play the look-ahead camera** (`config/camera.tres`: 64 px ahead, swings
-   at 160 px/s, holds below 20 px/s so a turn on the spot to throw does not
-   move the view). Its feel closes N0; its other half, *How a level is
-   built*, Matt approved on 2026-10-13, open to change. A look down while
-   falling is not built.
-4. **Sketch the outer wall's beat sheet** in the format in `SPEC.md`. Blocks N3. Playing
-   today's level 2 once first is cheap evidence of what to keep.
-5. **Paint the forest's background, attempt 2**, in Gemini from the prompt in
+3. **Sketch the outer wall's beat sheet** in the format in `SPEC.md`.
+   Blocks N3. Playing today's level 2 once first is cheap evidence of what
+   to keep.
+4. **Paint the forest's background, attempt 2**, in Gemini from the prompt in
    `ART.md` (*The forest*), saved to `assets/art_raw/forest_bg_2.*`. Attempt 1
    is in and dimmed; tall levels mirror it into X shapes when zoomed out.
-6. **Frame time on a real machine**: `tools/dev.sh frametime`, then with
+5. **Frame time on a real machine**: `tools/dev.sh frametime`, then with
    `res://scenes/rooms/act1_forest.tscn` and `act1_wall.tscn`: p95 under
    16.7 ms? Blocks R3's frame-rate half.
-7. **Older and still open**: R2's final quality (the flame, the sword, the
+6. **Older and still open**: R2's final quality (the flame, the sword, the
    doors, the ride); `RoomM7Sheet` consistent in treatment (closes M7); the
    unattended calls from 2026-10-05; M4's dragon pacing; a play log (`user://`,
    #136) when one is to hand. Two rulings wait for N1: faster ladder
@@ -101,7 +98,8 @@ shows only on a fresh load, and headless draws nothing, so shoot it.
 **Pixel art.** **Straight sword, asymmetric hilt.** **M5 final quality.**
 **Moving jumps are somersaults; dives cost a recovery pause** (2026-09-28).
 **M4:** contact with any enemy kills; the dragon dies only to RECALLING.
-**G1:** passed. **`LEVELS.md`'s twelve questions** (Matt, 2026-09-28).
+**G1:** passed. **N0:** passed (Matt, 2026-10-13: the camera feels good;
+*How a level is built* approved, open to change). **`LEVELS.md`'s twelve questions** (Matt, 2026-09-28).
 **R1's play half** (Matt, 2026-10-07): the bailey switch and the dragon read.
 
 ## Pointers
