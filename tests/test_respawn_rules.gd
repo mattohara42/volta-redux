@@ -23,3 +23,9 @@ func test_only_nearby_mechanisms_reset() -> void:
 	check(RespawnRules.within_reach(Vector2(100.0, 300.0), Vector2(600.0, 200.0), reach), "the same screen")
 	check(not RespawnRules.within_reach(Vector2(100.0, 300.0), Vector2(2000.0, 300.0), reach), "three screens along")
 	check(not RespawnRules.within_reach(Vector2(100.0, 600.0), Vector2(100.0, 100.0), reach), "two floors up and more")
+
+
+func test_only_enemies_killed_since_the_brazier_come_back() -> void:
+	check(RespawnRules.revives(2, 2), "killed after the second brazier, dying at it")
+	check(not RespawnRules.revives(1, 2), "killed before the second brazier was lit")
+	check(RespawnRules.revives(0, 0), "killed before any brazier, none lit since")

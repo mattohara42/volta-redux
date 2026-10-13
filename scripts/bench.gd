@@ -71,6 +71,18 @@ func _on_hero_respawned(at: Vector2, frozen_for: float) -> void:
 		var mechanism := node as Node2D
 		if mechanism != null and is_ancestor_of(mechanism) and RespawnRules.within_reach(at, mechanism.global_position, reach):
 			mechanism.call("reset", frozen_for)
+	# What you killed since this brazier comes back; what you killed before it
+	# is gone for good (`RespawnRules.revives`).
+	var hero := get_tree().get_first_node_in_group("player")
+	var lit_now := int(hero.get("checkpoints_lit")) if hero != null else 0
+	for node in get_tree().get_nodes_in_group("fallen_enemies"):
+		var enemy := node as Enemy
+		if enemy == null or not is_ancestor_of(enemy):
+			continue
+		if RespawnRules.revives(enemy.fell_at_checkpoint, lit_now):
+			enemy.revive(frozen_for)
+		else:
+			enemy.queue_free()
 
 
 ## A room that belongs to an act gets that act's far layers (`Backdrop`) and
