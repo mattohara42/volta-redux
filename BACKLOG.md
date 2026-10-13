@@ -4,150 +4,28 @@ Mid-build ideas land here, never in the active milestone. Nothing in this file i
 committed to until Matt says yes. Resolved entries are deleted; `git log` keeps
 them.
 
-**Reorganised 2026-10-06** around the first family playthrough (Matt and the
-kids). The playtest notes are first, then every older entry, filed by where it
-belongs in the plan (`BUILD_PLAN.md`, R1 to R4).
+**Triaged 2026-10-13.** The 2026-10-06 playtest notes and the R1 to R3 build
+notes are gone: every one became a milestone, and what each left to judge in
+play is in `HANDOFF.md`'s open list. What is still open from them is below.
 
-## The playtest, 2026-10-06
+## Left over from R1 to G2
 
-Matt and the kids each played it through. What worked: the music, the movement,
-the puzzles. Everyone had fun. What did not, with what the code says about it:
-
-1. **Some chests gave no swords.** Not a mis-wire: the rule is doing what it
-   says. `ActRoute.chest_top_up` brings the swords you *own* up to three, and
-   it counts every sword of yours still in the room, embedded in wood or lying
-   on the floor, as owned. Leave two in a wall, walk into a chest holding one,
-   and it gives nothing. To a player that is a broken chest. It also only
-   fires on walking in (`body_entered`), so a chest you are already standing in
-   never refills.
-2. **The wooden switch under the dragon did not read.** `Act1Bailey`, beat 3.
-   Nobody worked out that a sword goes in it. The room drops you into the yard
-   with the switch *behind* you ("turn round, throw"), so the first thing you
-   see is a shut portcullis and nothing pointing at the answer. It is also the
-   first switch in the game, with no room before it that shows one.
-3. **The caged dragon read as a solid block with blinking eyes.** Same room.
-   The grate is code-drawn bars over a dark rectangle with two eyes, dimmed as
-   background. Nobody knew what it was, and it sits right above the switch, so
-   it pulled attention off the one puzzle that needed it. Note that
-   `assets/art/enemies/dragon_chained_sheet.png` already exists.
-4. **Drops you cannot get back up.** A handful of places let you move forward
-   past a drop too high to jump back. **New rule from Matt: a player can always
-   walk back to the beginning of the level.**
-5. **The sword and the "door" are placeholders.** The sword is drawn in code
-   (`Sword._draw`, gold rectangles and a polygon) and the room exit is a flat
-   gold rectangle (`RoomExit._draw`). Both are below everything around them.
-6. **The dragon's flame still does not look real.** It is a shader polygon
-   clipped to the kill box (`Flame`, `shaders/flame.gdshader`).
-7. **Lothar riding the dragon does not look real.** `DragonRider` stacks the
-   standing hero sprite on the flight sheet.
-8. **It is far too short and too linear.** The headline note. Matt wants each
-   level much longer and often taller: five to ten floors of a castle, with
-   mixed enemy groups, about ten times the size. The census backs him up. The
-   whole game has 21 playable rooms, each one screen tall (360 px) and two to
-   four screens wide, and in all of them there are four scorpions, two bats,
-   one eyeball, the dragon and the generator. The giant ant is in no room.
-   Act 3 has no creature except its boss.
-
-## Decided, and where the plan went
-
-Matt answered all seven questions and the cage on 2026-10-06, each as
-recommended: `LEVELS.md` → *Decisions (2026-10-06)*. The plan is now
-`BUILD_PLAN.md`'s R1 to R4 and G2, and `SPEC.md` is rewritten to match. What
-follows are working notes for those milestones, detail the plan does not carry.
-
-- **R1 is built, all four pieces.** The chest rule; the walk-back check in
-  CI with a ladder home in nine rooms; the bailey's switch moved into the face
-  ahead of the yard, with a glinting slot, a small light, and a gold chain to
-  the gate on the level above that lights and runs when a blade lands; the
-  cage a lit, chained dragon behind sparse bars over the quiet stretch, facing
-  you, breathing, a puff of smoke every few seconds and one roar as you come.
-  To judge in play: whether the smoke is too faint, and whether the roar (the
-  Act 2 dragon's own) startles a kid in a good way. The rungs ladder softens
-  that room's barrier lesson. Act 1's gate room (room 4) still sets its switch
-  behind you after the drop; once the bailey has taught it, that may be a fair
-  twist rather than a trap, but watch for it.
-- **R2 is built.** The sword (one sprite, spun in flight, its tip hidden in
-  the face when embedded), a doorway per act in place of the gold exit, and
-  Lothar seated astride the dragon for the ride, all in `ART.md`. To judge in
-  play: the doors' picks (a one-line swap in `config/actN.tres` to another
-  candidate), and whether the spinning 16 px sword shimmers.
-- **R2, the flame, is built.** The breath is a cone (`SPEC.md`'s own word),
-  not a box: it leaves the jaws at head height and spreads down to the floor
-  by a third of its reach (`DragonBreath.cone`, `dragon_cone_*` in
-  `config/enemies.tres`), and that cone is both what kills and what is drawn
-  burning. White-hot at the jaws, cooling through orange and red, frayed and
-  rising into dithered smoke past the cone's top and far end (`flame_spill`,
-  seen, never lethal), with embers thrown along it. The kill area shrank under
-  the jaws only, beside the dragon's own body. The freed dragon's breath in
-  Act 4 (`FreedBreath`) is a separate drawing and was not touched; give it the
-  same plume if it reads as flat next to this one.
-- **R3, the level format, is built.** `levels/*.level`, 16 px a cell
-  (Matt, 2026-10-07): a `[map]` and a `[things]` list, read by `LevelGrid`
-  (`scripts/logic/`), built by `GridRoom`. The bailey is ported. Not yet in
-  the legend: copper, barriers, current switches, plates, gems, the eyeball
-  and the ant. Add each when the first level needs it.
-- **R3, tall rooms and frame time.** A room can now be taller than a screen
-  (`Bench.room_height`, from a level's map or its `height` line), and the
-  light field, far backdrop and dust follow. `levels/test_tall.level` is ten
-  screens by five floors; `tools/dev.sh frametime` measured it in this
-  container's software renderer at 26.3 ms mean, 32.6 ms p95, against the
-  one-screen bailey's 25.0 and 28.5: about the same cost for fifty times the
-  area. Both are over 16.7 ms only because nothing here has a GPU. Matt's
-  machine gives the number that counts.
 - **A tall level needs its own background painting.** The act's one-screen
   painting is repeated down a tall room, every other copy flipped, as a
-  stopgap; a castle five floors tall wants a painting made for it. G2.
-- **R3, respawn and saves are built** (Matt, 2026-10-07). A death keeps every
-  sword stuck in a wall or a switch and clears the loose ones; if the hand plus
-  the stuck ones would pass five, the oldest stuck ones go, so dying never
-  farms ledges (an assumption, not Matt's words). Only mechanisms within
-  `reset_reach` of the brazier reset (`RespawnRules`, `config/death.tres`),
-  and the room does it on the hero's `respawned` signal. Lighting a brazier
-  saves the room, the brazier, the swords and the gems; the rest of the level
-  is fresh on resume. Caveat: reach is measured from a mechanism's own
-  position, and the giant ant's sits at the room origin, so check it when the
-  ant goes into a big level.
-- **G2, level 1 is grey-boxed: the forest and the moat**
-  (`levels/act1_forest.level`, 316 by 56 cells, about eight screens by two
-  and a half). It replaces the bank room, whose lessons it keeps (its tests
-  became `tests/test_act1_forest.gd`, held for every scorpion in the level).
-  Two routes: low through the river branches, the hollow log and the nest of
-  three; high up the great oak, through the treetops, the canopy and over the
-  nest. A stump on the river's island joins them, and one past the nest drops
-  you at the moat. Dressed in Act 1's castle tiles, so trees are brick and
-  planks. To judge in play: whether the high road is found, whether four
-  cracked branches on the low crossing is one too many, and whether the
-  stumps read as stumps. Known gaps: the river is a spiked gorge because
-  there is no water yet (water that kills could be lava's rule with its own
-  shader), and there are no vines or bark art, so a vine is a ladder.
-  Frame time here in software: 29.1 ms mean, 37.0 p95, against the tall test
-  level's 23.7 and 29.8 in the same run, so about a quarter dearer (more
-  enemies, more lights). Matt's GPU gives the number that counts.
-  **Played (Matt, 2026-10-07): it plays well, and the high road was found.**
-  A stump did not warp: landing on its edge never counted (fixed, #158).
-- **G2, level 2 is grey-boxed: the outer wall to the castle gate**
-  (`levels/act1_wall.level`, 260 by 48 cells, about six and a half screens by
-  two). It replaces the wall, bailey and gate rooms as sections (their tests
-  became `tests/test_act1_wall.gd`). Left to right: three storeys of wall
-  climbed by ladder with two bats round them; a skeleton (a dormant
-  scorpion) asleep on the walk; the gatehouse guard, killed head on from the
-  sill (a 12 px step the map marks and `Act1Wall` builds, since cells are
-  16 px); the breach on falling slabs. The high road climbs the gatehouse
-  tower and crosses on scaffolds past two bats, which have to die in order
-  (the first from the tower, the second from the second scaffold) and fly
-  across the line a throw takes, so they can. Then the bailey (hurdles, the
-  cage, the yard switch ahead), the ditch with a bat over the sword ledge,
-  and the castle on a plinth whose face is the switch, ahead of you, rather
-  than behind you as the old gate room had it. To judge in play: whether the
+  stopgap; a castle five floors tall wants a painting made for it.
+- **The respawn sword cap is an assumption, not Matt's words.** If the hand
+  plus the swords stuck in walls would pass five on a death, the oldest stuck
+  ones go, so dying never farms ledges (`RespawnRules`).
+- **A mechanism's respawn reach is measured from its own position**, and the
+  giant ant's sits at the room origin. Check it the first time an ant goes
+  into a big level.
+- **The forest's river is a spiked gorge** because there is no water. Water
+  that kills could be lava's rule with its own shader.
+- **The freed dragon's breath in Act 4** (`FreedBreath`) is a separate drawing
+  from the R2 flame. Give it the same plume if it reads as flat beside it.
+- **The old outer wall's questions, for the beat sheet** (N3): whether the
   high road's bats are fair or just a toll, whether the skeleton reads as a
   surprise or a scorpion, and whether the castle's plinth switch is found.
-  Not dressed: no battlements (`TileArt.draw_battlements` is unused now),
-  no torches, no siege engines. Frame time in software: 39.3 ms mean, 49.2
-  p95, against level 1's 32.0 and 44.1 in the same run, about a fifth
-  dearer (six braziers, two switch lights and the cage's). **Cost: one
-  session, no credits**, the same as level 1.
-- **R3, a tile's collision line** becomes a per-tile property of the format,
-  which retires the one-off measuring scan (debt, below).
 
 ## Ingredients for the big levels
 
@@ -160,19 +38,11 @@ needed rather than optional, because the content is about to exist.
   switch, so standing still to throw is the risk; a dormant scorpion beside an
   awake one. Plus the two variants `LEVELS.md` already decided: the skeleton
   (a dormant scorpion) and the armour-flipped guard.
-- **The giant ant is in no room.** Act 3 is the obvious home: seven rooms with
-  no creature but the generator. Check first what an ant does when it walks
-  into an embedded sword.
-- **The floor plate and the dormant enemy on a plate** are built
-  (`room_m4_plate`, `room_m4_dormant`) and in no room. `LEVELS.md` liked "an
-  enemy as a switch".
-- **More ways up than ladders.** Five to ten floors climbed only by ladder is
-  exactly the monotony `SPEC.md` warns about, so this stops being a "judge
-  after G1" question. Free now: geysers as routes (`room_m3_geysers` proves
-  it), moving platforms as lifts (`MovingPlatform` already travels any vector),
-  vines as ladders with other art (`LEVELS.md`, 2026-09-28 decision 7). New
-  systems still needing a yes: two-way portals (decision 8 kept the one-shot
-  stump warp).
+- **The giant ant is placeable and in no level.** Act 3 is the obvious home:
+  seven rooms with no creature but the generator. Check first what an ant does
+  when it walks into an embedded sword.
+- **Two-way portals**, a new system still needing a yes (`LEVELS.md` decision
+  8 kept the one-shot stump warp). Lifts and geysers are placeable now.
 - **Spikes where lava cannot go**: teeth on top of the ledge you land on. The
   56 px jump cannot clear a bed on a 32 px step, so it wants a moving platform
   or a sword ledge to arrive on. Revisit when building a level.
@@ -189,10 +59,8 @@ needed rather than optional, because the content is about to exist.
   Volta. The other two rooms could ask more.
 - **From `LEVELS.md`, decided and unbuilt:** siege engines on a clock (the
   dragon's breath with other numbers), the torch carried at the cost of the
-  sword, a lock needing two switches at once, a floor that holds the first
-  time and drops the second, the wood/stone fake-out once or twice, a sword
-  graveyard for atmosphere, the chandelier. (The one-way stump warp is built for
-  G2: `Stump`, `room_g2_stump`.)
+  sword, the wood/stone fake-out once or twice, a sword graveyard for
+  atmosphere, the chandelier.
 - **Remix rooms** after the credits, harder versions of early sections. Matt
   wants them; add each idea here as it comes. After the pass.
 
@@ -239,11 +107,12 @@ needed rather than optional, because the content is about to exist.
 ## Code and tooling debt
 
 - **The test runner passes a test that crashes.** A `SCRIPT ERROR` mid-test
-  aborts that test and the run still reports 0 failed. Worth making a script
-  error a failure.
+  aborts that test and the run still reports 0 failed. A file that will not
+  parse is now a failure (`tests/run_tests.gd`); the mid-test case is not.
+  Unverified by a run.
 - **No tool measures where a tile's art meets its collision line.** Done by a
-  one-off scan for `room_m5_wall`. A big level format makes this a per-tile
-  property, so solve it there.
+  one-off scan for `room_m5_wall`. It belongs in the level format as a
+  per-tile property; N2's `TileShape` does not do it.
 - **`tools/cut-rig.py` only knows named rectangles.** Mostly moot since the
   move to frame animation; keep only if a rig ever returns.
 - **F2's bench cycle leaves out the M4 rooms.** Reachable by
