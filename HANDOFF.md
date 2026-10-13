@@ -44,9 +44,9 @@ Matt's answers to 1 to 3 below open; N3 needs the beat sheet.
 2. **Look at N2's after shots** (the PR) or play either Act 1 level: is a
    shot natural-looking? That closes N2. The back walls, torches and trunks
    are Claude's placements, easy to move in the level text.
-3. **Sketch the outer wall's beat sheet** in the format in `SPEC.md`.
-   Blocks N3. Playing today's level 2 once first is cheap evidence of what
-   to keep.
+3. **Mark up the outer wall's beat sheet**, Claude's draft at
+   `levels/act1_wall.beats` (Matt asked for one, 2026-10-13). Blocks N3.
+   Playing today's level 2 once first is cheap evidence of what to keep.
 4. **Paint the forest's background, attempt 2**, in Gemini from the prompt in
    `ART.md` (*The forest*), saved to `assets/art_raw/forest_bg_2.*`. Attempt 1
    is in and dimmed; tall levels mirror it into X shapes when zoomed out.
