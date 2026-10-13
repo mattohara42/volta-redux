@@ -275,7 +275,8 @@ Three gems in the final level, as in the original.
 
 ## How a level is built
 
-> **Draft for Matt's approval (N0).** Nothing below is settled until he says so.
+> **Approved by Matt, 2026-10-13, as a working method.** It is expected to
+> change as levels get built and played; amend it here when it does.
 
 G2's first answer was that the levels were area rather than ideas: long flat
 runs, big blocks, one way through. This is the method that replaces drawing a
