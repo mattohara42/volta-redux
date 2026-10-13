@@ -1,6 +1,7 @@
-[gd_resource type="Resource" script_class="ActTiles" load_steps=24 format=3]
+[gd_resource type="Resource" script_class="ActTiles" load_steps=25 format=3]
 
 [ext_resource type="Script" path="res://scripts/act_tiles.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/art/forest/forest_bg_px.png" id="bg"]
 [ext_resource type="Texture2D" path="res://assets/art/forest/tiles_px/bark.png" id="bark"]
 [ext_resource type="Texture2D" path="res://assets/art/forest/tiles_px/thorns.png" id="thorns"]
 [ext_resource type="Texture2D" path="res://assets/art/forest/tiles_px/branch_cracked.png" id="cracked"]
@@ -26,6 +27,7 @@
 [ext_resource type="Texture2D" path="res://assets/art/forest/props/root_2.png" id="root2"]
 [resource]
 script = ExtResource("1")
+background = ExtResource("bg")
 floor_tiles = Array[Texture2D]([ExtResource("2"), ExtResource("3"), ExtResource("4"), ExtResource("5")])
 wall_tiles = Array[Texture2D]([ExtResource("6"), ExtResource("7"), ExtResource("8"), ExtResource("9"), ExtResource("10"), ExtResource("11")])
 lintel = false
