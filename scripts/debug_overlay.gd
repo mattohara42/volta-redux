@@ -59,6 +59,9 @@ static var _shown_by_choice: Variant = null
 @onready var _panel: PanelContainer = $Panel
 @onready var _label: Label = $Panel/Margin/Label
 
+## The room's name, shown whenever the panel is not, so a bench that starts
+## with the panel hidden still says which bench it is.
+var _room_tag: Label
 var _player: Player
 var _world: WorldConfig
 var _death: DeathConfig
@@ -81,6 +84,25 @@ func _ready() -> void:
 	_label.add_theme_color_override("font_color", Palette.FIRE_HOT)
 	_label.add_theme_font_size_override("font_size", 7)
 	_panel.visible = (not starts_hidden) if _shown_by_choice == null else _shown_by_choice
+	_room_tag = Label.new()
+	_room_tag.position = Vector2(4.0, 2.0)
+	_room_tag.add_theme_color_override("font_color", Palette.FIRE_HOT)
+	_room_tag.add_theme_font_size_override("font_size", 7)
+	add_child(_room_tag)
+
+
+## Which room this is and where it sits in the F2 cycle, because several
+## benches look alike and the scene name was nowhere on screen.
+func _room_here() -> String:
+	var scene := get_tree().current_scene
+	if scene == null:
+		return ""
+	var here := scene.scene_file_path
+	var index := BENCHES.find(here)
+	var place := "not in the F2 cycle" if index < 0 else "%d of %d in the F2 cycle" % [
+		index + 1, BENCHES.size()
+	]
+	return "%s   %s" % [here.get_file().get_basename(), place]
 
 
 func _cycle_bench() -> void:
@@ -169,6 +191,7 @@ func _process(_delta: float) -> void:
 	# drops a player into the bench cycle (`BACKLOG.md`).
 	if not OS.is_debug_build():
 		_panel.visible = false
+		_room_tag.visible = false
 		return
 	if Input.is_action_just_pressed("debug_next_bench"):
 		_cycle_bench()
@@ -176,6 +199,9 @@ func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("debug_toggle_overlay"):
 		_panel.visible = not _panel.visible
 		_shown_by_choice = _panel.visible
+	_room_tag.visible = not _panel.visible
+	if _room_tag.visible:
+		_room_tag.text = _room_here()
 	if _player == null or not _panel.visible:
 		return
 
@@ -187,6 +213,7 @@ func _process(_delta: float) -> void:
 	var cleared := "clears a tier" if _player.peak_height >= _world.tier_height else "short of a tier"
 
 	_label.text = "\n".join([
+		"room        %s" % _room_here(),
 		"preset      %s   (jump %.0f px in %.2f s)" % [
 			config.preset_name, config.jump_height, config.time_to_apex
 		],
