@@ -38,16 +38,17 @@ Matt's answers to 1 to 4 below open; N3 needs the beat sheet.
 
 ## Blocked on Matt
 
-1. **Approve *How a level is built*** (`SPEC.md`), or mark it up. Blocks N0.
-   **Play the N1 benches** (`bench_n1`, `bench_n1_found`, `bench_n1_combos`,
+1. **Play the N1 benches** (`bench_n1`, `bench_n1_found`, `bench_n1_combos`,
    F2) and say which combinations are worth building beats around. Closes N1.
 2. **Look at N2's after shots** (the PR) or play either Act 1 level: is a
    shot natural-looking? That closes N2. The back walls, torches and trunks
    are Claude's placements, easy to move in the level text.
 3. **Play the look-ahead camera** (`config/camera.tres`: 64 px ahead, swings
    at 160 px/s, holds below 20 px/s so a turn on the spot to throw does not
-   move the view). Its feel closes N0. A look down while falling is not built.
-4. **Sketch the outer wall's beat sheet** in that format. Blocks N3. Playing
+   move the view). Its feel closes N0; its other half, *How a level is
+   built*, Matt approved on 2026-10-13, open to change. A look down while
+   falling is not built.
+4. **Sketch the outer wall's beat sheet** in the format in `SPEC.md`. Blocks N3. Playing
    today's level 2 once first is cheap evidence of what to keep.
 5. **Paint the forest's background, attempt 2**, in Gemini from the prompt in
    `ART.md` (*The forest*), saved to `assets/art_raw/forest_bg_2.*`. Attempt 1
