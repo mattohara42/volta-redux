@@ -35,6 +35,7 @@ const BENCHES: PackedStringArray = [
 	"res://scenes/rooms/bench_n1_combos.tscn",
 	"res://scenes/rooms/act1_forest.tscn",
 	"res://scenes/rooms/act1_wall.tscn",
+	"res://scenes/rooms/act1_wall_old.tscn",
 	"res://scenes/rooms/act2_mouth.tscn",
 	"res://scenes/rooms/act2_geysers.tscn",
 	"res://scenes/rooms/act2_causeway.tscn",

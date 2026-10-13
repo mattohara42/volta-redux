@@ -4,37 +4,22 @@
 > session narrative, that is what `git log` is for. Keep it under 150 lines.
 
 **Updated:** 2026-10-13 · **Phase:** 3 rebuilt, depth before breadth.
-**Active milestone:** N1, everything built is placeable (`BUILD_PLAN.md`).
-N0 is done; N1 and N2 are built and wait only on Matt (below).
-**N1 done-when:** each new level-file entry has a parser test and a bench
-that passes walkback, route and scenarios, and Matt has played the benches
-(F2) and said which combinations are worth building beats around. Then N2
-(it can run alongside), then N3, the outer wall rebuilt from Matt's beat
-sheet. R4 and M14 wait until G2 passes on the rebuilt Act 1.
-
-## Where this is
-
-**G2's first answer was "not fun yet"** (Matt, 2026-10-07): too short,
-simple, stilted, blocky and linear. A review found the cause is how levels
-are made, not the mechanics; Matt adopted its plan and four rulings
-(`LEVELS.md`, *Decisions 2026-10-07*). **Act 1 is two levels**: the forest
-(`levels/act1_forest.level`, in its own art, background attempt 1
-included: `ART.md`, *The forest*) and the outer wall
-(`levels/act1_wall.level`, grey-boxed, the one N3 rebuilds). Acts 2 to 4
-are still the old one-screen rooms.
-**Credits: 285.**
+**Active milestone:** N3, the outer wall rebuilt from a beat sheet
+(`BUILD_PLAN.md`). Matt approved the sheet, `levels/act1_wall.beats`, on
+2026-10-13. N0 is done; N1 and N2 are built and wait only on Matt's play.
+**N3 done-when:** route, walkback, tests and scenarios pass, every beat is
+shot where the sheet puts it, and Matt and the kids play Act 1 from a new
+game and say it is better (G2 again). R4 and M14 wait on that.
 
 ## The next action
 
-**N2, the minimum look, is built.** A grid level's still parts are drawn
-once into textures (`LevelBake`); solid interiors fall into the art set's
-coloured dark by depth (`TileShape`); open sides get an edge and ground you
-walk under a lintel; levels gain `[back]` and `[decor]` grids, the second
-written by rule (`tools/dev.sh decorate`, `DecorRules`). Both Act 1 levels
-have both; the forest's back grid keeps only earth, since the painting has
-trunks of its own. Before and after shots and frame times are in the N2 PR.
-F2 now cycles through the M4 benches too. **Next for Claude**: whatever
-Matt's answers to 1 to 3 below open; N3 needs the beat sheet.
+**N3 has started.** The pre-N3 wall is kept loadable to compare:
+`levels/act1_wall_old.level`, `act1_wall_old.tscn` (F2), its tests and
+scenarios. `levels/act1_wall.level` is still a copy of it. **Next for
+Claude**: rebuild `act1_wall.level` from the beat sheet a screen at a time,
+beats 1 to 5 first (the culvert to the tower stair), each with a test or
+scenario and a shot. N2 (built) is in its own PR: the look is baked once
+(`LevelBake`), with `[back]` and `[decor]` grids.
 
 ## Blocked on Matt
 
@@ -44,16 +29,13 @@ Matt's answers to 1 to 3 below open; N3 needs the beat sheet.
 2. **Look at N2's after shots** (the PR) or play either Act 1 level: is a
    shot natural-looking? That closes N2. The back walls, torches and trunks
    are Claude's placements, easy to move in the level text.
-3. **Mark up the outer wall's beat sheet**, Claude's draft at
-   `levels/act1_wall.beats` (Matt asked for one, 2026-10-13). Blocks N3.
-   Playing today's level 2 once first is cheap evidence of what to keep.
-4. **Paint the forest's background, attempt 2**, in Gemini from the prompt in
+3. **Paint the forest's background, attempt 2**, in Gemini from the prompt in
    `ART.md` (*The forest*), saved to `assets/art_raw/forest_bg_2.*`. Attempt 1
    is in and dimmed; tall levels mirror it into X shapes when zoomed out.
-5. **Frame time on a real machine**: `tools/dev.sh frametime`, then with
+4. **Frame time on a real machine**: `tools/dev.sh frametime`, then with
    `res://scenes/rooms/act1_forest.tscn` and `act1_wall.tscn`: p95 under
    16.7 ms? Blocks R3's frame-rate half.
-6. **Older and still open**: R2's final quality (the flame, the sword, the
+5. **Older and still open**: R2's final quality (the flame, the sword, the
    doors, the ride); `RoomM7Sheet` consistent in treatment (closes M7); the
    unattended calls from 2026-10-05; M4's dragon pacing; a play log (`user://`,
    #136) when one is to hand. Two rulings wait for N1: faster ladder

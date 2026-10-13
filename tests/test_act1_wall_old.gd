@@ -1,4 +1,5 @@
-## Act 1's second level (`levels/act1_wall.level`), as arithmetic. It folds in
+## The outer wall as it stood before N3 (`levels/act1_wall_old.level`), kept
+## to compare against the rebuild, as arithmetic. It folds in
 ## the claims the wall, bailey and gate rooms made: the wall is climbed and
 ## never jumped; the gatehouse is passed with a sword, and its sill is where a
 ## throw lands on top of the guard; the breach and the high road can both be
@@ -22,8 +23,11 @@ const FAR_TOP: float = 448.0
 const PIT_TOP: float = 560.0
 
 
+const LEVEL := "res://levels/act1_wall_old.level"
+
+
 func _level() -> LevelGrid.Level:
-	return GridRoom.read(Act1Wall.LEVEL)
+	return GridRoom.read(LEVEL)
 
 
 func _throw_y(surface: float) -> float:
