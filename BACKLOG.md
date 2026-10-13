@@ -80,9 +80,6 @@ needed rather than optional, because the content is about to exist.
   tufts are the lip's grass grown taller, roots are the soil's roots let out.
   Good enough to judge the rules by. A drawn set (tufts, roots, ferns,
   fungus) is one or two Sprite Fusion requests, gated on Matt's approval.
-- **The forest's back trunks are flat bark columns**, darkened. They give the
-  canopy something to stand on until the forest's painting (`ART.md`, *The
-  forest*) exists; with a painting they may want to go.
 - **Torches come from the rules, so they follow the back wall.** Every
   back-wall stretch at floor level gets one each ten cells. In the gatehouse
   passage one hangs where the guard stands. Fine in a shot; play it.
