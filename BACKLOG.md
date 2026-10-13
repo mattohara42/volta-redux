@@ -26,6 +26,7 @@ play is in `HANDOFF.md`'s open list. What is still open from them is below.
 - **The old outer wall's questions, for the beat sheet** (N3): whether the
   high road's bats are fair or just a toll, whether the skeleton reads as a
   surprise or a scorpion, and whether the castle's plinth switch is found.
+
 ## Ingredients for the big levels
 
 Older entries that were waiting for content to use them. Most are now
