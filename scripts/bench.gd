@@ -211,6 +211,7 @@ func _add_falling_platform(rect: Rect2) -> FallingPlatform:
 		push_error("bench: a falling platform needs config/hazards.tres wired into the scene")
 		return null
 	_walk.solids.append(rect)
+	_walk.slabs.append(rect)
 	var platform := FallingPlatform.new()
 	# Far enough to be below the room, plus its own depth so nothing is left
 	# poking up into the gap it used to fill.

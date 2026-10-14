@@ -134,3 +134,26 @@ func test_nothing_crosses_a_barrier() -> void:
 	layout.deadly = [Rect2(400.0, 0.0, 6.0, FLOOR)]
 	var report := WalkBack.check(layout, _moves())
 	check(not report.exit_reached, "the exit beyond the barrier is out of reach")
+
+
+## A slab across a hole in the floor, the exit down the hole: standing on a
+## slab that falls takes you down through it, which is the only way there.
+func test_a_falling_slab_is_a_way_down_through_it() -> void:
+	var layout := WalkBack.Layout.new()
+	var slab := Rect2(280.0, FLOOR, 80.0, 16.0)
+	layout.solids = [
+		Rect2(0.0, FLOOR, 280.0, 16.0),
+		slab,
+		Rect2(360.0, FLOOR, WIDTH - 360.0, 16.0),
+		Rect2(0.0, 600.0, WIDTH, 40.0),
+		Rect2(-24.0, 0.0, 24.0, 640.0),
+		Rect2(WIDTH, 0.0, 24.0, 640.0),
+	]
+	layout.start = Vector2(40.0, FLOOR)
+	layout.exit = Rect2(320.0, 600.0 - 48.0, 8.0, 48.0)
+	var report := WalkBack.check(layout, _moves())
+	check(not report.exit_reached, "with the slab only ever present, nothing reaches the floor below")
+	layout.slabs = [slab]
+	report = WalkBack.check(layout, _moves())
+	check(report.exit_reached, "a slab that falls is a way down through it")
+	check_eq(report.stranded.size(), 1, "and the floor below has no way back")

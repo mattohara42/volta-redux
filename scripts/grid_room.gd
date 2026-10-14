@@ -175,7 +175,9 @@ func _build_things() -> void:
 		add_child(torch)
 	for t in level.of_kind("bat"):
 		var size := t.size("size", BAT_SIZE)
-		_add_bat(Rect2(t.rect.get_center() - size * 0.5, size), t.rect.size * 0.5)
+		var bat := _add_bat(Rect2(t.rect.get_center() - size * 0.5, size), t.rect.size * 0.5)
+		if bat != null and t.flag("dormant"):
+			bat.start_dormant()
 
 
 func _art(act: ActConfig) -> ActTiles:

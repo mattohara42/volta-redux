@@ -13,8 +13,9 @@
 ## already crosses would flag drops that are not there.
 ##
 ## Deliberately generous where a room is dynamic: gates count as open, falling
-## slabs as present, ferries as docked at either end, live metal as dead and a
-## lava tide as low. Each of those is a way back only some of the time, and
+## slabs as present (and as a way down, since one that falls drops you through
+## it), ferries as docked at either end, live metal as dead and a lava tide as
+## low. Each of those is a way back only some of the time, and
 ## timing is the room's puzzle, not a wall.
 class_name WalkBack
 extends RefCounted
@@ -45,6 +46,8 @@ class Layout:
 	var embeddable: Array[Rect2] = []
 	## Lava, spike beds and barriers.
 	var deadly: Array[Rect2] = []
+	## The falling slabs among `solids`: each is also a way down through it.
+	var slabs: Array[Rect2] = []
 	var ladders: Array[Rect2] = []
 	## A ferry's slab at its near dock, and how far it travels to the far one.
 	var ferries: Array[Rect2] = []
@@ -231,7 +234,29 @@ static func _moves_between(
 	_ferries(edges, surfaces, layout, moves)
 	_geysers(edges, surfaces, floors, layout, moves)
 	_warps(edges, surfaces, layout)
+	_slab_drops(edges, surfaces, layout, moves)
 	return edges
+
+
+## Standing on a slab that falls, you fall with it: from along its top, straight
+## down through where it was, onto whatever is below.
+static func _slab_drops(
+	edges: Array[PackedInt32Array], surfaces: Array[Rect2], layout: Layout, moves: Moves
+) -> void:
+	for slab in layout.slabs:
+		var without := layout.solids.duplicate()
+		without.erase(slab)
+		for i in surfaces.size():
+			var surface := surfaces[i]
+			if not is_equal_approx(surface.position.y, slab.position.y):
+				continue
+			var x := maxf(surface.position.x, slab.position.x + moves.hero_width * 0.5)
+			var end := minf(surface.end.x, slab.end.x - moves.hero_width * 0.5)
+			while x <= end:
+				# A hair below the top, so the fall does not land on the slab's own
+				# surface before it has started.
+				_link(edges, i, _fly(Vector2(x, slab.position.y + 0.5), 0.0, false, surfaces, without, layout.deadly, moves))
+				x += STEP_X
 
 
 ## One arc, from feet at `feet` with run speed `vx`, jumping or just falling.

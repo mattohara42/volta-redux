@@ -31,7 +31,8 @@
 ##     gate                     a portcullis
 ##     switch opens=G           wood a sword holds down, opening gate G
 ##     scorpion range=96        a patrol; `dormant` asleep until you come near
-##     bat                      flies about the rect it fills
+##     bat                      flies about the rect it fills; `dormant` asleep
+##                              at its middle until you come near (a roost)
 ##     stump to=U               land on it, come up on stump U (one way)
 ##     stump                    a stump that leads nowhere, or a warp's end
 ##     plate opens=G            lying on the floor under it; weight holds it
