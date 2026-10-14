@@ -371,3 +371,120 @@ func test_the_bailey_wall_planks_are_the_way_down() -> void:
 			below = minf(below, solid.position.y)
 	check_eq(below, LIP, "nothing between the planks and the lip")
 	check(FLOOR_1 - LIP > move.jump_height, "the lip is a drop too deep to climb back from the courtyard")
+
+
+const YARD: float = 704.0
+const PLINTH: float = 672.0
+
+
+## Beat 14. A step over a sleeping skeleton, as at 3, with an eye between
+## them that starts above the step's throw line and drifts down across it, out
+## of reach of the step. A ladder from the ditch's brazier is the way in and
+## back.
+func test_the_gallery_eye_drifts_onto_the_steps_line() -> void:
+	var world: WorldConfig = load(WORLD)
+	var enemies: EnemyConfig = load(ENEMIES)
+	var level := _level()
+	var step := Act1Wall.sill_rect(level.thing("a").rect, level.thing("a").number("height", 0.0))
+	check_eq(step.end.y, FLOOR_3, "the step is on floor 3")
+	var skeleton := level.thing("b")
+	check(skeleton.flag("dormant"), "the skeleton sleeps")
+	var line := step.position.y - world.hero_height * 0.5
+	var half_height := GridRoom.SCORPION_SIZE.y * 0.5
+	for facing in [-1.0, 1.0]:
+		check(
+			ScorpionPatrol.is_vulnerable_to(
+				Vector2(-10.0, line - (FLOOR_3 - half_height)), facing, half_height, enemies.scorpion_armor_top_fraction
+			),
+			"from the step a throw gets through facing %.0f" % facing
+		)
+	var eye := level.thing("c").rect
+	check(eye.position.x > step.end.x and eye.end.x < skeleton.rect.position.x, "the eye is between the step and the skeleton")
+	check(eye.get_center().y + GridRoom.EYEBALL_SIZE.y * 0.5 < line, "it starts above the step's line")
+	check(eye.end.y > line, "and can drift down across it")
+	check(eye.position.x - GridRoom.EYEBALL_SIZE.x * 0.5 > step.end.x, "without reaching the step")
+	var up := false
+	for ladder in level.ladders:
+		up = up or (is_equal_approx(ladder.position.y, FLOOR_3) and is_equal_approx(ladder.end.y, FAR_TOP) and ladder.end.x <= step.position.x)
+	check(up, "a ladder up from the ditch's far side")
+
+
+## Beat 15. Two switches hold the inner gate: the low one on the floor's throw
+## line, the high one on the line thrown from a sword stuck in the low one.
+## Past the gate a brazier, and a ladder up to a roof that drops you back.
+func test_the_inner_gate_needs_the_second_switch_from_the_first() -> void:
+	var world: WorldConfig = load(WORLD)
+	var sword: SwordConfig = load(SWORD)
+	var level := _level()
+	var low := level.thing("d")
+	var high := level.thing("e")
+	check_eq(String(low.params.get("opens", "")), "f", "the low switch opens the inner gate")
+	check_eq(String(high.params.get("opens", "")), "f", "and so does the high one")
+	var floor_line := _throw_y(FLOOR_3)
+	check(low.rect.position.y < floor_line and low.rect.end.y > floor_line, "the low one is on the floor's line")
+	check(not (high.rect.position.y < floor_line and high.rect.end.y > floor_line), "the high one is not")
+	var ledge_top := floor_line - Sword.LEDGE_THICKNESS * 0.5
+	var ledge_line := ledge_top - world.hero_height * 0.5
+	check(high.rect.position.y < ledge_line and high.rect.end.y > ledge_line, "it is on the line from a sword in the low one")
+	check(high.rect.position.x - low.rect.position.x <= sword.max_range, "within a throw of it")
+	var gate := level.thing("f").rect
+	check(gate.position.x > high.rect.end.x, "the gate is past both")
+	var lit := false
+	for base in level.braziers:
+		lit = lit or (is_equal_approx(base.y, FLOOR_3) and base.x > gate.end.x)
+	check(lit, "a brazier past the gate")
+	var roof := false
+	for ladder in level.ladders:
+		roof = roof or (ladder.position.x > gate.end.x and ladder.position.y < gate.position.y and is_equal_approx(ladder.end.y, FLOOR_3))
+	check(roof, "a ladder up from past the gate to the roof")
+
+
+## Beat 16. Planks that hold once over the gate yard, ending on stone, with a
+## scorpion patrolling the yard floor under them.
+func test_the_plinth_approach_planks_hang_over_the_yard_scorpion() -> void:
+	var level := _level()
+	var planks := level.thing("j")
+	check_eq(planks.number("holds", 0.0), 1.0, "planks that hold once")
+	check_eq(planks.rect.position.y, FLOOR_3, "on floor 3")
+	var ends_on_stone := false
+	for solid in level.solids():
+		ends_on_stone = ends_on_stone or (is_equal_approx(solid.position.y, FLOOR_3) and is_equal_approx(solid.position.x, planks.rect.end.x))
+	check(ends_on_stone, "ending on stone, so coming back is a second landing")
+	var patrol := _patrol(level.thing("k"))
+	check(patrol.x < planks.rect.end.x and patrol.y > planks.rect.position.x, "the yard scorpion walks under them")
+	check_eq(level.thing("k").rect.end.y, YARD, "on the yard floor")
+
+
+## Beat 17. The plinth's face is the switch, on the yard's throw line; a step
+## on a pillar in the yard puts a throw in the top of the scorpion guarding
+## the gate; both are inside a jump; the gate stands on the plinth with the
+## castle over it, and the exit is past it.
+func test_the_gate_yard_combines_the_sill_and_the_switch() -> void:
+	var move: MovementConfig = load(MOVE)
+	var world: WorldConfig = load(WORLD)
+	var enemies: EnemyConfig = load(ENEMIES)
+	var sword: SwordConfig = load(SWORD)
+	var level := _level()
+	var switch := level.thing("m")
+	check_eq(String(switch.params.get("opens", "")), "n", "the plinth's face opens the castle gate")
+	var line := _throw_y(YARD)
+	check(switch.rect.position.y < line and switch.rect.end.y > line, "on the yard's throw line")
+	check(YARD - PLINTH < move.jump_height, "the plinth is inside a jump")
+	var step := Act1Wall.sill_rect(level.thing("o").rect, level.thing("o").number("height", 0.0))
+	check(YARD - step.position.y < move.jump_height, "and so is the step on its pillar")
+	var guard := level.thing("l")
+	check_eq(guard.rect.end.y, PLINTH, "the guard is on the plinth")
+	var half_height := GridRoom.SCORPION_SIZE.y * 0.5
+	var from_step := step.position.y - world.hero_height * 0.5 - (PLINTH - half_height)
+	for facing in [-1.0, 1.0]:
+		check(
+			ScorpionPatrol.is_vulnerable_to(
+				Vector2(-10.0, from_step), facing, half_height, enemies.scorpion_armor_top_fraction
+			),
+			"from the step a throw gets into its top facing %.0f" % facing
+		)
+	check(step.end.x - world.hero_width * 0.5 + sword.max_range >= _patrol(guard).y, "the whole of its patrol is in reach")
+	var gate := level.thing("n").rect
+	check_eq(gate.end.y, PLINTH, "the gate stands on the plinth")
+	check(gate.position.x > _patrol(guard).y, "past the guard's patrol")
+	check(level.exit.position.x > gate.end.x, "and the exit is past the gate")

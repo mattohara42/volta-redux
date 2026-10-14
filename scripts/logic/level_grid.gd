@@ -24,8 +24,9 @@
 ##     =  a falling slab         H  a ladder, filling the air it climbs
 ##     @  where the hero starts  B  a brazier   C  a chest   E  the exit
 ##
-## Any other capital letter or digit is an anchor: every cell carrying it
-## makes one rectangle, and a line in `[things]` says what it is. A line is
+## Any other letter or digit is an anchor (lowercase too, but `w` is wood):
+## every cell carrying it makes one rectangle, and a line in `[things]` says
+## what it is. A line is
 ## `<anchor> <kind> key=value ...`. The kinds a `GridRoom` builds:
 ##
 ##     gate                     a portcullis
@@ -259,7 +260,9 @@ static func parse(text: String) -> Level:
 			_:
 				if MATERIALS.contains(c) or c == "H":
 					continue
-				if c == c.to_upper() and c != c.to_lower() or c.is_valid_int():
+				# Any letter (but `w`, wood, matched above) or digit. Lowercase
+				# too, since a big level runs out of capitals (N3's wall).
+				if c.to_upper() != c.to_lower() or c.is_valid_int():
 					anchors[c] = _bounds(at, level.cell)
 				else:
 					level.errors.append("unknown map character '%s'" % c)

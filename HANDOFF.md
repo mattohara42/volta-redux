@@ -13,31 +13,35 @@ game and say it is better (G2 again). R4 and M14 wait on that.
 
 ## The next action
 
-**N3: beats 1 to 13 and the pocket are built** in `levels/act1_wall.level`
-(slices 1 to 3), with a temporary exit past the ditch. The pre-N3 wall is
-`act1_wall_old` (F2). Changes from the sheet, each in its PR: the loop at 7
-opens only from the corridor side (no skipping the tower); the yard's
-ladder stands off its switch so a held sword does not block it; the ditch
-is four cells, not six, inside a jump to the sword. Bats can sleep
-(`bat dormant`) and walk-back models a slab as a way down through it.
-**Next for Claude**: slice 4, beats 14 to 17 (the barbican gallery, the
-inner gate, the plinth approach, the gate yard and the real exit).
+**N3 is built**: every beat on the sheet and the pocket, in
+`levels/act1_wall.level`, from the culvert's mouth to the castle gate. Route,
+walk-back, 501 tests and 122 scenarios pass (18 of them walk the new wall's
+beats), and every beat was shot. Where the build departs from the sheet is
+at the foot of `levels/act1_wall.beats` (*As built*). The pre-N3 wall is
+`act1_wall_old` (F2) to compare. Engine changes it needed: enemies revive
+at a respawn, bats can sleep, lowercase anchors, WalkBack drops through
+slabs. **Next for Claude**: Matt's play notes. N3 is done when Matt and the
+kids play Act 1 from a new game and say it is better (G2 again).
 
 ## Blocked on Matt
 
-1. **Play the N1 benches** (`bench_n1`, `bench_n1_found`, `bench_n1_combos`,
+1. **Play Act 1 from a new game, with the kids** (the rebuilt wall is level
+   2). Better than before? That is G2 again, and closes N3. Read the *As
+   built* notes in `levels/act1_wall.beats` first: each is a call to keep
+   or overrule.
+2. **Play the N1 benches** (`bench_n1`, `bench_n1_found`, `bench_n1_combos`,
    F2; the top left names the room) and say which combinations are worth
    building beats around. Closes N1.
-2. **Look at N2's after shots** (the PR) or play either Act 1 level: is a
+3. **Look at N2's after shots** (the PR) or play either Act 1 level: is a
    shot natural-looking? That closes N2. The back walls, torches and trunks
    are Claude's placements, easy to move in the level text.
-3. **Paint the forest's background, attempt 2**, in Gemini from the prompt in
+4. **Paint the forest's background, attempt 2**, in Gemini from the prompt in
    `ART.md` (*The forest*), saved to `assets/art_raw/forest_bg_2.*`. Attempt 1
    is in and dimmed; tall levels mirror it into X shapes when zoomed out.
-4. **Frame time on a real machine**: `tools/dev.sh frametime`, then with
+5. **Frame time on a real machine**: `tools/dev.sh frametime`, then with
    `res://scenes/rooms/act1_forest.tscn` and `act1_wall.tscn`: p95 under
    16.7 ms? Blocks R3's frame-rate half.
-5. **Older and still open**: R2's final quality (the flame, the sword, the
+6. **Older and still open**: R2's final quality (the flame, the sword, the
    doors, the ride); `RoomM7Sheet` consistent in treatment (closes M7); the
    unattended calls from 2026-10-05; M4's dragon pacing; a play log (`user://`,
    #136) when one is to hand. Two rulings wait for N1: faster ladder
