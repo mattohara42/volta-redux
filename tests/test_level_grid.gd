@@ -235,3 +235,15 @@ func test_a_layer_that_does_not_add_up_says_so() -> void:
 	var unknown := LevelGrid.parse("[map]\n..\n##\n[back]\n.~\n[decor]\nQ.\n")
 	check(unknown.errors.any(func(e: String) -> bool: return e.contains("[back] character '~'")), "lava is not a back wall")
 	check(unknown.errors.any(func(e: String) -> bool: return e.contains("[decor] character 'Q'")), "nor Q a decoration")
+
+
+func test_a_lowercase_letter_is_an_anchor_but_w_is_wood() -> void:
+	var level := LevelGrid.parse("""[map]
+.s.w
+####
+[things]
+s scorpion range=32
+""")
+	check_eq(level.errors, [] as Array[String], "no errors")
+	check(level.thing("s") != null and level.thing("s").kind == "scorpion", "s is a scorpion's anchor")
+	check_eq(level.wood.size(), 1, "and w is still wood")

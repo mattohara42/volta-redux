@@ -118,3 +118,25 @@ patrols the plinth top in front of the gate. Kill it from the yard wall's
 step, then hold the gate with a sword in the plinth's face and walk out.
 The exit is one way.
 can kill you: the scorpion
+
+# As built (N3, 2026-10-14)
+# Where levels/act1_wall.level differs from the sheet above, and why. Each is
+# Claude's call, made unattended, for Matt to overrule.
+# - 7: the loop back to the brazier at 4 goes through a portcullis whose
+#   switch is on the corridor side, so it opens for a player coming round
+#   and cannot be used to skip the tower on the way out.
+# - 8: a quick double jump (land on the shaking planks, jump to the post)
+#   gets home without the sword, as "or jump it if you can" allows. Widen the
+#   pit if the sword should be the only answer.
+# - 13: a brazier past the ditch, as the old wall had.
+# - 14: a throw that kills is lost, so there is no catch to spoil. The eye
+#   drifts to your height and sits on the line from the step: throw before it
+#   settles and the skeleton dies; wait and the eye takes the sword. The loop
+#   is the ladder down to the ditch's brazier (13), not the bailey's (9).
+# - 15: past the gate, a ladder up through the roof drops you back to the
+#   ditch's brazier, since the gate shuts once you recall your swords.
+# - 16: the "throw down from the planks' end" answer is not built (throws are
+#   flat); the other way in is a ladder down that lands you facing the
+#   scorpion. The planks end on stone so coming back is a second landing.
+# - 17: "the yard wall's step" is a step on a pillar in the yard, level with
+#   the plinth's top plus a sill.
