@@ -255,3 +255,119 @@ func test_the_loop_opens_only_from_the_corridor() -> void:
 	check(switch.rect.position.x > gate.end.x, "from the corridor side")
 	var line := _throw_y(FLOOR_2)
 	check(switch.rect.position.y < line and switch.rect.end.y > line, "on the corridor's throw line")
+
+
+const LIP: float = 640.0
+const FAR_TOP: float = 576.0
+const DITCH_FLOOR: float = 688.0
+
+
+## Beat 13. The ditch, kept from the old wall: crossed only on your own sword.
+func test_the_ditch_needs_the_sword() -> void:
+	var level := _level()
+	var hoarding := Rect2()
+	for wood in level.wood:
+		if is_equal_approx(wood.position.y, FAR_TOP):
+			hoarding = wood
+	check(hoarding.size != Vector2.ZERO, "the far side is faced with wood")
+	var near := 0.0
+	for solid in level.solids():
+		if is_equal_approx(solid.position.y, LIP) and solid.end.x <= hoarding.position.x:
+			near = maxf(near, solid.end.x)
+	DitchChecks.run(self, "Act1Wall", near, LIP, FAR_TOP, hoarding, DITCH_FLOOR)
+
+
+## Beat 9. The caged dragon over a quiet stretch of the bailey: above where
+## you walk, big enough for the dragon, nothing hunting under it, and a
+## brazier at the way in.
+func test_the_cage_is_scenery_over_a_quiet_bailey() -> void:
+	var level := _level()
+	var grate := level.thing("D").rect
+	check(grate.end.y < FLOOR_1, "it ends above the bailey floor")
+	check(grate.encloses(Act1Wall.dragon_rect(grate)), "the dragon fits inside it")
+	check(grate.end.x < level.thing("1").rect.position.x, "before the yard and its switch")
+	for t in level.of_kind("scorpion") + level.of_kind("bat"):
+		check(absf(t.rect.get_center().x - grate.get_center().x) > grate.size.x, "nothing hunts under the cage (%s)" % t.anchor)
+	var lit := false
+	for base in level.braziers:
+		lit = lit or (is_equal_approx(base.y, FLOOR_1) and base.x < grate.position.x and base.x > level.thing("I").rect.end.x)
+	check(lit, "a brazier where the bailey begins")
+
+
+## Beat 10. The yard's switch is the far face on the floor's throw line; its
+## ladder up stands clear of a sword held in it; the gate is up on floor 2
+## with stone over it; two bats round the ladder past it.
+func test_the_bailey_yard_switch_opens_the_gate_above() -> void:
+	var world: WorldConfig = load(WORLD)
+	var level := _level()
+	var switch := level.thing("1")
+	var gate := level.thing("2").rect
+	check_eq(String(switch.params.get("opens", "")), "2", "it opens the gate")
+	var line := _throw_y(FLOOR_1)
+	check(switch.rect.position.y < line and switch.rect.end.y > line, "on the yard's throw line")
+	check_eq(gate.end.y, FLOOR_2, "the gate is on floor 2")
+	var over := false
+	for solid in level.solids():
+		if solid.position.x <= gate.position.x and solid.end.x >= gate.end.x and is_equal_approx(solid.end.y, gate.position.y):
+			over = true
+	check(over, "with stone over it")
+	var up := Rect2()
+	for ladder in level.ladders:
+		if is_equal_approx(ladder.end.y, FLOOR_1) and is_equal_approx(ladder.position.y, FLOOR_2) and ladder.end.x <= switch.rect.position.x:
+			up = ladder
+	check(up.size != Vector2.ZERO, "a ladder up from the yard")
+	check(switch.rect.position.x - up.end.x >= world.sword_length, "clear of a sword held in the switch")
+	var bats := 0
+	for anchor in ["3", "4"]:
+		var box := _bat_box(anchor)
+		if box.position.x > gate.end.x:
+			bats += 1
+	check_eq(bats, 2, "two bats past the gate")
+
+
+## Beat 11. The barbican stair climbs from floor 1 to floor 3 with nothing on
+## it but a roost asleep beside it: one low, which comes down to the floor's
+## throw line, one high, and each wakes as the climb passes it.
+func test_the_barbican_roost_sleeps_beside_the_stair() -> void:
+	var enemies: EnemyConfig = load(ENEMIES)
+	var world: WorldConfig = load(WORLD)
+	var level := _level()
+	var stair := Rect2()
+	for ladder in level.ladders:
+		if is_equal_approx(ladder.end.y, FLOOR_1) and is_equal_approx(ladder.position.y, FLOOR_3) and ladder.position.x > level.thing("2").rect.end.x and ladder.position.x < level.thing("7").rect.position.x:
+			stair = ladder
+	check_eq(stair.size.y, FLOOR_1 - FLOOR_3, "a stair from floor 1 to floor 3")
+	var middle := stair.get_center().x
+	var low := level.thing("5")
+	var high := level.thing("6")
+	for t in [low, high]:
+		check(t.flag("dormant"), "bat %s asleep" % t.anchor)
+		check(absf(t.rect.get_center().x - middle) < enemies.dormant_wake_range, "bat %s wakes as the climb passes it" % t.anchor)
+	check(low.rect.get_center().y > high.rect.get_center().y, "one low, one high")
+	var line := _throw_y(FLOOR_1)
+	check(low.rect.position.y < line and low.rect.end.y > line, "the low one comes down to the floor's throw line")
+	var asleep_at := low.rect.get_center()
+	var from_floor := Vector2(middle, FLOOR_1 - world.hero_height * 0.5).distance_to(asleep_at)
+	check(from_floor > enemies.dormant_wake_range, "it sleeps through you standing at the foot (%.0f px)" % from_floor)
+
+
+## Beat 12. From the barbican's top, planks that hold once out to a dead end
+## closed by a merlon too tall to jump; under them nothing but air down to the
+## ditch's lip. The way back from the lip is a drop too deep to climb.
+func test_the_bailey_wall_planks_are_the_way_down() -> void:
+	var move: MovementConfig = load(MOVE)
+	var level := _level()
+	var planks := level.thing("7")
+	check_eq(planks.number("holds", 0.0), 1.0, "planks that hold once")
+	check_eq(planks.rect.position.y, FLOOR_3, "on floor 3")
+	var merlon := Rect2()
+	for solid in level.solids():
+		if solid.position.x >= planks.rect.end.x and solid.end.y <= FLOOR_3 + 0.5 and solid.position.y < FLOOR_3 and solid.position.x < planks.rect.end.x + 64.0:
+			merlon = solid
+	check(FLOOR_3 - merlon.position.y > move.jump_height, "a merlon at the dead end taller than a jump")
+	var below := LIP
+	for solid in level.solids():
+		if solid.position.x < planks.rect.end.x and solid.end.x > planks.rect.position.x and solid.position.y > FLOOR_3 and solid.position.y < LIP:
+			below = minf(below, solid.position.y)
+	check_eq(below, LIP, "nothing between the planks and the lip")
+	check(FLOOR_1 - LIP > move.jump_height, "the lip is a drop too deep to climb back from the courtyard")

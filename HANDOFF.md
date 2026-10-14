@@ -13,15 +13,15 @@ game and say it is better (G2 again). R4 and M14 wait on that.
 
 ## The next action
 
-**N3: beats 1 to 8 and the pocket are built** in `levels/act1_wall.level`
-(slices 1 and 2), with a temporary exit at the far end of the corridor under
-the wall walk. The pre-N3 wall is `act1_wall_old` (F2). One change from the
-sheet: the loop at 7 reaches the guardroom's brazier through a portcullis
-whose switch is on the corridor side, so it cannot be used to skip the
-tower on the way out. **Next for Claude**: slice 3, beats 9 to 13 (the
-bailey and the caged dragon, the bailey yard, the barbican stair's roost,
-the bailey wall, the ditch). The roost needs `bat dormant` in the level
-format first (only scorpions can sleep today).
+**N3: beats 1 to 13 and the pocket are built** in `levels/act1_wall.level`
+(slices 1 to 3), with a temporary exit past the ditch. The pre-N3 wall is
+`act1_wall_old` (F2). Changes from the sheet, each in its PR: the loop at 7
+opens only from the corridor side (no skipping the tower); the yard's
+ladder stands off its switch so a held sword does not block it; the ditch
+is four cells, not six, inside a jump to the sword. Bats can sleep
+(`bat dormant`) and walk-back models a slab as a way down through it.
+**Next for Claude**: slice 4, beats 14 to 17 (the barbican gallery, the
+inner gate, the plinth approach, the gate yard and the real exit).
 
 ## Blocked on Matt
 
