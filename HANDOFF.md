@@ -13,13 +13,13 @@ game and say it is better (G2 again). R4 and M14 wait on that.
 
 ## The next action
 
-**N3 has started.** The pre-N3 wall is kept loadable to compare:
-`levels/act1_wall_old.level`, `act1_wall_old.tscn` (F2), its tests and
-scenarios. `levels/act1_wall.level` is still a copy of it. **Next for
-Claude**: rebuild `act1_wall.level` from the beat sheet a screen at a time,
-beats 1 to 5 first (the culvert to the tower stair), each with a test or
-scenario and a shot. N2 (built) is in its own PR: the look is baked once
-(`LevelBake`), with `[back]` and `[decor]` grids.
+**N3, slice 1 of the rebuild is in**: `levels/act1_wall.level` is beats
+1 to 5 (the culvert's mouth to the top of the tower stair) with a temporary
+exit on the wall walk. The pre-N3 wall is `act1_wall_old` (F2), with its
+tests and scenarios. **Next for Claude**: slice 2, beats 6 to 8 and the
+pocket (the wall walk, the gatehouse switch, the hoardings), widening the
+map rightwards and moving the exit. Beat 11's roost needs `bat dormant` in
+the level format first (only scorpions can sleep today).
 
 ## Blocked on Matt
 

@@ -58,6 +58,8 @@ var _roared := false
 ## links visibly travel as the gate rises and falls.
 var _links: Array[Dictionary] = []
 var _grate := Rect2()
+## False while the rebuild (N3) has not reached the bailey, where the cage is.
+var _has_cage := false
 var _cage := Node2D.new()
 ## What moves (the dragon's breath, the chains) is drawn here and redrawn
 ## every frame, so the level itself is drawn once rather than every frame.
@@ -96,12 +98,16 @@ func _built() -> void:
 		switch.add_child(LightSource.point(
 			ATMOSPHERE_CONFIG.light_switch_radius, Palette.FIRE_CORE, ATMOSPHERE_CONFIG.light_switch_strength
 		))
-	_grate = level.thing("D").rect
 	# First child: over the level's own drawing, as `_draw_under` was, and
 	# under the hero, the creatures and the dark.
 	_live.draw.connect(_draw_live)
 	add_child(_live)
 	move_child(_live, 0)
+	var cage := level.thing("D")
+	_has_cage = cage != null
+	if not _has_cage:
+		return
+	_grate = cage.rect
 	# The cage's own light, so the dark of the level does not swallow it.
 	_cage.position = dragon_rect(_grate).get_center()
 	add_child(_cage)
@@ -116,7 +122,7 @@ func _process(delta: float) -> void:
 	var breath := ATMOSPHERE_CONFIG.cage_breath_seconds * DRAGON_FRAMES
 	_clock = fmod(_clock + delta, breath)
 	_smoke_clock += delta
-	if _smoke_clock >= ATMOSPHERE_CONFIG.cage_smoke_period:
+	if _has_cage and _smoke_clock >= ATMOSPHERE_CONFIG.cage_smoke_period:
 		_smoke_clock = 0.0
 		_smoke.restart()
 	_glint_clock += delta
@@ -137,7 +143,7 @@ func _process(delta: float) -> void:
 
 ## It roars once, as you come along the quiet stretch beneath it.
 func _listen_for_the_hero() -> void:
-	if _roared:
+	if _roared or not _has_cage:
 		return
 	for node in get_tree().get_nodes_in_group("player"):
 		var hero := node as Node2D
@@ -181,7 +187,8 @@ func _draw_over(canvas: CanvasItem) -> void:
 
 
 func _draw_live() -> void:
-	_draw_grate()
+	if _has_cage:
+		_draw_grate()
 	for link in _links:
 		_draw_link(link)
 
