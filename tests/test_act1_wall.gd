@@ -132,7 +132,8 @@ func test_the_tower_stair_switches_sides_past_a_bat_a_storey() -> void:
 	var level := _level()
 	var stair: Array[Rect2] = []
 	for ladder in level.ladders:
-		if ladder.position.y >= FLOOR_4 - 0.5 and ladder.end.y <= FLOOR_2 + 0.5 and ladder.position.x > level.thing("L").rect.end.x:
+		var inside := ladder.position.x > level.thing("L").rect.end.x and ladder.end.x <= level.thing("I").rect.position.x
+		if inside and ladder.position.y >= FLOOR_4 - 0.5 and ladder.end.y <= FLOOR_2 + 0.5:
 			stair.append(ladder)
 	stair.sort_custom(func(a: Rect2, b: Rect2) -> bool: return a.end.y > b.end.y)
 	check_eq(stair.size(), 3, "three ladders")
@@ -148,3 +149,109 @@ func test_the_tower_stair_switches_sides_past_a_bat_a_storey() -> void:
 		var box := _bat_box(bats[i])
 		var line := _throw_y(stair[i].end.y)
 		check(box.position.y < line and box.end.y > line, "bat %s crosses the throw line at ladder %d's foot" % [bats[i], i])
+
+
+const FLOOR_3: float = 416.0
+const FLOOR_5: float = 224.0
+
+
+## Beat 6. A ladder a tier up from the walk to planks that hold once, out to
+## a lookout; under the planks nothing but air down to the walk, so the drop
+## is a storey onto floor you already stood on.
+func test_the_lookout_planks_hold_once_over_the_walk() -> void:
+	var world: WorldConfig = load(WORLD)
+	var level := _level()
+	var planks := level.thing("U")
+	check_eq(planks.kind, "slab", "planks")
+	check_eq(planks.number("holds", 0.0), 1.0, "that hold once")
+	check_eq(planks.rect.position.y, FLOOR_5, "on floor 5")
+	var up := false
+	for ladder in level.ladders:
+		up = up or (is_equal_approx(ladder.position.y, FLOOR_5) and is_equal_approx(ladder.end.y, FLOOR_4) and ladder.end.x <= planks.rect.position.x)
+	check(up, "a ladder from the walk up to them")
+	check_eq(FLOOR_4 - FLOOR_5, world.tier_height, "a storey above the walk")
+	var below := planks.rect.end.y
+	for solid in level.solids():
+		if solid.position.x < planks.rect.end.x and solid.end.x > planks.rect.position.x and solid.position.y >= planks.rect.end.y and solid.position.y < FLOOR_4:
+			below = minf(below, solid.position.y)
+	check_eq(below, planks.rect.end.y, "nothing between the planks and the walk")
+
+
+## Beat 7. The switch is in the gatehouse face across the gap, on the line a
+## throw from the walk takes and inside its reach; the gate it opens is in the
+## passage under it, on floor 3, with room for the hero.
+func test_the_gatehouse_switch_is_thrown_at_from_the_walk() -> void:
+	var world: WorldConfig = load(WORLD)
+	var sword: SwordConfig = load(SWORD)
+	var level := _level()
+	var switch := level.thing("S")
+	check_eq(String(switch.params.get("opens", "")), "G", "it opens the gatehouse gate")
+	var line := _throw_y(FLOOR_4)
+	check(switch.rect.position.y < line and switch.rect.end.y > line, "the throw from the walk meets it")
+	var walk_end := 0.0
+	for solid in level.solids():
+		if is_equal_approx(solid.position.y, FLOOR_4) and solid.end.x <= switch.rect.position.x:
+			walk_end = maxf(walk_end, solid.end.x)
+	var gap := switch.rect.position.x - walk_end
+	check(gap > world.hero_width * 2.0, "across a gap (%.0f px)" % gap)
+	check(gap + world.hero_width * 0.5 <= sword.max_range, "inside a throw's reach")
+	var gate := level.thing("G").rect
+	check_eq(gate.end.y, FLOOR_3, "the gate stands on floor 3")
+	check(gate.size.y > world.hero_height, "and fills a passage the hero fits")
+	check(gate.position.x > switch.rect.position.x, "past the switch, so it is dropped to")
+
+
+## Beat 7a. Two bats over the high hoarding's throw line, planks that hold
+## once, and a fourth sword at the far end.
+func test_the_high_hoarding_holds_a_fourth_sword() -> void:
+	var level := _level()
+	var planks := level.thing("V")
+	check_eq(planks.number("holds", 0.0), 1.0, "planks that hold once")
+	check_eq(planks.rect.position.y, FLOOR_5, "on floor 5")
+	check(level.thing("X").rect.position.x > planks.rect.end.x, "the sword past them")
+	var line := _throw_y(FLOOR_5)
+	for anchor in ["Z", "N"]:
+		var box := _bat_box(anchor)
+		check(box.position.y < line and box.end.y > line, "bat %s crosses the throw line" % anchor)
+
+
+## Beat 8. A wooden stanchion, then planks that hold once over spikes, then
+## the chest. From the chest's ledge a throw meets the stanchion's face within
+## reach, so a sword can be the ledge home.
+func test_the_hoarding_chest_is_reached_over_planks_that_hold_once() -> void:
+	var world: WorldConfig = load(WORLD)
+	var sword: SwordConfig = load(SWORD)
+	var level := _level()
+	var planks := level.thing("Y")
+	check_eq(planks.number("holds", 0.0), 1.0, "planks that hold once")
+	check_eq(planks.rect.position.y, FLOOR_3, "on floor 3")
+	var spiked := 0.0
+	for bed in level.spikes:
+		if bed.position.x >= planks.rect.position.x and bed.end.x <= planks.rect.end.x:
+			spiked += bed.size.x
+	check_eq(spiked, planks.rect.size.x, "over spikes their whole width")
+	var chest := Vector2.ZERO
+	for base in level.chests:
+		if is_equal_approx(base.y, FLOOR_3) and base.x > planks.rect.end.x:
+			chest = base
+	check(chest != Vector2.ZERO, "the chest beyond them")
+	var line := _throw_y(FLOOR_3)
+	var post := Rect2()
+	for wood in level.wood:
+		if wood.end.x <= planks.rect.position.x and wood.position.y < line and wood.end.y > line:
+			post = wood
+	check(post.size != Vector2.ZERO, "a wooden stanchion before them, on the throw line")
+	var from := planks.rect.end.x + world.hero_width * 0.5
+	check(from - post.end.x <= sword.max_range, "a throw from the chest's ledge reaches it")
+
+
+## The loop back to the guardroom's brazier: a portcullis into the tower's
+## foot whose switch is on the corridor side, on its floor's throw line.
+func test_the_loop_opens_only_from_the_corridor() -> void:
+	var level := _level()
+	var switch := level.thing("F")
+	var gate := level.thing("I").rect
+	check_eq(String(switch.params.get("opens", "")), "I", "the switch opens the tower's gate")
+	check(switch.rect.position.x > gate.end.x, "from the corridor side")
+	var line := _throw_y(FLOOR_2)
+	check(switch.rect.position.y < line and switch.rect.end.y > line, "on the corridor's throw line")

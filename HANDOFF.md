@@ -13,13 +13,15 @@ game and say it is better (G2 again). R4 and M14 wait on that.
 
 ## The next action
 
-**N3, slice 1 of the rebuild is in**: `levels/act1_wall.level` is beats
-1 to 5 (the culvert's mouth to the top of the tower stair) with a temporary
-exit on the wall walk. The pre-N3 wall is `act1_wall_old` (F2), with its
-tests and scenarios. **Next for Claude**: slice 2, beats 6 to 8 and the
-pocket (the wall walk, the gatehouse switch, the hoardings), widening the
-map rightwards and moving the exit. Beat 11's roost needs `bat dormant` in
-the level format first (only scorpions can sleep today).
+**N3: beats 1 to 8 and the pocket are built** in `levels/act1_wall.level`
+(slices 1 and 2), with a temporary exit at the far end of the corridor under
+the wall walk. The pre-N3 wall is `act1_wall_old` (F2). One change from the
+sheet: the loop at 7 reaches the guardroom's brazier through a portcullis
+whose switch is on the corridor side, so it cannot be used to skip the
+tower on the way out. **Next for Claude**: slice 3, beats 9 to 13 (the
+bailey and the caged dragon, the bailey yard, the barbican stair's roost,
+the bailey wall, the ditch). The roost needs `bat dormant` in the level
+format first (only scorpions can sleep today).
 
 ## Blocked on Matt
 
