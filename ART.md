@@ -890,6 +890,24 @@ The nine, in reading order:
 Large, simple shapes and few small details: each piece reads at a glance as one clear silhouette with two or three values on it, because it will be shrunk to a few dozen pixels across. Flat, even light on every piece, no cast shadows on the backdrop and no light source painted into the sheet. The trunk's bark is cold: deep blue-violet and dark grey-green. The branch in piece 4 is warm umber brown wood under its moss, the one warm thing on the sheet. Leaves, bushes, ferns and moss are dark grey-green and blue-green, as they look at night; the darkest darks are deep violet-blue, never neutral black. Nothing gold, nothing orange or red, nothing glowing, no flowers, no fruit, no thorns and no spikes. No characters, no creatures, no ground, no sky, no fire, no text and no labels. The image is 2560 by 1440 pixels, aspect ratio 16:9.
 ```
 
+**The trees sheet landed first attempt too** (`act1_kit_trees.jpg`). The
+branch's twig came apart in `cut-sheet.py` and was cropped as one box. The
+trunk section flared from 145 to 195 px, so it was warped to one width (140)
+before pixelating, to match the base's top and the crown's foot; in the game
+every other section is drawn upside down, so each join is an edge meeting
+itself. Scales: trunk 0.32 (a 45 px trunk), branch 0.27, foliage 0.22, moss
+0.2. All pass `palette-check.py`. The branch is not used yet: the wood tiles
+already read as what a sword bites, and a branch drawn over them is for when
+the platforms get their own art.
+
+**In the game**: trees are placed by hand in `[decor]` (`y` a foot on the
+ground, `k` its crown in the same column; level design, not a rule), with
+leaves round each crown. By rule: leaves at a branch's free ends, moss under
+some branches, bushes behind the grass, all drawn behind everything; and
+fronds (`;`) drawn in front of the hero (`GridRoom.FRONT_Z`, under the
+room's dark) only on the lowest ground and clear of anything the map placed
+or a creature patrols.
+
 ### The foreground kit (2026-10-24, for Matt to paint in Gemini)
 
 **Why.** Matt, 2026-10-24: the foreground is "too monolithic and

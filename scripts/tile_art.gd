@@ -52,6 +52,24 @@ const FOREST_KIT := {
 	"fern": [preload("res://assets/art/forest/kit/fern.png")],
 	"toadstools": [preload("res://assets/art/forest/kit/toadstools.png")],
 }
+## The forest's trees (Matt, 2026-10-24): a trunk stood on its foot, sections
+## stacked up to its crown, leaves round the crown; and the greenery the
+## rules place, all behind everything you touch. Fronds are the one thing
+## drawn in front of the hero (`draw_fronds`).
+const TRUNK: Texture2D = preload("res://assets/art/forest/trees/trunk.png")
+const TRUNK_BASE: Texture2D = preload("res://assets/art/forest/trees/trunk_base.png")
+const TRUNK_CROWN: Texture2D = preload("res://assets/art/forest/trees/trunk_crown.png")
+const LEAVES: Array[Texture2D] = [preload("res://assets/art/forest/trees/leaves_big.png")]
+const LEAVES_SMALL: Array[Texture2D] = [preload("res://assets/art/forest/trees/leaves_small.png")]
+const BUSH: Array[Texture2D] = [preload("res://assets/art/forest/trees/bush.png")]
+const MOSS: Array[Texture2D] = [preload("res://assets/art/forest/trees/moss.png")]
+const FRONDS: Array[Texture2D] = [
+	preload("res://assets/art/forest/trees/fern_spray.png"), preload("res://assets/art/forest/trees/bush.png")
+]
+## Where a crown's clumps of leaves sit, from the middle of its top, art px.
+const CANOPY: Array[Vector3] = [
+	Vector3(-44, 4, 1), Vector3(44, 0, 1), Vector3(0, -14, 1), Vector3(-66, 24, 0), Vector3(68, 20, 0),
+]
 const UNSHADED: Array[Color] = [Color.WHITE]
 ## How far down its tile the forest lip's grass starts: a tuft roots there,
 ## in the grass, rather than standing on the tile's empty top rows.
@@ -336,6 +354,64 @@ static func draw_decor(canvas: CanvasItem, level: LevelGrid.Level, tiles: ActTil
 	_draw_kit(canvas, level, FOREST_KIT, false, Color.WHITE)
 	for at in level.decor_cells("ivy"):
 		_draw_prop(canvas, IVY, at, Vector2((at.x + 0.5) * cell, at.y * cell), false, Palette.GROUND_SHADE[1])
+
+
+## The level's trees and the greenery round them, behind everything else: a
+## tree's foot (`[decor]` `y`) stands on the ground, and its trunk rises to
+## the crown (`k`) above it in the same column.
+static func draw_trees(canvas: CanvasItem, level: LevelGrid.Level) -> void:
+	var cell := level.cell
+	var crowns := level.decor_cells("crown")
+	for foot in level.decor_cells("tree"):
+		var crown := Vector2i(-1, -1)
+		for c in crowns:
+			if c.x == foot.x and c.y < foot.y and c.y > crown.y:
+				crown = c
+		if crown.y < 0:
+			continue
+		var cx := (foot.x + 0.5) * cell
+		var ground := (foot.y + 1) * cell
+		var top := (crown.y + 1) * cell
+		var y := ground - TRUNK_BASE.get_height()
+		canvas.draw_texture(TRUNK_BASE, Vector2(roundf(cx - TRUNK_BASE.get_width() * 0.5), y))
+		# Every other section upside down, so each join is the same edge
+		# meeting itself rather than a seam.
+		var size := TRUNK.get_size()
+		var flipped := false
+		while y > top:
+			var part := minf(size.y, y - top)
+			var region := Rect2(0.0, 0.0 if flipped else size.y - part, size.x, part)
+			var at := Rect2(roundf(cx - size.x * 0.5), y - part, size.x, part)
+			if flipped:
+				canvas.draw_set_transform(Vector2(0.0, at.position.y * 2.0 + part), 0.0, Vector2(1.0, -1.0))
+			canvas.draw_texture_rect_region(TRUNK, at, region)
+			canvas.draw_set_transform(Vector2.ZERO)
+			y -= part
+			flipped = not flipped
+		var crown_top := top - TRUNK_CROWN.get_height()
+		canvas.draw_texture(TRUNK_CROWN, Vector2(roundf(cx - TRUNK_CROWN.get_width() * 0.5), crown_top))
+		for clump in CANOPY:
+			var texture: Texture2D = LEAVES[0] if clump.z > 0 else LEAVES_SMALL[0]
+			canvas.draw_texture(texture, (Vector2(cx + clump.x, crown_top + clump.y) - texture.get_size() * 0.5).round())
+	for at in level.decor_cells("leaves"):
+		_draw_centred(canvas, LEAVES, at, cell)
+	for at in level.decor_cells("leaves_small"):
+		_draw_centred(canvas, LEAVES_SMALL, at, cell)
+	for at in level.decor_cells("bush"):
+		_draw_prop(canvas, BUSH, at, Vector2((at.x + 0.5) * cell, (at.y + 1) * cell + TUFT_SINK), true)
+	for at in level.decor_cells("moss"):
+		_draw_prop(canvas, MOSS, at, Vector2((at.x + 0.5) * cell, at.y * cell), false)
+
+
+## The fronds in front of the hero, sunk into the lip they grow from.
+static func draw_fronds(canvas: CanvasItem, level: LevelGrid.Level) -> void:
+	for at in level.decor_cells("frond"):
+		_draw_prop(canvas, FRONDS, at, Vector2((at.x + 0.5) * level.cell, (at.y + 1) * level.cell + TUFT_SINK), true)
+
+
+static func _draw_centred(canvas: CanvasItem, textures: Array[Texture2D], at: Vector2i, cell: float) -> void:
+	var texture := textures[TileVariety.pick(at, textures.size())]
+	canvas.draw_texture(texture, ((Vector2(at) + Vector2(0.5, 0.5)) * cell - texture.get_size() * 0.5).round())
 
 
 ## The kit's features set into the face of the level's stone, drawn with the

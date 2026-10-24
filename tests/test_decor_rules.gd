@@ -244,3 +244,27 @@ func test_the_forest_sets_its_finds_in_earth_not_bark() -> void:
 					check(grid == earth, "a find in bark")
 					found += 1
 	check(found > 0, "a deep bank of earth has some")
+
+
+## Fronds are drawn over the hero, so they keep clear of everything the map
+## placed and of a creature's whole patrol.
+func test_fronds_keep_clear_of_what_you_play_against() -> void:
+	var ground := "#".repeat(80) + "\n"
+	var open_row := ".".repeat(80) + "\n"
+	var level := _rows("[map]\n" + open_row.repeat(5) + ".".repeat(40) + "C" + ".".repeat(39) + "\n" + ground.repeat(3))
+	var grid := DecorRules.place(level, "forest")
+	var fronds := 0
+	for x in grid[5].length():
+		if grid[5][x] == ";":
+			fronds += 1
+			check(absi(x - 40) > DecorRules.FROND_CLEAR + DecorRules.FOOTPRINTS["frond"].x, "a frond at %d keeps clear of the chest" % x)
+	check(fronds > 0, "a long open floor gets some")
+
+
+## A tree stands on its foot and rises to a crown above it, or it is not drawn.
+func test_every_forest_tree_has_a_crown() -> void:
+	var level := GridRoom.read("res://levels/act1_forest.level")
+	var crowns := level.decor_cells("crown")
+	check(not level.decor_cells("tree").is_empty(), "the forest has trees")
+	for foot in level.decor_cells("tree"):
+		check(crowns.any(func(c: Vector2i) -> bool: return c.x == foot.x and c.y < foot.y), "the tree at %s has a crown" % foot)

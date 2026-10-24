@@ -15,7 +15,10 @@
 ##            the torches; ivy hanging from a ceiling; the same features
 ##            set into the face of a big block of stone, away from its edge
 ##   forest   a fern or toadstools standing on the grass now
-##            and then; tufts on the grass; roots hanging under earth;
+##            and then, and bushes behind; leaves at a branch's free end
+##            and moss under it; fronds in front of the hero along the
+##            lowest ground, clear of anything you play against; tufts on
+##            the grass; roots hanging under earth;
 ##            boulders, bones and old stones set into a bank's face, away
 ##            from its edge
 ##
@@ -64,6 +67,7 @@ const FOOTPRINTS := {
 	"boulder": Vector3i(2, 2, 0), "stones": Vector3i(1, 2, 0), "skull": Vector3i(2, 2, 0),
 	"strata": Vector3i(2, 2, 0), "standing_stone": Vector3i(1, 2, 0),
 	"fern": Vector3i(1, 2, 0), "toadstools": Vector3i(1, 2, 0),
+	"bush": Vector3i(2, 3, 0), "moss": Vector3i(2, 3, 0), "frond": Vector3i(2, 3, 0),
 }
 ## Features set into a block's face (Matt, 2026-10-24: the giant blocks are
 ## the problem; built faces, not slabs). One is tried in each bay of
@@ -85,6 +89,21 @@ const FOREST_FACE_ONE_IN := 3
 const FOREST_FLOOR: PackedStringArray = ["fern", "toadstools"]
 const FLOOR_PITCH := 5
 const FLOOR_ONE_IN := 3
+## The forest's trees (Matt, 2026-10-24: greenery all round them). A bush
+## behind the grass, one tried each `BUSH_PITCH` cells, one in `BUSH_ONE_IN`;
+## moss under one branch in `MOSS_ONE_IN`.
+const BUSH_PITCH := 7
+const BUSH_ONE_IN := 2
+const MOSS_ONE_IN := 2
+## A branch is a run of wood at least this long with air above it.
+const BRANCH_MIN := 3
+## Fronds drawn in front of the hero (Matt: low and sparse): only on the
+## lowest ground, one tried each `FROND_PITCH` cells, one in `FROND_ONE_IN`,
+## and none within `FROND_CLEAR` cells of anything the map placed, a hazard,
+## or a creature's whole patrol.
+const FROND_PITCH := 9
+const FROND_ONE_IN := 2
+const FROND_CLEAR := 2
 ## Ivy hangs from one ceiling cell in this many, where there is at least
 ## this much air below, and never within this many cells of other ivy.
 const IVY_ONE_IN := 6
@@ -112,6 +131,9 @@ static func place(level: LevelGrid.Level, style: String) -> Array[String]:
 		_ivy(rows, grid)
 		_faces(rows, grid, FACE_FEATURES, true, 1, SOLID)
 	elif style == "forest":
+		_fronds(level, rows, grid)
+		_branches(rows, grid)
+		_bushes(rows, grid)
 		_floor_props(rows, grid)
 		_tufts(rows, grid)
 		_roots(rows, grid)
@@ -277,7 +299,89 @@ static func _char(kind: String) -> String:
 	return AIR
 
 
-## Now and then a fern, toadstools or long grass on the grass, never where
+## Fronds in front of the hero along the lowest ground, clear of everything
+## the map placed and of every creature's patrol, so they hide nothing that
+## matters.
+static func _fronds(level: LevelGrid.Level, rows: Array[String], grid: Array[String]) -> void:
+	var lowest := 0
+	for y in range(1, rows.size()):
+		for x in rows[y].length():
+			if rows[y][x] == "#" and rows[y - 1][x] == AIR:
+				lowest = maxi(lowest, y)
+	var keep_out: Array[Rect2i] = []
+	for t in level.things:
+		var cells := Rect2i(Vector2i(t.rect.position / level.cell), Vector2i((t.rect.size / level.cell).ceil()))
+		cells.size.x += ceili(t.number("range", 0.0) / level.cell)
+		keep_out.append(cells.grow(FROND_CLEAR))
+	var foot: Vector3i = FOOTPRINTS["frond"]
+	var y := lowest - 1
+	var last := -FROND_PITCH
+	for x in range(foot.x, rows[y].length() - foot.x):
+		if x - last < FROND_PITCH or _hash(x * 3 + 1, y) % FROND_ONE_IN != 0:
+			continue
+		if not _lowest_and_clear(rows, x, y, foot.x + FROND_CLEAR):
+			continue
+		if keep_out.any(func(r: Rect2i) -> bool: return r.has_point(Vector2i(x, y))):
+			continue
+		if _fits(rows, grid, {}, x, y - foot.y + 1, y, foot.x, false):
+			_put(rows, grid, x, y, _char("frond"))
+			last = x
+
+
+## Whether every cell `reach` either side of `x` on row `y` is air on grass,
+## with nothing the map placed in the rows just above.
+static func _lowest_and_clear(rows: Array[String], x: int, y: int, reach: int) -> bool:
+	for dx in range(-reach, reach + 1):
+		var cx := x + dx
+		if cx < 0 or cx >= rows[y].length() or rows[y + 1][cx] != "#":
+			return false
+		for dy in range(0, 4):
+			if y - dy >= 0 and rows[y - dy][cx] != AIR:
+				return false
+	return true
+
+
+## Leaves at a branch's free ends, behind it, and moss under one in
+## `MOSS_ONE_IN`.
+static func _branches(rows: Array[String], grid: Array[String]) -> void:
+	for y in range(1, rows.size() - 1):
+		var x := 0
+		var row := rows[y]
+		while x < row.length():
+			if row[x] != "w" or rows[y - 1][x] != AIR:
+				x += 1
+				continue
+			var start := x
+			while x < row.length() and row[x] == "w":
+				x += 1
+			if x - start < BRANCH_MIN:
+				continue
+			for end in [start - 1, x]:
+				if _free(rows, end, y) and grid[y][end] == AIR:
+					_put(rows, grid, end, y, _char("leaves" if _hash(end, y) % 2 == 0 else "leaves_small"))
+			var mid := (start + x) / 2
+			var foot: Vector3i = FOOTPRINTS["moss"]
+			if _hash(mid, y) % MOSS_ONE_IN == 0 and _fits(rows, grid, {}, mid, y + 1, y + foot.y, foot.x, false):
+				_put(rows, grid, mid, y + 1, _char("moss"))
+
+
+## A bush behind the grass now and then, its footprint all air.
+static func _bushes(rows: Array[String], grid: Array[String]) -> void:
+	var foot: Vector3i = FOOTPRINTS["bush"]
+	for y in range(1, rows.size()):
+		var last := -BUSH_PITCH
+		for x in range(foot.x, rows[y].length() - foot.x):
+			if rows[y][x] != "#" or rows[y - 1][x] != AIR or x - last < BUSH_PITCH or _hash(x * 5 + 2, y) % BUSH_ONE_IN != 0:
+				continue
+			var lip := true
+			for dx in range(-foot.x, foot.x + 1):
+				lip = lip and rows[y][x + dx] == "#"
+			if lip and _fits(rows, grid, {}, x, y - foot.y, y - 1, foot.x, false):
+				_put(rows, grid, x, y - 1, _char("bush"))
+				last = x
+
+
+## Now and then a fern or toadstools on the grass, never where
 ## the map has put something, never on another.
 static func _floor_props(rows: Array[String], grid: Array[String]) -> void:
 	for y in range(1, rows.size()):

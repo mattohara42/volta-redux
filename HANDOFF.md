@@ -35,9 +35,11 @@ The forest kit is in the forest the same way.
 first):** Matt, with *Ghosts 'n Goblins Resurrection* shots: ground at the
 bottom, hills, trees with boughs and greenery. The oak's slab is now a trunk
 in `[back]` with two boughs (the crown and the sleeper's roof), the hill is
-half as tall and terraced. Next: the trees sheet (`ART.md`, *The forest's
-trees*) for trunks, boughs, canopy and bushes, then a sparse layer of plants
-in front of the hero along the bottom edge (Matt said yes, low and sparse).
+half as tall and terraced. The trees sheet is in: five trees placed by hand
+(the clearing, the oak, the island, the far bank, the hill), leaves, moss,
+bushes, and two fronds drawn in front of the hero. Matt's to play: the
+terraces, the longer drop from the high road to the nest, and whether a
+frond over the hero's legs ever hides something.
 
 ## Blocked on Matt
 
