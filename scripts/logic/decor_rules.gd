@@ -10,7 +10,9 @@
 ##   castle   battlements along a wall walk that stands over a drop, out in
 ##            the open rather than before a back wall; torches
 ##            on a back wall at head height, spaced along the floor; chains
-##            hanging from a high ceiling
+##            hanging from a high ceiling; a wall feature (an arrow slit, a
+##            niche, a pier, a breach) in the bays of a back wall between
+##            the torches; ivy hanging from a ceiling
 ##   forest   tufts on the grass; roots hanging under earth
 ##
 ## Decoration only ever goes in air the map leaves empty, so it never covers
@@ -38,6 +40,26 @@ const CHAIN_ONE_IN := 9
 ## underside.
 const TUFT_ONE_IN := 3
 const ROOT_ONE_IN := 2
+## Wall features (the foreground kit, `ART.md`): at most one in this many
+## cells along a floor, and none within this many cells of a torch, a
+## ladder or a brazier, which fill the wall already.
+const FEATURE_PITCH := 6
+const FEATURE_CLEAR := 2
+## The kinds, in the order a bay tries them from wherever its hash starts.
+const FEATURES: PackedStringArray = ["niche", "slit", "pier", "breach", "ring", "drain", "banner", "footing"]
+## Each one's footprint in cells: how far it reaches either side of its
+## anchor, how many rows tall it is, and how far above the floor its bottom
+## row, the anchor, sits. Its art fits inside (`test_decor_rules.gd`).
+const FOOTPRINTS := {
+	"niche": Vector3i(1, 3, 0), "pier": Vector3i(0, 3, 0), "footing": Vector3i(1, 2, 0),
+	"slit": Vector3i(1, 3, 1), "breach": Vector3i(1, 3, 1), "ring": Vector3i(1, 3, 1),
+	"drain": Vector3i(1, 3, 1), "banner": Vector3i(1, 3, 1), "ivy": Vector3i(1, 3, 0),
+}
+## Ivy hangs from one ceiling cell in this many, where there is at least
+## this much air below, and never within this many cells of other ivy.
+const IVY_ONE_IN := 6
+const IVY_HEADROOM := 5
+const IVY_PITCH := 8
 
 const AIR := "."
 const SOLID := "#%&"
@@ -56,6 +78,8 @@ static func place(level: LevelGrid.Level, style: String) -> Array[String]:
 		_battlements(rows, grid, back)
 		_torches(rows, grid, back)
 		_chains(rows, grid)
+		_features(rows, grid, back)
+		_ivy(rows, grid)
 	elif style == "forest":
 		_tufts(rows, grid)
 		_roots(rows, grid)
@@ -109,6 +133,77 @@ static func _chains(rows: Array[String], grid: Array[String]) -> void:
 				continue
 			for i in CHAIN_LENGTH:
 				_put(rows, grid, x, y + i, "c")
+
+
+## One feature a bay, standing on the floor in front of a back wall, its
+## whole footprint wall and air no other decoration has taken.
+static func _features(rows: Array[String], grid: Array[String], back: Dictionary) -> void:
+	for run in _top_runs(rows):
+		var floor_air: int = run.x
+		var last := -FEATURE_PITCH
+		for x in range(run.y, run.z + 1):
+			if x - last < FEATURE_PITCH or not _clear_of_fill(rows, grid, x, floor_air):
+				continue
+			var start := _hash(x, floor_air) % FEATURES.size()
+			for i in FEATURES.size():
+				var kind := FEATURES[(start + i) % FEATURES.size()]
+				var foot: Vector3i = FOOTPRINTS[kind]
+				var anchor := floor_air - foot.z
+				if _fits(rows, grid, back, x, anchor - foot.y + 1, anchor, foot.x, true):
+					_put(rows, grid, x, anchor, _char(kind))
+					last = x
+					break
+
+
+## Ivy hangs from a lip three cells wide, so it does not hang off an edge.
+static func _ivy(rows: Array[String], grid: Array[String]) -> void:
+	var foot: Vector3i = FOOTPRINTS["ivy"]
+	for y in range(1, rows.size()):
+		var last := -IVY_PITCH
+		for x in range(1, rows[y].length() - 1):
+			if x - last < IVY_PITCH or _hash(x, y) % IVY_ONE_IN != 0 or _headroom(rows, x, y) < IVY_HEADROOM:
+				continue
+			var hung := true
+			for dx in range(-foot.x, foot.x + 1):
+				hung = hung and SOLID.contains(rows[y - 1][x + dx])
+			if hung and _fits(rows, grid, {}, x, y, y + foot.y - 1, foot.x, false):
+				_put(rows, grid, x, y, _char("ivy"))
+				last = x
+
+
+## Whether every cell from `top` to `bottom`, `reach` either side of `x`, is
+## air the map and the decoration leave empty, and wall behind if `walled`.
+static func _fits(rows: Array[String], grid: Array[String], back: Dictionary, x: int, top: int, bottom: int, reach: int, walled: bool) -> bool:
+	for y in range(top, bottom + 1):
+		for dx in range(-reach, reach + 1):
+			var at := Vector2i(x + dx, y)
+			if not _free(rows, at.x, at.y) or grid[at.y][at.x] != AIR:
+				return false
+			if walled and not back.has(at):
+				return false
+	return true
+
+
+## Whether nothing that lights or fills a wall (a torch, a ladder, a
+## brazier) stands within `FEATURE_CLEAR` of `x`, on the floor's row or the
+## few above it.
+static func _clear_of_fill(rows: Array[String], grid: Array[String], x: int, floor_air: int) -> bool:
+	for y in range(maxi(floor_air - 4, 0), floor_air + 1):
+		for dx in range(-FEATURE_CLEAR, FEATURE_CLEAR + 1):
+			var cx := x + dx
+			if cx < 0 or cx >= rows[y].length():
+				continue
+			if rows[y][cx] in ["B", "H"] or grid[y][cx] == "t":
+				return false
+	return true
+
+
+## The `[decor]` character for a kind (`LevelGrid.DECOR`).
+static func _char(kind: String) -> String:
+	for c: String in LevelGrid.DECOR:
+		if LevelGrid.DECOR[c] == kind:
+			return c
+	return AIR
 
 
 static func _tufts(rows: Array[String], grid: Array[String]) -> void:

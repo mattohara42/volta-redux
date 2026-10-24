@@ -27,6 +27,20 @@ const CHAIN_TILES: Array[Texture2D] = [preload("res://assets/art/act1/tiles_px/c
 const SHACKLE: Texture2D = preload("res://assets/art/act1/props/shackle.png")
 ## A cracked slab, cropped to the stone so its top row is the surface you land on.
 const CRUMBLE_TILE: Texture2D = preload("res://assets/art/act1/tiles_px/crumble.png")
+## The foreground kit (`ART.md`): features set into a back wall, each by its
+## `[decor]` kind, and ivy hanging from a ceiling. A kind with two pieces
+## takes one a cell (`TileVariety`).
+const KIT := {
+	"slit": [preload("res://assets/art/act1/kit/slit.png")],
+	"niche": [preload("res://assets/art/act1/kit/niche.png")],
+	"pier": [preload("res://assets/art/act1/kit/pier.png")],
+	"drain": [preload("res://assets/art/act1/kit/drain.png")],
+	"breach": [preload("res://assets/art/act1/kit/breach_0.png"), preload("res://assets/art/act1/kit/breach_1.png")],
+	"ring": [preload("res://assets/art/act1/kit/ring.png")],
+	"footing": [preload("res://assets/art/act1/kit/footing.png")],
+	"banner": [preload("res://assets/art/act1/kit/banner.png")],
+}
+const IVY: Array[Texture2D] = [preload("res://assets/art/act1/kit/ivy.png")]
 const UNSHADED: Array[Color] = [Color.WHITE]
 ## How far down its tile the forest lip's grass starts: a tuft roots there,
 ## in the grass, rather than standing on the tile's empty top rows.
@@ -281,7 +295,8 @@ static func draw_edges(canvas: CanvasItem, level: LevelGrid.Level, tiles: ActTil
 
 
 ## The level's `[decor]` that holds still (`DecorRules`): battlements on a
-## wall walk, chains from a ceiling, tufts on grass, roots under earth. A
+## wall walk, chains from a ceiling, tufts on grass, roots under earth, the
+## foreground kit's wall features and ivy. A
 ## torch flickers, so it is a `WallTorch` the room adds, not drawn here. A
 ## decoration whose art the set does not have is left out rather than drawn
 ## as something else.
@@ -302,17 +317,26 @@ static func draw_decor(canvas: CanvasItem, level: LevelGrid.Level, tiles: ActTil
 		_draw_prop(canvas, set.tuft_tiles, at, Vector2((at.x + 0.5) * cell, (at.y + 1) * cell + TUFT_SINK), true)
 	for at in level.decor_cells("root"):
 		_draw_prop(canvas, set.root_tiles, at, Vector2((at.x + 0.5) * cell, at.y * cell), false)
+	# Set into the back wall, so shaded with it: the art's own big stones are
+	# what stand out from the brick, not a brightness the wall does not have.
+	for kind: String in KIT:
+		var pieces: Array[Texture2D] = []
+		pieces.assign(KIT[kind])
+		for at in level.decor_cells(kind):
+			_draw_prop(canvas, pieces, at, Vector2((at.x + 0.5) * cell, (at.y + 1) * cell), true, Palette.KIT_SHADE)
+	for at in level.decor_cells("ivy"):
+		_draw_prop(canvas, IVY, at, Vector2((at.x + 0.5) * cell, at.y * cell), false, Palette.GROUND_SHADE[1])
 
 
 ## One of `textures`, picked for the cell, centred on `anchor`: standing on it,
-## or hanging from it.
-static func _draw_prop(canvas: CanvasItem, textures: Array[Texture2D], cell: Vector2i, anchor: Vector2, stands: bool) -> void:
+## or hanging from it, multiplied by `shade`.
+static func _draw_prop(canvas: CanvasItem, textures: Array[Texture2D], cell: Vector2i, anchor: Vector2, stands: bool, shade := Color.WHITE) -> void:
 	if textures.is_empty():
 		return
 	var texture := textures[TileVariety.pick(cell, textures.size())]
 	var size := texture.get_size()
 	var top := anchor.y - size.y if stands else anchor.y
-	canvas.draw_texture(texture, Vector2(roundf(anchor.x - size.x * 0.5), top))
+	canvas.draw_texture(texture, Vector2(roundf(anchor.x - size.x * 0.5), top), shade)
 
 
 ## How dark each cell of the level's stone goes, one texel a cell: its colour

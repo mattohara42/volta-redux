@@ -29,11 +29,17 @@ scipy's distance transform), rather than partially corrected. It trades a
 few pixels of texture detail right at the silhouette edge for a hard
 guarantee of zero backdrop bleed.
 
+`--spill-hue DEG` also clears every pixel within DEG degrees of the
+backdrop's hue that is at least moderately saturated. For thin strands (ivy,
+hair) the ring above cannot help: a strand two pixels wide has no clean
+pixel to borrow from, and the backdrop shows through it as pink specks. Off
+by default; measured on the castle kit's ivy (`ART.md`, The foreground kit).
+
 CLAUDE.md: the destructive mode is the flag. Writing over an existing OUT
 needs --overwrite; the default refuses.
 
 Usage:
-    tools/key.py DELIVERY.png OUT.png [--tolerance N] [--ring N] [--overwrite]
+    tools/key.py DELIVERY.png OUT.png [--tolerance N] [--ring N] [--spill-hue DEG] [--overwrite]
 
 Requires pillow, numpy and scipy (tools/requirements.txt).
 """
@@ -60,6 +66,20 @@ def _backdrop_mask(rgb: np.ndarray, backdrop: tuple[int, int, int], tolerance: i
     than a flood from the border: an enclosed pocket of backdrop colour is
     still backdrop even when nothing connects it to the edge of the frame."""
     return np.all(np.abs(rgb.astype(int) - np.array(backdrop)) <= tolerance, axis=-1)
+
+
+# How saturated a pixel near the backdrop's hue must be to count as spill.
+_SPILL_SATURATION = 0.3
+
+
+def _spill_mask(rgb: np.ndarray, backdrop: tuple[int, int, int], degrees: float) -> np.ndarray:
+    """Every pixel whose hue is within `degrees` of the backdrop's and whose
+    saturation is at least `_SPILL_SATURATION`."""
+    hsv = np.asarray(Image.fromarray(rgb.astype(np.uint8), mode="RGB").convert("HSV")).astype(float)
+    target = np.asarray(Image.new("RGB", (1, 1), backdrop).convert("HSV")).astype(float)[0, 0]
+    gap = np.abs(hsv[..., 0] - target[0]) * 360.0 / 255.0
+    gap = np.minimum(gap, 360.0 - gap)
+    return (gap <= degrees) & (hsv[..., 1] / 255.0 >= _SPILL_SATURATION)
 
 
 def _dilate(mask: np.ndarray, iterations: int) -> np.ndarray:
@@ -91,7 +111,7 @@ def _decontaminate(rgb: np.ndarray, mask: np.ndarray, ring_px: int) -> np.ndarra
     return out
 
 
-def key(delivery: Path, out: Path, tolerance: int, ring_px: int, overwrite: bool) -> None:
+def key(delivery: Path, out: Path, tolerance: int, ring_px: int, overwrite: bool, spill_hue: float = 0.0) -> None:
     if out.exists() and not overwrite:
         raise SystemExit(f"{out} already exists; pass --overwrite to replace it.")
 
@@ -99,6 +119,8 @@ def key(delivery: Path, out: Path, tolerance: int, ring_px: int, overwrite: bool
     rgb = np.asarray(image)
     backdrop = _detect_backdrop(rgb)
     mask = _backdrop_mask(rgb, backdrop, tolerance)
+    if spill_hue > 0:
+        mask |= _spill_mask(rgb, backdrop, spill_hue)
     clean_rgb = _decontaminate(rgb, mask, ring_px)
 
     rgba = np.dstack([clean_rgb, np.full(rgb.shape[:2], 255, dtype=np.uint8)])
@@ -122,9 +144,13 @@ def main(argv: list[str] | None = None) -> int:
         "--ring", type=int, default=10,
         help="Width in px of the contamination band to decontaminate around the cut (default 10).",
     )
+    parser.add_argument(
+        "--spill-hue", type=float, default=0.0,
+        help="Also clear saturated pixels within this many degrees of the backdrop's hue (default 0, off).",
+    )
     parser.add_argument("--overwrite", action="store_true", help="Replace OUT if it already exists.")
     args = parser.parse_args(argv)
-    key(args.delivery, args.out, args.tolerance, args.ring, args.overwrite)
+    key(args.delivery, args.out, args.tolerance, args.ring, args.overwrite, args.spill_hue)
     return 0
 
 

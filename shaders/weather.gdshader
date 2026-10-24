@@ -1,8 +1,9 @@
 // Weather on a level's stone and back wall: broad patches of damp and of dry,
 // faded stone, so a wall a screen wide reads as one built and rained on
-// rather than as one tile repeated. Multipliers on the art's own colours (`Palette`), so a dark
-// stays the coloured dark it was. Stepped in the house dither, two art pixels
-// a step, as `ground_shade.gdshader` steps the interiors' dark.
+// rather than as one tile repeated. Multipliers on the art's own colours
+// (`Palette`), so a dark stays the coloured dark it was. Stepped in the house
+// dither, two art pixels a step, as `ground_shade.gdshader` steps the
+// interiors' dark.
 shader_type canvas_item;
 
 #include "res://shaders/dither.gdshaderinc"

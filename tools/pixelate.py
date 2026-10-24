@@ -32,6 +32,11 @@ for a painting that came back brighter than the playfield. The raw delivery
 stays untouched, so the dimmed copy can always be remade from it. The forest's
 moonlight shafts needed it: undimmed, they outshone the platforms.
 
+A painting with transparency (a keyed and cut prop, `key.py` then
+`cut-sheet.py`) keeps it: the downscale weighs colour by coverage so the
+backdrop's dark does not creep into the edge, then every pixel is either
+fully opaque or fully clear, as pixel art is, at half coverage.
+
 Run tools/palette-check.py on the result: reducing colours can merge a
 coloured dark into a neutral one.
 
@@ -41,7 +46,7 @@ needs --overwrite; the default refuses.
 Usage:
     tools/pixelate.py PAINTING.png OUT.png [--height 360] [--colors 24] [--crop X0,X1] [--dim F] [--overwrite]
 
-Requires pillow (tools/requirements.txt).
+Requires pillow and numpy (tools/requirements.txt).
 """
 from __future__ import annotations
 
@@ -49,6 +54,7 @@ import argparse
 import sys
 from pathlib import Path
 
+import numpy as np
 from PIL import Image
 
 
@@ -60,12 +66,26 @@ def dim(image: Image.Image, factor: float) -> Image.Image:
 
 
 def pixelate(painting: Image.Image, height: int, colors: int, dim_factor: float = 1.0) -> Image.Image:
-    rgb = painting.convert("RGB")
-    width = round(rgb.width * height / rgb.height)
-    small = rgb.resize((width, height), Image.BOX)
+    width = round(painting.width * height / painting.height)
+    if painting.mode not in ("RGBA", "LA", "PA") and "transparency" not in painting.info:
+        small = painting.convert("RGB").resize((width, height), Image.BOX)
+        if dim_factor != 1.0:
+            small = dim(small, dim_factor)
+        return small.quantize(colors=colors, method=Image.Quantize.FASTOCTREE, dither=Image.Dither.NONE).convert("RGB")
+    small = painting.convert("RGBA").convert("RGBa").resize((width, height), Image.BOX).convert("RGBA")
+    alpha = small.getchannel("A").point(lambda a: 255 if a >= 128 else 0)
+    rgb = small.convert("RGB")
     if dim_factor != 1.0:
-        small = dim(small, dim_factor)
-    return small.quantize(colors=colors, method=Image.Quantize.FASTOCTREE, dither=Image.Dither.NONE).convert("RGB")
+        rgb = dim(rgb, dim_factor)
+    # The clear pixels' colour is noise: fill them with an opaque one, so the
+    # palette is chosen from the prop alone.
+    opaque = np.asarray(rgb)[np.asarray(alpha) > 0]
+    if len(opaque):
+        fill = Image.new("RGB", rgb.size, tuple(int(c) for c in opaque[len(opaque) // 2]))
+        rgb = Image.composite(rgb, fill, alpha)
+    out = rgb.quantize(colors=colors, method=Image.Quantize.FASTOCTREE, dither=Image.Dither.NONE).convert("RGBA")
+    out.putalpha(alpha)
+    return out
 
 
 def main() -> None:

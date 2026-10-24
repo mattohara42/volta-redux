@@ -873,13 +873,28 @@ were dropped. **What is missing is anything bigger than a tile**: openings,
 piers, big stones, things growing. Those are drawn content, so they come
 from a sheet.
 
-**The plan once a sheet is in `assets/art_raw/`**: `key.py`, `cut-sheet.py`,
-then each feature pixelated to its own size in cells (an arrow slit 1 by 3,
-a niche 2 by 3, the pier a tile 1 cell wide that stacks), `recolour-darks.py`
-and `palette-check.py`. They go into the act's `ActTiles` and are placed by
-new `[decor]` rules (`DecorRules`), mostly on the back wall, so they stay
-reviewable in the level file as Matt asked (2026-10-07). Nothing solid
-changes.
+**The castle sheet landed first attempt (2026-10-24)**,
+`assets/art_raw/act1_kit_castle.jpg`: all nine, plus a second breach, at one
+consistent scale, square to the camera, on clean magenta. 1376x768, not the
+2560x1440 asked, as usual. The pipeline:
+
+    tools/key.py assets/art_raw/act1_kit_castle.jpg keyed.png --spill-hue 30
+    tools/cut-sheet.py keyed.png cut --prefix kit --min-area 2000
+    tools/pixelate.py cut/kit_NN.png assets/art/act1/kit/NAME.png --height H --colors 16
+
+One scale for every piece, 48/347 (the pier's painted height to three
+cells), so H is each cut's height times that; the pier came out exactly one
+cell wide. **Backdrop bled into the ivy's thin strands** as pink specks that
+`key.py`'s edge ring cannot reach, since a strand has no clean pixel beside
+it: `--spill-hue 30` clears them, and elsewhere only takes a fringe under
+half an art pixel once shrunk. `pixelate.py` now keeps a cut's transparency
+(hard-edged at half coverage). All ten pass `palette-check.py`.
+
+**In the game**: `TileArt.KIT`, placed by `DecorRules` (one feature a bay of
+back wall between the torches, ivy under a ceiling), drawn at
+`Palette.KIT_SHADE` so they sit in the back wall. Added to the outer wall
+with `tools/dev.sh decorate ... --add=KINDS`, which keeps the file's hand
+edits. The forest sheet is still to paint.
 
 **Why a sheet of nine**: `GEMINI_NOTES.md`, *Several subjects on one sheet*,
 is the strongest result the last project had, and the original castle

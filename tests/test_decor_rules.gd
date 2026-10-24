@@ -125,3 +125,80 @@ func test_no_parapet_stands_before_a_building() -> void:
 .......###
 """)
 	check_eq(DecorRules.place(level, "castle")[1], ".....nn...", "only out in the open")
+
+
+## The foreground kit: one wall feature a bay of a back wall, never with no
+## wall behind it, never where a ladder stands.
+func test_wall_features_need_a_back_wall_and_a_bay() -> void:
+	var text := """[map]
+..............
+..............
+..............
+..............
+..............
+##############
+[back]
+##############
+##############
+##############
+##############
+##############
+"""
+	var grid := DecorRules.place(_rows(text), "castle")
+	var features := 0
+	for row in grid:
+		for c in row:
+			if DecorRules.FEATURES.has(LevelGrid.DECOR.get(c, "")):
+				features += 1
+	check(features > 0, "a bay of back wall gets a feature")
+	var bare := DecorRules.place(_rows(text.split("[back]")[0]), "castle")
+	for row in bare:
+		for c in row:
+			check(not DecorRules.FEATURES.has(LevelGrid.DECOR.get(c, "")), "and none with no wall behind")
+
+
+func test_a_wall_feature_keeps_clear_of_a_ladder() -> void:
+	var grid := DecorRules.place(_rows("""[map]
+.....
+..H..
+..H..
+..H..
+#####
+[back]
+#####
+#####
+#####
+#####
+"""), "castle")
+	for row in grid:
+		check_eq(row, ".....", "a ladder fills the wall already")
+
+
+## Ivy hangs from a lip three cells wide with room below, and two never hang
+## side by side.
+func test_ivy_hangs_from_a_lip_and_keeps_apart() -> void:
+	var map := "[map]\n" + "#".repeat(60) + "\n" + (".".repeat(60) + "\n").repeat(6) + "#".repeat(60) + "\n"
+	var grid := DecorRules.place(_rows(map), "castle")
+	var ivy: Array[int] = []
+	for y in grid.size():
+		for x in grid[y].length():
+			if grid[y][x] == "v":
+				check_eq(y, 1, "right under the ceiling")
+				ivy.append(x)
+	check(not ivy.is_empty(), "a long ceiling grows some")
+	for i in range(1, ivy.size()):
+		check(ivy[i] - ivy[i - 1] >= DecorRules.IVY_PITCH, "and keeps %d cells apart" % DecorRules.IVY_PITCH)
+
+
+## A footprint is the room the rules keep clear, so the art must fit in it,
+## standing on its anchor (or hanging from it, for ivy), centred on its cell.
+func test_the_kit_fits_its_footprints() -> void:
+	var cell := 16.0
+	var pieces := TileArt.KIT.duplicate()
+	pieces["ivy"] = TileArt.IVY
+	for kind: String in pieces:
+		var foot: Vector3i = DecorRules.FOOTPRINTS[kind]
+		for texture: Texture2D in pieces[kind]:
+			var size := texture.get_size()
+			check(size.x <= (2 * foot.x + 1) * cell, "%s is %d px wide, inside %d cells" % [kind, size.x, 2 * foot.x + 1])
+			check(size.y <= foot.y * cell, "%s is %d px tall, inside %d rows" % [kind, size.y, foot.y])
