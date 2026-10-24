@@ -35,6 +35,9 @@ const LADDER_SLACK: float = 4.0
 const RUNG_PITCH: float = 16.0
 ## How many rounds of sword ledges thrown from ledges.
 const LEDGE_ROUNDS: int = 3
+## How far the middle of a hero may be from a ladder and still hold it, as a
+## share of the hero's width: half the width of `Player`'s ladder probe.
+const GRIP_REACH: float = 0.25
 
 
 ## What a room is made of, as far as moving through it goes.
@@ -83,6 +86,9 @@ class Moves:
 class Report:
 	extends RefCounted
 	var surfaces: Array[Rect2] = []
+	## The parts of each ladder a hero can climb, between the floors it passes
+	## through without a hero-wide hole (`climbable_of`).
+	var climbable: Array[Rect2] = []
 	## Surfaces reachable from the start that cannot get back to it.
 	var stranded: Array[Rect2] = []
 	var exit_reached := false
@@ -97,7 +103,8 @@ static func check(layout: Layout, moves: Moves) -> Report:
 		standing.append(layout.ferries[f])
 		standing.append(Rect2(layout.ferries[f].position + layout.ferry_travel[f], layout.ferries[f].size))
 	var base := surfaces_of(standing, layout.deadly, moves.hero_height)
-	base.append_array(rungs_of(layout.ladders))
+	report.climbable = climbable_of(layout.ladders, layout.solids, moves)
+	base.append_array(rungs_of(report.climbable))
 	report.surfaces = base
 	var start := _surface_under(base, layout.start)
 	report.start_found = start >= 0
@@ -105,11 +112,11 @@ static func check(layout: Layout, moves: Moves) -> Report:
 		return report
 
 	# Home: no swords. Forward: the same, plus every ledge a throw can make.
-	var home := _moves_between(base, layout, moves, [])
+	var home := _moves_between(base, layout, report.climbable, moves)
 	var ledges := _ledges(base, layout, moves)
 	var all := base.duplicate()
 	all.append_array(ledges)
-	var forward := _moves_between(all, layout, moves, ledges)
+	var forward := _moves_between(all, layout, report.climbable, moves)
 
 	var reached := _reach(forward, [start])
 	var back := _reach(_reversed(home, base.size()), [start])
@@ -144,6 +151,53 @@ static func surfaces_of(solids: Array[Rect2], deadly: Array[Rect2], hero_height:
 			if piece.y - piece.x >= 1.0:
 				spans.append(Rect2(piece.x, y, piece.y - piece.x, 0.0))
 	return _join(spans)
+
+
+## Each ladder cut into the parts a hero can climb. A ladder through a floor
+## climbs through it only where the hole is as wide as the hero, somewhere the
+## hero can still hold the ladder; a narrower hole stops the climb under the
+## floor, head against it, and starts it again on top. Both pieces still serve
+## that floor's top from above.
+static func climbable_of(ladders: Array[Rect2], solids: Array[Rect2], moves: Moves) -> Array[Rect2]:
+	var pieces: Array[Rect2] = []
+	var w := moves.hero_width * 0.5
+	var reach := moves.hero_width * GRIP_REACH
+	for ladder in ladders:
+		# The solids a hero on this ladder could touch, and every height where
+		# the set of them changes.
+		var near: Array[Rect2] = []
+		var cuts: Array[float] = [ladder.position.y, ladder.end.y]
+		for solid in solids:
+			if solid.end.x > ladder.position.x - reach - w and solid.position.x < ladder.end.x + reach + w \
+					and solid.end.y > ladder.position.y and solid.position.y < ladder.end.y:
+				near.append(solid)
+				cuts.append(clampf(solid.position.y, ladder.position.y, ladder.end.y))
+				cuts.append(clampf(solid.end.y, ladder.position.y, ladder.end.y))
+		cuts.sort()
+		var top := ladder.position.y
+		for c in range(cuts.size() - 1):
+			var a := cuts[c]
+			var b := cuts[c + 1]
+			if b - a < 0.5 or _fits(ladder, a, b, near, w, reach):
+				continue
+			# Feet stop on the floor's top above, and a head's height under it below.
+			if a - top >= 0.5:
+				pieces.append(Rect2(ladder.position.x, top, ladder.size.x, a - top))
+			top = b + moves.hero_height
+		if ladder.end.y - top >= 0.5:
+			pieces.append(Rect2(ladder.position.x, top, ladder.size.x, ladder.end.y - top))
+	return pieces
+
+
+## Whether a hero `2 * w` wide, holding `ladder`, fits between heights `a` and
+## `b`: some place for its middle, within `reach` of the ladder, clear of every
+## solid there.
+static func _fits(ladder: Rect2, a: float, b: float, near: Array[Rect2], w: float, reach: float) -> bool:
+	var free: Array[Vector2] = [Vector2(ladder.position.x - reach, ladder.end.x + reach)]
+	for solid in near:
+		if solid.position.y < b and solid.end.y > a:
+			free = _cut(free, solid.position.x - w, solid.end.x + w)
+	return not free.is_empty()
 
 
 ## Somewhere to be on each ladder, every `RUNG_PITCH` from its top down to
@@ -207,7 +261,7 @@ static func _throw(at: Vector2, dir: float, layout: Layout, moves: Moves) -> Rec
 
 ## For each surface, the surfaces one move takes it to.
 static func _moves_between(
-	surfaces: Array[Rect2], layout: Layout, moves: Moves, ledges: Array[Rect2]
+	surfaces: Array[Rect2], layout: Layout, ladders: Array[Rect2], moves: Moves
 ) -> Array[PackedInt32Array]:
 	var edges: Array[PackedInt32Array] = []
 	for i in surfaces.size():
@@ -230,7 +284,7 @@ static func _moves_between(
 				if speed > 0.0:
 					var feet := Vector2(edge_x + dir * moves.hero_width * 0.5, surface.position.y)
 					_link(edges, i, _fly(feet, dir * speed * moves.run_speed, false, surfaces, floors, layout.deadly, moves))
-	_ladders(edges, surfaces, layout.ladders)
+	_ladders(edges, surfaces, ladders)
 	_ferries(edges, surfaces, layout, moves)
 	_geysers(edges, surfaces, floors, layout, moves)
 	_warps(edges, surfaces, layout)

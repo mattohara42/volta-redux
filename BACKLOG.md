@@ -108,10 +108,6 @@ needed rather than optional, because the content is about to exist.
 
 ## Code and tooling debt
 
-- **Walk-back and the route check do not know the hero's width.** Both passed
-  a ladder through a one-cell hole in a landing that an 18 px hero cannot
-  climb (N3 slice 1, found by a real run and fixed). Until they do, every
-  ladder through a floor gets a scenario that climbs it.
 - **No tool measures where a tile's art meets its collision line.** Done by a
   one-off scan for `room_m5_wall`. It belongs in the level format as a
   per-tile property; N2's `TileShape` does not do it.
