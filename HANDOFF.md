@@ -23,14 +23,18 @@ at a respawn, bats can sleep, lowercase anchors, WalkBack drops through
 slabs. **Next for Claude**: Matt's play notes. N3 is done when Matt and the
 kids play Act 1 from a new game and say it is better (G2 again).
 
-**Alongside, while Matt travels (2026-10-24):** the foreground is "too
-monolithic and repetitive" (Matt). Weather patches on the stone and back
-wall, the castle kit (slits, niches, piers, breaches, ivy, banners) set
-into the outer wall's back walls by rule, and the big solid blocks drawn as
-built faces with the kit in them, their dark half as deep (Matt chose this
-over cutaway, windows or thinner blocks; `ART.md`, *The foreground kit*).
-The forest kit is in the forest the same way. Every asked-for sheet is in,
-the forest background's attempt 2 included (`ART.md`).
+**The foreground kit and the new trees and assets are good enough to go on
+with** (Matt, 2026-10-24, from the shots of the forest and the castle).
+Placements are rules written into `[decor]` (`ART.md`, *The foreground
+kit*), still easy to move by hand when play says so.
+
+**Walk-back knows the hero's width** (2026-10-24): a ladder through a hole
+narrower than the hero is cut there. It found a second dead end at once,
+the ladder past the inner gate (beat 16), now fixed (*As built*).
+
+**FLASHES in the pause menu** (2026-10-24, Matt's yes): scales the storm's
+lightning down to nothing, for photosensitive players, kept with the volume
+levels (`Flashes`). Rain and thunder stay at any setting.
 
 **Forest rebuild (merged at Matt's word, 2026-10-24, before he played it):** Matt, with *Ghosts 'n Goblins Resurrection* shots: ground at the
 bottom, hills, trees with boughs and greenery. The oak's slab is now a trunk
@@ -74,13 +78,10 @@ play: whether the fly-in (0.2 s) reads, and the punch and exit sizes.
 3. **Look at N2's after shots** (the PR) or play either Act 1 level: is a
    shot natural-looking? That closes N2. The back walls, torches and trunks
    are Claude's placements, easy to move in the level text.
-4. **Look at the foreground kit in both Act 1 levels**: placements are
-   rules written into `[decor]`, easy to move by hand. Breach rubble near
-   head height and the forest's darker ferns are the two to judge.
-5. **Frame time on a real machine**: `tools/dev.sh frametime`, then with
+4. **Frame time on a real machine**: `tools/dev.sh frametime`, then with
    `res://scenes/rooms/act1_forest.tscn` and `act1_wall.tscn`: p95 under
    16.7 ms? Blocks R3's frame-rate half.
-6. **Older and still open**: R2's final quality (the flame, the sword, the
+5. **Older and still open**: R2's final quality (the flame, the sword, the
    doors, the ride); `RoomM7Sheet` consistent in treatment (closes M7); the
    unattended calls from 2026-10-05; M4's dragon pacing; a play log (`user://`,
    #136) when one is to hand. Two rulings wait for N1: faster ladder

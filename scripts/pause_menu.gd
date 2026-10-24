@@ -1,6 +1,7 @@
 ## The pause menu, an autoload (`Pause`). Escape or a pad's Start freezes the
 ## room and offers: go on, start the room again, the music's and the effects'
-## levels (kept between sessions by `Audio`), a new game, and leave.
+## levels (kept between sessions by `Audio`), how bright the lightning gets
+## (`Flashes`), a new game, and leave.
 ##
 ## Every colour is `Palette`'s and every box is drawn here, because Godot's
 ## default theme is neutral grey, which `ART_DIRECTION.md` does not allow.
@@ -21,6 +22,7 @@ var is_open := false
 var _box: VBoxContainer
 var _music: Button
 var _effects: Button
+var _flashes: Button
 var _new_game: Button
 
 
@@ -48,6 +50,7 @@ func _ready() -> void:
 	_item("START THE ROOM AGAIN", _restart)
 	_music = _item("", func() -> void: _step(Audio.MUSIC_BUS, 1))
 	_effects = _item("", func() -> void: _step(Audio.SFX_BUS, 1))
+	_flashes = _item("", func() -> void: _step_flashes(1))
 	_new_game = _item(NEW_GAME, _ask_new_game)
 	_new_game.focus_exited.connect(func() -> void: _new_game.text = NEW_GAME)
 	_item("LEAVE", func() -> void: get_tree().quit())
@@ -128,6 +131,12 @@ func _ask_new_game() -> void:
 ## Left and right on a level change it, the way a pad expects a setting to.
 func _step_focused_level() -> void:
 	var focused := get_viewport().gui_get_focus_owner()
+	if focused == _flashes:
+		if Input.is_action_just_pressed("ui_right"):
+			_step_flashes(1)
+		elif Input.is_action_just_pressed("ui_left"):
+			_step_flashes(-1)
+		return
 	var bus := &""
 	if focused == _music:
 		bus = Audio.MUSIC_BUS
@@ -144,12 +153,21 @@ func _step_focused_level() -> void:
 ## One step of `bus`'s level, wrapping from full back to nothing when a press
 ## on the row itself goes past the top.
 func _step(bus: StringName, by: int) -> void:
-	var now := roundi(Audio.levels[bus] * LEVEL_STEPS)
-	var next := now + by
+	Audio.set_level(bus, next_level(Audio.levels[bus], by))
+	_refresh()
+
+
+func _step_flashes(by: int) -> void:
+	Flashes.set_level(next_level(Flashes.level(), by))
+	_refresh()
+
+
+## `level` moved one step by `by`, wrapping from full back to nothing.
+static func next_level(level: float, by: int) -> float:
+	var next := roundi(level * LEVEL_STEPS) + by
 	if next > LEVEL_STEPS:
 		next = 0
-	Audio.set_level(bus, clampf(float(next) / LEVEL_STEPS, 0.0, 1.0))
-	_refresh()
+	return clampf(float(next) / LEVEL_STEPS, 0.0, 1.0)
 
 
 func _refresh() -> void:
@@ -157,6 +175,7 @@ func _refresh() -> void:
 		return
 	_music.text = "MUSIC    %s" % level_bar(Audio.levels[Audio.MUSIC_BUS])
 	_effects.text = "EFFECTS  %s" % level_bar(Audio.levels[Audio.SFX_BUS])
+	_flashes.text = "FLASHES  %s" % level_bar(Flashes.level())
 
 
 ## A level drawn as text: `[=======---]` for 0.7.
