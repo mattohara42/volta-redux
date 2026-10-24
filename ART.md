@@ -859,6 +859,37 @@ mechanic in `GEMINI_NOTES.md` is for editing **our own** paintings.
 
 ## Open requests
 
+### The forest's trees (2026-10-24, for Matt to paint in Gemini)
+
+**Why.** Matt, with two reference shots from *Ghosts 'n Goblins
+Resurrection*: in a forest the ground stays at the bottom of the screen,
+rolling in hills, and the hero leaves it only to climb a tree; trees have
+boughs and branches and greenery all round them. The forest's trunks were
+flat slabs of bark and its branches floating planks. The rebuild puts
+trunks in the back layer with branches growing from them; this sheet is
+their art. The trunk is cold bark because a sword does not bite it; the
+bough is warm umber because the branches you stand on are wood a sword
+does bite (`ART_DIRECTION.md`). Save as `assets/art_raw/act1_kit_trees.*`.
+
+```
+Painted fantasy game art lit by fire and by electricity, in the style of hand-painted backgrounds from a hand-animated feature: visible brushwork, soft edges, real depth. Character and creature shapes read as a strong silhouette first, in the way of Mike Mignola's comic art, but rendered with full painterly surface and value, not flat black shapes. Every dark area of the painting is a coloured dark: cold violet-blue in stone and shadow, warm umber in wood and leather. Never use a neutral black or a neutral grey anywhere in the image, including in shadow. Forms are separated by value and by edge quality, hard edges where a shape matters, soft edges where it recedes, never a uniform ink outline.
+
+A sheet of nine separate pieces of one ancient gnarled forest oak and the plants around it, for a side-scrolling platformer, painted on a flat solid magenta (#FF00FF) backdrop, in a grid of three rows of three, with generous even spacing of plain magenta between every piece so each one can be cut apart on its own. Every piece is seen in flat side view, square to the camera like a stage flat, with no perspective and no vanishing point. It is NOT a three-quarter view and NOT seen from above or below. All nine are at the same scale, and each stops at its own outline, with magenta right up to its edge.
+
+The nine, in reading order:
+1. A straight section of the oak's huge trunk, deeply furrowed and twisted bark, cut off flat and level at its top and at its bottom so copies can stack on each other, twice as tall as it is wide.
+2. The foot of the same trunk flaring out into great roots that spread left and right along the ground, its top cut off flat and level to join the trunk section, wider than it is tall.
+3. The top of the same trunk splitting into three thick boughs that spread up and outward, its bottom cut off flat and level to join the trunk section, a little wider than it is tall.
+4. One long thick branch growing out to the right from a flat cut left end, tapering to a thin twiggy tip, with a strip of moss along its top edge, four times as wide as it is tall.
+5. A big rounded clump of dark leaves, one and a half times as wide as it is tall.
+6. A small clump of dark leaves, about as wide as it is tall.
+7. A low leafy bush with a flat bottom edge, twice as wide as it is tall.
+8. A tall spray of fern fronds and broad leaves rising from a flat bottom edge, wider than it is tall.
+9. A curtain of hanging moss strands falling from a straight horizontal top edge, a little taller than it is wide.
+
+Large, simple shapes and few small details: each piece reads at a glance as one clear silhouette with two or three values on it, because it will be shrunk to a few dozen pixels across. Flat, even light on every piece, no cast shadows on the backdrop and no light source painted into the sheet. The trunk's bark is cold: deep blue-violet and dark grey-green. The branch in piece 4 is warm umber brown wood under its moss, the one warm thing on the sheet. Leaves, bushes, ferns and moss are dark grey-green and blue-green, as they look at night; the darkest darks are deep violet-blue, never neutral black. Nothing gold, nothing orange or red, nothing glowing, no flowers, no fruit, no thorns and no spikes. No characters, no creatures, no ground, no sky, no fire, no text and no labels. The image is 2560 by 1440 pixels, aspect ratio 16:9.
+```
+
 ### The foreground kit (2026-10-24, for Matt to paint in Gemini)
 
 **Why.** Matt, 2026-10-24: the foreground is "too monolithic and

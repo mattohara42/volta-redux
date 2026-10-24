@@ -84,7 +84,7 @@ const FOREST_FACE_ONE_IN := 3
 ## the kit's long grass: pale and spiky beside a scorpion, it read as one.
 const FOREST_FLOOR: PackedStringArray = ["fern", "toadstools"]
 const FLOOR_PITCH := 5
-const FLOOR_ONE_IN := 2
+const FLOOR_ONE_IN := 3
 ## Ivy hangs from one ceiling cell in this many, where there is at least
 ## this much air below, and never within this many cells of other ivy.
 const IVY_ONE_IN := 6

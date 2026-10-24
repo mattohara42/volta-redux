@@ -31,6 +31,14 @@ built faces with the kit in them, their dark half as deep (Matt chose this
 over cutaway, windows or thinner blocks; `ART.md`, *The foreground kit*).
 The forest kit is in the forest the same way.
 
+**Forest rebuild (branch `claude/forest-rebuild`, not merged; Matt plays it
+first):** Matt, with *Ghosts 'n Goblins Resurrection* shots: ground at the
+bottom, hills, trees with boughs and greenery. The oak's slab is now a trunk
+in `[back]` with two boughs (the crown and the sleeper's roof), the hill is
+half as tall and terraced. Next: the trees sheet (`ART.md`, *The forest's
+trees*) for trunks, boughs, canopy and bushes, then a sparse layer of plants
+in front of the hero along the bottom edge (Matt said yes, low and sparse).
+
 ## Blocked on Matt
 
 1. **Play Act 1 from a new game, with the kids** (the rebuilt wall is level

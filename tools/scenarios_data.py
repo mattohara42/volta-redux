@@ -599,7 +599,7 @@ SCENARIOS: list[dict] = [
 		"name": "Act 1 forest: the stump past the nest brings you down at the moat",
 		"scene": "res://scenes/rooms/act1_forest.tscn",
 		"out": "act1_forest_stump_down.png",
-		"at": (4256, 544),
+		"at": (4256, 672),
 		"input": "jump:10;move_right:8;-:40",
 		"zoom": 1.0,
 		"centre": (4700, 700),
