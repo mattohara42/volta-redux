@@ -25,8 +25,9 @@ extends Resource
 @export var message_seconds: float = 2.2
 ## Point size of the death message, against a 640x360 viewport. It is centred on
 ## the screen and meant to be read at a glance while you are already running, so
-## it is a good deal larger than anything else the game draws.
-@export var message_font_size: int = 24
+## it is as large as the cards' lettering. A multiple of the font's 10 px grid
+## (`Lettering`).
+@export var message_font_size: int = 20
 
 @export_group("What comes back")
 ## Whether a respawn restores the swords you had spent. SPEC.md says it does:

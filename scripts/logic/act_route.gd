@@ -58,8 +58,9 @@ static func tally(deaths: int, seconds: float) -> String:
 	return "%s, %s." % [fell, took]
 
 
-## The line under an act's own card: how often it killed you.
+## The line under an act's own card: how often Lothar fell in it, in the
+## end card's own words.
 static func act_tally(deaths: int) -> String:
 	if deaths <= 0:
-		return "Not once did it kill you."
-	return "It killed you once." if deaths == 1 else "It killed you %d times." % deaths
+		return "Lothar never fell."
+	return "Lothar fell once." if deaths == 1 else "Lothar fell %d times." % deaths

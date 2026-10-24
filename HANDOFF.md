@@ -49,6 +49,13 @@ flashes and strikes through the hall's windows (`Storm`, `config/storm.tres`,
 `ART_DIRECTION.md` amended). First strike 6 s into a room, then every 10 to
 24 s. Matt's to play: rain density, how often, how bright (`BACKLOG.md`).
 
+**The cards (2026-10-24, Matt delegating while driving):** one pixel font
+everywhere a player reads (`ART_DIRECTION.md`, *Lettering*); the opening
+card moved up off the floor; each act named as it begins; act cards say
+"Lothar fell N times" like the end card; the end card waits for jump; the
+room tag hidden in act rooms (F1 still names the room). Matt's to judge the
+font and the end card's wording.
+
 ## Blocked on Matt
 
 1. **Play Act 1 from a new game, with the kids** (the rebuilt wall is level

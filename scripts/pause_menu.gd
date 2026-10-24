@@ -11,8 +11,8 @@ extends CanvasLayer
 ## Over the room, the HUD and the opening card; under an act's card.
 const LAYER := 95
 const LEVEL_STEPS := 10
-const TITLE_SIZE := 28
-const ITEM_SIZE := 14
+const TITLE_SIZE := Lettering.TITLE
+const ITEM_SIZE := Lettering.BODY
 const NEW_GAME := "NEW GAME"
 ## A new game throws the saved one away, so it asks twice.
 const NEW_GAME_SURE := "NEW GAME? PRESS AGAIN"
@@ -42,8 +42,7 @@ func _ready() -> void:
 	var title := Label.new()
 	title.text = "PAUSED"
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title.add_theme_font_size_override("font_size", TITLE_SIZE)
-	title.add_theme_color_override("font_color", Palette.FIRE_HOT)
+	Lettering.apply(title, TITLE_SIZE, Palette.FIRE_HOT)
 	_box.add_child(title)
 	_item("GO ON", close)
 	_item("START THE ROOM AGAIN", _restart)
@@ -60,8 +59,7 @@ func _item(text: String, pressed: Callable) -> Button:
 	button.text = text
 	button.flat = false
 	button.focus_mode = Control.FOCUS_ALL
-	button.add_theme_font_size_override("font_size", ITEM_SIZE)
-	button.add_theme_color_override("font_color", Palette.STONE_LIT)
+	Lettering.apply(button, ITEM_SIZE, Palette.STONE_LIT)
 	button.add_theme_color_override("font_hover_color", Palette.FIRE_HOT)
 	button.add_theme_color_override("font_focus_color", Palette.FIRE_HOT)
 	button.add_theme_color_override("font_pressed_color", Palette.FIRE_CORE)

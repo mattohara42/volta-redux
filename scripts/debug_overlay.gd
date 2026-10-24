@@ -61,8 +61,10 @@ static var _shown_by_choice: Variant = null
 @onready var _label: Label = $Panel/Margin/Label
 
 ## The room's name, shown whenever the panel is not, so a bench that starts
-## with the panel hidden still says which bench it is.
+## with the panel hidden still says which bench it is. Not in an act's rooms,
+## where it sat over the title and the game: F1's panel names the room there.
 var _room_tag: Label
+var _in_an_act := false
 var _player: Player
 var _world: WorldConfig
 var _death: DeathConfig
@@ -85,6 +87,12 @@ func _ready() -> void:
 	_label.add_theme_color_override("font_color", Palette.FIRE_HOT)
 	_label.add_theme_font_size_override("font_size", 7)
 	_panel.visible = (not starts_hidden) if _shown_by_choice == null else _shown_by_choice
+	var act_state := get_node_or_null("/root/ActState")
+	# The room this overlay was saved into, which is set before the tree has
+	# made it the current scene.
+	var scene := owner if owner != null else get_tree().current_scene
+	if act_state != null and scene != null:
+		_in_an_act = act_state.act_of(scene.scene_file_path) != null
 	_room_tag = Label.new()
 	_room_tag.position = Vector2(4.0, 2.0)
 	_room_tag.add_theme_color_override("font_color", Palette.FIRE_HOT)
@@ -200,7 +208,7 @@ func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("debug_toggle_overlay"):
 		_panel.visible = not _panel.visible
 		_shown_by_choice = _panel.visible
-	_room_tag.visible = not _panel.visible
+	_room_tag.visible = not _panel.visible and not _in_an_act
 	if _room_tag.visible:
 		_room_tag.text = _room_here()
 	if _player == null or not _panel.visible:

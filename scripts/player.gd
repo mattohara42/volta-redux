@@ -189,8 +189,7 @@ func _ready() -> void:
 	# steer is never lost in a room's dark (`LightField`).
 	add_child(LightSource.point(ATMOSPHERE.light_hero_radius, Palette.FIRE_CORE, ATMOSPHERE.light_hero_strength))
 	_sound.bus = Sfx.BUS
-	_message_label.add_theme_font_size_override("font_size", death_config.message_font_size)
-	_message_label.add_theme_color_override("font_color", Palette.FIRE_HOT)
+	Lettering.apply(_message_label, death_config.message_font_size, Palette.FIRE_HOT)
 	_message_label.text = ""
 	_ladder_probe.area_entered.connect(func(_a: Area2D) -> void: _ladders_touched += 1)
 	_ladder_probe.area_exited.connect(func(_a: Area2D) -> void: _ladders_touched = maxi(_ladders_touched - 1, 0))

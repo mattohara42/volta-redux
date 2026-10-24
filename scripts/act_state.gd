@@ -18,6 +18,8 @@ const ATMOSPHERE: AtmosphereConfig = preload("res://config/atmosphere.tres")
 const ACTS: Array[ActConfig] = [preload("res://config/act1.tres"), preload("res://config/act2.tres"), preload("res://config/act3.tres"), preload("res://config/act4.tres")]
 const SWORD: SwordConfig = preload("res://config/sword.tres")
 const SAVE := "user://save.cfg"
+## Under the end card's tally, once it has been up long enough to read.
+const END_PROMPT := "PRESS JUMP TO PLAY AGAIN"
 
 ## Swords to arrive with, or -1 for none carried. Read once, by the next hero.
 var _carried := -1
@@ -314,26 +316,35 @@ func act_of(room_path: String) -> ActConfig:
 
 
 ## The act-complete card: the room freezes under it, then the next act begins
-## with what you held, as any exit carries it.
+## with what you held, as any exit carries it, and with its name over its
+## first room. After the last act it is the end card, and it holds until the
+## player presses on: the run's tally is the one screen worth reading.
 func _finish(act: ActConfig, swords_held: int, max_swords: int) -> void:
 	var card := CanvasLayer.new()
 	card.process_mode = Node.PROCESS_MODE_ALWAYS
 	card.layer = 100
 	# The dark comes up over the frozen room, then the words over the dark.
 	var curtain := Dissolve.cover(card, ATMOSPHERE.card_cover_seconds, card.layer - 1)
-	var label := Label.new()
 	var index := ACTS.find(act)
 	var ending := ActRoute.is_ending(index, ACTS.size())
 	var act_deaths := run_deaths - _act_start_deaths
-	label.text = act.title + ("\n\nThe end.\n\n" + ActRoute.tally(run_deaths, run_seconds) if ending else "\n\n" + ActRoute.act_tally(act_deaths))
-	label.modulate.a = 0.0
-	create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS).tween_property(label, "modulate:a", 1.0, ATMOSPHERE.card_cover_seconds).set_delay(ATMOSPHERE.card_cover_seconds * 0.6)
-	label.add_theme_font_size_override("font_size", act.card_font_size)
-	label.add_theme_color_override("font_color", Palette.FIRE_HOT)
-	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	label.set_anchors_preset(Control.PRESET_FULL_RECT)
-	card.add_child(label)
+	var size := act.card_font_size
+	var words := VBoxContainer.new()
+	words.alignment = BoxContainer.ALIGNMENT_CENTER
+	words.set_anchors_preset(Control.PRESET_FULL_RECT)
+	# The end is set as large as the game's name was at the start.
+	_card_line(words, "THE END" if ending else act.title.to_upper(), size * 2 if ending else size, Palette.FIRE_HOT)
+	_card_line(words, "", size, Palette.FIRE_HOT)
+	_card_line(words, ActRoute.tally(run_deaths, run_seconds) if ending else ActRoute.act_tally(act_deaths), size, Palette.FIRE_HOT)
+	# Laid out from the start but unseen, so the words do not jump when it shows.
+	var prompt: Label = null
+	if ending:
+		_card_line(words, "", size, Palette.FIRE_CORE)
+		prompt = _card_line(words, END_PROMPT, size, Palette.FIRE_CORE)
+		prompt.modulate.a = 0.0
+	words.modulate.a = 0.0
+	create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS).tween_property(words, "modulate:a", 1.0, ATMOSPHERE.card_cover_seconds).set_delay(ATMOSPHERE.card_cover_seconds * 0.6)
+	card.add_child(words)
 	# The act ends on three low notes, heard over the frozen room.
 	var sting := AudioStreamPlayer.new()
 	sting.stream = AUDIO.card
@@ -349,6 +360,8 @@ func _finish(act: ActConfig, swords_held: int, max_swords: int) -> void:
 		audio.fade_out()
 	get_tree().paused = true
 	await get_tree().create_timer(act.complete_card_seconds, true).timeout
+	if ending:
+		await _press_to_go_on(prompt)
 	get_tree().paused = false
 	curtain.queue_free()
 	card.queue_free()
@@ -360,3 +373,24 @@ func _finish(act: ActConfig, swords_held: int, max_swords: int) -> void:
 	_carried = ActRoute.carried(swords_held, max_swords)
 	_begin_act(next_index, _carried)
 	get_tree().change_scene_to_file(next.rooms[0])
+	get_tree().root.add_child(OpeningCard.make(next.title, next.card_font_size, false))
+
+
+## The end card's last line, and then nothing until jump or throw is pressed.
+## Pressed as it is asked for, not held from the flight, or the card would be
+## gone before it was read.
+func _press_to_go_on(prompt: Label) -> void:
+	prompt.modulate.a = 1.0
+	while true:
+		await get_tree().process_frame
+		if Input.is_action_just_pressed("jump") or Input.is_action_just_pressed("throw"):
+			return
+
+
+func _card_line(words: VBoxContainer, text: String, size: int, colour: Color) -> Label:
+	var line := Label.new()
+	line.text = text
+	line.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	Lettering.apply(line, size, colour)
+	words.add_child(line)
+	return line

@@ -9,10 +9,13 @@ extends Resource
 @export var title: String = ""
 ## Scene paths, first room first. Exits only lead forward (Matt, 2026-10-03).
 @export var rooms: PackedStringArray = []
-## How long the act-complete card holds before the act starts again, seconds.
+## How long the act-complete card holds before the next act starts, seconds.
+## After the last act it is how long the end card holds before it asks for a
+## press, and it then waits for one.
 @export var complete_card_seconds: float = 2.5
-## The card's lettering, in the same size as the death messages.
-@export var card_font_size: int = 24
+## The card's lettering, in the same size as the death messages. A multiple of
+## the font's 10 px grid (`Lettering`); the game's name is set at twice it.
+@export var card_font_size: int = 20
 
 ## The act's ground and painting (`ActTiles`). Rooms draw from their own copy;
 ## this one is for what the act as a whole needs from it, the lights the

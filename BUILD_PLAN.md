@@ -342,6 +342,10 @@ save per act (`SavePoint`), so M14's playthroughs need not be one sitting.
 Launching resumes the act; the pause menu's NEW GAME starts over. The title
 screen, key remapping and export are untouched.
 
+**And 2026-10-24**: the lettering (`ART_DIRECTION.md`, *Lettering*), each act
+named over its first room as it begins, and an end card that holds until a
+press rather than dropping the player into a new game after 2.5 s.
+
 **Done when**: it is at a URL and someone else has finished it.
 
 ---

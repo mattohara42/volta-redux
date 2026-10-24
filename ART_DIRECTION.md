@@ -162,6 +162,22 @@ settings and when they change over.
 (`ANIMATION.md`), and a rotated pixel sprite will shimmer. At the sword's size
 it may be fine. Check it in a screenshot before believing either way.
 
+## Lettering
+
+**One pixel font, Jersey 10, for every word a player reads** (decided
+2026-10-24, Matt delegating the call): the cards, the pause menu, the death
+lines. Godot's own font was smooth and drawn at window resolution, so every
+word on screen sat on top of the art rather than in it. A blackletter was
+tried for the title and lost: its capital V reads as an I.
+
+It is drawn on a 10 px grid, so it is set at **10, 20 or 40 px only**, with
+smoothing off, which keeps its pixels the same squares as the art's
+(`scripts/lettering.gd`, and a test on every size). The game's name and THE
+END are 40, everything else 20. Words in a card are capitals; a sentence a
+player reads (a tally) is set as a sentence. Under the letters is a shadow one
+font pixel down and right in a coloured dark. The debug panel keeps Godot's
+font, because it is an instrument.
+
 ## What this direction forbids
 
 - Pure black and pure white, anywhere, including UI text and particle cores.
