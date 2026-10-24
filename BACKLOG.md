@@ -103,8 +103,7 @@ needed rather than optional, because the content is about to exist.
 - **The storm (2026-10-24).** A full-screen flash every 10 to 24 s, held
   0.05 s and cleared in 0.18. Is it too often, too bright, or does it ever
   hide a hazard at the wrong moment? `config/storm.tres` has every dial.
-  A setting to soften or turn off the flash, for photosensitive players, is
-  worth having before anyone outside the family plays.
+  The pause menu's FLASHES row scales it down to nothing (`Flashes`).
 
 ## Code and tooling debt
 

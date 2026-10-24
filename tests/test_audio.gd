@@ -134,3 +134,9 @@ func test_the_pause_menu_draws_a_level_as_text() -> void:
 	check_eq(PauseMenu.level_bar(0.7), "[=======---]", "seven tenths")
 	check_eq(PauseMenu.level_bar(0.0), "[----------]", "nothing")
 	check_eq(PauseMenu.level_bar(1.0), "[==========]", "everything")
+
+
+func test_a_level_steps_and_wraps_from_full_to_nothing() -> void:
+	check_eq(PauseMenu.next_level(0.7, 1), 0.8, "one step up")
+	check_eq(PauseMenu.next_level(0.0, -1), 0.0, "never below nothing")
+	check_eq(PauseMenu.next_level(1.0, 1), 0.0, "past full, back to nothing")

@@ -115,15 +115,17 @@ func _process(delta: float) -> void:
 
 
 ## How bright the sky is this frame, 0 to 1.
+## Scaled by the player's own setting (`Flashes`).
 func _sky_now() -> float:
 	if _strike_t < 0.0:
 		return 0.0
-	return StormRules.sky(_strike_t, _pulses, CONFIG.pulse_seconds, CONFIG.pulse_gap_seconds, CONFIG.afterglow_seconds, CONFIG.gap_level)
+	return Flashes.level() * StormRules.sky(_strike_t, _pulses, CONFIG.pulse_seconds, CONFIG.pulse_gap_seconds, CONFIG.afterglow_seconds, CONFIG.gap_level)
 
 
 func _show() -> void:
 	var sky := _sky_now()
 	var white := 0.0 if _strike_t < 0.0 else StormRules.whiteout(_strike_t, CONFIG.whiteout_hold_seconds, CONFIG.whiteout_fade_seconds)
+	white *= Flashes.level()
 	if _sky != null:
 		_sky.color = Color(Palette.ARC_CORE, sky * CONFIG.sky_lift)
 	_flash.color = Color(Palette.ARC_CORE, white * CONFIG.whiteout)
