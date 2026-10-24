@@ -41,6 +41,19 @@ const KIT := {
 	"banner": [preload("res://assets/art/act1/kit/banner.png")],
 }
 const IVY: Array[Texture2D] = [preload("res://assets/art/act1/kit/ivy.png")]
+## The castle yard: siege gear and stores standing on the floor, behind
+## everything you touch, by `[decor]` kind.
+const YARD := {
+	"trebuchet": [preload("res://assets/art/act1/yard/trebuchet.png")],
+	"ballista": [preload("res://assets/art/act1/yard/ballista.png")],
+	"cart": [preload("res://assets/art/act1/yard/cart.png")],
+	"barrels": [preload("res://assets/art/act1/yard/barrels.png")],
+	"crates": [preload("res://assets/art/act1/yard/crates.png")],
+	"rack": [preload("res://assets/art/act1/yard/rack.png")],
+	"shot": [preload("res://assets/art/act1/yard/shot.png")],
+	"rubble": [preload("res://assets/art/act1/yard/rubble.png")],
+	"sacks": [preload("res://assets/art/act1/yard/sacks.png")],
+}
 ## The forest kit: what is set into a bank of earth, and what stands on the
 ## grass, by `[decor]` kind.
 const FOREST_KIT := {
@@ -397,6 +410,7 @@ static func draw_decor(canvas: CanvasItem, level: LevelGrid.Level, tiles: ActTil
 	# Set into the back wall, so shaded with it: the art's own big stones are
 	# what stand out from the brick, not a brightness the wall does not have.
 	_draw_kit(canvas, level, KIT, false, Palette.KIT_SHADE)
+	_draw_kit(canvas, level, YARD, false, Color.WHITE)
 	# Standing on the grass, unshaded as the tufts are: the forest's art is
 	# darker than the castle's, and shaded it went to grey shapes.
 	_draw_kit(canvas, level, FOREST_KIT, false, Color.WHITE)

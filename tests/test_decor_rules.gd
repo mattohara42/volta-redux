@@ -196,6 +196,7 @@ func test_the_kit_fits_its_footprints() -> void:
 	var cell := 16.0
 	var pieces := TileArt.KIT.duplicate()
 	pieces.merge(TileArt.FOREST_KIT)
+	pieces.merge(TileArt.YARD)
 	pieces["ivy"] = TileArt.IVY
 	for kind: String in pieces:
 		var foot: Vector3i = DecorRules.FOOTPRINTS[kind]

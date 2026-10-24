@@ -13,7 +13,8 @@
 ##            hanging from a high ceiling; a wall feature (an arrow slit, a
 ##            niche, a pier, a breach) in the bays of a back wall between
 ##            the torches; ivy hanging from a ceiling; the same features
-##            set into the face of a big block of stone, away from its edge
+##            set into the face of a big block of stone, away from its edge;
+##            siege gear and stores standing about on open floors (the yard)
 ##   forest   a fern, toadstools or a hollow log on the grass now
 ##            and then, and bushes behind; leaves at a branch's free end
 ##            and moss under it; fronds in front of the hero along the
@@ -67,6 +68,9 @@ const FOOTPRINTS := {
 	"boulder": Vector3i(2, 2, 0), "stones": Vector3i(1, 2, 0), "skull": Vector3i(2, 2, 0),
 	"strata": Vector3i(2, 2, 0), "standing_stone": Vector3i(1, 2, 0),
 	"fern": Vector3i(1, 2, 0), "toadstools": Vector3i(1, 2, 0),
+	"trebuchet": Vector3i(3, 5, 0), "ballista": Vector3i(2, 3, 0), "cart": Vector3i(2, 3, 0),
+	"barrels": Vector3i(1, 3, 0), "crates": Vector3i(2, 3, 0), "rack": Vector3i(2, 3, 0),
+	"shot": Vector3i(1, 2, 0), "rubble": Vector3i(2, 2, 0), "sacks": Vector3i(1, 2, 0),
 	"log": Vector3i(2, 3, 0), "bush": Vector3i(2, 3, 0), "moss": Vector3i(2, 3, 0), "frond": Vector3i(2, 3, 0),
 }
 ## Features set into a block's face (Matt, 2026-10-24: the giant blocks are
@@ -101,6 +105,16 @@ const BRANCH_MIN := 3
 ## lowest ground, one tried each `FROND_PITCH` cells, one in `FROND_ONE_IN`,
 ## and none within `FROND_CLEAR` cells of anything the map placed, a hazard,
 ## or a creature's whole patrol.
+## The castle yard (the yard sheet): one piece tried each `YARD_PITCH` cells
+## along an open floor, one in `YARD_ONE_IN` of those, clear of anything the
+## map placed or a creature patrols by `FROND_CLEAR`, as fronds are. Big
+## pieces are listed twice as rarely as small ones.
+const YARD: PackedStringArray = [
+	"barrels", "crates", "sacks", "shot", "rubble", "rack", "barrels", "crates",
+	"sacks", "rubble", "cart", "ballista", "trebuchet",
+]
+const YARD_PITCH := 8
+const YARD_ONE_IN := 2
 const FROND_PITCH := 9
 const FROND_ONE_IN := 2
 const FROND_CLEAR := 2
@@ -130,6 +144,7 @@ static func place(level: LevelGrid.Level, style: String) -> Array[String]:
 		_features(rows, grid, back)
 		_ivy(rows, grid)
 		_faces(rows, grid, FACE_FEATURES, true, 1, SOLID)
+		_yard(level, rows, grid)
 	elif style == "forest":
 		_fronds(level, rows, grid)
 		_branches(rows, grid)
@@ -308,11 +323,7 @@ static func _fronds(level: LevelGrid.Level, rows: Array[String], grid: Array[Str
 		for x in rows[y].length():
 			if rows[y][x] == "#" and rows[y - 1][x] == AIR:
 				lowest = maxi(lowest, y)
-	var keep_out: Array[Rect2i] = []
-	for t in level.things:
-		var cells := Rect2i(Vector2i(t.rect.position / level.cell), Vector2i((t.rect.size / level.cell).ceil()))
-		cells.size.x += ceili(t.number("range", 0.0) / level.cell)
-		keep_out.append(cells.grow(FROND_CLEAR))
+	var keep_out := _keep_out(level)
 	var foot: Vector3i = FOOTPRINTS["frond"]
 	var y := lowest - 1
 	var last := -FROND_PITCH
@@ -326,6 +337,43 @@ static func _fronds(level: LevelGrid.Level, rows: Array[String], grid: Array[Str
 		if _fits(rows, grid, {}, x, y - foot.y + 1, y, foot.x, false):
 			_put(rows, grid, x, y, _char("frond"))
 			last = x
+
+
+## Everything the map placed, grown by `FROND_CLEAR`, a creature's box
+## stretched along its whole patrol: where nothing drawn over or beside the
+## play may stand.
+static func _keep_out(level: LevelGrid.Level) -> Array[Rect2i]:
+	var keep_out: Array[Rect2i] = []
+	for t in level.things:
+		var cells := Rect2i(Vector2i(t.rect.position / level.cell), Vector2i((t.rect.size / level.cell).ceil()))
+		cells.size.x += ceili(t.number("range", 0.0) / level.cell)
+		keep_out.append(cells.grow(FROND_CLEAR))
+	return keep_out
+
+
+## Siege gear and stores on open floors: a piece's whole footprint air with
+## solid under all of it, nothing lighting or filling the wall beside it, and
+## clear of every thing the map placed.
+static func _yard(level: LevelGrid.Level, rows: Array[String], grid: Array[String]) -> void:
+	var keep_out := _keep_out(level)
+	for run in _top_runs(rows):
+		var y: int = run.x
+		var last := -YARD_PITCH
+		for x in range(run.y, run.z + 1):
+			if x - last < YARD_PITCH or _hash(x * 11 + 4, y) % YARD_ONE_IN != 0:
+				continue
+			if keep_out.any(func(r: Rect2i) -> bool: return r.has_point(Vector2i(x, y))):
+				continue
+			if not _clear_of_fill(rows, grid, x, y):
+				continue
+			var kind := YARD[_hash(x * 3 + 7, y * 5 + 1) % YARD.size()]
+			var foot: Vector3i = FOOTPRINTS[kind]
+			var floored := true
+			for dx in range(-foot.x, foot.x + 1):
+				floored = floored and x + dx >= run.y and x + dx <= run.z
+			if floored and _fits(rows, grid, {}, x, y - foot.y + 1, y, foot.x, false):
+				_put(rows, grid, x, y, _char(kind))
+				last = x
 
 
 ## Whether every cell `reach` either side of `x` on row `y` is air on grass,

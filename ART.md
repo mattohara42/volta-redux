@@ -931,6 +931,16 @@ The nine, in reading order:
 Large, simple shapes and few small details: each piece reads at a glance as one clear silhouette with two or three values on it, because it will be shrunk to a few dozen pixels across. Thin strands, twigs and threads disappear at that size, so make every root, limb and rope thick and few. Flat, even light on every piece, no cast shadows on the backdrop and no light source painted into the sheet. Bark and roots are cold grey-violet, never warm brown. Moss, grass and leaves are dark grey-green and blue-green, as they look at night. Stone is cold blue-violet grey. The darkest darks are deep violet-blue, never neutral black. Nothing gold, nothing orange or red, nothing glowing, no warm brown wood, no thorns and no spikes. No characters, no creatures, no sky, no fire, no text and no labels. The image is 2560 by 1440 pixels, aspect ratio 16:9.
 ```
 
+**The yard sheet landed first attempt** (`act1_kit_yard.jpg`): trebuchet,
+ballista, cart, barrels, crates, weapon rack, stone shot, rubble and sacks,
+the wood cold and weathered as asked. Each pixelated at a scale of its own
+(a trebuchet is not barrel-sized: 0.26 against 0.15) and lifted 1.35 to read
+against the bailey's wall. Placed by `DecorRules`' yard rule on open floors
+(castle style), one in two tried every eight cells, big pieces rarer, clear
+of torches, ladders, braziers and of anything the map placed or a creature
+patrols. Added to the outer wall with `--add`, keeping its hand edits: 20
+pieces, one trebuchet. Drawn unshaded behind everything.
+
 **The second trees sheet landed first attempt** (`act1_kit_trees_2.jpg`):
 a pale, twisted tree with a willow's drooping leaves. Gemini drew both trunk
 sections like stumps, their flat top face showing, so the top 24 px of each

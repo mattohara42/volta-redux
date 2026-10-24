@@ -93,7 +93,8 @@ set's fill, `%` its face, `w` its wood. `[decor]` is one decoration a cell:
 battlements (`n`), torches (`t`), chains (`c`), grass tufts (`,`), roots
 (`'`), ivy (`v`) and the castle's wall features: arrow slit (`l`), niche
 (`a`), pier (`p`), drain (`d`), breach (`x`), ring (`o`), footing (`f`) and
-banner (`b`), each standing on its cell. The forest adds its finds
+banner (`b`), each standing on its cell, and the yard's siege gear and
+stores (`T A W R X G O U S`). The forest adds its finds
 (`r s z g m`), ferns, toadstools and a hollow log (`e u L`), bushes (`h`), leaves (`q j`),
 moss (`i`) and fronds drawn in front of the hero (`;`). Two kinds are
 placed by hand, never by rule: a tree is a foot `y` on the ground and a

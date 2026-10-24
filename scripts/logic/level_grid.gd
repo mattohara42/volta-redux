@@ -83,6 +83,8 @@ const DECOR := {
 	"y": "tree", "k": "crown", "q": "leaves", "j": "leaves_small", "h": "bush", "i": "moss",
 	";": "frond", "<": "bough_left", ">": "bough_right",
 	"Y": "pale_tree", "K": "pale_crown", "L": "log",
+	"T": "trebuchet", "A": "ballista", "W": "cart", "R": "barrels", "X": "crates",
+	"G": "rack", "O": "shot", "U": "rubble", "S": "sacks",
 }
 const KINDS: PackedStringArray = [
 	"gate", "switch", "plate", "scorpion", "bat", "stump", "lift", "geyser", "ant",
