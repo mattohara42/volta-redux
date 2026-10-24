@@ -195,6 +195,7 @@ func test_ivy_hangs_from_a_lip_and_keeps_apart() -> void:
 func test_the_kit_fits_its_footprints() -> void:
 	var cell := 16.0
 	var pieces := TileArt.KIT.duplicate()
+	pieces.merge(TileArt.FOREST_KIT)
 	pieces["ivy"] = TileArt.IVY
 	for kind: String in pieces:
 		var foot: Vector3i = DecorRules.FOOTPRINTS[kind]
@@ -227,3 +228,19 @@ func test_a_big_block_gets_features_set_into_its_face() -> void:
 	for row in thin:
 		for c in row:
 			check(not DecorRules.FACE_FEATURES.has(LevelGrid.DECOR.get(c, "")) or c == ".", "and a floor two rows thick gets none")
+
+
+## The forest sets its stones and bones into a bank of earth, never into a
+## trunk, which is solid too.
+func test_the_forest_sets_its_finds_in_earth_not_bark() -> void:
+	var rows := (".".repeat(60) + "\n").repeat(2)
+	var earth := DecorRules.place(_rows("[map]\n" + rows + ("#".repeat(60) + "\n").repeat(14)), "forest")
+	var bark := DecorRules.place(_rows("[map]\n" + rows + ("%".repeat(60) + "\n").repeat(14)), "forest")
+	var found := 0
+	for grid in [earth, bark]:
+		for row: String in grid:
+			for c in row:
+				if DecorRules.FOREST_FACE.has(LevelGrid.DECOR.get(c, "")):
+					check(grid == earth, "a find in bark")
+					found += 1
+	check(found > 0, "a deep bank of earth has some")

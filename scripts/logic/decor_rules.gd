@@ -14,7 +14,10 @@
 ##            niche, a pier, a breach) in the bays of a back wall between
 ##            the torches; ivy hanging from a ceiling; the same features
 ##            set into the face of a big block of stone, away from its edge
-##   forest   tufts on the grass; roots hanging under earth
+##   forest   a fern or toadstools standing on the grass now
+##            and then; tufts on the grass; roots hanging under earth;
+##            boulders, bones and old stones set into a bank's face, away
+##            from its edge
 ##
 ## Decoration only ever goes in air the map leaves empty, so it never covers
 ## a ladder, a marker or a mechanism, and changes nothing that plays. The one
@@ -58,6 +61,9 @@ const FOOTPRINTS := {
 	"niche": Vector3i(1, 3, 0), "pier": Vector3i(0, 3, 0), "footing": Vector3i(1, 2, 0),
 	"slit": Vector3i(1, 3, 1), "breach": Vector3i(1, 3, 1), "ring": Vector3i(1, 3, 1),
 	"drain": Vector3i(1, 3, 1), "banner": Vector3i(1, 3, 1), "ivy": Vector3i(1, 3, 0),
+	"boulder": Vector3i(2, 2, 0), "stones": Vector3i(1, 2, 0), "skull": Vector3i(2, 2, 0),
+	"strata": Vector3i(2, 2, 0), "standing_stone": Vector3i(1, 2, 0),
+	"fern": Vector3i(1, 2, 0), "toadstools": Vector3i(1, 2, 0),
 }
 ## Features set into a block's face (Matt, 2026-10-24: the giant blocks are
 ## the problem; built faces, not slabs). One is tried in each bay of
@@ -68,6 +74,17 @@ const FACE_ROWS := 5
 const FACE_DEPTH := 2
 ## No niche: a dark arch in stone you cannot enter reads as a doorway.
 const FACE_FEATURES: PackedStringArray = ["slit", "pier", "drain", "breach", "ring", "banner"]
+## The forest's, set into a bank of earth the same way (the forest kit),
+## a skull rarer than a stone, and only one bay in `FOREST_FACE_ONE_IN`
+## tried, or a bank reads as a graveyard.
+const FOREST_FACE: PackedStringArray = ["boulder", "stones", "strata", "standing_stone", "boulder", "stones", "skull"]
+const FOREST_FACE_ONE_IN := 3
+## What stands on the forest's grass: one tried each `FLOOR_PITCH` cells
+## along a lip, one in `FLOOR_ONE_IN` of those, its footprint all air. Not
+## the kit's long grass: pale and spiky beside a scorpion, it read as one.
+const FOREST_FLOOR: PackedStringArray = ["fern", "toadstools"]
+const FLOOR_PITCH := 5
+const FLOOR_ONE_IN := 2
 ## Ivy hangs from one ceiling cell in this many, where there is at least
 ## this much air below, and never within this many cells of other ivy.
 const IVY_ONE_IN := 6
@@ -93,10 +110,12 @@ static func place(level: LevelGrid.Level, style: String) -> Array[String]:
 		_chains(rows, grid)
 		_features(rows, grid, back)
 		_ivy(rows, grid)
-		_faces(rows, grid)
+		_faces(rows, grid, FACE_FEATURES, true, 1, SOLID)
 	elif style == "forest":
+		_floor_props(rows, grid)
 		_tufts(rows, grid)
 		_roots(rows, grid)
+		_faces(rows, grid, FOREST_FACE, false, FOREST_FACE_ONE_IN, "#")
 	return grid
 
 
@@ -169,19 +188,25 @@ static func _features(rows: Array[String], grid: Array[String], back: Dictionary
 					break
 
 
-## One feature a bay of a block's face, its footprint all deep stone.
-static func _faces(rows: Array[String], grid: Array[String]) -> void:
+## One of `kinds` a bay of a block's face, its footprint all deep stone.
+## With `fall_back`, a bay whose kind does not fit tries the next; without,
+## it stays bare, which keeps the narrowest kind from taking every bay. Only
+## one bay in `one_in` is tried at all, and only into `material` (the
+## forest's earth, never a trunk).
+static func _faces(rows: Array[String], grid: Array[String], kinds: PackedStringArray, fall_back: bool, one_in: int, material: String) -> void:
 	var depths := TileShape.depths(rows)
 	var width := rows[0].length()
 	for top in range(0, rows.size(), FACE_ROWS):
 		for left in range(0, width, FACE_PITCH):
 			var h := _hash(left, top)
+			if (h >> 12) % one_in != 0:
+				continue
 			var x := left + (h >> 4) % FACE_PITCH
 			var anchor := top + (h >> 8) % FACE_ROWS
-			for i in FACE_FEATURES.size():
-				var kind := FACE_FEATURES[(h + i) % FACE_FEATURES.size()]
+			for i in (kinds.size() if fall_back else 1):
+				var kind := kinds[(h + i) % kinds.size()]
 				var foot: Vector3i = FOOTPRINTS[kind]
-				if _set_in_stone(depths, grid, width, x, anchor - foot.y + 1, anchor, foot.x):
+				if _set_in_stone(rows, depths, grid, material, x, anchor - foot.y + 1, anchor, foot.x):
 					var row := grid[anchor]
 					row[x] = _char(kind)
 					grid[anchor] = row
@@ -189,13 +214,14 @@ static func _faces(rows: Array[String], grid: Array[String]) -> void:
 
 
 ## Whether every cell from `top` to `bottom`, `reach` either side of `x`, is
-## stone `FACE_DEPTH` deep that no other decoration has taken.
-static func _set_in_stone(depths: PackedInt32Array, grid: Array[String], width: int, x: int, top: int, bottom: int, reach: int) -> bool:
+## `material` `FACE_DEPTH` deep that no other decoration has taken.
+static func _set_in_stone(rows: Array[String], depths: PackedInt32Array, grid: Array[String], material: String, x: int, top: int, bottom: int, reach: int) -> bool:
+	var width := rows[0].length()
 	if top < 0 or bottom >= grid.size() or x - reach < 0 or x + reach >= width:
 		return false
 	for y in range(top, bottom + 1):
 		for dx in range(-reach, reach + 1):
-			if depths[y * width + x + dx] < FACE_DEPTH or grid[y][x + dx] != AIR:
+			if depths[y * width + x + dx] < FACE_DEPTH or grid[y][x + dx] != AIR or not material.contains(rows[y][x + dx]):
 				return false
 	return true
 
@@ -249,6 +275,24 @@ static func _char(kind: String) -> String:
 		if LevelGrid.DECOR[c] == kind:
 			return c
 	return AIR
+
+
+## Now and then a fern, toadstools or long grass on the grass, never where
+## the map has put something, never on another.
+static func _floor_props(rows: Array[String], grid: Array[String]) -> void:
+	for y in range(1, rows.size()):
+		var last := -FLOOR_PITCH
+		for x in rows[y].length():
+			if rows[y][x] != "#" or x - last < FLOOR_PITCH or _hash(x, y) % FLOOR_ONE_IN != 0:
+				continue
+			var kind := FOREST_FLOOR[_hash(x * 7 + 3, y * 13 + 5) % FOREST_FLOOR.size()]
+			var foot: Vector3i = FOOTPRINTS[kind]
+			var lip := true
+			for dx in range(-foot.x, foot.x + 1):
+				lip = lip and x + dx >= 0 and x + dx < rows[y].length() and rows[y][x + dx] == "#"
+			if lip and _fits(rows, grid, {}, x, y - foot.y, y - 1, foot.x, false):
+				_put(rows, grid, x, y - 1, _char(kind))
+				last = x
 
 
 static func _tufts(rows: Array[String], grid: Array[String]) -> void:

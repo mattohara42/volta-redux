@@ -67,7 +67,8 @@ func test_the_act1_levels_decorate_only_air_or_deep_stone() -> void:
 				count += 1
 				var c := level.rows[at.y][at.x]
 				# A wall feature may be set into a block's face, deep in the stone.
-				var in_face := DecorRules.FACE_FEATURES.has(kind) and depths[at.y * width + at.x] >= DecorRules.FACE_DEPTH
+				var face_kind := DecorRules.FACE_FEATURES.has(kind) or DecorRules.FOREST_FACE.has(kind)
+				var in_face := face_kind and depths[at.y * width + at.x] >= DecorRules.FACE_DEPTH
 				check(c == "." or creatures.contains(c) or in_face, "%s: %s at %s stands in '%s'" % [path.get_file(), kind, at, c])
 		check(count > 0, "%s is decorated" % path.get_file())
 		check(not level.back.is_empty(), "%s has a back wall" % path.get_file())

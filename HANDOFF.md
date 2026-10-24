@@ -29,7 +29,7 @@ wall, the castle kit (slits, niches, piers, breaches, ivy, banners) set
 into the outer wall's back walls by rule, and the big solid blocks drawn as
 built faces with the kit in them, their dark half as deep (Matt chose this
 over cutaway, windows or thinner blocks; `ART.md`, *The foreground kit*).
-The forest sheet goes the same way when it lands.
+The forest kit is in the forest the same way.
 
 ## Blocked on Matt
 
@@ -46,9 +46,9 @@ The forest sheet goes the same way when it lands.
 4. **Paint the forest's background, attempt 2**, in Gemini from the prompt in
    `ART.md` (*The forest*), saved to `assets/art_raw/forest_bg_2.*`. Attempt 1
    is in and dimmed; tall levels mirror it into X shapes when zoomed out.
-5. **Paint the forest kit** in Gemini from the prompt in `ART.md` (*The
-   foreground kit*), saved to `assets/art_raw/act1_kit_forest.*`. And look at
-   the castle kit in the wall: placements are rules, easy to move by hand.
+5. **Look at the foreground kit in both Act 1 levels**: placements are
+   rules written into `[decor]`, easy to move by hand. Breach rubble near
+   head height and the forest's darker ferns are the two to judge.
 6. **Frame time on a real machine**: `tools/dev.sh frametime`, then with
    `res://scenes/rooms/act1_forest.tscn` and `act1_wall.tscn`: p95 under
    16.7 ms? Blocks R3's frame-rate half.

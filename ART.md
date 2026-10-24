@@ -904,7 +904,19 @@ as deep (`ground_shade_most` 0.5), and `DecorRules` sets slits, piers,
 drains, breaches, rings and banners into a block's face wherever the whole
 footprint is two rings deep, drawn with the stone so they take its shade
 and weather. No niche on a face: a dark arch in stone you cannot enter
-reads as a doorway. The forest sheet is still to paint.
+reads as a doorway.
+
+**The forest sheet landed first attempt too** (`act1_kit_forest.jpg`). The
+skull and its bones came apart in `cut-sheet.py` and were cropped as one
+box; one scale, 32/212 (the standing stone to two cells). Two of nine are
+not used: the roots (thin strands gone to nothing at this size; the forest
+has its own) and the long grass (pale and spiky beside a scorpion, it read
+as a creature). Boulders, stones, a skull, gravel bands and a standing stone
+are set into banks of earth only, never a trunk, one bay in three, a skull
+rarer than a stone; ferns and toadstools stand on the grass now and then.
+Drawn unshaded, as the tufts are: earth is darker art than masonry, and
+shaded they went to grey shapes. The forest's `[decor]` had no hand edits,
+so it was rewritten with `--replace`. The forest sheet is still to paint.
 
 **Why a sheet of nine**: `GEMINI_NOTES.md`, *Several subjects on one sheet*,
 is the strongest result the last project had, and the original castle

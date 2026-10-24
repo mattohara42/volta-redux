@@ -41,6 +41,17 @@ const KIT := {
 	"banner": [preload("res://assets/art/act1/kit/banner.png")],
 }
 const IVY: Array[Texture2D] = [preload("res://assets/art/act1/kit/ivy.png")]
+## The forest kit: what is set into a bank of earth, and what stands on the
+## grass, by `[decor]` kind.
+const FOREST_KIT := {
+	"boulder": [preload("res://assets/art/forest/kit/boulder.png")],
+	"stones": [preload("res://assets/art/forest/kit/stones.png")],
+	"skull": [preload("res://assets/art/forest/kit/skull.png")],
+	"strata": [preload("res://assets/art/forest/kit/strata.png")],
+	"standing_stone": [preload("res://assets/art/forest/kit/standing_stone.png")],
+	"fern": [preload("res://assets/art/forest/kit/fern.png")],
+	"toadstools": [preload("res://assets/art/forest/kit/toadstools.png")],
+}
 const UNSHADED: Array[Color] = [Color.WHITE]
 ## How far down its tile the forest lip's grass starts: a tuft roots there,
 ## in the grass, rather than standing on the tile's empty top rows.
@@ -319,7 +330,10 @@ static func draw_decor(canvas: CanvasItem, level: LevelGrid.Level, tiles: ActTil
 		_draw_prop(canvas, set.root_tiles, at, Vector2((at.x + 0.5) * cell, at.y * cell), false)
 	# Set into the back wall, so shaded with it: the art's own big stones are
 	# what stand out from the brick, not a brightness the wall does not have.
-	_draw_kit(canvas, level, false, Palette.KIT_SHADE)
+	_draw_kit(canvas, level, KIT, false, Palette.KIT_SHADE)
+	# Standing on the grass, unshaded as the tufts are: the forest's art is
+	# darker than the castle's, and shaded it went to grey shapes.
+	_draw_kit(canvas, level, FOREST_KIT, false, Color.WHITE)
 	for at in level.decor_cells("ivy"):
 		_draw_prop(canvas, IVY, at, Vector2((at.x + 0.5) * cell, at.y * cell), false, Palette.GROUND_SHADE[1])
 
@@ -328,16 +342,18 @@ static func draw_decor(canvas: CanvasItem, level: LevelGrid.Level, tiles: ActTil
 ## stone (before its interiors fall into the dark), so they take the same
 ## shade, weather and dark as the masonry around them.
 static func draw_kit_in_stone(canvas: CanvasItem, level: LevelGrid.Level) -> void:
-	_draw_kit(canvas, level, true, Palette.GROUND_SHADE[Palette.GROUND_SHADE.size() - 1])
+	_draw_kit(canvas, level, KIT, true, Palette.GROUND_SHADE[Palette.GROUND_SHADE.size() - 1])
+	# Earth is darker than masonry, so what is buried in it is left as drawn.
+	_draw_kit(canvas, level, FOREST_KIT, true, Color.WHITE)
 
 
-## Each kit feature anchored in stone (`in_stone`) or in air, standing on its
-## anchor cell.
-static func _draw_kit(canvas: CanvasItem, level: LevelGrid.Level, in_stone: bool, shade: Color) -> void:
+## Each of `kit`'s features anchored in stone (`in_stone`) or in air,
+## standing on its anchor cell.
+static func _draw_kit(canvas: CanvasItem, level: LevelGrid.Level, kit: Dictionary, in_stone: bool, shade: Color) -> void:
 	var cell := level.cell
-	for kind: String in KIT:
+	for kind: String in kit:
 		var pieces: Array[Texture2D] = []
-		pieces.assign(KIT[kind])
+		pieces.assign(kit[kind])
 		for at in level.decor_cells(kind):
 			if TileShape.is_solid(level.rows, at.x, at.y) != in_stone:
 				continue
