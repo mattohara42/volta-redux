@@ -859,6 +859,78 @@ mechanic in `GEMINI_NOTES.md` is for editing **our own** paintings.
 
 ## Open requests
 
+### The next sheets (2026-10-24, for Matt to paint in Gemini)
+
+Matt chose all four: a second kind of tree (the stand of six oaks reads as
+one tree cloned), dressing for the castle yard (`LEVELS.md`: "siege engines
+standing around as dressing"), ground cover for the forest's flat band of
+earth, and the forest background's attempt 2 (its prompt is under *The
+forest*, above). Each new sheet keeps the nine-piece layout that has landed
+first attempt three times, and adds the one lesson the forest kit paid for:
+thin strands vanish at a few dozen pixels, so roots and limbs are asked for
+thick and few. The yard's wood is asked cold, grey and weathered, because
+warm brown wood says a sword sticks and none of it is solid. The second
+tree's hollow trunk section must match the plain one's width, so either can
+stack. Save as `assets/art_raw/act1_kit_trees_2.*`, `act1_kit_yard.*` and
+`act1_kit_ground.*`.
+
+```
+Painted fantasy game art lit by fire and by electricity, in the style of hand-painted backgrounds from a hand-animated feature: visible brushwork, soft edges, real depth. Character and creature shapes read as a strong silhouette first, in the way of Mike Mignola's comic art, but rendered with full painterly surface and value, not flat black shapes. Every dark area of the painting is a coloured dark: cold violet-blue in stone and shadow, warm umber in wood and leather. Never use a neutral black or a neutral grey anywhere in the image, including in shadow. Forms are separated by value and by edge quality, hard edges where a shape matters, soft edges where it recedes, never a uniform ink outline.
+
+A sheet of nine separate pieces of a second kind of ancient forest tree, different from a broad oak: a tall, twisted, half-dead tree with pale bark and drooping foliage, for a side-scrolling platformer, painted on a flat solid magenta (#FF00FF) backdrop, in a grid of three rows of three, with generous even spacing of plain magenta between every piece so each one can be cut apart on its own. Every piece is seen in flat side view, square to the camera like a stage flat, with no perspective and no vanishing point. It is NOT a three-quarter view and NOT seen from above or below. All nine are at the same scale, and each stops at its own outline, with magenta right up to its edge.
+
+The nine, in reading order:
+1. A straight section of the tree's trunk, narrower than an oak's, twisted and knotted, cut off flat and level at its top and at its bottom so copies can stack on each other, about two and a half times as tall as it is wide.
+2. A second section of the same trunk with a dark hollow knot hole in it, exactly as wide as piece 1, also cut off flat and level at top and bottom, the same height as piece 1.
+3. The foot of the same trunk, its roots arching up out of the ground in two or three thick loops, its top cut off flat and level to join the trunk section, wider than it is tall.
+4. The top of the same trunk splitting into two long twisted limbs that reach up and out unevenly, one higher than the other, its bottom cut off flat and level to join the trunk section.
+5. One thick dead limb jutting out to the right from a flat cut left end, bare, broken off at its tip, three times as wide as it is tall.
+6. A big clump of drooping, hanging foliage like a willow's, longer than it is wide, falling from a rounded top.
+7. A small clump of the same drooping foliage, about as wide as it is tall.
+8. A hollow fallen log of the same pale bark lying on its side, its open end facing the viewer as a dark ring, three times as wide as it is tall.
+9. A curtain of thick ivy falling from a straight horizontal top edge, a little taller than it is wide.
+
+Large, simple shapes and few small details: each piece reads at a glance as one clear silhouette with two or three values on it, because it will be shrunk to a few dozen pixels across. Thin strands, twigs and threads disappear at that size, so make every root, limb and rope thick and few. Flat, even light on every piece, no cast shadows on the backdrop and no light source painted into the sheet. The bark is cold and pale: grey-violet and ash blue, lighter than an oak's, with deep blue-violet in its furrows. The foliage is a cool blue-green, as it looks at night. The darkest darks are deep violet-blue, never neutral black. Nothing gold, nothing orange or red, nothing warm brown, nothing glowing, no flowers, no fruit, no thorns and no spikes. No characters, no creatures, no ground, no sky, no fire, no text and no labels. The image is 2560 by 1440 pixels, aspect ratio 16:9.
+```
+
+```
+Painted fantasy game art lit by fire and by electricity, in the style of hand-painted backgrounds from a hand-animated feature: visible brushwork, soft edges, real depth. Character and creature shapes read as a strong silhouette first, in the way of Mike Mignola's comic art, but rendered with full painterly surface and value, not flat black shapes. Every dark area of the painting is a coloured dark: cold violet-blue in stone and shadow, warm umber in wood and leather. Never use a neutral black or a neutral grey anywhere in the image, including in shadow. Forms are separated by value and by edge quality, hard edges where a shape matters, soft edges where it recedes, never a uniform ink outline.
+
+A sheet of nine separate pieces of dressing for a castle's outer yard and wall walk, siege gear and stores standing about, for a side-scrolling platformer, painted on a flat solid magenta (#FF00FF) backdrop, in a grid of three rows of three, with generous even spacing of plain magenta between every piece so each one can be cut apart on its own. Every piece is seen in flat side view, square to the camera like a stage flat, with no perspective and no vanishing point. It is NOT a three-quarter view and NOT seen from above or below. All nine are at the same scale, and each stops at its own outline, with magenta right up to its edge.
+
+The nine, in reading order:
+1. A trebuchet seen exactly side on: a tall frame on a low base, its long throwing arm raised, a counterweight box hanging at its short end, about as tall as it is wide.
+2. A ballista on a low wheeled carriage seen side on, its great bow drawn, pointing to the right, wider than it is tall.
+3. A small two-wheeled hand cart seen side on, empty, its handles resting on the ground, wider than it is tall.
+4. A pyramid of three barrels lying on their sides, ends to the viewer, a little wider than it is tall.
+5. A stack of three wooden crates of two sizes, about as wide as it is tall.
+6. A weapon rack holding four upright spears and two round shields with faded indigo heraldry, wider than it is tall.
+7. A pile of round stone shot for the trebuchet, a low heap, wider than it is tall.
+8. A heap of fallen masonry: broken blocks and rubble, a low heap, wider than it is tall.
+9. Three heavy sacks of grain slumped against each other, wider than it is tall.
+
+Large, simple shapes and few small details: each piece reads at a glance as one clear silhouette with two or three values on it, because it will be shrunk to a few dozen pixels across. Thin strands, twigs and threads disappear at that size, so make every root, limb and rope thick and few. Flat, even light on every piece, no cast shadows on the backdrop and no light source painted into the sheet. All the wood is old, weathered and cold: grey-brown and ash grey, sun-bleached and rain-darkened, never warm orange or rich brown, because in this game warm brown wood means a sword can stick in it, and none of this can. Iron is a dark cool grey-violet, stone is blue-violet grey, cloth and sacking a dull grey-violet. The darkest darks are deep violet-blue, never neutral black. Nothing gold, nothing orange or red, nothing bright, no flags with bright colours, no fire, no ladders. No characters, no creatures, no ground, no sky, no text and no labels. The image is 2560 by 1440 pixels, aspect ratio 16:9.
+```
+
+```
+Painted fantasy game art lit by fire and by electricity, in the style of hand-painted backgrounds from a hand-animated feature: visible brushwork, soft edges, real depth. Character and creature shapes read as a strong silhouette first, in the way of Mike Mignola's comic art, but rendered with full painterly surface and value, not flat black shapes. Every dark area of the painting is a coloured dark: cold violet-blue in stone and shadow, warm umber in wood and leather. Never use a neutral black or a neutral grey anywhere in the image, including in shadow. Forms are separated by value and by edge quality, hard edges where a shape matters, soft edges where it recedes, never a uniform ink outline.
+
+A sheet of nine separate pieces of forest floor at night, things that break up a grassy bank and the earth under it, for a side-scrolling platformer, painted on a flat solid magenta (#FF00FF) backdrop, in a grid of three rows of three, with generous even spacing of plain magenta between every piece so each one can be cut apart on its own. Every piece is seen in flat side view, square to the camera like a stage flat, with no perspective and no vanishing point. It is NOT a three-quarter view and NOT seen from above or below. All nine are at the same scale, and each stops at its own outline, with magenta right up to its edge.
+
+The nine, in reading order:
+1. A run of a great tree's exposed roots growing along the top of a bank and curling down over its edge, a few thick roots only, its top edge straight and level, three times as wide as it is tall.
+2. A broad flat rock half sunk in the ground, its top edge flat and level, mossy on top, twice as wide as it is tall.
+3. A mossy fallen log lying on its side, cold grey bark, its ends broken, four times as wide as it is tall.
+4. A clump of tall dark grass and reeds, wider than it is tall.
+5. A mossy boulder with two ferns growing from its foot, a little wider than it is tall.
+6. A shelf of bracket fungus on a short stub of root, cold blue-violet caps, not glowing, wider than it is tall.
+7. A low drift of fallen leaves, dark and cold, three times as wide as it is tall.
+8. An old carved stone, a fallen and cracked piece of a ruin, half sunk in the ground, wider than it is tall.
+9. Four thick roots hanging down from a straight horizontal top edge, the underside of a bank, a little taller than it is wide.
+
+Large, simple shapes and few small details: each piece reads at a glance as one clear silhouette with two or three values on it, because it will be shrunk to a few dozen pixels across. Thin strands, twigs and threads disappear at that size, so make every root, limb and rope thick and few. Flat, even light on every piece, no cast shadows on the backdrop and no light source painted into the sheet. Bark and roots are cold grey-violet, never warm brown. Moss, grass and leaves are dark grey-green and blue-green, as they look at night. Stone is cold blue-violet grey. The darkest darks are deep violet-blue, never neutral black. Nothing gold, nothing orange or red, nothing glowing, no warm brown wood, no thorns and no spikes. No characters, no creatures, no sky, no fire, no text and no labels. The image is 2560 by 1440 pixels, aspect ratio 16:9.
+```
+
 ### The forest's trees (2026-10-24, for Matt to paint in Gemini)
 
 **Why.** Matt, with two reference shots from *Ghosts 'n Goblins
