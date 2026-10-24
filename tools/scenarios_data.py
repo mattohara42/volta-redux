@@ -553,6 +553,21 @@ SCENARIOS: list[dict] = [
 		],
 	},
 	{
+		"name": "Act 1 forest: off the oak's vine onto a bough beside it",
+		"scene": "res://scenes/rooms/act1_forest.tscn",
+		"out": "act1_forest_bough.png",
+		"at": (728, 800),
+		"input": "climb_up:150;move_left:30;-:40",
+		"zoom": 1.0,
+		"centre": (680, 600),
+		"checks": [
+			{"type": "player_position", "min_x": 576, "max_x": 704, "max_y": 590,
+				"message": "the hero should be standing on the left bough, off the vine"},
+			{"type": "contains", "pattern": "capture: no deaths",
+				"message": "stepping off the vine should not kill"},
+		],
+	},
+	{
 		"name": "Act 1 forest: the first river branches, the cracked one included, can be jumped",
 		"scene": "res://scenes/rooms/act1_forest.tscn",
 		"out": "act1_forest_river.png",
