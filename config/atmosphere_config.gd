@@ -218,3 +218,16 @@ extends Resource
 @export_range(0.0, 1.0) var ground_shade_most: float = 0.9
 ## Bands between untouched and deepest, in the house dither.
 @export var ground_shade_steps: float = 4.0
+
+
+@export_group("Weather")
+## Broad patches of damp and of dry stone across a level's stone and back wall
+## (`shaders/weather.gdshader`), so a wall a screen wide is not one tile
+## repeated. The colours are `Palette`'s `WEATHER_DAMP` and `WEATHER_DRY`.
+## Art px across one patch.
+@export var weather_patch_size: float = 96.0
+## How far a pixel goes toward damp and toward dry, 0 to 1.
+@export_range(0.0, 1.0) var weather_damp_most: float = 1.0
+@export_range(0.0, 1.0) var weather_dry_most: float = 1.0
+## Bands between untouched and most, in the house dither.
+@export var weather_steps: float = 3.0

@@ -34,3 +34,11 @@ func test_the_project_clear_colour_is_the_backdrop() -> void:
 	check_near(clear.r, Palette.BACKDROP.r, 0.004, "clear colour red matches Palette.BACKDROP")
 	check_near(clear.g, Palette.BACKDROP.g, 0.004, "clear colour green matches Palette.BACKDROP")
 	check_near(clear.b, Palette.BACKDROP.b, 0.004, "clear colour blue matches Palette.BACKDROP")
+
+
+## The weather (`shaders/weather.gdshader`) multiplies the art, so damp on the
+## deepest stone, under the back wall's shade, must still be a coloured dark.
+func test_damp_stone_stays_a_coloured_dark() -> void:
+	for stone in [Palette.STONE_DEEP, Palette.STONE_DEEP * Palette.BACK_SHADE]:
+		var damp: Color = stone * Palette.WEATHER_DAMP
+		check(ColourRules.is_legal(damp), "damp %s: %s" % [stone.to_html(false), ColourRules.explain(damp)])

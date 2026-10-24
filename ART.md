@@ -859,6 +859,75 @@ mechanic in `GEMINI_NOTES.md` is for editing **our own** paintings.
 
 ## Open requests
 
+### The foreground kit (2026-10-24, for Matt to paint in Gemini)
+
+**Why.** Matt, 2026-10-24: the foreground is "too monolithic and
+repetitive". Shot from a real build, every surface in front of the painting
+is one small brick (about 6 by 4 art px) or the flat dark of an interior,
+and the brick is so small and even that it reads as wallpaper. Two things
+were tried in code first. A weather shader (`shaders/weather.gdshader`)
+lays broad damp and dry patches over the stone and the back wall, which
+helps a little and is in. Rare 16 px feature tiles derived from the brick (a
+brick knocked out, a crack, moss) were too small to read at game size and
+were dropped. **What is missing is anything bigger than a tile**: openings,
+piers, big stones, things growing. Those are drawn content, so they come
+from a sheet.
+
+**The plan once a sheet is in `assets/art_raw/`**: `key.py`, `cut-sheet.py`,
+then each feature pixelated to its own size in cells (an arrow slit 1 by 3,
+a niche 2 by 3, the pier a tile 1 cell wide that stacks), `recolour-darks.py`
+and `palette-check.py`. They go into the act's `ActTiles` and are placed by
+new `[decor]` rules (`DecorRules`), mostly on the back wall, so they stay
+reviewable in the level file as Matt asked (2026-10-07). Nothing solid
+changes.
+
+**Why a sheet of nine**: `GEMINI_NOTES.md`, *Several subjects on one sheet*,
+is the strongest result the last project had, and the original castle
+tileset came back clean first attempt as one. Each feature is described as
+a silhouette with two or three values because it ends up a few dozen pixels
+across. Nothing is gold (reserved for what you use), warm and saturated
+(reserved for what kills) or warm umber wood (reserved for what a sword
+bites into). Save the castle sheet as `assets/art_raw/act1_kit_castle.*` and
+the forest's as `assets/art_raw/act1_kit_forest.*`.
+
+```
+Painted fantasy game art lit by fire and by electricity, in the style of hand-painted backgrounds from a hand-animated feature: visible brushwork, soft edges, real depth. Character and creature shapes read as a strong silhouette first, in the way of Mike Mignola's comic art, but rendered with full painterly surface and value, not flat black shapes. Every dark area of the painting is a coloured dark: cold violet-blue in stone and shadow, warm umber in wood and leather. Never use a neutral black or a neutral grey anywhere in the image, including in shadow. Forms are separated by value and by edge quality, hard edges where a shape matters, soft edges where it recedes, never a uniform ink outline.
+
+A sheet of nine separate castle wall features for a side-scrolling platformer, painted on a flat solid magenta (#FF00FF) backdrop, in a grid of three rows of three, with generous even spacing of plain magenta between every feature so each one can be cut apart on its own. Every feature is seen in flat side view, square to the camera like a stage flat, with no perspective and no vanishing point. It is NOT a three-quarter view and NOT seen from above or below. All nine are built of the same cold castle stone at the same scale, and each is meant to be laid over a plain wall of small bricks, so none of them paints the wall around it: each stops at its own outline, with magenta right up to its edge.
+
+The nine, in reading order:
+1. A tall narrow arrow slit: a dark vertical opening framed by a few large dressed stones, about three times as tall as it is wide.
+2. An empty round-arched niche, deep dark inside, its arch made of wedge-shaped stones, a little taller than it is wide.
+3. A plain stone pier of large squared blocks stacked in a straight column, three times as tall as it is wide, its top and bottom cut off flat and square so it can stack on itself.
+4. A stone drain spout jutting from a single large block, with a long dark wet stain running straight down beneath it.
+5. A ragged breach where the facing stones have fallen away, showing a rough dark rubble core behind, about as wide as it is tall, its edge broken and irregular.
+6. A row of three huge foundation blocks side by side, three times as wide as they are tall, worn at the corners, with damp dark green moss along their bottom edge.
+7. An iron ring hanging from a staple set into one large square stone.
+8. A curtain of dark ivy and moss hanging down from a straight horizontal top edge, ragged and thinning toward the bottom, a little taller than it is wide.
+9. A tattered banner of faded deep indigo cloth hanging from a short iron rod, longer than it is wide, torn along its lower edge.
+
+Large, simple shapes and few small details: each feature reads at a glance as one clear silhouette with two or three values on it, because it will be shrunk to a few dozen pixels across. Flat, even light on every feature, no cast shadows on the backdrop and no light source painted into the sheet. Stone is blue-violet grey, dry and slightly purple; its shadows and openings are deep violet-blue, never neutral black. Iron is a dark cool grey-violet, the moss and ivy dark grey-green, the banner a muted deep indigo. Nothing gold, nothing orange or red, nothing bright. No characters, no creatures, no torches, no fire, no wooden beams or planks, no floors, no ladders, no text and no labels. The image is 2560 by 1440 pixels, aspect ratio 16:9.
+```
+
+```
+Painted fantasy game art lit by fire and by electricity, in the style of hand-painted backgrounds from a hand-animated feature: visible brushwork, soft edges, real depth. Character and creature shapes read as a strong silhouette first, in the way of Mike Mignola's comic art, but rendered with full painterly surface and value, not flat black shapes. Every dark area of the painting is a coloured dark: cold violet-blue in stone and shadow, warm umber in wood and leather. Never use a neutral black or a neutral grey anywhere in the image, including in shadow. Forms are separated by value and by edge quality, hard edges where a shape matters, soft edges where it recedes, never a uniform ink outline.
+
+A sheet of nine separate things found in the earth of an ancient forest at night, for a side-scrolling platformer, painted on a flat solid magenta (#FF00FF) backdrop, in a grid of three rows of three, with generous even spacing of plain magenta between every item so each one can be cut apart on its own. Every item is seen in flat side view, square to the camera like a stage flat, with no perspective and no vanishing point. It is NOT a three-quarter view and NOT seen from above. All nine are at the same scale, and each is meant to be laid over a bank of plain dark violet earth, so none of them paints the earth around it: each stops at its own outline, with magenta right up to its edge.
+
+The nine, in reading order:
+1. One large rounded boulder, about twice as wide as it is tall, mossy on top.
+2. A cluster of three smaller stones of different sizes, wider than it is tall.
+3. A tangle of thin pale roots hanging down from a straight horizontal top edge, twice as tall as it is wide.
+4. An old animal skull with a few scattered bones, half sunk in the earth.
+5. A clump of three toadstools with cold blue-violet caps, not glowing.
+6. A young fern unfurling, a little taller than it is wide.
+7. A band of layered pebbles and gravel, three times as wide as it is tall.
+8. A broken fragment of an old carved standing stone with a worn spiral on it, twice as tall as it is wide.
+9. A tuft of long pale grass bent over to one side.
+
+Large, simple shapes and few small details: each item reads at a glance as one clear silhouette with two or three values on it, because it will be shrunk to a few dozen pixels across. Flat, even light on every item, no cast shadows on the backdrop and no light source painted into the sheet. Stone is cold blue-violet grey, moss and leaves dark grey-green, roots and bone a pale cold grey-violet; the darkest darks are deep violet-blue, never neutral black. Nothing gold, nothing orange or red, nothing glowing, no warm brown wood, no branches, no logs, no thorns and no spikes. No characters, no creatures, no fire, no text and no labels. The image is 2560 by 1440 pixels, aspect ratio 16:9.
+```
+
 **Where deliveries live.** Matt saves exactly what Gemini's download UI gives
 him into `assets/art_raw/`, one file per generation, untouched. Pipeline output
 (keyed, cut, ready to import) goes in `assets/art/`, organised by what it is

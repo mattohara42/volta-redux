@@ -18,6 +18,7 @@ const EYEBALL_SIZE := Vector2(24.0, 24.0)
 ## hand-written plate rooms have it.
 const PLATE_DEPTH: float = 8.0
 const GROUND_SHADE: Shader = preload("res://shaders/ground_shade.gdshader")
+const WEATHER: Shader = preload("res://shaders/weather.gdshader")
 
 @export_file("*.level") var level_file: String
 ## The level's own art, if it is not its act's (the forest is Act 1 and is not
@@ -231,6 +232,9 @@ func _built() -> void:
 func _bake() -> void:
 	var bake := LevelBake.new()
 	bake.name = "Bake"
+	var weather := _weather()
+	bake.add_layer(_draw_back, weather)
+	bake.add_layer(_draw_stone, weather)
 	bake.add_layer(_draw_level)
 	var shade := ShaderMaterial.new()
 	shade.shader = GROUND_SHADE
@@ -250,14 +254,38 @@ func _draw() -> void:
 	_draw_under(self)
 
 
-func _draw_level(canvas: CanvasItem) -> void:
+## The weather on the stone (`shaders/weather.gdshader`), its numbers from
+## `config/` and its colours from `Palette`. Each level sits somewhere else in
+## the noise, so no two are weathered alike.
+func _weather() -> ShaderMaterial:
+	var weather := ShaderMaterial.new()
+	weather.shader = WEATHER
+	weather.set_shader_parameter("damp", Palette.WEATHER_DAMP)
+	weather.set_shader_parameter("dry", Palette.WEATHER_DRY)
+	weather.set_shader_parameter("patch_size", ATMOSPHERE.weather_patch_size)
+	weather.set_shader_parameter("damp_most", ATMOSPHERE.weather_damp_most)
+	weather.set_shader_parameter("dry_most", ATMOSPHERE.weather_dry_most)
+	weather.set_shader_parameter("steps", ATMOSPHERE.weather_steps)
+	var h := level_file.hash()
+	weather.set_shader_parameter("seed", Vector2(h & 0xfff, (h >> 12) & 0xfff))
+	return weather
+
+
+func _draw_back(canvas: CanvasItem) -> void:
 	TileArt.draw_back(canvas, level, _tiles)
+
+
+## What you stand on and against.
+func _draw_stone(canvas: CanvasItem) -> void:
 	for rect in level.ground_faces:
 		TileArt.draw_ground(canvas, rect, _tiles)
 	for rect in level.wall_faces:
 		TileArt.draw_wall(canvas, rect, _tiles)
 	for rect in level.castle_faces:
 		TileArt.draw_wall(canvas, rect)
+
+
+func _draw_level(canvas: CanvasItem) -> void:
 	for rect in level.wood:
 		TileArt.draw_wood(canvas, rect, _tiles)
 	for ladder in _ladders:

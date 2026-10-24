@@ -3,7 +3,7 @@
 > **Rewrite this file, never append.** State snapshot and pointers only. No
 > session narrative, that is what `git log` is for. Keep it under 150 lines.
 
-**Updated:** 2026-10-13 · **Phase:** 3 rebuilt, depth before breadth.
+**Updated:** 2026-10-24 · **Phase:** 3 rebuilt, depth before breadth.
 **Active milestone:** N3, the outer wall rebuilt from a beat sheet
 (`BUILD_PLAN.md`). Matt approved the sheet, `levels/act1_wall.beats`, on
 2026-10-13. N0 is done; N1 and N2 are built and wait only on Matt's play.
@@ -23,6 +23,12 @@ at a respawn, bats can sleep, lowercase anchors, WalkBack drops through
 slabs. **Next for Claude**: Matt's play notes. N3 is done when Matt and the
 kids play Act 1 from a new game and say it is better (G2 again).
 
+**Alongside, while Matt travels (2026-10-24):** the foreground is "too
+monolithic and repetitive" (Matt). Weather patches on the stone and back
+wall are in (`shaders/weather.gdshader`); bigger drawn features wait on the
+foreground kit (`ART.md`, *The foreground kit*). When a sheet lands, Claude
+keys, cuts and pixelates it and places it by new `[decor]` rules.
+
 ## Blocked on Matt
 
 1. **Play Act 1 from a new game, with the kids** (the rebuilt wall is level
@@ -38,10 +44,13 @@ kids play Act 1 from a new game and say it is better (G2 again).
 4. **Paint the forest's background, attempt 2**, in Gemini from the prompt in
    `ART.md` (*The forest*), saved to `assets/art_raw/forest_bg_2.*`. Attempt 1
    is in and dimmed; tall levels mirror it into X shapes when zoomed out.
-5. **Frame time on a real machine**: `tools/dev.sh frametime`, then with
+5. **Paint the foreground kit**, two sheets in Gemini from the prompts in
+   `ART.md` (*The foreground kit*), saved to `assets/art_raw/act1_kit_castle.*`
+   and `act1_kit_forest.*`.
+6. **Frame time on a real machine**: `tools/dev.sh frametime`, then with
    `res://scenes/rooms/act1_forest.tscn` and `act1_wall.tscn`: p95 under
    16.7 ms? Blocks R3's frame-rate half.
-6. **Older and still open**: R2's final quality (the flame, the sword, the
+7. **Older and still open**: R2's final quality (the flame, the sword, the
    doors, the ride); `RoomM7Sheet` consistent in treatment (closes M7); the
    unattended calls from 2026-10-05; M4's dragon pacing; a play log (`user://`,
    #136) when one is to hand. Two rulings wait for N1: faster ladder
