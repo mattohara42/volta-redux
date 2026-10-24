@@ -921,6 +921,14 @@ tiles, value lifted by half and saturation a little so they read from
 across the room, the cracked one given a crumbling underside and a crack.
 Warm where a sword bites, the trunk's cold bark where it does not.
 
+**Brighter (Matt, 2026-10-24: "it fades into the background too much").**
+Every tree piece and bough has its value lifted by 1.6, the foliage its
+saturation by 1.6 too (lifted alone it went grey), and the new wood tiles
+1.3 on top of their first lift. Hue kept, so every dark stays coloured; all
+pass `palette-check.py`. The trunks are now among the brightest things on
+screen, past the ground's lip, which `ART_DIRECTION.md`'s "backgrounds lose"
+would argue against: Matt's call when he sees it.
+
 **In the game**: trees are placed by hand in `[decor]` (`y` a foot on the
 ground, `k` its crown in the same column; level design, not a rule), with
 leaves round each crown. By rule: leaves at a branch's free ends, moss under
