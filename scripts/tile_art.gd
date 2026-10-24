@@ -78,10 +78,19 @@ const BOUGHS := {
 }
 ## How many rows a bough is, the band each texture is warped to.
 const BOUGH_ROWS := 2
-## Where a crown's clumps of leaves sit, from the middle of its top, art px.
+## Where a crown's clumps of leaves sit, from the middle of its top, art px,
+## and whether each is a big clump (1) or a small one (0). Wide, so a crown
+## reads as a great oak's canopy and not a tuft on a pole (Matt, 2026-10-24).
 const CANOPY: Array[Vector3] = [
-	Vector3(-44, 4, 1), Vector3(44, 0, 1), Vector3(0, -14, 1), Vector3(-66, 24, 0), Vector3(68, 20, 0),
+	Vector3(-120, 34, 0), Vector3(122, 30, 0), Vector3(-92, 18, 1), Vector3(94, 14, 1),
+	Vector3(-46, 2, 1), Vector3(46, -2, 1), Vector3(-20, -22, 1), Vector3(24, -24, 1),
+	Vector3(0, -38, 0), Vector3(-70, -10, 0), Vector3(72, -14, 0),
 ]
+## One clump in this many of a crown is left out, picked per tree.
+const CANOPY_GAPS := 5
+## Where a bough's leaves sit: from the tip of its texture, art px, along the
+## bough and up, big then small.
+const BOUGH_LEAVES: Array[Vector2] = [Vector2(-14, -2), Vector2(-40, -14)]
 const UNSHADED: Array[Color] = [Color.WHITE]
 ## How far down its tile the forest lip's grass starts: a tuft roots there,
 ## in the grass, rather than standing on the tile's empty top rows.
@@ -385,6 +394,12 @@ static func draw_trees(canvas: CanvasItem, level: LevelGrid.Level) -> void:
 		var cx := (foot.x + 0.5) * cell
 		var ground := (foot.y + 1) * cell
 		var top := (crown.y + 1) * cell
+		# About half the trees drawn mirrored, and each crown leaving out a
+		# clump or two of its own, so a stand of them is not one tree cloned.
+		var facing := -1.0 if TileVariety.pick(foot, 2) == 1 else 1.0
+		var middle := cx
+		canvas.draw_set_transform(Vector2(middle, 0.0), 0.0, Vector2(facing, 1.0))
+		cx = 0.0
 		var y := ground - TRUNK_BASE.get_height()
 		canvas.draw_texture(TRUNK_BASE, Vector2(roundf(cx - TRUNK_BASE.get_width() * 0.5), y))
 		# Every other section upside down, so each join is the same edge
@@ -396,16 +411,20 @@ static func draw_trees(canvas: CanvasItem, level: LevelGrid.Level) -> void:
 			var region := Rect2(0.0, 0.0 if flipped else size.y - part, size.x, part)
 			var at := Rect2(roundf(cx - size.x * 0.5), y - part, size.x, part)
 			if flipped:
-				canvas.draw_set_transform(Vector2(0.0, at.position.y * 2.0 + part), 0.0, Vector2(1.0, -1.0))
+				canvas.draw_set_transform(Vector2(middle, at.position.y * 2.0 + part), 0.0, Vector2(facing, -1.0))
 			canvas.draw_texture_rect_region(TRUNK, at, region)
-			canvas.draw_set_transform(Vector2.ZERO)
+			canvas.draw_set_transform(Vector2(middle, 0.0), 0.0, Vector2(facing, 1.0))
 			y -= part
 			flipped = not flipped
 		var crown_top := top - TRUNK_CROWN.get_height()
 		canvas.draw_texture(TRUNK_CROWN, Vector2(roundf(cx - TRUNK_CROWN.get_width() * 0.5), crown_top))
-		for clump in CANOPY:
+		for i in CANOPY.size():
+			var clump := CANOPY[i]
+			if TileVariety.pick(foot + Vector2i(i, 0), CANOPY_GAPS) == 0:
+				continue
 			var texture: Texture2D = LEAVES[0] if clump.z > 0 else LEAVES_SMALL[0]
 			canvas.draw_texture(texture, (Vector2(cx + clump.x, crown_top + clump.y) - texture.get_size() * 0.5).round())
+		canvas.draw_set_transform(Vector2.ZERO)
 	for at in level.decor_cells("leaves"):
 		_draw_centred(canvas, LEAVES, at, cell)
 	for at in level.decor_cells("leaves_small"):
@@ -455,12 +474,20 @@ static func draw_boughs(canvas: CanvasItem, level: LevelGrid.Level) -> void:
 			continue
 		var at: Vector2i = b["anchor"]
 		var top := (at.y - 1) * cell
-		if int(b["step"]) > 0:
+		var step := int(b["step"])
+		if step > 0:
 			canvas.draw_texture(texture, Vector2(at.x * cell, top))
 		else:
 			canvas.draw_set_transform(Vector2((at.x + 1) * cell, top), 0.0, Vector2(-1.0, 1.0))
 			canvas.draw_texture(texture, Vector2.ZERO)
 			canvas.draw_set_transform(Vector2.ZERO)
+		# Leaves at its tip, so the whole tree is in leaf and not only its crown.
+		var root := at.x * cell if step > 0 else (at.x + 1) * cell
+		var tip := Vector2(root + step * texture.get_width(), top + cell)
+		for i in BOUGH_LEAVES.size():
+			var leaves: Texture2D = LEAVES[0] if i == 0 else LEAVES_SMALL[0]
+			var offset := Vector2(BOUGH_LEAVES[i].x * step, BOUGH_LEAVES[i].y)
+			canvas.draw_texture(leaves, (tip + offset - leaves.get_size() * 0.5).round())
 
 
 ## The fronds in front of the hero, sunk into the lip they grow from.

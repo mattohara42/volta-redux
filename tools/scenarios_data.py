@@ -544,11 +544,11 @@ SCENARIOS: list[dict] = [
 		"scene": "res://scenes/rooms/act1_forest.tscn",
 		"out": "act1_forest_oak.png",
 		"at": (728, 800),
-		"input": "climb_up:400;move_right:40;-:20",
+		"input": "climb_up:400;move_right:20;-:20",
 		"zoom": 1.0,
 		"centre": (800, 400),
 		"checks": [
-			{"type": "player_position", "min_x": 752, "max_x": 896, "max_y": 275,
+			{"type": "player_position", "min_x": 752, "max_x": 848, "max_y": 275,
 				"message": "the hero should be standing on top of the oak"},
 		],
 	},
@@ -561,7 +561,7 @@ SCENARIOS: list[dict] = [
 		"zoom": 1.0,
 		"centre": (680, 600),
 		"checks": [
-			{"type": "player_position", "min_x": 576, "max_x": 704, "max_y": 590,
+			{"type": "player_position", "min_x": 560, "max_x": 704, "max_y": 590,
 				"message": "the hero should be standing on the left bough, off the vine"},
 			{"type": "contains", "pattern": "capture: no deaths",
 				"message": "stepping off the vine should not kill"},

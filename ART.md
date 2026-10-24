@@ -919,6 +919,17 @@ sleeper's roof, which must be one solid over its whole patrol, moved to the
 right of the trunk with a shorter patrol (112 px, from 176) that keeps clear
 of the brazier. `bough.py --lift 1.6` makes a new bough as bright as the rest.
 
+**Shaped (Matt, 2026-10-24).** Boughs shorten going up (10 to 6 cells) and
+taper: the top edge stays level with what you stand on and the underside
+rises like the painted branch, down to 0.6 of its rows (`bough.py`'s
+`_TAPER`). Every bough tip carries leaves, crowns are twice as wide, about
+half the trees are drawn mirrored and each crown leaves out a clump or two
+of its own, so a stand of them is not one tree cloned. The high road's
+branches no longer float: a tree stands under each pair, its crown just
+above, so a branch crosses the trunk below the fork (the first branch
+reaches four cells further back to meet the shorter crown bough). The
+trunks are still one picture; a second kind of tree is a Gemini sheet.
+
 **One tree, two tones (Matt, 2026-10-24).** Shown the oak, Matt: the three
 wood objects look completely different. They did: cold painted bark, the
 boughs, and the forest's orange plank tiles from batch A. Matt chose one

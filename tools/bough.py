@@ -2,9 +2,9 @@
 """Make a bough a given number of cells long from the keyed branch painting.
 
 ART.md, The forest's trees. A bough is solid: you stand on it, and a low one
-roofs a scorpion's tunnel. So its thick part is warped to exactly the bough's
-rows (every column's span stretched to `--rows` cells), and what you see is
-what you stand on and what you hit your head on. Past the solid end the
+roofs a scorpion's tunnel. So its thick part is warped to the bough's rows,
+its top edge level with what you stand on, and its underside tapering like
+the painted branch down to `_TAPER` of the rows toward the solid end. Past the solid end the
 painting's twiggy tip carries on unwarped, shifted to meet it, as decoration.
 
 Output: an image whose solid band is `--rows` cells tall starting one cell
@@ -43,6 +43,10 @@ from PIL import Image
 
 # Columns of painting each edge is averaged over.
 _SMOOTH = 41
+# How thin the bough may get toward its solid end, as a fraction of its rows:
+# it tapers like the painted branch, top edge level (what you stand on), the
+# underside rising, so it reads as a branch and not a plank (Matt, 2026-10-24).
+_TAPER = 0.6
 
 
 def bough(painting: Image.Image, cells: int, rows: int, thick_end: int, cell: int, colors: int) -> Image.Image:
@@ -63,6 +67,8 @@ def bough(painting: Image.Image, cells: int, rows: int, thick_end: int, cell: in
     pad = _SMOOTH // 2
     tops = np.convolve(np.pad(tops, pad, mode="edge"), kernel, mode="valid")
     bottoms = np.convolve(np.pad(bottoms, pad, mode="edge"), kernel, mode="valid")
+    thickness = bottoms - tops
+    widest = float(np.nanmax(thickness[: max(1, thick_end // 4)]))
     last_shift = 0
     for x in range(w):
         ys = np.nonzero(src[:, x, 3])[0]
@@ -70,8 +76,9 @@ def bough(painting: Image.Image, cells: int, rows: int, thick_end: int, cell: in
             continue
         if x < thick_end:
             t, b = int(round(tops[x])), int(round(bottoms[x]))
-            span = Image.fromarray(src[t : b + 1, x : x + 1]).resize((1, band), Image.BOX)
-            out[top : top + band, x] = np.asarray(span)[:, 0]
+            tall = max(1, round(band * min(1.0, max(_TAPER, thickness[x] / widest))))
+            span = Image.fromarray(src[t : b + 1, x : x + 1]).resize((1, tall), Image.BOX)
+            out[top : top + tall, x] = np.asarray(span)[:, 0]
             last_shift = top - t
         else:
             for y in ys:
@@ -88,10 +95,10 @@ def bough(painting: Image.Image, cells: int, rows: int, thick_end: int, cell: in
         fill = Image.new("RGB", rgb.size, tuple(int(c) for c in opaque[len(opaque) // 2]))
         rgb = Image.composite(rgb, fill, alpha)
     result = rgb.quantize(colors=colors, method=Image.Quantize.FASTOCTREE, dither=Image.Dither.NONE).convert("RGBA")
-    # The solid part is solid all through, so the art never shows air where
-    # the hero cannot go.
+    # The top of the solid part is solid all along, so the surface you stand
+    # on never shows a gap.
     a = np.asarray(alpha).copy()
-    a[cell : cell + rows * cell, : cells * cell] = 255
+    a[cell : cell + int(rows * cell * _TAPER), : cells * cell] = 255
     result.putalpha(Image.fromarray(a))
     return result
 
