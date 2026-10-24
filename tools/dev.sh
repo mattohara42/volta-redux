@@ -11,7 +11,7 @@
 #   tools/dev.sh route               every room's exit, in order, to the ending
 #   tools/dev.sh walkback [filter]   every room can be walked back to its start
 #   tools/dev.sh frametime [scene]   frame times in a real build (R3)
-#   tools/dev.sh decorate LEVEL STYLE [--replace]   a level's [decor], by rule (N2)
+#   tools/dev.sh decorate LEVEL STYLE [--replace|--add=KINDS]   a level's [decor], by rule (N2)
 #
 # CLAUDE.md: the destructive mode is the flag. `shot` does not pass
 # --overwrite, so replacing an existing image is something you ask for.

@@ -77,6 +77,10 @@ const WALL_DARK := Color(0.36, 0.35, 0.40)
 # stands behind everything you can touch, so it is darker and cooler than any
 # of it ("Backgrounds lose").
 const BACK_SHADE := Color(0.30, 0.29, 0.38)
+# The foreground kit's wall features (`TileArt.KIT`), set into a back wall:
+# a little lighter than `BACK_SHADE`, since their stones are dressed and
+# stand proud of the brick, but still behind anything you can touch.
+const KIT_SHADE := Color(0.60, 0.58, 0.68)
 # Weather on a level's stone (`shaders/weather.gdshader`), as multipliers on
 # the art. Damp is darker and pulled toward the moat's green; dry is a little
 # lifted and faded toward violet. Both keep a dark the coloured dark it was.

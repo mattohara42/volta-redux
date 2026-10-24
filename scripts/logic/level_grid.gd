@@ -76,6 +76,10 @@ const BACK := "#%w"
 ## What a `[decor]` cell can be, and the kind each character is.
 const DECOR := {
 	"n": "battlement", "t": "torch", "c": "chain", ",": "tuft", "'": "root",
+	"l": "slit", "a": "niche", "p": "pier", "d": "drain", "x": "breach",
+	"o": "ring", "f": "footing", "b": "banner", "v": "ivy",
+	"r": "boulder", "s": "stones", "z": "skull", "g": "strata", "m": "standing_stone",
+	"e": "fern", "u": "toadstools",
 }
 const KINDS: PackedStringArray = [
 	"gate", "switch", "plate", "scorpion", "bat", "stump", "lift", "geyser", "ant",

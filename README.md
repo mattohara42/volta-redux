@@ -90,8 +90,10 @@ partway through a big level with `"at": (x, y)` (`capture.gd --at=x,y`).
 Two more grids over the same cells change how a level looks and nothing about
 how it plays. `[back]` is a wall behind the hero, never solid: `#` the art
 set's fill, `%` its face, `w` its wood. `[decor]` is one decoration a cell:
-battlements (`n`), torches (`t`), chains (`c`), grass tufts (`,`) and roots
-(`'`). Decoration is placed by rule and then edited by hand like the rest of
+battlements (`n`), torches (`t`), chains (`c`), grass tufts (`,`), roots
+(`'`), ivy (`v`) and the castle's wall features: arrow slit (`l`), niche
+(`a`), pier (`p`), drain (`d`), breach (`x`), ring (`o`), footing (`f`) and
+banner (`b`), each standing on its cell. Decoration is placed by rule and then edited by hand like the rest of
 the file:
 
 ```
@@ -100,7 +102,9 @@ tools/dev.sh decorate levels/act1_wall.level castle --replace  # writes over it
 ```
 
 It refuses a level that already has a `[decor]` section unless you pass
-`--replace`, since that throws away hand edits. Run it again after the map or
+`--replace`, since that throws away hand edits. `--add=KINDS` (say
+`--add=slit,ivy`) keeps every cell already there and writes only those
+kinds into empty ones, which is how a new rule reaches a hand-edited level. Run it again after the map or
 the `[back]` changes. The rules are `scripts/logic/decor_rules.gd`.
 
 A grid level's still parts (back wall, stone, edges, the dark its interiors

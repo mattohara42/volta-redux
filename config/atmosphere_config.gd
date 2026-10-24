@@ -215,7 +215,9 @@ extends Resource
 ## How many rings more until the dark is as deep as it goes.
 @export var ground_shade_span: float = 3.0
 ## As deep as it goes: how far toward the set's `interior_dark`, 0 to 1.
-@export_range(0.0, 1.0) var ground_shade_most: float = 0.9
+## Half since 2026-10-24: at 0.9 a big block read as a slab of dark with a
+## brick rim (Matt); at half it reads as a built face you are looking at.
+@export_range(0.0, 1.0) var ground_shade_most: float = 0.5
 ## Bands between untouched and deepest, in the house dither.
 @export var ground_shade_steps: float = 4.0
 

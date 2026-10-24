@@ -125,3 +125,122 @@ func test_no_parapet_stands_before_a_building() -> void:
 .......###
 """)
 	check_eq(DecorRules.place(level, "castle")[1], ".....nn...", "only out in the open")
+
+
+## The foreground kit: one wall feature a bay of a back wall, never with no
+## wall behind it, never where a ladder stands.
+func test_wall_features_need_a_back_wall_and_a_bay() -> void:
+	var text := """[map]
+..............
+..............
+..............
+..............
+..............
+##############
+[back]
+##############
+##############
+##############
+##############
+##############
+"""
+	var grid := DecorRules.place(_rows(text), "castle")
+	var features := 0
+	for row in grid:
+		for c in row:
+			if DecorRules.FEATURES.has(LevelGrid.DECOR.get(c, "")):
+				features += 1
+	check(features > 0, "a bay of back wall gets a feature")
+	var bare := DecorRules.place(_rows(text.split("[back]")[0]), "castle")
+	for row in bare:
+		for c in row:
+			check(not DecorRules.FEATURES.has(LevelGrid.DECOR.get(c, "")), "and none with no wall behind")
+
+
+func test_a_wall_feature_keeps_clear_of_a_ladder() -> void:
+	var grid := DecorRules.place(_rows("""[map]
+.....
+..H..
+..H..
+..H..
+#####
+[back]
+#####
+#####
+#####
+#####
+"""), "castle")
+	for row in grid:
+		check_eq(row, ".....", "a ladder fills the wall already")
+
+
+## Ivy hangs from a lip three cells wide with room below, and two never hang
+## side by side.
+func test_ivy_hangs_from_a_lip_and_keeps_apart() -> void:
+	var map := "[map]\n" + "#".repeat(60) + "\n" + (".".repeat(60) + "\n").repeat(6) + "#".repeat(60) + "\n"
+	var grid := DecorRules.place(_rows(map), "castle")
+	var ivy: Array[int] = []
+	for y in grid.size():
+		for x in grid[y].length():
+			if grid[y][x] == "v":
+				check_eq(y, 1, "right under the ceiling")
+				ivy.append(x)
+	check(not ivy.is_empty(), "a long ceiling grows some")
+	for i in range(1, ivy.size()):
+		check(ivy[i] - ivy[i - 1] >= DecorRules.IVY_PITCH, "and keeps %d cells apart" % DecorRules.IVY_PITCH)
+
+
+## A footprint is the room the rules keep clear, so the art must fit in it,
+## standing on its anchor (or hanging from it, for ivy), centred on its cell.
+func test_the_kit_fits_its_footprints() -> void:
+	var cell := 16.0
+	var pieces := TileArt.KIT.duplicate()
+	pieces.merge(TileArt.FOREST_KIT)
+	pieces["ivy"] = TileArt.IVY
+	for kind: String in pieces:
+		var foot: Vector3i = DecorRules.FOOTPRINTS[kind]
+		for texture: Texture2D in pieces[kind]:
+			var size := texture.get_size()
+			check(size.x <= (2 * foot.x + 1) * cell, "%s is %d px wide, inside %d cells" % [kind, size.x, 2 * foot.x + 1])
+			check(size.y <= foot.y * cell, "%s is %d px tall, inside %d rows" % [kind, size.y, foot.y])
+
+
+## A big block's face gets features, all of each footprint in stone two
+## rings deep, so the ring you play against stays plain; a thin wall gets none.
+func test_a_big_block_gets_features_set_into_its_face() -> void:
+	var map := "[map]\n" + (".".repeat(30) + "\n").repeat(2) + ("#".repeat(30) + "\n").repeat(12)
+	var level := _rows(map)
+	var grid := DecorRules.place(level, "castle")
+	var depths := TileShape.depths(level.rows)
+	var set := 0
+	for y in grid.size():
+		for x in grid[y].length():
+			var kind: String = LevelGrid.DECOR.get(grid[y][x], "")
+			if not DecorRules.FACE_FEATURES.has(kind):
+				continue
+			set += 1
+			var foot: Vector3i = DecorRules.FOOTPRINTS[kind]
+			for fy in range(y - foot.y + 1, y + 1):
+				for fx in range(x - foot.x, x + foot.x + 1):
+					check(depths[fy * 30 + fx] >= DecorRules.FACE_DEPTH, "%s at %s stays off the edge" % [kind, Vector2i(x, y)])
+	check(set > 0, "a block twelve rows deep gets some")
+	var thin := DecorRules.place(_rows("[map]\n" + (".".repeat(30) + "\n").repeat(2) + ("#".repeat(30) + "\n").repeat(2)), "castle")
+	for row in thin:
+		for c in row:
+			check(not DecorRules.FACE_FEATURES.has(LevelGrid.DECOR.get(c, "")) or c == ".", "and a floor two rows thick gets none")
+
+
+## The forest sets its stones and bones into a bank of earth, never into a
+## trunk, which is solid too.
+func test_the_forest_sets_its_finds_in_earth_not_bark() -> void:
+	var rows := (".".repeat(60) + "\n").repeat(2)
+	var earth := DecorRules.place(_rows("[map]\n" + rows + ("#".repeat(60) + "\n").repeat(14)), "forest")
+	var bark := DecorRules.place(_rows("[map]\n" + rows + ("%".repeat(60) + "\n").repeat(14)), "forest")
+	var found := 0
+	for grid in [earth, bark]:
+		for row: String in grid:
+			for c in row:
+				if DecorRules.FOREST_FACE.has(LevelGrid.DECOR.get(c, "")):
+					check(grid == earth, "a find in bark")
+					found += 1
+	check(found > 0, "a deep bank of earth has some")

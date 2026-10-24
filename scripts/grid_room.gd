@@ -283,6 +283,7 @@ func _draw_stone(canvas: CanvasItem) -> void:
 		TileArt.draw_wall(canvas, rect, _tiles)
 	for rect in level.castle_faces:
 		TileArt.draw_wall(canvas, rect)
+	TileArt.draw_kit_in_stone(canvas, level)
 
 
 func _draw_level(canvas: CanvasItem) -> void:
