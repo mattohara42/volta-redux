@@ -14,7 +14,7 @@
 ##            niche, a pier, a breach) in the bays of a back wall between
 ##            the torches; ivy hanging from a ceiling; the same features
 ##            set into the face of a big block of stone, away from its edge
-##   forest   a fern or toadstools standing on the grass now
+##   forest   a fern, toadstools or a hollow log on the grass now
 ##            and then, and bushes behind; leaves at a branch's free end
 ##            and moss under it; fronds in front of the hero along the
 ##            lowest ground, clear of anything you play against; tufts on
@@ -67,7 +67,7 @@ const FOOTPRINTS := {
 	"boulder": Vector3i(2, 2, 0), "stones": Vector3i(1, 2, 0), "skull": Vector3i(2, 2, 0),
 	"strata": Vector3i(2, 2, 0), "standing_stone": Vector3i(1, 2, 0),
 	"fern": Vector3i(1, 2, 0), "toadstools": Vector3i(1, 2, 0),
-	"bush": Vector3i(2, 3, 0), "moss": Vector3i(2, 3, 0), "frond": Vector3i(2, 3, 0),
+	"log": Vector3i(2, 3, 0), "bush": Vector3i(2, 3, 0), "moss": Vector3i(2, 3, 0), "frond": Vector3i(2, 3, 0),
 }
 ## Features set into a block's face (Matt, 2026-10-24: the giant blocks are
 ## the problem; built faces, not slabs). One is tried in each bay of
@@ -86,7 +86,7 @@ const FOREST_FACE_ONE_IN := 3
 ## What stands on the forest's grass: one tried each `FLOOR_PITCH` cells
 ## along a lip, one in `FLOOR_ONE_IN` of those, its footprint all air. Not
 ## the kit's long grass: pale and spiky beside a scorpion, it read as one.
-const FOREST_FLOOR: PackedStringArray = ["fern", "toadstools"]
+const FOREST_FLOOR: PackedStringArray = ["fern", "toadstools", "log"]
 const FLOOR_PITCH := 5
 const FLOOR_ONE_IN := 3
 ## The forest's trees (Matt, 2026-10-24: greenery all round them). A bush

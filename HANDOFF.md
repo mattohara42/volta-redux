@@ -56,8 +56,9 @@ whether a frond over the hero's legs ever hides something.
 4. **Paint the forest's background, attempt 2**, in Gemini from the prompt in
    `ART.md` (*The forest*), saved to `assets/art_raw/forest_bg_2.*`. Attempt 1
    is in and dimmed; tall levels mirror it into X shapes when zoomed out.
-5. **Paint the next sheets** (`ART.md`, *The next sheets*): a second tree,
-   the castle yard, forest ground cover; and the forest background attempt 2.
+5. **Paint the next sheets** (`ART.md`, *The next sheets*): the castle yard
+   and forest ground cover, and the forest background attempt 2. The second
+   tree is in.
 6. **Look at the foreground kit in both Act 1 levels**: placements are
    rules written into `[decor]`, easy to move by hand. Breach rubble near
    head height and the forest's darker ferns are the two to judge.
