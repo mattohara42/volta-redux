@@ -296,11 +296,25 @@ func _draw_back(canvas: CanvasItem) -> void:
 func _draw_stone(canvas: CanvasItem) -> void:
 	for rect in level.ground_faces:
 		TileArt.draw_ground(canvas, rect, _tiles)
+	var drawn_as_boughs := TileArt.bough_cells(level)
 	for rect in level.wall_faces:
-		TileArt.draw_wall(canvas, rect, _tiles)
+		if not _all_in(rect, drawn_as_boughs):
+			TileArt.draw_wall(canvas, rect, _tiles)
 	for rect in level.castle_faces:
 		TileArt.draw_wall(canvas, rect)
 	TileArt.draw_kit_in_stone(canvas, level)
+	TileArt.draw_boughs(canvas, level)
+
+
+## Whether every cell of `rect` is in `cells`.
+func _all_in(rect: Rect2, cells: Dictionary) -> bool:
+	var from := Vector2i(rect.position / level.cell)
+	var to := Vector2i(rect.end / level.cell)
+	for y in range(from.y, to.y):
+		for x in range(from.x, to.x):
+			if not cells.has(Vector2i(x, y)):
+				return false
+	return true
 
 
 func _draw_level(canvas: CanvasItem) -> void:

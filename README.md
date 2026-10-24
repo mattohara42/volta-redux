@@ -93,7 +93,13 @@ set's fill, `%` its face, `w` its wood. `[decor]` is one decoration a cell:
 battlements (`n`), torches (`t`), chains (`c`), grass tufts (`,`), roots
 (`'`), ivy (`v`) and the castle's wall features: arrow slit (`l`), niche
 (`a`), pier (`p`), drain (`d`), breach (`x`), ring (`o`), footing (`f`) and
-banner (`b`), each standing on its cell. Decoration is placed by rule and then edited by hand like the rest of
+banner (`b`), each standing on its cell. The forest adds its finds
+(`r s z g m`), ferns and toadstools (`e u`), bushes (`h`), leaves (`q j`),
+moss (`i`) and fronds drawn in front of the hero (`;`). Two kinds are
+placed by hand, never by rule: a tree is a foot `y` on the ground and a
+crown `k` above it in the same column, and a bough is solid bark drawn as a
+branch, marked at its trunk end with `<` (growing left) or `>` (right).
+Decoration is placed by rule and then edited by hand like the rest of
 the file:
 
 ```

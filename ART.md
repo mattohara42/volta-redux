@@ -900,6 +900,16 @@ itself. Scales: trunk 0.32 (a 45 px trunk), branch 0.27, foliage 0.22, moss
 already read as what a sword bites, and a branch drawn over them is for when
 the platforms get their own art.
 
+**Boughs (Matt, 2026-10-24: "draw them as boughs").** The oak's two solid
+boughs were bars of bark twenty cells long. They are shorter now, just
+longer than the sleeper's patrol under the low one, and drawn from the
+branch painting by `tools/bough.py`: its thick part warped to exactly the
+bough's two rows, so what you see is what you stand on and hit your head
+on, edges smoothed along it so the warp does not streak, the twigs past the
+solid end. `--like trunk.png` recolours the wood to the trunk's bark,
+because warm umber says a sword bites and bark does not. One texture per
+length (6, 7, 12); a test holds every bough in a level to having one.
+
 **In the game**: trees are placed by hand in `[decor]` (`y` a foot on the
 ground, `k` its crown in the same column; level design, not a rule), with
 leaves round each crown. By rule: leaves at a branch's free ends, moss under

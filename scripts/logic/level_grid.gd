@@ -81,7 +81,7 @@ const DECOR := {
 	"r": "boulder", "s": "stones", "z": "skull", "g": "strata", "m": "standing_stone",
 	"e": "fern", "u": "toadstools",
 	"y": "tree", "k": "crown", "q": "leaves", "j": "leaves_small", "h": "bush", "i": "moss",
-	";": "frond",
+	";": "frond", "<": "bough_left", ">": "bough_right",
 }
 const KINDS: PackedStringArray = [
 	"gate", "switch", "plate", "scorpion", "bat", "stump", "lift", "geyser", "ant",

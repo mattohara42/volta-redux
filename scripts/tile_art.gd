@@ -66,6 +66,16 @@ const MOSS: Array[Texture2D] = [preload("res://assets/art/forest/trees/moss.png"
 const FRONDS: Array[Texture2D] = [
 	preload("res://assets/art/forest/trees/fern_spray.png"), preload("res://assets/art/forest/trees/bush.png")
 ]
+## A bough, by its length in cells (`tools/bough.py`): solid bark drawn as a
+## branch, its thick end at the trunk, its twigs past the solid end. The
+## band you stand on starts one cell down the texture.
+const BOUGHS := {
+	6: preload("res://assets/art/forest/trees/bough_6.png"),
+	7: preload("res://assets/art/forest/trees/bough_7.png"),
+	12: preload("res://assets/art/forest/trees/bough_12.png"),
+}
+## How many rows a bough is, the band each texture is warped to.
+const BOUGH_ROWS := 2
 ## Where a crown's clumps of leaves sit, from the middle of its top, art px.
 const CANOPY: Array[Vector3] = [
 	Vector3(-44, 4, 1), Vector3(44, 0, 1), Vector3(0, -14, 1), Vector3(-66, 24, 0), Vector3(68, 20, 0),
@@ -305,11 +315,12 @@ static func draw_edges(canvas: CanvasItem, level: LevelGrid.Level, tiles: ActTil
 			while x < row.length() and row[x] == "#" and TileShape.open_sides(level.rows, x, y) & TileShape.DOWN:
 				x += 1
 			draw_lintel(canvas, Rect2(start * cell, y * cell, (x - start) * cell, cell), tiles)
+	var drawn_as_boughs := bough_cells(level)
 	for y in level.rows.size():
 		var row := level.rows[y]
 		for x in row.length():
 			var sides := TileShape.open_sides(level.rows, x, y)
-			if sides == 0:
+			if sides == 0 or drawn_as_boughs.has(Vector2i(x, y)):
 				continue
 			var edge := ACT1.edge_dark if row[x] == "&" else set.edge_dark
 			var at := Vector2(x, y) * cell
@@ -401,6 +412,53 @@ static func draw_trees(canvas: CanvasItem, level: LevelGrid.Level) -> void:
 		_draw_prop(canvas, BUSH, at, Vector2((at.x + 0.5) * cell, (at.y + 1) * cell + TUFT_SINK), true)
 	for at in level.decor_cells("moss"):
 		_draw_prop(canvas, MOSS, at, Vector2((at.x + 0.5) * cell, at.y * cell), false)
+
+
+## Each bough in the level: the solid it covers, by its `[decor]` anchor (`<`
+## grows left from its trunk, `>` right) along the run of bark in that
+## direction, `BOUGH_ROWS` rows deep. A bough is drawn as a branch rather
+## than as a bar of bark (Matt, 2026-10-24).
+static func boughs(level: LevelGrid.Level) -> Array[Dictionary]:
+	var found: Array[Dictionary] = []
+	for kind in ["bough_left", "bough_right"]:
+		var step := -1 if kind == "bough_left" else 1
+		for at in level.decor_cells(kind):
+			var length := 0
+			var x := at.x
+			while x >= 0 and x < level.rows[at.y].length() and level.rows[at.y][x] == "%":
+				length += 1
+				x += step
+			found.append({"anchor": at, "step": step, "length": length})
+	return found
+
+
+## Every cell a bough covers, so the bark and its edges are left out there.
+static func bough_cells(level: LevelGrid.Level) -> Dictionary:
+	var cells := {}
+	for b in boughs(level):
+		var at: Vector2i = b["anchor"]
+		for i in int(b["length"]):
+			for r in BOUGH_ROWS:
+				cells[Vector2i(at.x + i * int(b["step"]), at.y + r)] = true
+	return cells
+
+
+## The level's boughs, drawn with its stone. A bough with no art of its
+## length is left as bark (`test_level_bake.gd` holds every one to having it).
+static func draw_boughs(canvas: CanvasItem, level: LevelGrid.Level) -> void:
+	var cell := level.cell
+	for b in boughs(level):
+		var texture: Texture2D = BOUGHS.get(int(b["length"]))
+		if texture == null:
+			continue
+		var at: Vector2i = b["anchor"]
+		var top := (at.y - 1) * cell
+		if int(b["step"]) > 0:
+			canvas.draw_texture(texture, Vector2(at.x * cell, top))
+		else:
+			canvas.draw_set_transform(Vector2((at.x + 1) * cell, top), 0.0, Vector2(-1.0, 1.0))
+			canvas.draw_texture(texture, Vector2.ZERO)
+			canvas.draw_set_transform(Vector2.ZERO)
 
 
 ## The fronds in front of the hero, sunk into the lip they grow from.

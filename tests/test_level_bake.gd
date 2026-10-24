@@ -69,6 +69,23 @@ func test_the_act1_levels_decorate_only_air_or_deep_stone() -> void:
 				# A wall feature may be set into a block's face, deep in the stone.
 				var face_kind := DecorRules.FACE_FEATURES.has(kind) or DecorRules.FOREST_FACE.has(kind)
 				var in_face := face_kind and depths[at.y * width + at.x] >= DecorRules.FACE_DEPTH
-				check(c == "." or creatures.contains(c) or in_face, "%s: %s at %s stands in '%s'" % [path.get_file(), kind, at, c])
+				# A bough is marked on the bark it draws (`TileArt.boughs`).
+				var on_bough := kind.begins_with("bough") and c == "%"
+				check(c == "." or creatures.contains(c) or in_face or on_bough, "%s: %s at %s stands in '%s'" % [path.get_file(), kind, at, c])
 		check(count > 0, "%s is decorated" % path.get_file())
 		check(not level.back.is_empty(), "%s has a back wall" % path.get_file())
+
+
+## A bough with no art of its length would be drawn as a bar of bark again,
+## the thing it replaced, so every bough in every level has its art, and
+## covers exactly its rows.
+func test_every_bough_has_art_of_its_length() -> void:
+	for path in LEVELS:
+		var level := GridRoom.read(path)
+		for b in TileArt.boughs(level):
+			check(TileArt.BOUGHS.has(int(b["length"])), "%s: a bough %d cells long at %s has art" % [path.get_file(), b["length"], b["anchor"]])
+			var at: Vector2i = b["anchor"]
+			for r in TileArt.BOUGH_ROWS:
+				check_eq(level.rows[at.y + r][at.x], "%", "%s: the bough at %s is %d rows of bark" % [path.get_file(), at, TileArt.BOUGH_ROWS])
+	var forest := GridRoom.read("res://levels/act1_forest.level")
+	check_eq(TileArt.boughs(forest).size(), 4, "the oak has four boughs")
