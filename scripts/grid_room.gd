@@ -19,6 +19,8 @@ const EYEBALL_SIZE := Vector2(24.0, 24.0)
 const PLATE_DEPTH: float = 8.0
 const GROUND_SHADE: Shader = preload("res://shaders/ground_shade.gdshader")
 const WEATHER: Shader = preload("res://shaders/weather.gdshader")
+## Above the hero and every creature, below the room's dark (`LightField.Z`).
+const FRONT_Z := 50
 
 @export_file("*.level") var level_file: String
 ## The level's own art, if it is not its act's (the forest is Act 1 and is not
@@ -76,6 +78,7 @@ func _ready() -> void:
 	_build()
 	_built()
 	_bake()
+	_add_fronds()
 	_add_enclosure(level.size.x)
 	_frame_camera(level.size.x)
 	queue_redraw()
@@ -248,6 +251,19 @@ func _bake() -> void:
 	bake.build(Vector2(level.size.x, maxf(level.size.y, room_height)))
 
 
+## Fronds in front of the hero (Matt, 2026-10-24: low and sparse), under the
+## room's light and dark so the ambient falls on them as on everything.
+func _add_fronds() -> void:
+	if level.decor_cells("frond").is_empty():
+		return
+	var front := Node2D.new()
+	front.name = "Fronds"
+	front.z_index = FRONT_Z
+	front.z_as_relative = false
+	front.draw.connect(func() -> void: TileArt.draw_fronds(front, level))
+	add_child(front)
+
+
 ## The painting stays the room's own drawing, behind the bake.
 func _draw() -> void:
 	TileArt.draw_background_across(self, level.size.x, _tiles, room_height)
@@ -272,6 +288,7 @@ func _weather() -> ShaderMaterial:
 
 
 func _draw_back(canvas: CanvasItem) -> void:
+	TileArt.draw_trees(canvas, level)
 	TileArt.draw_back(canvas, level, _tiles)
 
 
@@ -279,11 +296,25 @@ func _draw_back(canvas: CanvasItem) -> void:
 func _draw_stone(canvas: CanvasItem) -> void:
 	for rect in level.ground_faces:
 		TileArt.draw_ground(canvas, rect, _tiles)
+	var drawn_as_boughs := TileArt.bough_cells(level)
 	for rect in level.wall_faces:
-		TileArt.draw_wall(canvas, rect, _tiles)
+		if not _all_in(rect, drawn_as_boughs):
+			TileArt.draw_wall(canvas, rect, _tiles)
 	for rect in level.castle_faces:
 		TileArt.draw_wall(canvas, rect)
 	TileArt.draw_kit_in_stone(canvas, level)
+	TileArt.draw_boughs(canvas, level)
+
+
+## Whether every cell of `rect` is in `cells`.
+func _all_in(rect: Rect2, cells: Dictionary) -> bool:
+	var from := Vector2i(rect.position / level.cell)
+	var to := Vector2i(rect.end / level.cell)
+	for y in range(from.y, to.y):
+		for x in range(from.x, to.x):
+			if not cells.has(Vector2i(x, y)):
+				return false
+	return true
 
 
 func _draw_level(canvas: CanvasItem) -> void:

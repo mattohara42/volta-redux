@@ -859,6 +859,104 @@ mechanic in `GEMINI_NOTES.md` is for editing **our own** paintings.
 
 ## Open requests
 
+### The forest's trees (2026-10-24, for Matt to paint in Gemini)
+
+**Why.** Matt, with two reference shots from *Ghosts 'n Goblins
+Resurrection*: in a forest the ground stays at the bottom of the screen,
+rolling in hills, and the hero leaves it only to climb a tree; trees have
+boughs and branches and greenery all round them. The forest's trunks were
+flat slabs of bark and its branches floating planks. The rebuild puts
+trunks in the back layer with branches growing from them; this sheet is
+their art. The trunk is cold bark because a sword does not bite it; the
+bough is warm umber because the branches you stand on are wood a sword
+does bite (`ART_DIRECTION.md`). Save as `assets/art_raw/act1_kit_trees.*`.
+
+```
+Painted fantasy game art lit by fire and by electricity, in the style of hand-painted backgrounds from a hand-animated feature: visible brushwork, soft edges, real depth. Character and creature shapes read as a strong silhouette first, in the way of Mike Mignola's comic art, but rendered with full painterly surface and value, not flat black shapes. Every dark area of the painting is a coloured dark: cold violet-blue in stone and shadow, warm umber in wood and leather. Never use a neutral black or a neutral grey anywhere in the image, including in shadow. Forms are separated by value and by edge quality, hard edges where a shape matters, soft edges where it recedes, never a uniform ink outline.
+
+A sheet of nine separate pieces of one ancient gnarled forest oak and the plants around it, for a side-scrolling platformer, painted on a flat solid magenta (#FF00FF) backdrop, in a grid of three rows of three, with generous even spacing of plain magenta between every piece so each one can be cut apart on its own. Every piece is seen in flat side view, square to the camera like a stage flat, with no perspective and no vanishing point. It is NOT a three-quarter view and NOT seen from above or below. All nine are at the same scale, and each stops at its own outline, with magenta right up to its edge.
+
+The nine, in reading order:
+1. A straight section of the oak's huge trunk, deeply furrowed and twisted bark, cut off flat and level at its top and at its bottom so copies can stack on each other, twice as tall as it is wide.
+2. The foot of the same trunk flaring out into great roots that spread left and right along the ground, its top cut off flat and level to join the trunk section, wider than it is tall.
+3. The top of the same trunk splitting into three thick boughs that spread up and outward, its bottom cut off flat and level to join the trunk section, a little wider than it is tall.
+4. One long thick branch growing out to the right from a flat cut left end, tapering to a thin twiggy tip, with a strip of moss along its top edge, four times as wide as it is tall.
+5. A big rounded clump of dark leaves, one and a half times as wide as it is tall.
+6. A small clump of dark leaves, about as wide as it is tall.
+7. A low leafy bush with a flat bottom edge, twice as wide as it is tall.
+8. A tall spray of fern fronds and broad leaves rising from a flat bottom edge, wider than it is tall.
+9. A curtain of hanging moss strands falling from a straight horizontal top edge, a little taller than it is wide.
+
+Large, simple shapes and few small details: each piece reads at a glance as one clear silhouette with two or three values on it, because it will be shrunk to a few dozen pixels across. Flat, even light on every piece, no cast shadows on the backdrop and no light source painted into the sheet. The trunk's bark is cold: deep blue-violet and dark grey-green. The branch in piece 4 is warm umber brown wood under its moss, the one warm thing on the sheet. Leaves, bushes, ferns and moss are dark grey-green and blue-green, as they look at night; the darkest darks are deep violet-blue, never neutral black. Nothing gold, nothing orange or red, nothing glowing, no flowers, no fruit, no thorns and no spikes. No characters, no creatures, no ground, no sky, no fire, no text and no labels. The image is 2560 by 1440 pixels, aspect ratio 16:9.
+```
+
+**The trees sheet landed first attempt too** (`act1_kit_trees.jpg`). The
+branch's twig came apart in `cut-sheet.py` and was cropped as one box. The
+trunk section flared from 145 to 195 px, so it was warped to one width (140)
+before pixelating, to match the base's top and the crown's foot; in the game
+every other section is drawn upside down, so each join is an edge meeting
+itself. Scales: trunk 0.32 (a 45 px trunk), branch 0.27, foliage 0.22, moss
+0.2. All pass `palette-check.py`. The branch is not used yet: the wood tiles
+already read as what a sword bites, and a branch drawn over them is for when
+the platforms get their own art.
+
+**Boughs (Matt, 2026-10-24: "draw them as boughs").** The oak's two solid
+boughs were bars of bark twenty cells long. They are shorter now, just
+longer than the sleeper's patrol under the low one, and drawn from the
+branch painting by `tools/bough.py`: its thick part warped to exactly the
+bough's two rows, so what you see is what you stand on and hit your head
+on, edges smoothed along it so the warp does not streak, the twigs past the
+solid end. `--like trunk.png` recolours the wood to the trunk's bark,
+because warm umber says a sword bites and bark does not. One texture per
+length; a test holds every bough in a level to having one.
+
+**Staggered (Matt, 2026-10-24: the vine into the trunk, boughs staggered and
+not all alike).** The oak's vine now climbs the middle of its trunk, and its
+five boughs alternate sides up it at heights of their own, each a different
+length (6 to 10) so no two are the same picture. A vine through a bough needs
+a gap a cell either side, so the boughs grow from the trunk's sides and the
+sleeper's roof, which must be one solid over its whole patrol, moved to the
+right of the trunk with a shorter patrol (112 px, from 176) that keeps clear
+of the brazier. `bough.py --lift 1.6` makes a new bough as bright as the rest.
+
+**Shaped (Matt, 2026-10-24).** Boughs shorten going up (10 to 6 cells) and
+taper: the top edge stays level with what you stand on and the underside
+rises like the painted branch, down to 0.6 of its rows (`bough.py`'s
+`_TAPER`). Every bough tip carries leaves, crowns are twice as wide, about
+half the trees are drawn mirrored and each crown leaves out a clump or two
+of its own, so a stand of them is not one tree cloned. The high road's
+branches no longer float: a tree stands under each pair, its crown just
+above, so a branch crosses the trunk below the fork (the first branch
+reaches four cells further back to meet the shorter crown bough). The
+trunks are still one picture; a second kind of tree is a Gemini sheet.
+
+**One tree, two tones (Matt, 2026-10-24).** Shown the oak, Matt: the three
+wood objects look completely different. They did: cold painted bark, the
+boughs, and the forest's orange plank tiles from batch A. Matt chose one
+tree in two tones over warming the boughs or dropping the warm-wood cue. The
+branches and posts you stand on (`wood_tiles`, two variants) and the cracked
+branch are now cut from the same branch painting: `tools/bough.py --cells 8
+--rows 1` for a 16 px band, 32 px segments cross-faded into seamless 16 px
+tiles, value lifted by half and saturation a little so they read from
+across the room, the cracked one given a crumbling underside and a crack.
+Warm where a sword bites, the trunk's cold bark where it does not.
+
+**Brighter (Matt, 2026-10-24: "it fades into the background too much").**
+Every tree piece and bough has its value lifted by 1.6, the foliage its
+saturation by 1.6 too (lifted alone it went grey), and the new wood tiles
+1.3 on top of their first lift. Hue kept, so every dark stays coloured; all
+pass `palette-check.py`. The trunks are now among the brightest things on
+screen, past the ground's lip, which `ART_DIRECTION.md`'s "backgrounds lose"
+would argue against: Matt's call when he sees it.
+
+**In the game**: trees are placed by hand in `[decor]` (`y` a foot on the
+ground, `k` its crown in the same column; level design, not a rule), with
+leaves round each crown. By rule: leaves at a branch's free ends, moss under
+some branches, bushes behind the grass, all drawn behind everything; and
+fronds (`;`) drawn in front of the hero (`GridRoom.FRONT_Z`, under the
+room's dark) only on the lowest ground and clear of anything the map placed
+or a creature patrols.
+
 ### The foreground kit (2026-10-24, for Matt to paint in Gemini)
 
 **Why.** Matt, 2026-10-24: the foreground is "too monolithic and

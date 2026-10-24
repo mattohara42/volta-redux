@@ -52,6 +52,45 @@ const FOREST_KIT := {
 	"fern": [preload("res://assets/art/forest/kit/fern.png")],
 	"toadstools": [preload("res://assets/art/forest/kit/toadstools.png")],
 }
+## The forest's trees (Matt, 2026-10-24): a trunk stood on its foot, sections
+## stacked up to its crown, leaves round the crown; and the greenery the
+## rules place, all behind everything you touch. Fronds are the one thing
+## drawn in front of the hero (`draw_fronds`).
+const TRUNK: Texture2D = preload("res://assets/art/forest/trees/trunk.png")
+const TRUNK_BASE: Texture2D = preload("res://assets/art/forest/trees/trunk_base.png")
+const TRUNK_CROWN: Texture2D = preload("res://assets/art/forest/trees/trunk_crown.png")
+const LEAVES: Array[Texture2D] = [preload("res://assets/art/forest/trees/leaves_big.png")]
+const LEAVES_SMALL: Array[Texture2D] = [preload("res://assets/art/forest/trees/leaves_small.png")]
+const BUSH: Array[Texture2D] = [preload("res://assets/art/forest/trees/bush.png")]
+const MOSS: Array[Texture2D] = [preload("res://assets/art/forest/trees/moss.png")]
+const FRONDS: Array[Texture2D] = [
+	preload("res://assets/art/forest/trees/fern_spray.png"), preload("res://assets/art/forest/trees/bush.png")
+]
+## A bough, by its length in cells (`tools/bough.py`): solid bark drawn as a
+## branch, its thick end at the trunk, its twigs past the solid end. The
+## band you stand on starts one cell down the texture.
+const BOUGHS := {
+	6: preload("res://assets/art/forest/trees/bough_6.png"),
+	7: preload("res://assets/art/forest/trees/bough_7.png"),
+	8: preload("res://assets/art/forest/trees/bough_8.png"),
+	9: preload("res://assets/art/forest/trees/bough_9.png"),
+	10: preload("res://assets/art/forest/trees/bough_10.png"),
+}
+## How many rows a bough is, the band each texture is warped to.
+const BOUGH_ROWS := 2
+## Where a crown's clumps of leaves sit, from the middle of its top, art px,
+## and whether each is a big clump (1) or a small one (0). Wide, so a crown
+## reads as a great oak's canopy and not a tuft on a pole (Matt, 2026-10-24).
+const CANOPY: Array[Vector3] = [
+	Vector3(-120, 34, 0), Vector3(122, 30, 0), Vector3(-92, 18, 1), Vector3(94, 14, 1),
+	Vector3(-46, 2, 1), Vector3(46, -2, 1), Vector3(-20, -22, 1), Vector3(24, -24, 1),
+	Vector3(0, -38, 0), Vector3(-70, -10, 0), Vector3(72, -14, 0),
+]
+## One clump in this many of a crown is left out, picked per tree.
+const CANOPY_GAPS := 5
+## Where a bough's leaves sit: from the tip of its texture, art px, along the
+## bough and up, big then small.
+const BOUGH_LEAVES: Array[Vector2] = [Vector2(-14, -2), Vector2(-40, -14)]
 const UNSHADED: Array[Color] = [Color.WHITE]
 ## How far down its tile the forest lip's grass starts: a tuft roots there,
 ## in the grass, rather than standing on the tile's empty top rows.
@@ -287,11 +326,12 @@ static func draw_edges(canvas: CanvasItem, level: LevelGrid.Level, tiles: ActTil
 			while x < row.length() and row[x] == "#" and TileShape.open_sides(level.rows, x, y) & TileShape.DOWN:
 				x += 1
 			draw_lintel(canvas, Rect2(start * cell, y * cell, (x - start) * cell, cell), tiles)
+	var drawn_as_boughs := bough_cells(level)
 	for y in level.rows.size():
 		var row := level.rows[y]
 		for x in row.length():
 			var sides := TileShape.open_sides(level.rows, x, y)
-			if sides == 0:
+			if sides == 0 or drawn_as_boughs.has(Vector2i(x, y)):
 				continue
 			var edge := ACT1.edge_dark if row[x] == "&" else set.edge_dark
 			var at := Vector2(x, y) * cell
@@ -336,6 +376,129 @@ static func draw_decor(canvas: CanvasItem, level: LevelGrid.Level, tiles: ActTil
 	_draw_kit(canvas, level, FOREST_KIT, false, Color.WHITE)
 	for at in level.decor_cells("ivy"):
 		_draw_prop(canvas, IVY, at, Vector2((at.x + 0.5) * cell, at.y * cell), false, Palette.GROUND_SHADE[1])
+
+
+## The level's trees and the greenery round them, behind everything else: a
+## tree's foot (`[decor]` `y`) stands on the ground, and its trunk rises to
+## the crown (`k`) above it in the same column.
+static func draw_trees(canvas: CanvasItem, level: LevelGrid.Level) -> void:
+	var cell := level.cell
+	var crowns := level.decor_cells("crown")
+	for foot in level.decor_cells("tree"):
+		var crown := Vector2i(-1, -1)
+		for c in crowns:
+			if c.x == foot.x and c.y < foot.y and c.y > crown.y:
+				crown = c
+		if crown.y < 0:
+			continue
+		var cx := (foot.x + 0.5) * cell
+		var ground := (foot.y + 1) * cell
+		var top := (crown.y + 1) * cell
+		# About half the trees drawn mirrored, and each crown leaving out a
+		# clump or two of its own, so a stand of them is not one tree cloned.
+		var facing := -1.0 if TileVariety.pick(foot, 2) == 1 else 1.0
+		var middle := cx
+		canvas.draw_set_transform(Vector2(middle, 0.0), 0.0, Vector2(facing, 1.0))
+		cx = 0.0
+		var y := ground - TRUNK_BASE.get_height()
+		canvas.draw_texture(TRUNK_BASE, Vector2(roundf(cx - TRUNK_BASE.get_width() * 0.5), y))
+		# Every other section upside down, so each join is the same edge
+		# meeting itself rather than a seam.
+		var size := TRUNK.get_size()
+		var flipped := false
+		while y > top:
+			var part := minf(size.y, y - top)
+			var region := Rect2(0.0, 0.0 if flipped else size.y - part, size.x, part)
+			var at := Rect2(roundf(cx - size.x * 0.5), y - part, size.x, part)
+			if flipped:
+				canvas.draw_set_transform(Vector2(middle, at.position.y * 2.0 + part), 0.0, Vector2(facing, -1.0))
+			canvas.draw_texture_rect_region(TRUNK, at, region)
+			canvas.draw_set_transform(Vector2(middle, 0.0), 0.0, Vector2(facing, 1.0))
+			y -= part
+			flipped = not flipped
+		var crown_top := top - TRUNK_CROWN.get_height()
+		canvas.draw_texture(TRUNK_CROWN, Vector2(roundf(cx - TRUNK_CROWN.get_width() * 0.5), crown_top))
+		for i in CANOPY.size():
+			var clump := CANOPY[i]
+			if TileVariety.pick(foot + Vector2i(i, 0), CANOPY_GAPS) == 0:
+				continue
+			var texture: Texture2D = LEAVES[0] if clump.z > 0 else LEAVES_SMALL[0]
+			canvas.draw_texture(texture, (Vector2(cx + clump.x, crown_top + clump.y) - texture.get_size() * 0.5).round())
+		canvas.draw_set_transform(Vector2.ZERO)
+	for at in level.decor_cells("leaves"):
+		_draw_centred(canvas, LEAVES, at, cell)
+	for at in level.decor_cells("leaves_small"):
+		_draw_centred(canvas, LEAVES_SMALL, at, cell)
+	for at in level.decor_cells("bush"):
+		_draw_prop(canvas, BUSH, at, Vector2((at.x + 0.5) * cell, (at.y + 1) * cell + TUFT_SINK), true)
+	for at in level.decor_cells("moss"):
+		_draw_prop(canvas, MOSS, at, Vector2((at.x + 0.5) * cell, at.y * cell), false)
+
+
+## Each bough in the level: the solid it covers, by its `[decor]` anchor (`<`
+## grows left from its trunk, `>` right) along the run of bark in that
+## direction, `BOUGH_ROWS` rows deep. A bough is drawn as a branch rather
+## than as a bar of bark (Matt, 2026-10-24).
+static func boughs(level: LevelGrid.Level) -> Array[Dictionary]:
+	var found: Array[Dictionary] = []
+	for kind in ["bough_left", "bough_right"]:
+		var step := -1 if kind == "bough_left" else 1
+		for at in level.decor_cells(kind):
+			var length := 0
+			var x := at.x
+			while x >= 0 and x < level.rows[at.y].length() and level.rows[at.y][x] == "%":
+				length += 1
+				x += step
+			found.append({"anchor": at, "step": step, "length": length})
+	return found
+
+
+## Every cell a bough covers, so the bark and its edges are left out there.
+static func bough_cells(level: LevelGrid.Level) -> Dictionary:
+	var cells := {}
+	for b in boughs(level):
+		var at: Vector2i = b["anchor"]
+		for i in int(b["length"]):
+			for r in BOUGH_ROWS:
+				cells[Vector2i(at.x + i * int(b["step"]), at.y + r)] = true
+	return cells
+
+
+## The level's boughs, drawn with its stone. A bough with no art of its
+## length is left as bark (`test_level_bake.gd` holds every one to having it).
+static func draw_boughs(canvas: CanvasItem, level: LevelGrid.Level) -> void:
+	var cell := level.cell
+	for b in boughs(level):
+		var texture: Texture2D = BOUGHS.get(int(b["length"]))
+		if texture == null:
+			continue
+		var at: Vector2i = b["anchor"]
+		var top := (at.y - 1) * cell
+		var step := int(b["step"])
+		if step > 0:
+			canvas.draw_texture(texture, Vector2(at.x * cell, top))
+		else:
+			canvas.draw_set_transform(Vector2((at.x + 1) * cell, top), 0.0, Vector2(-1.0, 1.0))
+			canvas.draw_texture(texture, Vector2.ZERO)
+			canvas.draw_set_transform(Vector2.ZERO)
+		# Leaves at its tip, so the whole tree is in leaf and not only its crown.
+		var root := at.x * cell if step > 0 else (at.x + 1) * cell
+		var tip := Vector2(root + step * texture.get_width(), top + cell)
+		for i in BOUGH_LEAVES.size():
+			var leaves: Texture2D = LEAVES[0] if i == 0 else LEAVES_SMALL[0]
+			var offset := Vector2(BOUGH_LEAVES[i].x * step, BOUGH_LEAVES[i].y)
+			canvas.draw_texture(leaves, (tip + offset - leaves.get_size() * 0.5).round())
+
+
+## The fronds in front of the hero, sunk into the lip they grow from.
+static func draw_fronds(canvas: CanvasItem, level: LevelGrid.Level) -> void:
+	for at in level.decor_cells("frond"):
+		_draw_prop(canvas, FRONDS, at, Vector2((at.x + 0.5) * level.cell, (at.y + 1) * level.cell + TUFT_SINK), true)
+
+
+static func _draw_centred(canvas: CanvasItem, textures: Array[Texture2D], at: Vector2i, cell: float) -> void:
+	var texture := textures[TileVariety.pick(at, textures.size())]
+	canvas.draw_texture(texture, ((Vector2(at) + Vector2(0.5, 0.5)) * cell - texture.get_size() * 0.5).round())
 
 
 ## The kit's features set into the face of the level's stone, drawn with the
