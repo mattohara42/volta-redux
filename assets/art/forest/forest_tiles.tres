@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ActTiles" load_steps=25 format=3]
+[gd_resource type="Resource" script_class="ActTiles" load_steps=26 format=3]
 
 [ext_resource type="Script" path="res://scripts/act_tiles.gd" id="1"]
 [ext_resource type="Texture2D" path="res://assets/art/forest/forest_bg_px.png" id="bg"]
@@ -16,7 +16,8 @@
 [ext_resource type="Texture2D" path="res://assets/art/forest/tiles_px/earth_3.png" id="9"]
 [ext_resource type="Texture2D" path="res://assets/art/forest/tiles_px/earth_4.png" id="10"]
 [ext_resource type="Texture2D" path="res://assets/art/forest/tiles_px/earth_5.png" id="11"]
-[ext_resource type="Texture2D" path="res://assets/art/forest/tiles_px/branch.png" id="12"]
+[ext_resource type="Texture2D" path="res://assets/art/forest/tiles_px/branch_0.png" id="12"]
+[ext_resource type="Texture2D" path="res://assets/art/forest/tiles_px/branch_1.png" id="12b"]
 [ext_resource type="Texture2D" path="res://assets/art/forest/tiles_px/vine.png" id="13"]
 
 [ext_resource type="Texture2D" path="res://assets/art/forest/props/tuft_0.png" id="tuft0"]
@@ -32,7 +33,7 @@ floor_tiles = Array[Texture2D]([ExtResource("2"), ExtResource("3"), ExtResource(
 wall_tiles = Array[Texture2D]([ExtResource("6"), ExtResource("7"), ExtResource("8"), ExtResource("9"), ExtResource("10"), ExtResource("11")])
 lintel = false
 face_tiles = Array[Texture2D]([ExtResource("bark")])
-wood_tiles = Array[Texture2D]([ExtResource("12")])
+wood_tiles = Array[Texture2D]([ExtResource("12"), ExtResource("12b")])
 climb_tiles = Array[Texture2D]([ExtResource("13")])
 hazard_tiles = Array[Texture2D]([ExtResource("thorns")])
 crumble_tile = ExtResource("cracked")

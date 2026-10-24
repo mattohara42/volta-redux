@@ -910,6 +910,17 @@ solid end. `--like trunk.png` recolours the wood to the trunk's bark,
 because warm umber says a sword bites and bark does not. One texture per
 length (6, 7, 12); a test holds every bough in a level to having one.
 
+**One tree, two tones (Matt, 2026-10-24).** Shown the oak, Matt: the three
+wood objects look completely different. They did: cold painted bark, the
+boughs, and the forest's orange plank tiles from batch A. Matt chose one
+tree in two tones over warming the boughs or dropping the warm-wood cue. The
+branches and posts you stand on (`wood_tiles`, two variants) and the cracked
+branch are now cut from the same branch painting: `tools/bough.py --cells 8
+--rows 1` for a 16 px band, 32 px segments cross-faded into seamless 16 px
+tiles, value lifted by half and saturation a little so they read from
+across the room, the cracked one given a crumbling underside and a crack.
+Warm where a sword bites, the trunk's cold bark where it does not.
+
 **In the game**: trees are placed by hand in `[decor]` (`y` a foot on the
 ground, `k` its crown in the same column; level design, not a rule), with
 leaves round each crown. By rule: leaves at a branch's free ends, moss under
