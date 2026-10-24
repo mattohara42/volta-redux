@@ -212,6 +212,32 @@ static func painted_lights(width: float, tiles: ActTiles = null, height: float =
 	return out
 
 
+## Every window of `tiles`' painting across a room `width` wide, mirrored copy
+## by copy the way `painted_lights` mirrors its points.
+static func painted_windows(width: float, tiles: ActTiles = null, height: float = 0.0) -> Array[Rect2]:
+	var set := _or_act1(tiles)
+	var out: Array[Rect2] = []
+	if set.background == null:
+		return out
+	var step := float(set.background.get_width())
+	var rise := float(set.background.get_height())
+	var y := 0.0
+	var flipped := false
+	while y < maxf(height, 1.0):
+		var x := 0.0
+		var mirrored := false
+		while x < width:
+			for pane in set.windows:
+				var left := x + (step - pane.end.x if mirrored else pane.position.x)
+				var top := y + (rise - pane.end.y if flipped else pane.position.y)
+				out.append(Rect2(left, top, pane.size.x, pane.size.y))
+			x += step
+			mirrored = not mirrored
+		y += rise
+		flipped = not flipped
+	return out
+
+
 ## A strip of floor tiles along the top edge of `rect`, masonry below it,
 ## stepping darker row by row the way shadow falls under a ledge.
 static func draw_ground(canvas: CanvasItem, rect: Rect2, tiles: ActTiles = null) -> void:

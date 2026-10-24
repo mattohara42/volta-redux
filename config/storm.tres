@@ -1,0 +1,34 @@
+[gd_resource type="Resource" script_class="StormConfig" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://config/storm_config.gd" id="1_storm"]
+
+[resource]
+script = ExtResource("1_storm")
+rain_amount = 650
+rain_speed = 520.0
+rain_speed_spread = 0.25
+rain_slant = 24.0
+rain_streak_length = 14.0
+rain_alpha = 0.9
+first_strike_seconds = 6.0
+strike_gap_min = 10.0
+strike_gap_max = 24.0
+pulses_max = 3
+pulse_seconds = 0.06
+pulse_gap_seconds = 0.1
+afterglow_seconds = 0.4
+gap_level = 0.25
+sky_lift = 0.6
+whiteout = 0.92
+whiteout_hold_seconds = 0.05
+whiteout_fade_seconds = 0.18
+pane_lift = 0.6
+window_light_radius = 150.0
+window_light_strength = 0.9
+bolt_subdivisions = 4
+bolt_jag = 0.2
+bolt_fork_chance = 0.5
+thunder_delay_min = 0.15
+thunder_delay_max = 0.9
+thunder_volume_db = 0.0
+thunder_pitch_jitter = 0.12

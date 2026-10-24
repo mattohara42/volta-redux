@@ -100,6 +100,11 @@ needed rather than optional, because the content is about to exist.
   that did not, note it here.
 - **Matt's play log** (`user://`, PR #136) from this playthrough would show
   where the time and deaths went. Worth sharing before R1.
+- **The storm (2026-10-24).** A full-screen flash every 10 to 24 s, held
+  0.05 s and cleared in 0.18. Is it too often, too bright, or does it ever
+  hide a hazard at the wrong moment? `config/storm.tres` has every dial.
+  A setting to soften or turn off the flash, for photosensitive players, is
+  worth having before anyone outside the family plays.
 
 ## Code and tooling debt
 
@@ -130,6 +135,12 @@ needed rather than optional, because the content is about to exist.
   Anything reading `current_scene` (the debug overlay's room tag) is blank in
   its shots; a movie-writer launch shows it. Shots may differ from play in
   other ways that read the scene the same way.
+- **Two storms in Act 4.** `amb_hall` bakes a distant thunder roll into
+  its loop at 6 s, which now plays out of step with the real strikes
+  (`Storm`); and `backdrop_hall.gdshader` still draws its own rain and
+  flash, unused since Act 4 got a painted background (`backdrop = 0`).
+  Re-render `amb_hall` without its thunder, and drop the hall backdrop's
+  rain and flash or the whole Hall style if nothing will use it.
 
 ## Deferred from v1 deliberately
 

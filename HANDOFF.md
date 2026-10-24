@@ -42,6 +42,13 @@ terraces, the longer drop from the high road to the nest, the oak's vine and
 staggered boughs, the sleeper's shorter patrol right of the trunk, and
 whether a frond over the hero's legs ever hides something.
 
+**The storm (Matt, 2026-10-24):** driving rain across Act 1's foreground,
+and lightning that lights the painting behind the room, flashes over
+everything in Volta's arc-core colour and cracks with thunder; in Act 4 it
+flashes and strikes through the hall's windows (`Storm`, `config/storm.tres`,
+`ART_DIRECTION.md` amended). First strike 6 s into a room, then every 10 to
+24 s. Matt's to play: rain density, how often, how bright (`BACKLOG.md`).
+
 ## Blocked on Matt
 
 1. **Play Act 1 from a new game, with the kids** (the rebuilt wall is level

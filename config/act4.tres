@@ -16,6 +16,7 @@ card_font_size = 24
 ambient_light = Color(0.62, 0.54, 0.76, 1)
 ceiling_dim = 0.2
 backdrop = 0
+storm = 2
 music = ExtResource("2_music")
 exit_art = ExtResource("9_exit")
 tiles = ExtResource("3_tiles")

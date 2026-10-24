@@ -103,6 +103,14 @@ func _dress_the_room() -> void:
 		var backdrop := Backdrop.new()
 		backdrop.setup(act.backdrop as Backdrop.Style, hash(scene_file_path), room_height)
 		add_child(backdrop)
+	if act.storm != Storm.Kind.NONE:
+		var storm := Storm.new()
+		add_child(storm)
+		storm.setup(act.storm as Storm.Kind, TileArt.painted_windows(_room_width(), _art(act), room_height), hash(scene_file_path))
+		# First among the room's children, so its glow on the painting draws
+		# over the room's own drawing (the painting) and under everything the
+		# room built on top of it.
+		move_child(storm, 0)
 	if act.ambient_light != Color.WHITE:
 		var field := LightField.new()
 		field.setup(act.ambient_light, act.ceiling_dim, room_height)
