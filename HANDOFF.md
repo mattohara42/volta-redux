@@ -25,8 +25,10 @@ kids play Act 1 from a new game and say it is better (G2 again).
 
 **Alongside, while Matt travels (2026-10-24):** the foreground is "too
 monolithic and repetitive" (Matt). Weather patches on the stone and back
-wall, and the castle kit (slits, niches, piers, breaches, ivy, banners) set
-into the outer wall's back walls by rule (`ART.md`, *The foreground kit*).
+wall, the castle kit (slits, niches, piers, breaches, ivy, banners) set
+into the outer wall's back walls by rule, and the big solid blocks drawn as
+built faces with the kit in them, their dark half as deep (Matt chose this
+over cutaway, windows or thinner blocks; `ART.md`, *The foreground kit*).
 The forest sheet goes the same way when it lands.
 
 ## Blocked on Matt

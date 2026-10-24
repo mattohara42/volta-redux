@@ -894,7 +894,17 @@ half an art pixel once shrunk. `pixelate.py` now keeps a cut's transparency
 back wall between the torches, ivy under a ceiling), drawn at
 `Palette.KIT_SHADE` so they sit in the back wall. Added to the outer wall
 with `tools/dev.sh decorate ... --add=KINDS`, which keeps the file's hand
-edits. The forest sheet is still to paint.
+edits.
+
+**Built faces, not slabs (Matt, 2026-10-24).** Shown the kit, Matt named
+the real problem: the giant solid blocks, a brick rim around a flat dark.
+Of four treatments offered (built faces, cutaway, windows into the mass,
+thinner blocks) Matt chose built faces. The interiors' dark now goes half
+as deep (`ground_shade_most` 0.5), and `DecorRules` sets slits, piers,
+drains, breaches, rings and banners into a block's face wherever the whole
+footprint is two rings deep, drawn with the stone so they take its shade
+and weather. No niche on a face: a dark arch in stone you cannot enter
+reads as a doorway. The forest sheet is still to paint.
 
 **Why a sheet of nine**: `GEMINI_NOTES.md`, *Several subjects on one sheet*,
 is the strongest result the last project had, and the original castle

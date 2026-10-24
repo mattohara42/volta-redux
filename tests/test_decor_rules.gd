@@ -202,3 +202,28 @@ func test_the_kit_fits_its_footprints() -> void:
 			var size := texture.get_size()
 			check(size.x <= (2 * foot.x + 1) * cell, "%s is %d px wide, inside %d cells" % [kind, size.x, 2 * foot.x + 1])
 			check(size.y <= foot.y * cell, "%s is %d px tall, inside %d rows" % [kind, size.y, foot.y])
+
+
+## A big block's face gets features, all of each footprint in stone two
+## rings deep, so the ring you play against stays plain; a thin wall gets none.
+func test_a_big_block_gets_features_set_into_its_face() -> void:
+	var map := "[map]\n" + (".".repeat(30) + "\n").repeat(2) + ("#".repeat(30) + "\n").repeat(12)
+	var level := _rows(map)
+	var grid := DecorRules.place(level, "castle")
+	var depths := TileShape.depths(level.rows)
+	var set := 0
+	for y in grid.size():
+		for x in grid[y].length():
+			var kind: String = LevelGrid.DECOR.get(grid[y][x], "")
+			if not DecorRules.FACE_FEATURES.has(kind):
+				continue
+			set += 1
+			var foot: Vector3i = DecorRules.FOOTPRINTS[kind]
+			for fy in range(y - foot.y + 1, y + 1):
+				for fx in range(x - foot.x, x + foot.x + 1):
+					check(depths[fy * 30 + fx] >= DecorRules.FACE_DEPTH, "%s at %s stays off the edge" % [kind, Vector2i(x, y)])
+	check(set > 0, "a block twelve rows deep gets some")
+	var thin := DecorRules.place(_rows("[map]\n" + (".".repeat(30) + "\n").repeat(2) + ("#".repeat(30) + "\n").repeat(2)), "castle")
+	for row in thin:
+		for c in row:
+			check(not DecorRules.FACE_FEATURES.has(LevelGrid.DECOR.get(c, "")) or c == ".", "and a floor two rows thick gets none")

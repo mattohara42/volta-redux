@@ -12,11 +12,15 @@
 ##            on a back wall at head height, spaced along the floor; chains
 ##            hanging from a high ceiling; a wall feature (an arrow slit, a
 ##            niche, a pier, a breach) in the bays of a back wall between
-##            the torches; ivy hanging from a ceiling
+##            the torches; ivy hanging from a ceiling; the same features
+##            set into the face of a big block of stone, away from its edge
 ##   forest   tufts on the grass; roots hanging under earth
 ##
 ## Decoration only ever goes in air the map leaves empty, so it never covers
-## a ladder, a marker or a mechanism, and changes nothing that plays. A
+## a ladder, a marker or a mechanism, and changes nothing that plays. The one
+## exception is a wall feature set into a block's face, which goes only where
+## its whole footprint is stone at least `FACE_DEPTH` deep: inside the ring
+## that touches the air, where nothing is ever touched. A
 ## creature's box is air it moves through, so it counts as air: a parapet does
 ## not stop where a bat flies.
 class_name DecorRules
@@ -55,6 +59,15 @@ const FOOTPRINTS := {
 	"slit": Vector3i(1, 3, 1), "breach": Vector3i(1, 3, 1), "ring": Vector3i(1, 3, 1),
 	"drain": Vector3i(1, 3, 1), "banner": Vector3i(1, 3, 1), "ivy": Vector3i(1, 3, 0),
 }
+## Features set into a block's face (Matt, 2026-10-24: the giant blocks are
+## the problem; built faces, not slabs). One is tried in each bay of
+## `FACE_PITCH` cells across and `FACE_ROWS` down, at a spot the bay's hash
+## picks, and only where its footprint is stone `FACE_DEPTH` deep or more.
+const FACE_PITCH := 6
+const FACE_ROWS := 5
+const FACE_DEPTH := 2
+## No niche: a dark arch in stone you cannot enter reads as a doorway.
+const FACE_FEATURES: PackedStringArray = ["slit", "pier", "drain", "breach", "ring", "banner"]
 ## Ivy hangs from one ceiling cell in this many, where there is at least
 ## this much air below, and never within this many cells of other ivy.
 const IVY_ONE_IN := 6
@@ -80,6 +93,7 @@ static func place(level: LevelGrid.Level, style: String) -> Array[String]:
 		_chains(rows, grid)
 		_features(rows, grid, back)
 		_ivy(rows, grid)
+		_faces(rows, grid)
 	elif style == "forest":
 		_tufts(rows, grid)
 		_roots(rows, grid)
@@ -153,6 +167,37 @@ static func _features(rows: Array[String], grid: Array[String], back: Dictionary
 					_put(rows, grid, x, anchor, _char(kind))
 					last = x
 					break
+
+
+## One feature a bay of a block's face, its footprint all deep stone.
+static func _faces(rows: Array[String], grid: Array[String]) -> void:
+	var depths := TileShape.depths(rows)
+	var width := rows[0].length()
+	for top in range(0, rows.size(), FACE_ROWS):
+		for left in range(0, width, FACE_PITCH):
+			var h := _hash(left, top)
+			var x := left + (h >> 4) % FACE_PITCH
+			var anchor := top + (h >> 8) % FACE_ROWS
+			for i in FACE_FEATURES.size():
+				var kind := FACE_FEATURES[(h + i) % FACE_FEATURES.size()]
+				var foot: Vector3i = FOOTPRINTS[kind]
+				if _set_in_stone(depths, grid, width, x, anchor - foot.y + 1, anchor, foot.x):
+					var row := grid[anchor]
+					row[x] = _char(kind)
+					grid[anchor] = row
+					break
+
+
+## Whether every cell from `top` to `bottom`, `reach` either side of `x`, is
+## stone `FACE_DEPTH` deep that no other decoration has taken.
+static func _set_in_stone(depths: PackedInt32Array, grid: Array[String], width: int, x: int, top: int, bottom: int, reach: int) -> bool:
+	if top < 0 or bottom >= grid.size() or x - reach < 0 or x + reach >= width:
+		return false
+	for y in range(top, bottom + 1):
+		for dx in range(-reach, reach + 1):
+			if depths[y * width + x + dx] < FACE_DEPTH or grid[y][x + dx] != AIR:
+				return false
+	return true
 
 
 ## Ivy hangs from a lip three cells wide, so it does not hang off an edge.

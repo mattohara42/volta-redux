@@ -319,13 +319,29 @@ static func draw_decor(canvas: CanvasItem, level: LevelGrid.Level, tiles: ActTil
 		_draw_prop(canvas, set.root_tiles, at, Vector2((at.x + 0.5) * cell, at.y * cell), false)
 	# Set into the back wall, so shaded with it: the art's own big stones are
 	# what stand out from the brick, not a brightness the wall does not have.
+	_draw_kit(canvas, level, false, Palette.KIT_SHADE)
+	for at in level.decor_cells("ivy"):
+		_draw_prop(canvas, IVY, at, Vector2((at.x + 0.5) * cell, at.y * cell), false, Palette.GROUND_SHADE[1])
+
+
+## The kit's features set into the face of the level's stone, drawn with the
+## stone (before its interiors fall into the dark), so they take the same
+## shade, weather and dark as the masonry around them.
+static func draw_kit_in_stone(canvas: CanvasItem, level: LevelGrid.Level) -> void:
+	_draw_kit(canvas, level, true, Palette.GROUND_SHADE[Palette.GROUND_SHADE.size() - 1])
+
+
+## Each kit feature anchored in stone (`in_stone`) or in air, standing on its
+## anchor cell.
+static func _draw_kit(canvas: CanvasItem, level: LevelGrid.Level, in_stone: bool, shade: Color) -> void:
+	var cell := level.cell
 	for kind: String in KIT:
 		var pieces: Array[Texture2D] = []
 		pieces.assign(KIT[kind])
 		for at in level.decor_cells(kind):
-			_draw_prop(canvas, pieces, at, Vector2((at.x + 0.5) * cell, (at.y + 1) * cell), true, Palette.KIT_SHADE)
-	for at in level.decor_cells("ivy"):
-		_draw_prop(canvas, IVY, at, Vector2((at.x + 0.5) * cell, at.y * cell), false, Palette.GROUND_SHADE[1])
+			if TileShape.is_solid(level.rows, at.x, at.y) != in_stone:
+				continue
+			_draw_prop(canvas, pieces, at, Vector2((at.x + 0.5) * cell, (at.y + 1) * cell), true, shade)
 
 
 ## One of `textures`, picked for the cell, centred on `anchor`: standing on it,
