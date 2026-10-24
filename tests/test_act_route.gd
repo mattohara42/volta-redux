@@ -78,7 +78,8 @@ func test_the_tally_says_how_the_run_went() -> void:
 	check(not ActRoute.tally(120, 7200.0).contains(String.chr(0x2014)), "no em-dash in a string a player reads")
 
 
-func test_an_act_card_says_how_often_the_act_killed_you() -> void:
-	check_eq(ActRoute.act_tally(0), "Not once did it kill you.", "a clean act")
-	check_eq(ActRoute.act_tally(1), "It killed you once.", "one death")
-	check_eq(ActRoute.act_tally(12), "It killed you 12 times.", "a usual act")
+func test_an_act_card_says_how_often_lothar_fell() -> void:
+	check_eq(ActRoute.act_tally(0), "Lothar never fell.", "a clean act")
+	check_eq(ActRoute.act_tally(1), "Lothar fell once.", "one death")
+	check_eq(ActRoute.act_tally(12), "Lothar fell 12 times.", "a usual act")
+	check(ActRoute.tally(12, 60.0).begins_with(ActRoute.act_tally(12).trim_suffix(".")), "in the same words as the end card")

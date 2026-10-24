@@ -2,7 +2,7 @@
 ## completed from a new save"). Starts at the main scene and, room by room,
 ## loads each as the real current scene, puts the hero in its exit and checks
 ## that `ActState` loads the room that should come next, through every act's
-## card to the ending and back to a new game.
+## card to the ending, past the end card's press, and back to a new game.
 ##
 ## It does not play the rooms: the scenarios do that, one room at a time.
 ## This is the part they cannot reach, because under the capture tool a room
@@ -43,6 +43,9 @@ func _process(_delta: float) -> bool:
 	if _failed or _step >= _expected.size():
 		return true
 	var scene := current_scene
+	# The last room's exit brings up the end card, which waits for a press.
+	if _step >= _expected.size() - 2:
+		_press_on()
 	if scene == null or scene.scene_file_path != _expected[_step]:
 		if _elapsed() > WAIT_SECONDS:
 			_fail("expected %s, still on %s" % [_expected[_step], scene.scene_file_path if scene else "nothing"])
@@ -85,6 +88,15 @@ func _keep_leaving(scene: Node, step: int) -> void:
 		_step += 1
 		_nudged = false
 		_since = Time.get_ticks_msec()
+
+
+## The end card waits for a press of jump, so press it, a frame down and a
+## frame up, until the new game arrives.
+func _press_on() -> void:
+	if Input.is_action_pressed("jump"):
+		Input.action_release("jump")
+	else:
+		Input.action_press("jump")
 
 
 func _exit_in(scene: Node) -> Node2D:
