@@ -563,6 +563,17 @@ level mirrors the painting down every 360 px, and the diagonal shafts and
 flared trunk bases mirror into X shapes and hourglasses. It shows only zoomed
 out. Attempt 2 fixes it at the source.
 
+**Forest background, attempt 2, landed first attempt (2026-10-24)**
+(`assets/art_raw/forest_bg_2.jpg`): straight trunks of one width, vertical
+shafts, nothing horizontal. Cropped from one big trunk's centre to the same
+trunk two bays on (94 to 1015), so every mirror seam falls on a trunk, and
+dimmed by the same half, which matches attempt 1's brightness:
+
+    tools/pixelate.py assets/art_raw/forest_bg_2.jpg assets/art/forest/forest_bg_px.png --crop 94,1015 --dim 0.5
+
+432x360 at 24 colours, palette check passes. Zoomed out on the tall
+forest, the X shapes and hourglasses are gone.
+
 **Forest background, attempt 2: the prompt, for Matt to paint in Gemini.**
 Attempt 1's prompt with the light and the mist made symmetric top to bottom,
 so the vertical mirror has nothing to reflect: the shafts fall straight down,
