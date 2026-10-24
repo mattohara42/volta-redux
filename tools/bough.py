@@ -17,12 +17,15 @@ pixel's value and leaving the moss alone. The branch was painted warm umber,
 which says a sword bites here (`ART_DIRECTION.md`); a bough of bark it does
 not bite must not say so.
 
+`--lift F` multiplies every pixel's value by F, hue kept, as the forest's
+tree art was lifted when it faded into the night (`ART.md`).
+
 The source is never modified. An existing output needs --overwrite (CLAUDE.md:
 the destructive mode is the flag).
 
 Usage:
     tools/bough.py BRANCH.png OUT.png --cells N [--rows 2] [--thick-end 200]
-        [--cell 16] [--colors 16] [--like TRUNK.png] [--overwrite]
+        [--cell 16] [--colors 16] [--like TRUNK.png] [--lift F] [--overwrite]
 
 `--thick-end` is where the painting's solid part ends, in its own pixels:
 200, just before the fork.
@@ -114,6 +117,16 @@ def like(image: Image.Image, trunk: Image.Image) -> Image.Image:
     return out
 
 
+def lifted(image: Image.Image, factor: float) -> Image.Image:
+    """`image` with every pixel's value times `factor`, hue and alpha kept."""
+    alpha = image.getchannel("A")
+    hsv = np.asarray(image.convert("RGB").convert("HSV")).astype(float)
+    hsv[..., 2] = np.clip(hsv[..., 2] * factor, 0, 255)
+    out = Image.fromarray(hsv.astype(np.uint8), mode="HSV").convert("RGBA")
+    out.putalpha(alpha)
+    return out
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("branch", type=Path)
@@ -124,6 +137,7 @@ def main() -> int:
     parser.add_argument("--cell", type=int, default=16)
     parser.add_argument("--colors", type=int, default=16)
     parser.add_argument("--like", type=Path, help="a trunk whose bark the wood is recoloured to")
+    parser.add_argument("--lift", type=float, default=1.0, help="multiply every pixel's value by this")
     parser.add_argument("--overwrite", action="store_true")
     args = parser.parse_args()
     if args.out.exists() and not args.overwrite:
@@ -131,6 +145,8 @@ def main() -> int:
     result = bough(Image.open(args.branch), args.cells, args.rows, args.thick_end, args.cell, args.colors)
     if args.like:
         result = like(result, Image.open(args.like))
+    if args.lift != 1.0:
+        result = lifted(result, args.lift)
     result.save(args.out)
     print(f"wrote {args.out}, {result.width}x{result.height}")
     return 0

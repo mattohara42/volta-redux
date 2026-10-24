@@ -72,7 +72,9 @@ const FRONDS: Array[Texture2D] = [
 const BOUGHS := {
 	6: preload("res://assets/art/forest/trees/bough_6.png"),
 	7: preload("res://assets/art/forest/trees/bough_7.png"),
-	12: preload("res://assets/art/forest/trees/bough_12.png"),
+	8: preload("res://assets/art/forest/trees/bough_8.png"),
+	9: preload("res://assets/art/forest/trees/bough_9.png"),
+	10: preload("res://assets/art/forest/trees/bough_10.png"),
 }
 ## How many rows a bough is, the band each texture is warped to.
 const BOUGH_ROWS := 2

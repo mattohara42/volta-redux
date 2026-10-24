@@ -908,7 +908,16 @@ bough's two rows, so what you see is what you stand on and hit your head
 on, edges smoothed along it so the warp does not streak, the twigs past the
 solid end. `--like trunk.png` recolours the wood to the trunk's bark,
 because warm umber says a sword bites and bark does not. One texture per
-length (6, 7, 12); a test holds every bough in a level to having one.
+length; a test holds every bough in a level to having one.
+
+**Staggered (Matt, 2026-10-24: the vine into the trunk, boughs staggered and
+not all alike).** The oak's vine now climbs the middle of its trunk, and its
+five boughs alternate sides up it at heights of their own, each a different
+length (6 to 10) so no two are the same picture. A vine through a bough needs
+a gap a cell either side, so the boughs grow from the trunk's sides and the
+sleeper's roof, which must be one solid over its whole patrol, moved to the
+right of the trunk with a shorter patrol (112 px, from 176) that keeps clear
+of the brazier. `bough.py --lift 1.6` makes a new bough as bright as the rest.
 
 **One tree, two tones (Matt, 2026-10-24).** Shown the oak, Matt: the three
 wood objects look completely different. They did: cold painted bark, the

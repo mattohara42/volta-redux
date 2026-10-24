@@ -38,8 +38,9 @@ in `[back]` with two boughs (the crown and the sleeper's roof), the hill is
 half as tall and terraced. The trees sheet is in: five trees placed by hand
 (the clearing, the oak, the island, the far bank, the hill), leaves, moss,
 bushes, and two fronds drawn in front of the hero. Matt's to play: the
-terraces, the longer drop from the high road to the nest, and whether a
-frond over the hero's legs ever hides something.
+terraces, the longer drop from the high road to the nest, the oak's vine and
+staggered boughs, the sleeper's shorter patrol right of the trunk, and
+whether a frond over the hero's legs ever hides something.
 
 ## Blocked on Matt
 
