@@ -41,6 +41,19 @@ const KIT := {
 	"banner": [preload("res://assets/art/act1/kit/banner.png")],
 }
 const IVY: Array[Texture2D] = [preload("res://assets/art/act1/kit/ivy.png")]
+## The castle yard: siege gear and stores standing on the floor, behind
+## everything you touch, by `[decor]` kind.
+const YARD := {
+	"trebuchet": [preload("res://assets/art/act1/yard/trebuchet.png")],
+	"ballista": [preload("res://assets/art/act1/yard/ballista.png")],
+	"cart": [preload("res://assets/art/act1/yard/cart.png")],
+	"barrels": [preload("res://assets/art/act1/yard/barrels.png")],
+	"crates": [preload("res://assets/art/act1/yard/crates.png")],
+	"rack": [preload("res://assets/art/act1/yard/rack.png")],
+	"shot": [preload("res://assets/art/act1/yard/shot.png")],
+	"rubble": [preload("res://assets/art/act1/yard/rubble.png")],
+	"sacks": [preload("res://assets/art/act1/yard/sacks.png")],
+}
 ## The forest kit: what is set into a bank of earth, and what stands on the
 ## grass, by `[decor]` kind.
 const FOREST_KIT := {
@@ -51,7 +64,17 @@ const FOREST_KIT := {
 	"standing_stone": [preload("res://assets/art/forest/kit/standing_stone.png")],
 	"fern": [preload("res://assets/art/forest/kit/fern.png")],
 	"toadstools": [preload("res://assets/art/forest/kit/toadstools.png")],
+	"log": [preload("res://assets/art/forest/trees/pale_log.png")],
+	"flat_rock": [preload("res://assets/art/forest/ground/flat_rock.png")],
+	"mossy_log": [preload("res://assets/art/forest/ground/mossy_log.png")],
+	"reeds": [preload("res://assets/art/forest/ground/reeds.png")],
+	"boulder_fern": [preload("res://assets/art/forest/ground/boulder_fern.png")],
+	"fungus": [preload("res://assets/art/forest/ground/fungus.png")],
+	"leaf_drift": [preload("res://assets/art/forest/ground/leaf_drift.png")],
+	"ruin": [preload("res://assets/art/forest/ground/ruin.png")],
 }
+## Thick roots hanging under a bank (the ground sheet).
+const HANG_ROOTS: Array[Texture2D] = [preload("res://assets/art/forest/ground/hanging_roots.png")]
 ## The forest's trees (Matt, 2026-10-24): a trunk stood on its foot, sections
 ## stacked up to its crown, leaves round the crown; and the greenery the
 ## rules place, all behind everything you touch. Fronds are the one thing
@@ -62,7 +85,9 @@ const TRUNK_CROWN: Texture2D = preload("res://assets/art/forest/trees/trunk_crow
 const LEAVES: Array[Texture2D] = [preload("res://assets/art/forest/trees/leaves_big.png")]
 const LEAVES_SMALL: Array[Texture2D] = [preload("res://assets/art/forest/trees/leaves_small.png")]
 const BUSH: Array[Texture2D] = [preload("res://assets/art/forest/trees/bush.png")]
-const MOSS: Array[Texture2D] = [preload("res://assets/art/forest/trees/moss.png")]
+const MOSS: Array[Texture2D] = [
+	preload("res://assets/art/forest/trees/moss.png"), preload("res://assets/art/forest/trees/ivy_curtain.png")
+]
 const FRONDS: Array[Texture2D] = [
 	preload("res://assets/art/forest/trees/fern_spray.png"), preload("res://assets/art/forest/trees/bush.png")
 ]
@@ -88,6 +113,29 @@ const CANOPY: Array[Vector3] = [
 ]
 ## One clump in this many of a crown is left out, picked per tree.
 const CANOPY_GAPS := 5
+## The pale tree (the second trees sheet): taller and twisted, ash-pale bark,
+## a willow's drooping leaves hanging round two limbs.
+const PALE_CANOPY: Array[Vector3] = [
+	Vector3(-96, 40, 0), Vector3(98, 36, 0), Vector3(-70, 24, 1), Vector3(72, 20, 1),
+	Vector3(-36, 10, 1), Vector3(38, 6, 1), Vector3(0, -6, 1), Vector3(-16, 30, 0),
+	Vector3(20, 34, 0), Vector3(-50, -2, 0), Vector3(54, -6, 0),
+]
+## Each kind of tree, by its `[decor]` foot and crown: the oak (`y`, `k`) and
+## the pale tree (`Y`, `K`). Placed by hand, never by rule.
+static var TREE_KINDS: Array[Dictionary] = [
+	{
+		"foot": "tree", "crown": "crown", "base": TRUNK_BASE, "sections": [TRUNK],
+		"crown_texture": TRUNK_CROWN, "crown_sink": 0, "canopy": CANOPY,
+		"leaves": LEAVES[0], "leaves_small": LEAVES_SMALL[0],
+	},
+	{
+		"foot": "pale_tree", "crown": "pale_crown", "base": preload("res://assets/art/forest/trees/pale_base.png"),
+		"sections": [preload("res://assets/art/forest/trees/pale_trunk.png"), preload("res://assets/art/forest/trees/pale_trunk_hole.png")],
+		"crown_texture": preload("res://assets/art/forest/trees/pale_crown.png"), "crown_sink": 2, "canopy": PALE_CANOPY,
+		"leaves": preload("res://assets/art/forest/trees/willow_big.png"),
+		"leaves_small": preload("res://assets/art/forest/trees/willow_small.png"),
+	},
+]
 ## Where a bough's leaves sit: from the tip of its texture, art px, along the
 ## bough and up, big then small.
 const BOUGH_LEAVES: Array[Vector2] = [Vector2(-14, -2), Vector2(-40, -14)]
@@ -371,6 +419,7 @@ static func draw_decor(canvas: CanvasItem, level: LevelGrid.Level, tiles: ActTil
 	# Set into the back wall, so shaded with it: the art's own big stones are
 	# what stand out from the brick, not a brightness the wall does not have.
 	_draw_kit(canvas, level, KIT, false, Palette.KIT_SHADE)
+	_draw_kit(canvas, level, YARD, false, Color.WHITE)
 	# Standing on the grass, unshaded as the tufts are: the forest's art is
 	# darker than the castle's, and shaded it went to grey shapes.
 	_draw_kit(canvas, level, FOREST_KIT, false, Color.WHITE)
@@ -383,48 +432,15 @@ static func draw_decor(canvas: CanvasItem, level: LevelGrid.Level, tiles: ActTil
 ## the crown (`k`) above it in the same column.
 static func draw_trees(canvas: CanvasItem, level: LevelGrid.Level) -> void:
 	var cell := level.cell
-	var crowns := level.decor_cells("crown")
-	for foot in level.decor_cells("tree"):
-		var crown := Vector2i(-1, -1)
-		for c in crowns:
-			if c.x == foot.x and c.y < foot.y and c.y > crown.y:
-				crown = c
-		if crown.y < 0:
-			continue
-		var cx := (foot.x + 0.5) * cell
-		var ground := (foot.y + 1) * cell
-		var top := (crown.y + 1) * cell
-		# About half the trees drawn mirrored, and each crown leaving out a
-		# clump or two of its own, so a stand of them is not one tree cloned.
-		var facing := -1.0 if TileVariety.pick(foot, 2) == 1 else 1.0
-		var middle := cx
-		canvas.draw_set_transform(Vector2(middle, 0.0), 0.0, Vector2(facing, 1.0))
-		cx = 0.0
-		var y := ground - TRUNK_BASE.get_height()
-		canvas.draw_texture(TRUNK_BASE, Vector2(roundf(cx - TRUNK_BASE.get_width() * 0.5), y))
-		# Every other section upside down, so each join is the same edge
-		# meeting itself rather than a seam.
-		var size := TRUNK.get_size()
-		var flipped := false
-		while y > top:
-			var part := minf(size.y, y - top)
-			var region := Rect2(0.0, 0.0 if flipped else size.y - part, size.x, part)
-			var at := Rect2(roundf(cx - size.x * 0.5), y - part, size.x, part)
-			if flipped:
-				canvas.draw_set_transform(Vector2(middle, at.position.y * 2.0 + part), 0.0, Vector2(facing, -1.0))
-			canvas.draw_texture_rect_region(TRUNK, at, region)
-			canvas.draw_set_transform(Vector2(middle, 0.0), 0.0, Vector2(facing, 1.0))
-			y -= part
-			flipped = not flipped
-		var crown_top := top - TRUNK_CROWN.get_height()
-		canvas.draw_texture(TRUNK_CROWN, Vector2(roundf(cx - TRUNK_CROWN.get_width() * 0.5), crown_top))
-		for i in CANOPY.size():
-			var clump := CANOPY[i]
-			if TileVariety.pick(foot + Vector2i(i, 0), CANOPY_GAPS) == 0:
-				continue
-			var texture: Texture2D = LEAVES[0] if clump.z > 0 else LEAVES_SMALL[0]
-			canvas.draw_texture(texture, (Vector2(cx + clump.x, crown_top + clump.y) - texture.get_size() * 0.5).round())
-		canvas.draw_set_transform(Vector2.ZERO)
+	for kind: Dictionary in TREE_KINDS:
+		var crowns := level.decor_cells(kind["crown"])
+		for foot in level.decor_cells(kind["foot"]):
+			var crown := Vector2i(-1, -1)
+			for c in crowns:
+				if c.x == foot.x and c.y < foot.y and c.y > crown.y:
+					crown = c
+			if crown.y >= 0:
+				_draw_tree(canvas, kind, foot, crown, cell)
 	for at in level.decor_cells("leaves"):
 		_draw_centred(canvas, LEAVES, at, cell)
 	for at in level.decor_cells("leaves_small"):
@@ -433,6 +449,8 @@ static func draw_trees(canvas: CanvasItem, level: LevelGrid.Level) -> void:
 		_draw_prop(canvas, BUSH, at, Vector2((at.x + 0.5) * cell, (at.y + 1) * cell + TUFT_SINK), true)
 	for at in level.decor_cells("moss"):
 		_draw_prop(canvas, MOSS, at, Vector2((at.x + 0.5) * cell, at.y * cell), false)
+	for at in level.decor_cells("hang_roots"):
+		_draw_prop(canvas, HANG_ROOTS, at, Vector2((at.x + 0.5) * cell, at.y * cell), false)
 
 
 ## Each bough in the level: the solid it covers, by its `[decor]` anchor (`<`
@@ -488,6 +506,51 @@ static func draw_boughs(canvas: CanvasItem, level: LevelGrid.Level) -> void:
 			var leaves: Texture2D = LEAVES[0] if i == 0 else LEAVES_SMALL[0]
 			var offset := Vector2(BOUGH_LEAVES[i].x * step, BOUGH_LEAVES[i].y)
 			canvas.draw_texture(leaves, (tip + offset - leaves.get_size() * 0.5).round())
+
+
+## One tree of `kind` (`TREE_KINDS`): its foot on the ground, its trunk up to
+## the crown cell, its crown and leaves above. About half are drawn mirrored
+## and each crown leaves out a clump or two of its own, so a stand of them is
+## not one tree cloned; trunk sections alternate upside down so a join is an
+## edge meeting itself, and a kind with more than one section picks per tree.
+static func _draw_tree(canvas: CanvasItem, kind: Dictionary, foot: Vector2i, crown: Vector2i, cell: float) -> void:
+	var base: Texture2D = kind["base"]
+	var crown_texture: Texture2D = kind["crown_texture"]
+	var sections: Array = kind["sections"]
+	var middle := (foot.x + 0.5) * cell
+	var ground := (foot.y + 1) * cell
+	var top := (crown.y + 1) * cell
+	var facing := -1.0 if TileVariety.pick(foot, 2) == 1 else 1.0
+	canvas.draw_set_transform(Vector2(middle, 0.0), 0.0, Vector2(facing, 1.0))
+	var y := ground - base.get_height()
+	canvas.draw_texture(base, Vector2(roundf(-base.get_width() * 0.5), y))
+	var flipped := false
+	var n := 0
+	while y > top:
+		var section: Texture2D = sections[TileVariety.pick(foot + Vector2i(0, n), sections.size())] if n % 3 == 1 else sections[0]
+		var size := section.get_size()
+		var part := minf(size.y, y - top)
+		var region := Rect2(0.0, 0.0 if flipped else size.y - part, size.x, part)
+		var at := Rect2(roundf(-size.x * 0.5), y - part, size.x, part)
+		if flipped:
+			canvas.draw_set_transform(Vector2(middle, at.position.y * 2.0 + part), 0.0, Vector2(facing, -1.0))
+		canvas.draw_texture_rect_region(section, at, region)
+		canvas.draw_set_transform(Vector2(middle, 0.0), 0.0, Vector2(facing, 1.0))
+		y -= part
+		flipped = not flipped
+		n += 1
+	var crown_top := top - crown_texture.get_height() + int(kind["crown_sink"])
+	canvas.draw_texture(crown_texture, Vector2(roundf(-crown_texture.get_width() * 0.5), crown_top))
+	var canopy: Array = kind["canopy"]
+	var big: Texture2D = kind["leaves"]
+	var small: Texture2D = kind["leaves_small"]
+	for i in canopy.size():
+		var clump: Vector3 = canopy[i]
+		if TileVariety.pick(foot + Vector2i(i, 0), CANOPY_GAPS) == 0:
+			continue
+		var texture := big if clump.z > 0 else small
+		canvas.draw_texture(texture, (Vector2(clump.x, crown_top + clump.y) - texture.get_size() * 0.5).round())
+	canvas.draw_set_transform(Vector2.ZERO)
 
 
 ## The fronds in front of the hero, sunk into the lip they grow from.

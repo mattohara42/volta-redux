@@ -55,16 +55,15 @@ whether a frond over the hero's legs ever hides something.
    are Claude's placements, easy to move in the level text.
 4. **Paint the forest's background, attempt 2**, in Gemini from the prompt in
    `ART.md` (*The forest*), saved to `assets/art_raw/forest_bg_2.*`. Attempt 1
-   is in and dimmed; tall levels mirror it into X shapes when zoomed out.
-5. **Paint the next sheets** (`ART.md`, *The next sheets*): a second tree,
-   the castle yard, forest ground cover; and the forest background attempt 2.
-6. **Look at the foreground kit in both Act 1 levels**: placements are
+   is in and dimmed; tall levels mirror it into X shapes when zoomed out. The
+   second tree, the castle yard and the ground cover are in.
+5. **Look at the foreground kit in both Act 1 levels**: placements are
    rules written into `[decor]`, easy to move by hand. Breach rubble near
    head height and the forest's darker ferns are the two to judge.
-7. **Frame time on a real machine**: `tools/dev.sh frametime`, then with
+6. **Frame time on a real machine**: `tools/dev.sh frametime`, then with
    `res://scenes/rooms/act1_forest.tscn` and `act1_wall.tscn`: p95 under
    16.7 ms? Blocks R3's frame-rate half.
-8. **Older and still open**: R2's final quality (the flame, the sword, the
+7. **Older and still open**: R2's final quality (the flame, the sword, the
    doors, the ride); `RoomM7Sheet` consistent in treatment (closes M7); the
    unattended calls from 2026-10-05; M4's dragon pacing; a play log (`user://`,
    #136) when one is to hand. Two rulings wait for N1: faster ladder

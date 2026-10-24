@@ -931,6 +931,43 @@ The nine, in reading order:
 Large, simple shapes and few small details: each piece reads at a glance as one clear silhouette with two or three values on it, because it will be shrunk to a few dozen pixels across. Thin strands, twigs and threads disappear at that size, so make every root, limb and rope thick and few. Flat, even light on every piece, no cast shadows on the backdrop and no light source painted into the sheet. Bark and roots are cold grey-violet, never warm brown. Moss, grass and leaves are dark grey-green and blue-green, as they look at night. Stone is cold blue-violet grey. The darkest darks are deep violet-blue, never neutral black. Nothing gold, nothing orange or red, nothing glowing, no warm brown wood, no thorns and no spikes. No characters, no creatures, no sky, no fire, no text and no labels. The image is 2560 by 1440 pixels, aspect ratio 16:9.
 ```
 
+**The ground sheet landed first attempt** (`act1_kit_ground.jpg`). Eight of
+nine are in: a flat rock, a mossy log, reeds, a boulder with ferns, bracket
+fungus, a drift of leaves and a ruin stone stand on or sit in the forest's
+ground, and thick roots hang under banks. The first piece, a bank cut open
+with its roots, came painted inside a rectangle of its own earth, which
+would clash with the bank it sat on, so it is left out. The floor rule now
+tries the next kind when a spot is too narrow for its own, and runs before
+the bushes, which fill what is left; grass tufts come after both, since a
+tuft in every third cell would block anything wider than one. The forest's
+`[decor]` was regenerated with `--replace` and its hand-placed trees and
+boughs put back.
+
+**The yard sheet landed first attempt** (`act1_kit_yard.jpg`): trebuchet,
+ballista, cart, barrels, crates, weapon rack, stone shot, rubble and sacks,
+the wood cold and weathered as asked. Each pixelated at a scale of its own
+(a trebuchet is not barrel-sized: 0.26 against 0.15) and lifted 1.35 to read
+against the bailey's wall. Placed by `DecorRules`' yard rule on open floors
+(castle style), one in two tried every eight cells, big pieces rarer, clear
+of torches, ladders, braziers and of anything the map placed or a creature
+patrols. Added to the outer wall with `--add`, keeping its hand edits: 20
+pieces, one trebuchet. Drawn unshaded behind everything.
+
+**The second trees sheet landed first attempt** (`act1_kit_trees_2.jpg`):
+a pale, twisted tree with a willow's drooping leaves. Gemini drew both trunk
+sections like stumps, their flat top face showing, so the top 24 px of each
+was trimmed and the rounded foot cut back before warping both to one width
+(104, as the oak's trunk was), so plain and hollow sections stack either way.
+The crown was widened so its foot meets the trunk. Scale 0.3 (a 31 px trunk,
+narrower than the oak's 45), foliage 0.22. The bark came out the brightest
+thing on screen and was dimmed to 0.75. The dead limb is not used yet.
+
+**In the game**: `TileArt.TREE_KINDS` holds both trees, drawn by one
+routine. The pale tree is `Y` (foot) and `K` (crown) in `[decor]`, by hand;
+four of the forest's nine trees are pale now, alternating with the oaks.
+The ivy curtain joins the moss under branches, and the hollow log is a
+floor prop (`L`), one placed by hand where the rule found no room.
+
 ### The forest's trees (2026-10-24, for Matt to paint in Gemini)
 
 **Why.** Matt, with two reference shots from *Ghosts 'n Goblins
