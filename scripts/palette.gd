@@ -77,6 +77,11 @@ const WALL_DARK := Color(0.36, 0.35, 0.40)
 # stands behind everything you can touch, so it is darker and cooler than any
 # of it ("Backgrounds lose").
 const BACK_SHADE := Color(0.30, 0.29, 0.38)
+# Weather on a level's stone (`shaders/weather.gdshader`), as multipliers on
+# the art. Damp is darker and pulled toward the moat's green; dry is a little
+# lifted and faded toward violet. Both keep a dark the coloured dark it was.
+const WEATHER_DAMP := Color(0.66, 0.76, 0.72)
+const WEATHER_DRY := Color(1.22, 1.17, 1.26)
 
 
 ## Every named colour, so the rule check has something to iterate.

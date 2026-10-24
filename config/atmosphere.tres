@@ -98,3 +98,7 @@ ground_shade_from = 1.0
 ground_shade_span = 3.0
 ground_shade_most = 0.9
 ground_shade_steps = 4.0
+weather_patch_size = 96.0
+weather_damp_most = 1.0
+weather_dry_most = 1.0
+weather_steps = 3.0
