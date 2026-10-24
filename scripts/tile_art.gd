@@ -65,7 +65,16 @@ const FOREST_KIT := {
 	"fern": [preload("res://assets/art/forest/kit/fern.png")],
 	"toadstools": [preload("res://assets/art/forest/kit/toadstools.png")],
 	"log": [preload("res://assets/art/forest/trees/pale_log.png")],
+	"flat_rock": [preload("res://assets/art/forest/ground/flat_rock.png")],
+	"mossy_log": [preload("res://assets/art/forest/ground/mossy_log.png")],
+	"reeds": [preload("res://assets/art/forest/ground/reeds.png")],
+	"boulder_fern": [preload("res://assets/art/forest/ground/boulder_fern.png")],
+	"fungus": [preload("res://assets/art/forest/ground/fungus.png")],
+	"leaf_drift": [preload("res://assets/art/forest/ground/leaf_drift.png")],
+	"ruin": [preload("res://assets/art/forest/ground/ruin.png")],
 }
+## Thick roots hanging under a bank (the ground sheet).
+const HANG_ROOTS: Array[Texture2D] = [preload("res://assets/art/forest/ground/hanging_roots.png")]
 ## The forest's trees (Matt, 2026-10-24): a trunk stood on its foot, sections
 ## stacked up to its crown, leaves round the crown; and the greenery the
 ## rules place, all behind everything you touch. Fronds are the one thing
@@ -440,6 +449,8 @@ static func draw_trees(canvas: CanvasItem, level: LevelGrid.Level) -> void:
 		_draw_prop(canvas, BUSH, at, Vector2((at.x + 0.5) * cell, (at.y + 1) * cell + TUFT_SINK), true)
 	for at in level.decor_cells("moss"):
 		_draw_prop(canvas, MOSS, at, Vector2((at.x + 0.5) * cell, at.y * cell), false)
+	for at in level.decor_cells("hang_roots"):
+		_draw_prop(canvas, HANG_ROOTS, at, Vector2((at.x + 0.5) * cell, at.y * cell), false)
 
 
 ## Each bough in the level: the solid it covers, by its `[decor]` anchor (`<`

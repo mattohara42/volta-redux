@@ -931,6 +931,18 @@ The nine, in reading order:
 Large, simple shapes and few small details: each piece reads at a glance as one clear silhouette with two or three values on it, because it will be shrunk to a few dozen pixels across. Thin strands, twigs and threads disappear at that size, so make every root, limb and rope thick and few. Flat, even light on every piece, no cast shadows on the backdrop and no light source painted into the sheet. Bark and roots are cold grey-violet, never warm brown. Moss, grass and leaves are dark grey-green and blue-green, as they look at night. Stone is cold blue-violet grey. The darkest darks are deep violet-blue, never neutral black. Nothing gold, nothing orange or red, nothing glowing, no warm brown wood, no thorns and no spikes. No characters, no creatures, no sky, no fire, no text and no labels. The image is 2560 by 1440 pixels, aspect ratio 16:9.
 ```
 
+**The ground sheet landed first attempt** (`act1_kit_ground.jpg`). Eight of
+nine are in: a flat rock, a mossy log, reeds, a boulder with ferns, bracket
+fungus, a drift of leaves and a ruin stone stand on or sit in the forest's
+ground, and thick roots hang under banks. The first piece, a bank cut open
+with its roots, came painted inside a rectangle of its own earth, which
+would clash with the bank it sat on, so it is left out. The floor rule now
+tries the next kind when a spot is too narrow for its own, and runs before
+the bushes, which fill what is left; grass tufts come after both, since a
+tuft in every third cell would block anything wider than one. The forest's
+`[decor]` was regenerated with `--replace` and its hand-placed trees and
+boughs put back.
+
 **The yard sheet landed first attempt** (`act1_kit_yard.jpg`): trebuchet,
 ballista, cart, barrels, crates, weapon rack, stone shot, rubble and sacks,
 the wood cold and weathered as asked. Each pixelated at a scale of its own

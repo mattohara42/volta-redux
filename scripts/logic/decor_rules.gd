@@ -15,7 +15,8 @@
 ##            the torches; ivy hanging from a ceiling; the same features
 ##            set into the face of a big block of stone, away from its edge;
 ##            siege gear and stores standing about on open floors (the yard)
-##   forest   a fern, toadstools or a hollow log on the grass now
+##   forest   ferns, toadstools, logs, reeds, rocks, fungus or leaves on
+##            the grass now; roots hanging thick under a bank; and
 ##            and then, and bushes behind; leaves at a branch's free end
 ##            and moss under it; fronds in front of the hero along the
 ##            lowest ground, clear of anything you play against; tufts on
@@ -71,7 +72,10 @@ const FOOTPRINTS := {
 	"trebuchet": Vector3i(3, 5, 0), "ballista": Vector3i(2, 3, 0), "cart": Vector3i(2, 3, 0),
 	"barrels": Vector3i(1, 3, 0), "crates": Vector3i(2, 3, 0), "rack": Vector3i(2, 3, 0),
 	"shot": Vector3i(1, 2, 0), "rubble": Vector3i(2, 2, 0), "sacks": Vector3i(1, 2, 0),
-	"log": Vector3i(2, 3, 0), "bush": Vector3i(2, 3, 0), "moss": Vector3i(2, 3, 0), "frond": Vector3i(2, 3, 0),
+	"log": Vector3i(2, 3, 0),
+	"flat_rock": Vector3i(2, 2, 0), "mossy_log": Vector3i(2, 2, 0), "reeds": Vector3i(2, 2, 0),
+	"boulder_fern": Vector3i(2, 2, 0), "fungus": Vector3i(1, 2, 0), "leaf_drift": Vector3i(2, 1, 0),
+	"ruin": Vector3i(2, 2, 0), "hang_roots": Vector3i(2, 3, 0), "bush": Vector3i(2, 3, 0), "moss": Vector3i(2, 3, 0), "frond": Vector3i(2, 3, 0),
 }
 ## Features set into a block's face (Matt, 2026-10-24: the giant blocks are
 ## the problem; built faces, not slabs). One is tried in each bay of
@@ -85,12 +89,19 @@ const FACE_FEATURES: PackedStringArray = ["slit", "pier", "drain", "breach", "ri
 ## The forest's, set into a bank of earth the same way (the forest kit),
 ## a skull rarer than a stone, and only one bay in `FOREST_FACE_ONE_IN`
 ## tried, or a bank reads as a graveyard.
-const FOREST_FACE: PackedStringArray = ["boulder", "stones", "strata", "standing_stone", "boulder", "stones", "skull"]
+const FOREST_FACE: PackedStringArray = ["boulder", "stones", "strata", "standing_stone", "boulder", "stones", "skull", "ruin"]
 const FOREST_FACE_ONE_IN := 3
 ## What stands on the forest's grass: one tried each `FLOOR_PITCH` cells
 ## along a lip, one in `FLOOR_ONE_IN` of those, its footprint all air. Not
 ## the kit's long grass: pale and spiky beside a scorpion, it read as one.
-const FOREST_FLOOR: PackedStringArray = ["fern", "toadstools", "log"]
+const FOREST_FLOOR: PackedStringArray = [
+	"fern", "toadstools", "log", "reeds", "boulder_fern", "fungus", "leaf_drift", "flat_rock", "mossy_log",
+]
+## Thick roots hanging under a bank of earth, one in `HANG_ONE_IN` cells of
+## its underside, `HANG_PITCH` apart, where there is `HANG_HEADROOM` of air.
+const HANG_ONE_IN := 5
+const HANG_PITCH := 9
+const HANG_HEADROOM := 4
 const FLOOR_PITCH := 5
 const FLOOR_ONE_IN := 3
 ## The forest's trees (Matt, 2026-10-24: greenery all round them). A bush
@@ -148,8 +159,9 @@ static func place(level: LevelGrid.Level, style: String) -> Array[String]:
 	elif style == "forest":
 		_fronds(level, rows, grid)
 		_branches(rows, grid)
-		_bushes(rows, grid)
 		_floor_props(rows, grid)
+		_bushes(rows, grid)
+		_hanging_roots(rows, grid)
 		_tufts(rows, grid)
 		_roots(rows, grid)
 		_faces(rows, grid, FOREST_FACE, false, FOREST_FACE_ONE_IN, "#")
@@ -437,13 +449,34 @@ static func _floor_props(rows: Array[String], grid: Array[String]) -> void:
 		for x in rows[y].length():
 			if rows[y][x] != "#" or x - last < FLOOR_PITCH or _hash(x, y) % FLOOR_ONE_IN != 0:
 				continue
-			var kind := FOREST_FLOOR[_hash(x * 7 + 3, y * 13 + 5) % FOREST_FLOOR.size()]
-			var foot: Vector3i = FOOTPRINTS[kind]
-			var lip := true
+			# The spot's own kind first, then the next, so a narrow spot still
+			# takes something narrow.
+			var start := _hash(x * 7 + 3, y * 13 + 5) % FOREST_FLOOR.size()
+			for i in FOREST_FLOOR.size():
+				var kind := FOREST_FLOOR[(start + i) % FOREST_FLOOR.size()]
+				var foot: Vector3i = FOOTPRINTS[kind]
+				var lip := true
+				for dx in range(-foot.x, foot.x + 1):
+					lip = lip and x + dx >= 0 and x + dx < rows[y].length() and rows[y][x + dx] == "#"
+				if lip and _fits(rows, grid, {}, x, y - foot.y, y - 1, foot.x, false):
+					_put(rows, grid, x, y - 1, _char(kind))
+					last = x
+					break
+
+
+## Thick roots hanging from a run of earth three cells wide, with room below.
+static func _hanging_roots(rows: Array[String], grid: Array[String]) -> void:
+	var foot: Vector3i = FOOTPRINTS["hang_roots"]
+	for y in range(1, rows.size()):
+		var last := -HANG_PITCH
+		for x in range(foot.x, rows[y].length() - foot.x):
+			if x - last < HANG_PITCH or _hash(x * 13 + 2, y) % HANG_ONE_IN != 0 or _headroom(rows, x, y) < HANG_HEADROOM:
+				continue
+			var hung := true
 			for dx in range(-foot.x, foot.x + 1):
-				lip = lip and x + dx >= 0 and x + dx < rows[y].length() and rows[y][x + dx] == "#"
-			if lip and _fits(rows, grid, {}, x, y - foot.y, y - 1, foot.x, false):
-				_put(rows, grid, x, y - 1, _char(kind))
+				hung = hung and rows[y - 1][x + dx] == "#"
+			if hung and _fits(rows, grid, {}, x, y, y + foot.y - 1, foot.x, false):
+				_put(rows, grid, x, y, _char("hang_roots"))
 				last = x
 
 

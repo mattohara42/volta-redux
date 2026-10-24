@@ -53,12 +53,11 @@ whether a frond over the hero's legs ever hides something.
 3. **Look at N2's after shots** (the PR) or play either Act 1 level: is a
    shot natural-looking? That closes N2. The back walls, torches and trunks
    are Claude's placements, easy to move in the level text.
-4. **Paint the forest's background, attempt 2**, in Gemini from the prompt in
+4. **(see 5) The forest's background, attempt 2**, in Gemini from the prompt in
    `ART.md` (*The forest*), saved to `assets/art_raw/forest_bg_2.*`. Attempt 1
    is in and dimmed; tall levels mirror it into X shapes when zoomed out.
-5. **Paint the next sheets** (`ART.md`, *The next sheets*): forest ground
-   cover, and the forest background attempt 2. The second tree and the
-   castle yard are in.
+5. **Paint the forest background, attempt 2** (prompt in `ART.md`, *The
+   forest*). The second tree, the castle yard and the ground cover are in.
 6. **Look at the foreground kit in both Act 1 levels**: placements are
    rules written into `[decor]`, easy to move by hand. Breach rubble near
    head height and the forest's darker ferns are the two to judge.
