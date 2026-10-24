@@ -734,13 +734,23 @@ func _draw() -> void:
 ## still while the body is placed back at the checkpoint underneath it, which is
 ## what lets it outlast the loop without costing any of SPEC.md's one second.
 ##
-## It fades over its last third rather than vanishing. Derived from
-## `message_seconds` rather than being its own number, so retuning how long the
-## line lingers retunes how long it takes to leave.
+## It flies in from behind the room, punches, settles, and flies on toward you
+## as it fades (`DeathMessageMotion`). The scale is pivoted on the label's
+## centre, which is the screen's, so the line grows about where it is read.
 func _update_message() -> void:
 	if _message_timer <= 0.0 or message_index < 0:
 		_message_label.text = ""
 		return
 	_message_label.text = DeathMessages.message_at(message_index)
-	var fade := maxf(death_config.message_seconds / 3.0, 0.01)
-	_message_label.modulate = Color(1.0, 1.0, 1.0, clampf(_message_timer / fade, 0.0, 1.0))
+	var c := death_config
+	var elapsed := c.message_seconds - _message_timer
+	# The smallest scale that keeps one font pixel a whole game pixel.
+	var step := float(Lettering.GRID) / float(c.message_font_size)
+	var s := DeathMessageMotion.scale_at(
+		elapsed, c.message_seconds, c.message_fly_in, c.message_settle, c.message_fade_out,
+		c.message_scale_from, c.message_scale_punch, c.message_scale_exit, step
+	)
+	_message_label.pivot_offset = (_message_label.size / 2.0).round()
+	_message_label.scale = Vector2(s, s)
+	var alpha := DeathMessageMotion.alpha_at(elapsed, c.message_seconds, c.message_fly_in, c.message_fade_out)
+	_message_label.modulate = Color(1.0, 1.0, 1.0, alpha)

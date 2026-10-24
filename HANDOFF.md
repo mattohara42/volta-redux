@@ -56,6 +56,12 @@ card moved up off the floor; each act named as it begins; act cards say
 room tag hidden in act rooms (F1 still names the room). Matt's to judge the
 font and the end card's wording.
 
+**The death line moves (Matt, 2026-10-24):** it flies in from behind the
+room, punches to 1.5x, settles, and flies on toward the camera as it fades.
+The scale steps by half (Matt chose this over smooth zoom) so the pixel font
+never splits a pixel (`DeathMessageMotion`, `config/death.tres`). Matt's to
+play: whether the fly-in (0.2 s) reads, and the punch and exit sizes.
+
 ## Blocked on Matt
 
 1. **Play Act 1 from a new game, with the kids** (the rebuilt wall is level

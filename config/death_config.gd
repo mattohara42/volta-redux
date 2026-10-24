@@ -28,6 +28,18 @@ extends Resource
 ## it is as large as the cards' lettering. A multiple of the font's 10 px grid
 ## (`Lettering`).
 @export var message_font_size: int = 20
+## How the line arrives and leaves (`DeathMessageMotion`). It flies in from
+## behind the room over `message_fly_in` seconds, growing from
+## `message_scale_from` to `message_scale_punch`, settles to its reading size
+## over `message_settle`, and over its last `message_fade_out` seconds keeps
+## growing toward `message_scale_exit` as it fades. Every scale is snapped to
+## the font's pixel grid, so at 20 px only multiples of 0.5 mean anything.
+@export var message_fly_in: float = 0.2
+@export var message_settle: float = 0.15
+@export var message_fade_out: float = 0.45
+@export var message_scale_from: float = 0.5
+@export var message_scale_punch: float = 1.5
+@export var message_scale_exit: float = 3.0
 
 @export_group("What comes back")
 ## Whether a respawn restores the swords you had spent. SPEC.md says it does:
