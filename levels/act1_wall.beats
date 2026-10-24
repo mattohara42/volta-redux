@@ -138,5 +138,11 @@ can kill you: the scorpion
 # - 16: the "throw down from the planks' end" answer is not built (throws are
 #   flat); the other way in is a ladder down that lands you facing the
 #   scorpion. The planks end on stone so coming back is a second landing.
+#   The planks start a cell short of that ladder (2026-10-24): a one-cell
+#   hole beside them was narrower than the hero, so the climb back up
+#   stopped under the planks (and no one fitted down it either). The hole
+#   is two cells now: a climb back up, a drop that lands you facing the
+#   scorpion as the note above meant, and a hop onto the planks going out.
+#   Walk-back knows the hero's width now.
 # - 17: "the yard wall's step" is a step on a pillar in the yard, level with
 #   the plinth's top plus a sill.

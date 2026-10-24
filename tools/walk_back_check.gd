@@ -97,7 +97,10 @@ func _draw(room: String, layout: WalkBack.Layout, report: WalkBack.Report) -> vo
 		_fill(image, solid, colour)
 	for hazard in layout.deadly:
 		_fill(image, hazard, Palette.LAVA_FLOW)
+	# A ladder's part a hero cannot climb (a hole too narrow) stays dark.
 	for ladder in layout.ladders:
+		_fill(image, ladder, Palette.STONE_DEEP)
+	for ladder in report.climbable:
 		_fill(image, ladder, Palette.GOLD_SHADE)
 	for surface in report.surfaces:
 		_fill(image, Rect2(surface.position.x, surface.position.y - 1.0, surface.size.x, 2.0), Palette.STONE_LIT)

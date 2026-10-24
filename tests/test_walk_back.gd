@@ -62,6 +62,36 @@ func test_a_ladder_is_a_way_back() -> void:
 	check_eq(report.stranded.size(), 0, "the ladder at the foot of the drop serves the top")
 
 
+## A ladder up through a hole in a floor too high to jump to. The hero is
+## wider than one cell, so a one-cell hole stops the climb under the floor,
+## and the walk-back model has to know it (N3 slice 1, found by a real run).
+func _hole(hole: float) -> WalkBack.Layout:
+	var upper := FLOOR - 120.0
+	var layout := WalkBack.Layout.new()
+	layout.solids = [
+		Rect2(0.0, FLOOR, WIDTH, 360.0 - FLOOR),
+		Rect2(0.0, upper, 320.0, 16.0),
+		Rect2(320.0 + hole, upper, WIDTH - 320.0 - hole, 16.0),
+		Rect2(-24.0, 0.0, 24.0, 360.0),
+		Rect2(WIDTH, 0.0, 24.0, 360.0),
+	]
+	layout.ladders = [Rect2(320.0, upper, 16.0, FLOOR - upper)]
+	layout.start = Vector2(40.0, FLOOR)
+	layout.exit = Rect2(600.0, upper - 48.0, 8.0, 48.0)
+	return layout
+
+
+func test_a_ladder_climbs_only_through_a_hole_the_hero_fits() -> void:
+	var narrow := WalkBack.check(_hole(16.0), _moves())
+	check(not narrow.exit_reached, "a one-cell hole is narrower than the hero")
+	check_eq(narrow.climbable.size(), 1, "the ladder is climbable under the floor only")
+	check_eq(narrow.climbable[0].position.y, FLOOR - 104.0 + WORLD.hero_height, "up to a head under the floor")
+	var wide := WalkBack.check(_hole(32.0), _moves())
+	check(wide.exit_reached, "a two-cell hole lets the hero through")
+	check_eq(wide.climbable.size(), 1, "and the ladder is whole")
+	check_eq(wide.stranded.size(), 0, "and climbs back down")
+
+
 ## A tall wooden wall in the middle of a flat room: a sword thrown into it is
 ## the only way over, and coming back over it would need another.
 func test_a_sword_ledge_goes_forward_and_never_home() -> void:

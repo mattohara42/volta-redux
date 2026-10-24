@@ -1683,6 +1683,19 @@ SCENARIOS: list[dict] = [
 		],
 	},
 	{
+		"name": "N3 wall: the ladder past the inner gate climbs through the roof beside the planks",
+		"scene": "res://scenes/rooms/act1_wall.tscn",
+		"out": "act1_wall_gate_roof_climb.png",
+		"input": "climb_up:240;move_left:20;-:20",
+		"zoom": 1.0,
+		"centre": (7740, 560),
+		"at": (7736, 704),
+		"checks": [
+			{"type": "player_position", "max_y": 420,
+				"message": "the hero should climb out onto the roof, through the hole beside the planks"},
+		],
+	},
+	{
 		"name": "N3 wall: the lookout's planks hold going out and drop you on the walk coming back",
 		"scene": "res://scenes/rooms/act1_wall.tscn",
 		"out": "act1_wall_lookout.png",
@@ -1864,7 +1877,7 @@ SCENARIOS: list[dict] = [
 		"name": "N3 wall: drop through the plinth approach's planks behind the scorpion and kill it",
 		"scene": "res://scenes/rooms/act1_wall.tscn",
 		"out": "act1_wall_plinth_approach.png",
-		"input": "move_right:70;-:180;move_left:30;-:62;move_right:1;-:2;throw:4;-:40",
+		"input": "move_right,jump:16;move_right:54;-:180;move_left:30;-:62;move_right:1;-:2;throw:4;-:40",
 		"zoom": 1.0,
 		"centre": (7850, 560),
 		"at": (7700, 416),
