@@ -297,6 +297,21 @@ def pull():
     return fade(mix(suck * 1.2, groan))
 
 
+def thunder():
+    """The storm, close: a hard crack overhead and the roll after it, breaking
+    up as it goes. The flash comes first and this a moment later (`Storm`)."""
+    dur = 4.5
+    rng = np.random.default_rng(140)
+    crack = highpass(noise(0.18, seed=141), 900.0) * decay(0.18, 0.04) * 1.6
+    splits = [delayed(highpass(noise(0.06, seed=142 + i), 1500.0) * decay(0.06, 0.012) * rng.uniform(0.5, 1.0), float(at))
+              for i, at in enumerate(np.sort(rng.uniform(0.02, 0.25, 5)))]
+    t = time(dur)
+    rolls = 0.5 + 0.5 * np.abs(np.sin(2 * np.pi * t * 1.3) * np.sin(2 * np.pi * t * 0.55 + 0.7))
+    rumble = lowpass(noise(dur, seed=148), sweep(900.0, 70.0, dur)) * adsr(dur, 0.08, 0.6, 0.7, 2.6)
+    rumble = rumble * rolls * 2.4
+    return fade(soft_clip(mix(crack, *splits, rumble), 1.4))
+
+
 def card():
     """An act ending: three low notes, the last held."""
     parts = []
@@ -336,6 +351,7 @@ RECIPES = {
     "bolt": bolt,
     "pull": pull,
     "card": card,
+    "thunder": thunder,
 }
 ## The ones the engine loops rather than plays once.
 LOOPS = {"sword_fly"}
@@ -349,6 +365,7 @@ LEVELS = {
     "hero_respawn": 0.45, "brazier": 0.7, "chest": 0.6, "kill": 0.8, "gem": 0.6,
     "gem_set": 0.75, "switch": 0.6, "gate": 0.65, "zap": 0.55, "short": 0.95,
     "geyser": 0.5, "crumble": 0.55, "roar": 0.85, "bolt": 0.7, "pull": 0.75, "card": 0.7,
+    "thunder": 0.9,
 }
 
 
@@ -366,15 +383,33 @@ def _seamless(x, fade=0.5):
     return body
 
 
-def amb_wind():
-    """Act 1: wind along the outer wall at night, gusting."""
-    dur = 14.0
+def _gust(dur):
     t = time(dur)
-    gust = 0.55 + 0.45 * np.sin(2 * np.pi * t / 7.0) * np.sin(2 * np.pi * t / 3.1 + 1.0)
+    return 0.55 + 0.45 * np.sin(2 * np.pi * t / 7.0) * np.sin(2 * np.pi * t / 3.1 + 1.0)
+
+
+def _wind(dur):
+    gust = _gust(dur)
     air = noise(dur, seed=100)
     body = bandpass(air, 300.0 + 500.0 * gust, q=0.9) * (0.4 + 0.6 * gust)
     whistle = bandpass(noise(dur, seed=101), 1400.0 + 400.0 * gust, q=6.0) * gust * 0.25
-    return _seamless(mix(body, whistle))
+    return mix(body, whistle)
+
+
+def amb_wind():
+    """Act 1: wind along the outer wall at night, gusting."""
+    return _seamless(_wind(14.0))
+
+
+def amb_storm():
+    """Act 1 under the storm: the wall's wind, and rain driven hard across
+    it, the rain coming in gusts with the wind."""
+    dur = 14.0
+    rain = bandpass(noise(dur, seed=105), 2600.0, q=0.5) * (0.5 + 0.5 * _gust(dur)) * 0.9
+    rng = np.random.default_rng(106)
+    drops = (rng.random(samples(dur)) > 0.996).astype(float) * rng.uniform(0.2, 1.0, samples(dur))
+    drops = bandpass(drops, 4200.0, q=1.2) * 0.6
+    return _seamless(mix(_wind(dur) * 0.8, rain, drops))
 
 
 def amb_cavern():
@@ -444,17 +479,18 @@ def loop_arc():
 
 RECIPES.update({
     "amb_wind": amb_wind,
+    "amb_storm": amb_storm,
     "amb_cavern": amb_cavern,
     "amb_works": amb_works,
     "amb_hall": amb_hall,
     "loop_lava": loop_lava,
     "loop_arc": loop_arc,
 })
-LOOPS.update({"amb_wind", "amb_cavern", "amb_works", "amb_hall", "loop_lava", "loop_arc"})
+LOOPS.update({"amb_wind", "amb_storm", "amb_cavern", "amb_works", "amb_hall", "loop_lava", "loop_arc"})
 LEVELS.update({
-    "amb_wind": 0.5, "amb_cavern": 0.6, "amb_works": 0.5, "amb_hall": 0.55,
+    "amb_wind": 0.5, "amb_storm": 0.55, "amb_cavern": 0.6, "amb_works": 0.5, "amb_hall": 0.55,
     "loop_lava": 0.6, "loop_arc": 0.45,
 })
 ## The beds are long, so they are written as Ogg rather than WAV; the code
 ## that plays them sets them looping (`Audio.looping`).
-BEDS = {"amb_wind", "amb_cavern", "amb_works", "amb_hall"}
+BEDS = {"amb_wind", "amb_storm", "amb_cavern", "amb_works", "amb_hall"}

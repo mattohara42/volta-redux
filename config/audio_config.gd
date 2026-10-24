@@ -47,6 +47,10 @@ extends Resource
 @export var bolt: AudioStream
 @export var pull: AudioStream
 
+@export_group("The storm")
+## The crack after a lightning flash (`Storm`), heard everywhere at once.
+@export var thunder: AudioStream
+
 @export_group("Loops on things")
 ## Sounds that sit on a thing in the room for as long as it is there: a lava
 ## pit's roar, an arc's buzz. Heard within `loop_reach` px and gone past it,

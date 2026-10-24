@@ -30,12 +30,18 @@ extends Resource
 @export_file("*.tscn") var boss_room: String = ""
 @export var boss_music: AudioStream
 ## The act's ambience bed (`tools/synth/sfx.py`), under the music: wind on the
-## wall, the mountain breathing, the works humming, rain in the hall.
+## wall in the rain, the mountain breathing, the works humming, rain in the hall.
 @export var ambience: AudioStream
 
 ## The far layers drawn by `Backdrop` while the act has no painted background:
 ## 0 none, 1 the caverns, 2 the works, 3 the hall (`Backdrop.Style`).
 @export_enum("None", "Cavern", "Works", "Hall") var backdrop: int = 0
+
+## The storm over the act (`Storm`): none; rain driven across the foreground
+## and lightning behind the room (Act 1, out on the wall); or lightning seen
+## only through the painting's windows (Act 4, inside the hall). Either
+## flashes over everything with thunder after it.
+@export_enum("None", "Rain", "Windows") var storm: int = 0
 
 @export_group("Light")
 ## What the dark is in this act: everything no light reaches is multiplied by

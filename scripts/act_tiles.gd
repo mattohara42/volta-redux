@@ -18,6 +18,10 @@ extends Resource
 ## px. Each becomes a light in the room's `LightField`, so the dark draws back
 ## around what the painter lit and the painting and the room agree.
 @export var lights: PackedVector2Array = PackedVector2Array()
+## The painting's windows onto the sky, in one copy of it, art px: each pane's
+## box from the tip of its arch to its sill. A storm (`Storm`) flashes and
+## strikes inside them, and nowhere else on the painting.
+@export var windows: Array[Rect2] = []
 ## The face of a wall you cannot stand on (`%`): masonry in the castle, cold
 ## bark on the forest's trunks. Empty draws `wall_tiles`.
 @export var face_tiles: Array[Texture2D] = []

@@ -74,6 +74,13 @@ reading before the hue does.
 Cyan going to white, thin and hard-edged against everything else being soft.
 `#5fe0e8` arc, `#eafcff` core, `#2a6f8a` residue.
 
+**The storm is Volta's too** (Matt, 2026-10-24). Lightning over the outer
+wall in Act 1, and through the hall's windows in Act 4, is his electricity
+seen from a long way off: foreshadowing, so it uses his colour rather than
+breaking the rule. The flash over everything is the arc's core, `#eafcff`,
+never a pure white, and a bolt is only ever drawn where the sky shows
+(Act 4's windows). Rain is cold stone, `#7d7a99`, under the room's dark.
+
 **Gold.** Gems, keys, the sword's edge, anything the player collects or uses.
 Reserved. If it is gold, it is interactive.
 `#e8c25a` face, `#a37c26` shade.
