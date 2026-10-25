@@ -104,12 +104,13 @@ and the level geometry to serve it. Concretely, the sword does five things:
    held open by a sword would always cost that sword; barriers are therefore
    always on, and the decision is where you stand when you recall.
 
-**A slash is coming** (Matt, 2026-10-25, built after G2): swing the sword in
-your hand instead of throwing it, and keep it. It saves a sword in a close
-fight. Open until it is built: whether it can hurt the bosses (Claude
-recommends not, or the anti-sword bosses below stop being anti-sword), its
-reach and recovery (the dials that stop it making the throw optional), and
-what it does with no sword in hand.
+**A slash is coming** (Matt, 2026-10-25, built after G2). The hero carries
+the throwing swords (three, cap five) and one more that never leaves his
+hand. He slashes with that one, so the slash is always there, even with
+every throwing sword spent, and it costs nothing. Open until it is built:
+whether it can hurt the bosses (Claude recommends not, or the anti-sword
+bosses below stop being anti-sword), and its reach and recovery, the dials
+that stop it making the throw optional.
 
 **The sword count is the difficulty dial and it is small.** Start with three,
 cap at five. Ten was too many to make any single throw matter.

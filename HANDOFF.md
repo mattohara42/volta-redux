@@ -29,8 +29,9 @@ overruling the R4-waits rule for planning only): `levels/act2_caverns.beats`,
 Matt approves it. His answers to its questions are at its foot (*Decided*).
 
 **Waiting for after G2** (Matt, 2026-10-25): the hunting scorpion and the
-slash, both in `SPEC.md`. Built after Matt plays N3, so his play of the wall
-compares like with like.
+slash with the sword that never leaves his hand (`SPEC.md`), and the
+original's timed portal replacing the stumps (`LEVELS.md`). Built after Matt
+plays N3, so his play of the wall compares like with like.
 
 **The foreground kit and the new trees and assets are good enough to go on
 with** (Matt, 2026-10-24, from the shots of the forest and the castle).
