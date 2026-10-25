@@ -131,7 +131,7 @@ Godot is not on the PATH on Matt's Mac, so `godot` typed alone fails with
 2. `tools/dev.sh import`, since `*.import` is gitignored and new art needs it.
 3. Sound on. `tools/dev.sh play`. For a run from the start, Esc, NEW GAME.
 4. Controls: A/D or arrows move, Space jumps, W/S climb, J throws, hold J to
-   recall, Esc pauses. F1 and F2 are bench tools: F2 leaves the game for the
+   recall, K slashes, Esc pauses. F1 and F2 are bench tools: F2 leaves the game for the
    benches, so leave both alone during a run.
 5. Play every room straight through and note anything that makes you stop.
    What to watch for right now is `HANDOFF.md` → *Blocked on Matt*.

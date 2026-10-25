@@ -350,6 +350,40 @@ SCENARIOS: list[dict] = [
 		],
 	},
 	{
+		# SPEC.md, the slash (Matt, 2026-10-25): run up behind the scorpion as
+		# it walks away and cut it. Free: the hand still holds three.
+		"name": "Slash a scorpion in the back",
+		"scene": "res://scenes/rooms/room_m4_enemies.tscn",
+		"out": "room_m4_slash_back.png",
+		"input": "debug_toggle_overlay:1;move_right:78;slash:2;-:30",
+		"zoom": 3.0,
+		"centre": (310, 290),
+		"checks": [
+			{"type": "not_contains", "pattern": "scorpion alive",
+				"message": "a slash into the scorpion's back should have killed it"},
+			{"type": "contains", "pattern": "3 sword(s) held",
+				"message": "the slash should not have spent a throwing sword"},
+			{"type": "contains", "pattern": "capture: no deaths",
+				"message": "the hero should not have died cutting it from behind"},
+		],
+	},
+	{
+		# Meet it head on and cut its face from 18 px, inside the 22 px reach:
+		# the armour turns the slash as it bounces a throw.
+		"name": "A slash at a scorpion's face is turned",
+		"scene": "res://scenes/rooms/room_m4_enemies.tscn",
+		"out": "room_m4_slash_face.png",
+		"input": "debug_toggle_overlay:1;-:150;move_right:64;slash:2;-:2",
+		"zoom": 3.0,
+		"centre": (290, 290),
+		"checks": [
+			{"type": "contains", "pattern": "scorpion alive",
+				"message": "the armour should have turned a slash at the scorpion's face"},
+			{"type": "player_position", "min_x": 262.0,
+				"message": "the hero should have been within reach of its face when he cut"},
+		],
+	},
+	{
 		"name": "Screenshot the dragon's arena",
 		"scene": "res://scenes/rooms/room_m4_dragon.tscn",
 		"out": "room_m4_dragon.png",

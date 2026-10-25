@@ -58,6 +58,21 @@ extends Resource
 ## lets a sword thrown into an insulating seam touch the conductors either side.
 @export var conduct_reach: float = 3.0
 
+@export_group("Slash")
+## The sword that never leaves his hand (`SPEC.md`). How far past the hero's
+## front the strike reaches, px. Shorter than a scorpion's body is wide, so
+## a slash is a step into danger and the throw stays the way to reach.
+@export var slash_reach: float = 22.0
+## How tall the strike is, px, centred on the hero's middle.
+@export var slash_height: float = 28.0
+## How long the strike can cut, seconds, from the press.
+@export var slash_active: float = 0.12
+## The pause after the strike before the next can start, seconds. The price
+## of a free attack: a missed slash leaves you standing in front of it.
+@export var slash_recovery: float = 0.3
+## How far the blade swings, degrees, drawn through the strike. Look only.
+@export var slash_sweep_degrees: float = 150.0
+
 @export_group("Sound")
 ## BUILD_PLAN.md M15: "The throw, the catch, the embed and the recall need
 ## four distinguishable sounds, because the sword's state is information the

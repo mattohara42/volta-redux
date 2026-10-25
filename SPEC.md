@@ -107,10 +107,12 @@ and the level geometry to serve it. Concretely, the sword does five things:
 **A slash is coming** (Matt, 2026-10-25, built after G2). The hero carries
 the throwing swords (three, cap five) and one more that never leaves his
 hand. He slashes with that one, so the slash is always there, even with
-every throwing sword spent, and it costs nothing. Open until it is built:
-whether it can hurt the bosses (Claude recommends not, or the anti-sword
-bosses below stop being anti-sword), and its reach and recovery, the dials
-that stop it making the throw optional.
+every throwing sword spent, and it costs nothing. It is its own button (K,
+gamepad B), so the throw and its hold-to-recall are untouched. **It cannot
+hurt the bosses** (Matt, 2026-10-25), and **armour turns it** as it bounces
+a throw: a scorpion is cut only from behind or above. Its reach (22 px past
+his front) and recovery (0.3 s) are the dials that stop it making the throw
+optional (`config/sword.tres`), Matt's to judge by playing.
 
 **The sword count is the difficulty dial and it is small.** Start with three,
 cap at five. Ten was too many to make any single throw matter.

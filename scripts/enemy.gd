@@ -90,6 +90,21 @@ func _on_area_entered(area: Area2D) -> void:
 		_defeat()
 
 
+## Cut by the hero's slash (`Slash`), from the hand at `from`. The same
+## question a thrown sword's hit asks, `is_vulnerable_to`, so armour that
+## bounces a throw turns a cut, and the dragon, which only a recalling sword
+## gets through, shrugs one off. A turned cut throws sparks so the player
+## sees it landed and did nothing. Nothing is spent either way: the sword in
+## the hand never leaves it.
+func slashed(from: Node2D) -> void:
+	if _fallen:
+		return
+	if is_vulnerable_to(from):
+		_defeat()
+	else:
+		Burst.emit(get_parent(), from.global_position, Burst.Kind.SPARKS)
+
+
 ## What losing does. Every enemy but one simply goes: `SPEC.md`'s "both die".
 ## The dragon overrides this, because it is overpowered and chained rather than
 ## killed, and it is the same dragon you free in Act 4.
