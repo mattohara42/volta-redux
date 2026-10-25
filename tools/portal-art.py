@@ -73,6 +73,21 @@ def pix(img, size):
     q = im.convert("RGB").quantize(24, method=Image.Quantize.FASTOCTREE).convert("RGB")
     return Image.fromarray(np.dstack([np.asarray(q), out[..., 3]]), "RGBA")
 
+def unfringe(img, fill):
+    """Backdrop magenta that survived the key along an edge: cleared from a
+    frame, and in a slab, which fills its opening, the pixel above instead."""
+    a = np.array(img).astype(int)
+    r, g, b = a[..., 0], a[..., 1], a[..., 2]
+    bad = (a[..., 3] > 0) & (r > 140) & (b > 140) & (g < r - 60)
+    if fill:
+        for y, x in zip(*np.nonzero(bad)):
+            if y > 0:
+                a[y, x] = a[y - 1, x]
+    else:
+        a[bad, 3] = 0
+    return Image.fromarray(a.astype(np.uint8), "RGBA")
+
+
 # material: frame piece, door piece, the door's interior as fractions (l, t, r, b)
 MATERIALS = {
     "stump": ("p_1", "p_2", (0.12, 0.12, 0.88, 0.80)),
@@ -98,7 +113,7 @@ for name, (frame_id, door_id, inner) in MATERIALS.items():
     s = HOLE_H / hh
     fsize = (round(frame.shape[1] * s), round(frame.shape[0] * s))
     hole = [round(hx0 * s), round(hy0 * s), round(hw * s), HOLE_H]
-    pix(Image.fromarray(frame), fsize).save(OUT / f"portal_{name}_frame.png")
-    pix(Image.fromarray(slab), (hole[2], hole[3])).save(OUT / f"portal_{name}_slab.png")
+    unfringe(pix(Image.fromarray(frame), fsize), fill=False).save(OUT / f"portal_{name}_frame.png")
+    unfringe(pix(Image.fromarray(slab), (hole[2], hole[3])), fill=True).save(OUT / f"portal_{name}_slab.png")
     meta[name] = {"frame": fsize, "hole": hole, "scale": round(s, 4)}
 print(json.dumps(meta, indent=1))
