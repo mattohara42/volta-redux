@@ -26,7 +26,11 @@ kids play Act 1 from a new game and say it is better (G2 again).
 **Act 2's first sheet is drafted ahead of the gate** (Matt, 2026-10-25,
 overruling the R4-waits rule for planning only): `levels/act2_caverns.beats`,
 19 beats from the undercroft to the lair door. Nothing is built from it until
-Matt approves it, and its six questions (*Before building*) come first.
+Matt approves it. His answers to its questions are at its foot (*Decided*).
+
+**Waiting for after G2** (Matt, 2026-10-25): the hunting scorpion and the
+slash, both in `SPEC.md`. Built after Matt plays N3, so his play of the wall
+compares like with like.
 
 **The foreground kit and the new trees and assets are good enough to go on
 with** (Matt, 2026-10-24, from the shots of the forest and the castle).
@@ -77,8 +81,8 @@ play: whether the fly-in (0.2 s) reads, and the punch and exit sizes.
    2). Better than before? That is G2 again, and closes N3. Read the *As
    built* notes in `levels/act1_wall.beats` first: each is a call to keep
    or overrule.
-2. **Mark up `levels/act2_caverns.beats`** and answer its six questions,
-   above all what lava does to a sword. Not a gate on N3.
+2. **Mark up `levels/act2_caverns.beats`** (its questions are answered).
+   Not a gate on N3.
 3. **Play the N1 benches** (`bench_n1`, `bench_n1_found`, `bench_n1_combos`,
    F2; the top left names the room) and say which combinations are worth
    building beats around. Closes N1.

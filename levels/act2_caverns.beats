@@ -1,10 +1,10 @@
 # The lava caverns: Act 2, level 1
 # DRAFT by Claude for Matt to mark up (2026-10-25). Started before G2 passes,
 # at Matt's word: the plan is provisional until he and the kids have played
-# the rebuilt wall. Nothing is built from it until he approves it. The
-# questions it raises are at the foot (*Before building*).
+# the rebuilt wall. Nothing is built from it until he approves it. Matt's
+# answers so far are at the foot (*Decided*).
 #
-# Act 2 as two levels (Claude's proposal): this one, from the castle's
+# Act 2 as two levels (Matt, 2026-10-25): this one, from the castle's
 # undercroft down to the lair door, and level 2, the mine and the dragon's
 # lair. Today's six rooms become sections: the mouth is beat 2, the geyser
 # shaft beats 4 and 8, the causeway beat 6, the tide beat 7. The mine and
@@ -74,14 +74,17 @@ loop: from the top ledge, a ladder down to the brazier at 7
 ## 8a. The sword graveyard  [pocket]  floor 5
 Along the top ledge from the well, a cave floor scattered with swords left
 by whoever came before and did not come back for theirs. Atmosphere, as
-`LEVELS.md` has it. One of them is a fourth sword (see *Before building*:
-the others must not read as pickups).
+`LEVELS.md` has it. Every one is broken (snapped blades, lone hilts, rusted
+stubs) except one, which is whole, and is a fourth sword.
 
 ## 9. The scorpion's dock  [twist: the ferry]  floor 3
-A ferry docks at a bank a scorpion patrols, and it faces the dock as you
-arrive. The answer that worked (ride, step off) puts you against its
-armoured front. Stay on, ride past the dock to the ferry's far stop over
-the lava, and throw back at its back as it walks away from the edge.
+A ferry docks at a bank a scorpion walks. It sees you on the ferry, comes
+to the edge and waits there facing you, so the answer that worked (ride,
+step off) puts you against its armoured front, and a throw from the ferry
+bounces. A timber post stands on the bank behind it. Throw into the post on
+the ride in, before it has turned to you, ride on, and when it faces you
+from the edge, recall: the sword comes home through its back.
+note: written for the chasing scorpion (*Decided*, 3), not today's patrol.
 can kill you: the scorpion, the lava
 brazier: on the dock, once it is yours
 
@@ -125,8 +128,10 @@ A gate on the ferry's far bank, and its switch a timber block on a pillar
 in the middle of the lava, out of reach from either bank. A flat throw from
 the ferry as it passes is the only one that reaches it. The gate rises and
 stays up while the sword holds it. Ride across, go through, recall it from
-the far side, and the gate drops behind you.
-can kill you: the lava
+the far side, and the gate drops behind you. An eyeball drifts over the
+ferry's path at your height: a throw at the switch that misses comes home
+through it, and it eats the sword.
+can kill you: the lava, the eyeball
 loop: past the gate, a passage back to the brazier at 14
 
 ## 16. The roost over the slabs  [combine: the throw from a falling floor + bats on ladders]  floors 1 to 2
@@ -142,7 +147,9 @@ Planks over a tide passage that hold once. Going out they hold. The way on
 is down through them, onto the passage floor, and the drop is safe only on
 a low tide. Cross, turn when the tide is going down, come back, and fall
 through to the passage, then cross it to the far refuge before it rises.
-can kill you: the tide
+An ant walks the passage ceiling, so the wait for a low tide is not a
+wait you can stand still for.
+can kill you: the tide, the ant
 
 ## 18. The high bank  [combine: the geyser + a sword is a ledge]  floors 1 to 2
 A jet that throws you a storey short of the bank, against a timber face.
@@ -156,22 +163,19 @@ brazier: on the high bank
 A long stair down. Claw marks on the walls and the heat getting stronger.
 The exit is one way, into level 2.
 
-# Before building (Claude's questions for Matt)
-# 1. What does lava do to a sword? Nothing decides it today. Most beats here
-#    put a miss over lava, so it is the stake of the whole level. Claude's
-#    proposal: lava takes the sword, as a kill does. Matt's call.
-# 2. The tide is not placeable yet. Only today's tide room has one, built by
-#    hand. Building this needs a `tide` kind in the level format (its low
-#    and high in cells, its clock in `config/hazards.tres`), in every level,
-#    as lifts and geysers are.
-# 3. Beat 18 needs a throw at the top of a jet. The code allows a throw in
-#    the air when it is not a somersault, but no room has asked for one, and
-#    whether a sword thrown there is a ledge you can then reach is a number
-#    to measure on a bench before the beat is drawn.
-# 4. The graveyard's swords (8a) must not read as swords to pick up, or the
-#    one real sword there teaches you to distrust every sword you find
-#    (`LEVELS.md`, *Surprises*). Snapped blades and hilts, never a whole one?
-# 5. Two levels for Act 2, and this split? `SPEC.md` allows two or three.
-# 6. Every species outside its room (`SPEC.md`, *Structure*): this sheet has
-#    bats and one scorpion. An eyeball or an ant could go on 15 or 17 if
-#    Matt wants a mixed group. Left out so each beat has one new thing in it.
+# Decided (Matt, 2026-10-25)
+# 1. Lava takes a sword that falls into it, as a kill does.
+# 2. The graveyard's swords are all broken but one (8a).
+# 3. Scorpions always move, and come after you when they see you, on their
+#    own floor only. A facing scorpion dies to a recall through its back, a
+#    hit from above, or a throw that gets past it and kills on the way home
+#    (`SPEC.md`, *Enemies*). Built after Matt has played N3.
+# 4. Two levels for Act 2, this split.
+# 5. The combines mix species: an eyeball on 15, an ant on 17.
+#
+# Claude's to do before building
+# - A `tide` kind in the level format, in every level, as lifts and geysers
+#   are. Only today's tide room has one, built by hand.
+# - A bench for 18: a throw at the top of a jet is allowed (it is not a
+#   somersault) but no room has asked for one, and whether the sword it
+#   leaves is a ledge you can reach is a number to measure first.

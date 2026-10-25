@@ -70,7 +70,8 @@ and the level geometry to serve it. Concretely, the sword does five things:
    turns and returns to where you are *now*, not to where you threw from. Stand
    in its path and it is back in your hand. Miss the catch and it lands on the
    floor, retrievable, but you have lost your position and your tempo.
-2. **Kill.** It hits an enemy and both die. The sword is gone.
+2. **Kill.** It hits an enemy and both die. The sword is gone. Lava takes a
+   sword that falls into it the same way (Matt, 2026-10-25).
 3. **Embed.** It hits **wood** and sticks, and a stuck sword is **a one-tile
    ledge you can stand on**. This is the move that turns a weapon into a
    traversal tool, and it is where the puzzles live. The art has to read as
@@ -102,6 +103,13 @@ and the level geometry to serve it. Concretely, the sword does five things:
    to "a recall cannot fail". Recall calls every sword at once, so a barrier
    held open by a sword would always cost that sword; barriers are therefore
    always on, and the decision is where you stand when you recall.
+
+**A slash is coming** (Matt, 2026-10-25, built after G2): swing the sword in
+your hand instead of throwing it, and keep it. It saves a sword in a close
+fight. Open until it is built: whether it can hurt the bosses (Claude
+recommends not, or the anti-sword bosses below stop being anti-sword), its
+reach and recovery (the dials that stop it making the throw optional), and
+what it does with no sword in hand.
 
 **The sword count is the difficulty dial and it is small.** Start with three,
 cap at five. Ten was too many to make any single throw matter.
@@ -354,11 +362,17 @@ sword. This is the design constraint that keeps a roster from being decoration.
 | enemy | behaviour | the mistake it punishes |
 |---|---|---|
 | **Bat** | erratic flight, fast, no ground contact | Throwing at a moving target. Costs you the sword nine times in ten |
-| **Scorpion** | ground patrol, armoured front | Throwing from the front. Must be hit from behind or above |
+| **Scorpion** | always walking; sees you and comes after you along its own floor; armoured front | Throwing from the front. Must be hit from behind or above |
 | **Giant ant** | walks walls and ceilings, ignores gravity | Assuming the floor is where danger is |
 | **Floating eyeball** | tracks you slowly, at your height | Standing in your own catch line. It is the anti-catch enemy and it exists to eat returning swords |
 | **Fire-breathing dragon** | Act 2 mini-boss, telegraphed cone, immobile | Panic throwing. It has to be beaten with recall, not ammunition |
 | **The generator** | Act 3 boss, arena, cannot be hit by a sword at all | Believing every problem is a throw |
+
+**The scorpion hunts** (Matt, 2026-10-25, built after G2). It never stands
+still, and when it sees you it comes after you along its own floor, stopping
+at ledges and walls, and goes back to walking when it loses you. A scorpion
+facing you dies to a sword coming home through its back (a recall from wood
+behind it, or a throw that got past it), or to a hit from above.
 
 **The two bosses are both anti-sword**, on purpose. A game whose verb is one
 button needs its bosses to ask what else the verb can do.
