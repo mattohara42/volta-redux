@@ -344,3 +344,23 @@ frames: the rider held, the wing tore and left specks. The single dragon
 animated cleanly before. **A clean still plus a cut-and-composite onto an
 existing clean animation is cheaper than a reroll** (`tools/composite-rider.py`):
 diff the edited still against its source, fill holes, drop specks.
+
+## Gemini sheets, keyed (2026-10-25)
+
+**Three landed first attempt in one evening** (the tall wall, the portal
+doors, and the yard and trees before them), so the nine-piece sheet and the
+stage-flat framing hold. Three new findings:
+
+- **A 9:16 scene holds a flat elevation** as well as 16:9 ones did: the tall
+  wall came back square to the camera, three buttresses where asked. It
+  also drew a small lightning bolt the prompt excluded; it pixelated to a
+  pale streak and stayed.
+- **"The exact shape and size of the opening in piece N" is not obeyed.**
+  Both stone doors came back as whole shut doorways, frame and all, and the
+  forest's "low ring of roots seen side on" came back as a wreath seen from
+  above: a ring has a top-down prior. Cut slabs from the middle of a door
+  piece instead (`tools/portal-art.py`).
+- **`key.py --spill-hue` eats warm purple-brown** (cold violet bark) along
+  with the magenta: the stump came out holed and the bark door vanished.
+  Key such a sheet with no spill and `--tolerance 40`, then clear the few
+  fringe pixels left after pixelating.
