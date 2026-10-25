@@ -515,6 +515,16 @@ func warp_to(feet: Vector2) -> void:
 			camera.reset_smoothing()
 
 
+## Out of a portal's other door with his feet at `feet`, still moving the way
+## he went in (`Portal`): the original's portal kept you running.
+func pass_through(feet: Vector2) -> void:
+	var kept := velocity
+	var flipping := _somersaulting
+	warp_to(feet)
+	velocity = kept
+	_somersaulting = flipping
+
+
 ## Where the hero's feet meet the floor, in canvas coordinates.
 func _feet() -> Vector2:
 	return global_position + Vector2(0.0, world.hero_height * 0.5)

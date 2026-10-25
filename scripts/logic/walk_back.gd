@@ -61,6 +61,9 @@ class Layout:
 	## `warp_to[i]`. One way, so it only ever joins the first to the second.
 	var warps: Array[Rect2] = []
 	var warp_to: Array[Vector2] = []
+	## Portal doors, in pairs: the feet of each door, first then second. Each
+	## takes you to the other, so a pair joins the floors under them both ways.
+	var portals: Array[Vector2] = []
 	## The hero's feet where the room starts them.
 	var start := Vector2.ZERO
 	## The exit, or an empty rect for a room whose exit comes later.
@@ -288,6 +291,7 @@ static func _moves_between(
 	_ferries(edges, surfaces, layout, moves)
 	_geysers(edges, surfaces, floors, layout, moves)
 	_warps(edges, surfaces, layout)
+	_portals(edges, surfaces, layout)
 	_slab_drops(edges, surfaces, layout, moves)
 	return edges
 
@@ -380,6 +384,17 @@ static func _warps(edges: Array[PackedInt32Array], surfaces: Array[Rect2], layou
 			var s := surfaces[i]
 			if absf(s.position.y - stump.position.y) <= 0.5 and s.position.x < stump.end.x and s.end.x > stump.position.x:
 				_link(edges, i, to)
+
+
+## A portal pair joins the floor under one door to the floor under the other,
+## both ways.
+static func _portals(edges: Array[PackedInt32Array], surfaces: Array[Rect2], layout: Layout) -> void:
+	for p in range(0, layout.portals.size() - 1, 2):
+		var a := _surface_under(surfaces, layout.portals[p])
+		var b := _surface_under(surfaces, layout.portals[p + 1])
+		if a >= 0 and b >= 0:
+			_link(edges, a, b)
+			_link(edges, b, a)
 
 
 ## A ferry's slab is a surface at each dock, and riding it joins the two.

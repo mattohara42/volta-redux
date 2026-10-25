@@ -176,6 +176,16 @@ func _build_things() -> void:
 		var stump := _add_stump(t.rect, to)
 		if _tiles != null and _tiles.stump_texture != null:
 			stump.art = _tiles.stump_texture
+	for t in level.of_kind("portal"):
+		if not t.params.has("to"):
+			continue
+		var other := level.thing(String(t.params["to"]))
+		if other == null or other.kind != "portal":
+			push_error("%s: portal '%s' leads to no portal ('%s')" % [level_file, t.anchor, t.params["to"]])
+			continue
+		var portal := _add_portal(t.rect, other.rect)
+		if portal != null:
+			portal.art = _tiles
 	for at in level.decor_cells("torch"):
 		var torch := WallTorch.new()
 		torch.position = Vector2((at.x + 0.5) * level.cell, (at.y + 1) * level.cell)

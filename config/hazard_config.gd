@@ -122,3 +122,15 @@ extends Resource
 @export var tide_rise_time: float = 1.0
 @export var tide_high_time: float = 1.6
 @export var tide_fall_time: float = 1.0
+
+@export_group("Portals")
+## The original's portal (`LEVELS.md`, Decisions 2026-10-25): each door is
+## open this long, seconds, in turn. "A few seconds": long enough to reach
+## the door from where it is placed, short enough to be a run.
+@export var portal_open_time: float = 3.0
+## Both doors shut between turns, seconds. "A second later it opens at the
+## bottom": and it is what keeps you from going straight back through.
+@export var portal_gap_time: float = 1.0
+## How long a door's slab takes to slide out of the way or back, seconds.
+## Look only: the door works for its whole open time.
+@export var portal_swing_time: float = 0.25

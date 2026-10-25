@@ -142,16 +142,20 @@ func test_the_clearing_is_safe_to_throw_in() -> void:
 		check(t.rect.position.x > first_roof, "no bat in the clearing (%s)" % t.anchor)
 
 
-## Each stump that leads somewhere leads to another stump.
-func test_every_stump_leads_to_a_stump() -> void:
+## Each portal door that leads somewhere leads to another portal door, tall
+## enough for the hero to run into (`Portal`, replacing the stumps).
+func test_every_portal_leads_to_a_portal_the_hero_fits() -> void:
 	var level := GridRoom.read(LEVEL)
-	var warps := 0
-	for t in level.of_kind("stump"):
+	var world: WorldConfig = load("res://config/world.tres")
+	var pairs := 0
+	for t in level.of_kind("portal"):
+		check(t.rect.size.y >= world.hero_height, "door %s is as tall as the hero" % t.anchor)
 		if t.params.has("to"):
-			warps += 1
+			pairs += 1
 			var target := level.thing(String(t.params["to"]))
-			check(target != null and target.kind == "stump", "stump %s leads to a stump" % t.anchor)
-	check(warps > 0, "the forest has at least one warp")
+			check(target != null and target.kind == "portal", "door %s leads to a door" % t.anchor)
+	check_eq(pairs, 2, "the forest's two stumps are two portals")
+	check(level.of_kind("stump").is_empty(), "and no stump warps are left")
 
 
 ## N0: the forest drew the castle painting's lit windows into its dark, because
