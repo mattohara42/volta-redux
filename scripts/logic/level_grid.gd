@@ -36,6 +36,9 @@
 ##                              at its middle until you come near (a roost)
 ##     stump to=U               land on it, come up on stump U (one way)
 ##     stump                    a stump that leads nowhere, or a warp's end
+##     portal to=Q              a door you run into while it is open, coming
+##                              out of door Q; the two take turns (`Portal`)
+##     portal                   the other door of a pair
 ##     plate opens=G            lying on the floor under it; weight holds it
 ##     lift travel=0,-6         a platform at its near end, going this many
 ##                              cells and back on its own clock
@@ -90,7 +93,7 @@ const DECOR := {
 }
 const KINDS: PackedStringArray = [
 	"gate", "switch", "plate", "scorpion", "bat", "stump", "lift", "geyser", "ant",
-	"eyeball", "slab", "sword", "sill", "cage",
+	"eyeball", "slab", "sword", "sill", "cage", "portal",
 ]
 
 

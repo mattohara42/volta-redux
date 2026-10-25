@@ -916,7 +916,9 @@ by transform (`ANIMATION.md`) and whatever shows in the open door can be a
 shader (`CLAUDE.md`: atmosphere is code). Three materials on one sheet, so
 the forest, the castle and the caverns (graveyard, beat 8a) get doors that
 are plainly the same thing. The hole is asked in magenta, which the key
-removes. Save as `assets/art_raw/kit_portals.*`.
+removes. Save as `assets/art_raw/kit_portals.*`. Until it lands, `Portal`
+draws a stone frame, a slab with a column of runes that slides up, and gold
+light banded behind it.
 
 ```
 Painted fantasy game art lit by fire and by electricity, in the style of hand-painted backgrounds from a hand-animated feature: visible brushwork, soft edges, real depth. Character and creature shapes read as a strong silhouette first, in the way of Mike Mignola's comic art, but rendered with full painterly surface and value, not flat black shapes. Every dark area of the painting is a coloured dark: cold violet-blue in stone and shadow, warm umber in wood and leather. Never use a neutral black or a neutral grey anywhere in the image, including in shadow. Forms are separated by value and by edge quality, hard edges where a shape matters, soft edges where it recedes, never a uniform ink outline.

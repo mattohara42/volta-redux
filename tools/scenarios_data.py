@@ -596,31 +596,63 @@ SCENARIOS: list[dict] = [
 		],
 	},
 	{
-		"name": "Act 1 forest: the island's stump brings you up in the canopy",
+		# The original's portal (`Portal`): the island's door opens first. Run
+		# into it and come out of the canopy's.
+		"name": "Act 1 forest: the island's portal brings you up in the canopy",
 		"scene": "res://scenes/rooms/act1_forest.tscn",
-		"out": "act1_forest_stump_up.png",
+		"out": "act1_forest_portal_up.png",
 		"at": (1592, 672),
-		"input": "move_right:10;move_right,jump:14;move_right:6;-:40",
+		"input": "move_right:24;-:40",
 		"zoom": 1.0,
 		"centre": (2600, 200),
 		"checks": [
-			{"type": "player_position", "min_x": 2640, "max_x": 2672, "max_y": 150,
-				"message": "the hero should be standing on the canopy's stump"},
+			{"type": "player_position", "min_x": 2620, "max_x": 2700, "max_y": 180,
+				"message": "the hero should be standing in the canopy's door"},
 			{"type": "contains", "pattern": "capture: no deaths",
-				"message": "a warp should not kill"},
+				"message": "a portal should not kill"},
 		],
 	},
 	{
-		"name": "Act 1 forest: the stump past the nest brings you down at the moat",
+		# The same run in the gap after the island's turn: a shut door is a
+		# wall's picture, and you stand in front of it.
+		"name": "Act 1 forest: a shut portal takes you nowhere",
 		"scene": "res://scenes/rooms/act1_forest.tscn",
-		"out": "act1_forest_stump_down.png",
-		"at": (4256, 672),
-		"input": "jump:10;move_right:8;-:40",
+		"out": "act1_forest_portal_shut.png",
+		"at": (1592, 672),
+		"input": "-:192;move_right:24;-:20",
+		"zoom": 1.0,
+		"centre": (1680, 600),
+		"checks": [
+			{"type": "player_position", "min_x": 1664, "max_x": 1696, "min_y": 640,
+				"message": "the hero should still be at the island's door"},
+		],
+	},
+	{
+		# Both ways (`LEVELS.md`): standing in the canopy's door, its turn
+		# comes after the island's, and it sends you back down.
+		"name": "Act 1 forest: the canopy's portal takes you back to the island",
+		"scene": "res://scenes/rooms/act1_forest.tscn",
+		"out": "act1_forest_portal_back.png",
+		"at": (2650, 192),
+		"input": "-:300",
+		"zoom": 1.0,
+		"centre": (1680, 600),
+		"checks": [
+			{"type": "player_position", "min_x": 1664, "max_x": 1696, "min_y": 640,
+				"message": "the hero should have come out of the island's door"},
+		],
+	},
+	{
+		"name": "Act 1 forest: the portal past the nest brings you down at the moat",
+		"scene": "res://scenes/rooms/act1_forest.tscn",
+		"out": "act1_forest_portal_down.png",
+		"at": (4230, 672),
+		"input": "move_right:14;-:40",
 		"zoom": 1.0,
 		"centre": (4700, 700),
 		"checks": [
-			{"type": "player_position", "min_x": 4704, "max_x": 4736, "min_y": 740,
-				"message": "the hero should be standing on the moat's stump"},
+			{"type": "player_position", "min_x": 4704, "max_x": 4750, "min_y": 760,
+				"message": "the hero should be standing at the moat's door"},
 		],
 	},
 	{

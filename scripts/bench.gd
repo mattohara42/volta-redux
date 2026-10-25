@@ -367,6 +367,22 @@ func _add_stump(rect: Rect2, to: Variant = null) -> Stump:
 	return stump
 
 
+## A pair of portal doors (`Portal`). `first` opens first. Walk-back counts
+## the pair as a way both ways, since each door takes you to the other.
+func _add_portal(first: Rect2, second: Rect2) -> Portal:
+	if hazards == null:
+		push_error("bench: a portal needs config/hazards.tres wired into the scene")
+		return null
+	var portal := Portal.new()
+	portal.configure(first, second, hazards)
+	add_child(portal)
+	# Behind the hero: a doorway is something you stand in front of.
+	move_child(portal, 0)
+	_walk.portals.append(PortalCycle.foot_of(first))
+	_walk.portals.append(PortalCycle.foot_of(second))
+	return portal
+
+
 ## A brazier standing on the floor at `base`, which is a point on a surface and
 ## not a rectangle: a brazier has no extent you can collide with, only a place
 ## it stands and a zone that notices you went past.
