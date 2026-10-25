@@ -58,8 +58,9 @@ it; his answers to its questions are at its foot (*Decided*).
 5. **Paint the sword graveyard** (`ART.md`, *The next three*, prompt 3).
    Blocks caverns beat 8a's look, not its build.
 6. **#208: auto-merge instead of merging at once.** #201 merged with a red
-   scenario because CI takes 10 minutes and the rule is to merge straight
-   away. Changes a `CLAUDE.md` rule, so Matt's.
+   scenario because CI took 12 minutes and the rule is to merge straight
+   away. Scenarios now run one per core (#211), so CI should be nearer 5.
+   Changes a `CLAUDE.md` rule, so Matt's.
 7. **Play the N1 benches** (`bench_n1`, `bench_n1_found`,
    `bench_n1_combos`, F2) and say which combinations are worth building
    beats around. Closes N1. The found bench's bat now takes about 7 s to
