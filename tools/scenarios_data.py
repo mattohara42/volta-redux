@@ -1537,13 +1537,16 @@ SCENARIOS: list[dict] = [
 		"scene": "res://scenes/rooms/bench_n1_found.tscn",
 		"out": "bench_n1_bat_kill.png",
 		"at": (640, 320),
-		"input": "-:30;throw:4;-:12;move_left:20;-:150",
+		# The post stands a cell clear of the bat's box, so the box keeps its
+		# full reach (`BatFlight.fitted_box`) and the bat finds the sword's
+		# hilt in its own time, between 380 and 440 frames.
+		"input": "-:30;throw:4;-:12;move_left:20;-:500",
 		"zoom": 1.5,
 		"centre": (650, 270),
 		"checks": [
 			{"type": "not_contains", "pattern": "bat alive",
 				"message": "the bat should have died on the sword in the post"},
-			{"type": "not_contains", "pattern": "sword embedded at (696.0",
+			{"type": "not_contains", "pattern": "sword embedded at (712.0",
 				"message": "and the sword should be lost with it (LEVELS.md ruling 3)"},
 			{"type": "contains", "pattern": "2 sword(s) held",
 				"message": "so the hand is one short"},

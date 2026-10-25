@@ -90,7 +90,6 @@ static func colours_for(backdrop_style: Style) -> Dictionary:
 				"wall": air.lerp(Palette.STONE_DEEP, 0.4),
 				"mortar": air.darkened(0.25),
 				"storm": air.lerp(Palette.ARC_RESIDUE, 0.3),
-				"flash": air.lerp(Palette.STONE_LIT, 0.55),
 				"column": air.darkened(0.3),
 				"column_lit": air.lerp(Palette.STONE_DEEP, 0.75),
 				"banner": air.lerp(Palette.SPIKE_IRON, 0.22).lerp(Palette.STONE_DEEP, 0.3),
@@ -106,8 +105,6 @@ static func motion_for(backdrop_style: Style) -> Dictionary:
 			return {"fall_speed": CONFIG.backdrop_fall_speed, "ash_speed": CONFIG.backdrop_ash_speed}
 		Style.WORKS:
 			return {"gear_spin": CONFIG.backdrop_gear_spin, "lamp_rate": CONFIG.backdrop_lamp_rate}
-		Style.HALL:
-			return {"rain_speed": CONFIG.backdrop_rain_speed, "flash_chance": CONFIG.backdrop_flash_chance}
 	return {}
 
 
