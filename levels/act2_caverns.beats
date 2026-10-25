@@ -1,0 +1,177 @@
+# The lava caverns: Act 2, level 1
+# DRAFT by Claude for Matt to mark up (2026-10-25). Started before G2 passes,
+# at Matt's word: the plan is provisional until he and the kids have played
+# the rebuilt wall. Nothing is built from it until he approves it. The
+# questions it raises are at the foot (*Before building*).
+#
+# Act 2 as two levels (Claude's proposal): this one, from the castle's
+# undercroft down to the lair door, and level 2, the mine and the dragon's
+# lair. Today's six rooms become sections: the mouth is beat 2, the geyser
+# shaft beats 4 and 8, the causeway beat 6, the tide beat 7. The mine and
+# the lair are level 2's, on a sheet of their own.
+#
+# Act 1 climbed. This level goes down, five floors to one, into the heat.
+# The geysers are how you come back up, which is what most loops are.
+ideas: the ferry, the geyser, the throw from a falling floor, the tide
+carried in from Act 1: throw and catch, a sword in wood is a ledge, the switch a sword holds, the floor that holds once, bats on ladders
+
+## 1. The undercroft  [breather]  floor 5
+Through the castle gate and down a stair cut in the rock. Masonry gives way
+to basalt. The first glow comes up from below, with the sound of it. Timber
+props and beams hold up the roof, so wood is still something to look for.
+brazier: here
+
+## 2. The first ferry  [introduce: the ferry]  floor 5
+A basalt slab riding back and forth over lava too wide to jump. Nothing
+alive. Wait for it, step on, ride, step off. The banks are wide, so a step
+taken early or late lands on rock.
+can kill you: the lava
+note: a fall costs the walk from 1, which is a few steps.
+
+## 3. The first slabs  [introduce: the throw from a falling floor]  floor 5
+A line of slabs that give way a moment after you land, over a dry pit. A
+bat circles above the far half. Throw from a slab and keep moving: the
+sword comes home to you wherever you are now. The pit under the slabs has
+no lava in it, so a fall costs nothing but the way back up, which is 4.
+can kill you: the bat
+
+## 4. The vent  [introduce: the geyser]  floors 4 to 5
+The pit floor under 3. A jet comes out of dry rock on its own clock and
+throws you back up to the undercroft's ledge. Missing it costs a wait.
+loop: up the jet to the brazier at 1
+
+## 5. The ferry under the bat  [develop: the ferry]  floor 4
+A longer crossing, lower down, with a bat working the air over the
+ferry's path. Standing still is not on offer. Throw from the moving
+ferry, and a miss comes home to wherever the ferry has carried you, which
+may be under the bat.
+can kill you: the bat, the lava
+brazier: on the far bank
+
+## 6. The causeway  [develop: the throw from a falling floor]  floor 4
+Today's causeway: two lines of slabs over lava, a bat at body height over
+the second. Throw from a slab before it goes and be on the next one for
+the catch. A miss you are not there for lands behind you.
+can kill you: the bat, the lava
+
+## 7. The low passage  [introduce: the tide]  floor 3
+Today's tide, shorter. A low passage between rock refuges. The lava lies
+under the passage floor, comes up over it, stands, and goes back down.
+Cross a stretch while it is low and be on the next refuge before it comes.
+The first stretch is short and the brazier is at its mouth, so a misjudged
+tide costs one stretch. A chest on the last refuge, after two bat fights.
+can kill you: the tide
+brazier: at the passage mouth
+
+## 8. The geyser well  [develop: the geyser]  floors 3 to 5
+A jet that comes out of lava, not rock: step in while it runs, or step in
+the lava. A bat at the well's top ledge. Throw at it from the well floor,
+then ride the jet. A sword that misses comes home to you at the top, not
+at the floor you threw from.
+can kill you: the bat, the lava
+loop: from the top ledge, a ladder down to the brazier at 7
+
+## 8a. The sword graveyard  [pocket]  floor 5
+Along the top ledge from the well, a cave floor scattered with swords left
+by whoever came before and did not come back for theirs. Atmosphere, as
+`LEVELS.md` has it. One of them is a fourth sword (see *Before building*:
+the others must not read as pickups).
+
+## 9. The scorpion's dock  [twist: the ferry]  floor 3
+A ferry docks at a bank a scorpion patrols, and it faces the dock as you
+arrive. The answer that worked (ride, step off) puts you against its
+armoured front. Stay on, ride past the dock to the ferry's far stop over
+the lava, and throw back at its back as it walks away from the edge.
+can kill you: the scorpion, the lava
+brazier: on the dock, once it is yours
+
+## 10. The quick bridge  [twist: the throw from a falling floor]  floor 3
+Slabs that go faster than a throw comes home, with a bat at the far end at
+body height. Thrown from a slab, the sword is still out when the slab
+drops. The throw has to start from the bank, and you run while it flies:
+the catch is on the far bank, or on the last slab if you are quick.
+can kill you: the bat, the lava
+
+## 11. The tide gallery  [develop: the tide]  floor 3
+A longer passage, and a bat works the air over its middle refuge. The
+refuge you wait the tide out on is inside the bat's box. Throw from the
+refuge before the tide comes and the catch is yours to wait for, or cross
+two stretches on one low tide and skip the refuge, which is tight.
+can kill you: the bat, the tide
+
+## 12. The forge hall  [breather]  floor 3
+An old working: anvils, a quench trough of lava, chains on the walls. From
+below, a sound you will hear again at the lair. A chest, because the next
+stretch is the hardest.
+brazier: here
+
+## 13. The flue  [twist: the geyser]  floors 3 to 1
+The way down is a geyser shaft. Every jet so far was a lift. This one is
+in the way. Drop between eruptions and get out sideways at the foot before
+the next one, or it throws you back up to the forge hall's floor and you
+try again.
+note: thrown back up is the cost. Nothing at the foot kills you.
+
+## 14. The rising shaft  [twist: the tide]  floors 1 to 2
+Out of the flue into the foot of a tall shaft, and the tide comes up it.
+Every tide so far was waited out on a refuge. This one rises past every
+refuge in the shaft, so waiting kills. Climb: ladders and ledges, no
+enemy, only the clock.
+can kill you: the tide
+brazier: at the top
+
+## 15. The ferry gate  [combine: the ferry + the switch a sword holds]  floor 2
+A gate on the ferry's far bank, and its switch a timber block on a pillar
+in the middle of the lava, out of reach from either bank. A flat throw from
+the ferry as it passes is the only one that reaches it. The gate rises and
+stays up while the sword holds it. Ride across, go through, recall it from
+the far side, and the gate drops behind you.
+can kill you: the lava
+loop: past the gate, a passage back to the brazier at 14
+
+## 16. The roost over the slabs  [combine: the throw from a falling floor + bats on ladders]  floors 1 to 2
+A line of falling slabs ends at the foot of a ladder, with a bat circling
+its top half. The slabs will not wait for a fight, so the throw is from
+the ladder, and the slab you came over is gone. A miss comes home to you
+on the ladder. Drop off and the floor below is lava.
+can kill you: the bat, the lava
+brazier: at the ladder's top
+
+## 17. The planks over the tide  [combine: the tide + the floor that holds once]  floor 1
+Planks over a tide passage that hold once. Going out they hold. The way on
+is down through them, onto the passage floor, and the drop is safe only on
+a low tide. Cross, turn when the tide is going down, come back, and fall
+through to the passage, then cross it to the far refuge before it rises.
+can kill you: the tide
+
+## 18. The high bank  [combine: the geyser + a sword is a ledge]  floors 1 to 2
+A jet that throws you a storey short of the bank, against a timber face.
+At the top of the jet, throw into the timber. On the next eruption, ride up
+and step off onto your sword, then up onto the bank, and recall it from
+there.
+can kill you: the lava
+brazier: on the high bank
+
+## 19. The lair stair  [breather]  floors 2 to 1
+A long stair down. Claw marks on the walls and the heat getting stronger.
+The exit is one way, into level 2.
+
+# Before building (Claude's questions for Matt)
+# 1. What does lava do to a sword? Nothing decides it today. Most beats here
+#    put a miss over lava, so it is the stake of the whole level. Claude's
+#    proposal: lava takes the sword, as a kill does. Matt's call.
+# 2. The tide is not placeable yet. Only today's tide room has one, built by
+#    hand. Building this needs a `tide` kind in the level format (its low
+#    and high in cells, its clock in `config/hazards.tres`), in every level,
+#    as lifts and geysers are.
+# 3. Beat 18 needs a throw at the top of a jet. The code allows a throw in
+#    the air when it is not a somersault, but no room has asked for one, and
+#    whether a sword thrown there is a ledge you can then reach is a number
+#    to measure on a bench before the beat is drawn.
+# 4. The graveyard's swords (8a) must not read as swords to pick up, or the
+#    one real sword there teaches you to distrust every sword you find
+#    (`LEVELS.md`, *Surprises*). Snapped blades and hilts, never a whole one?
+# 5. Two levels for Act 2, and this split? `SPEC.md` allows two or three.
+# 6. Every species outside its room (`SPEC.md`, *Structure*): this sheet has
+#    bats and one scorpion. An eyeball or an ant could go on 15 or 17 if
+#    Matt wants a mixed group. Left out so each beat has one new thing in it.
