@@ -183,7 +183,9 @@ func _build_things() -> void:
 		if other == null or other.kind != "portal":
 			push_error("%s: portal '%s' leads to no portal ('%s')" % [level_file, t.anchor, t.params["to"]])
 			continue
-		_add_portal(t.rect, other.rect)
+		var portal := _add_portal(t.rect, other.rect)
+		if portal != null:
+			portal.art = _tiles
 	for at in level.decor_cells("torch"):
 		var torch := WallTorch.new()
 		torch.position = Vector2((at.x + 0.5) * level.cell, (at.y + 1) * level.cell)

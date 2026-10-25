@@ -39,6 +39,12 @@ extends Resource
 @export var crumble_tile: Texture2D = null
 ## A stump (`Stump`), whole, at its rect's size. Null keeps it drawn in code.
 @export var stump_texture: Texture2D = null
+## A portal door (`Portal`): its frame, the slab that shuts it, and where the
+## opening is in the frame, art px. The opening's foot stands on the door's
+## floor. Null keeps the door drawn in code.
+@export var portal_frame: Texture2D = null
+@export var portal_slab: Texture2D = null
+@export var portal_hole := Rect2()
 
 @export_group("Edges and depth (N2)")
 ## The line drawn along a solid's open side and under it (`TileShape`): the

@@ -31,3 +31,21 @@ func test_a_hero_in_the_doorway_is_one_whose_middle_is_in_it() -> void:
 	check(not PortalCycle.in_doorway(Rect2(80.0, 60.0, 18.0, 40.0), door), "beside it, overlapping the frame")
 	check(not PortalCycle.in_doorway(Rect2(107.0, 0.0, 18.0, 40.0), door), "above it")
 	check_eq(PortalCycle.foot_of(door), Vector2(116.0, 100.0), "out of it, feet on its floor")
+
+
+## Each set with portal art: the opening is inside its frame, the slab is the
+## opening's size, and a hero fits through it.
+func test_every_portal_art_fits_its_opening() -> void:
+	var world: WorldConfig = load("res://config/world.tres")
+	for path in [
+		"res://assets/art/forest/forest_tiles.tres", "res://assets/art/act1/act1_tiles.tres",
+		"res://assets/art/act1/wall_tiles.tres", "res://assets/art/act2/act2_tiles.tres",
+	]:
+		var set: ActTiles = load(path)
+		check(set.portal_frame != null and set.portal_slab != null, "%s has portal art" % path)
+		if set.portal_frame == null or set.portal_slab == null:
+			continue
+		var frame := Rect2(Vector2.ZERO, set.portal_frame.get_size())
+		check(frame.encloses(set.portal_hole), "%s: the opening is inside the frame" % path)
+		check_eq(set.portal_slab.get_size(), set.portal_hole.size, "%s: the slab fills the opening" % path)
+		check(set.portal_hole.size.y >= world.hero_height, "%s: a hero fits through" % path)
