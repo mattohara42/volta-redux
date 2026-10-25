@@ -71,11 +71,22 @@ at the floor you threw from.
 can kill you: the bat, the lava
 loop: from the top ledge, a ladder down to the brazier at 7
 
-## 8a. The sword graveyard  [pocket]  floor 5
-Along the top ledge from the well, a cave floor scattered with swords left
-by whoever came before and did not come back for theirs. Atmosphere, as
-`LEVELS.md` has it. Every one is broken (snapped blades, lone hilts, rusted
-stubs) except one, which is whole, and is a fourth sword.
+## 8a. The sword graveyard  [pocket]  floors 3 and 5
+A sealed cave above the well, which no ladder or jet reaches. The way in is
+the portal (`LEVELS.md`, 2026-10-25). Its bottom door is on a lip of the
+well floor between the jet and the lava, so getting to it is the well's
+fight over again. It opens for a few seconds, then its top door opens in
+the cave a second later, and so on in turn.
+Inside, a floor scattered with swords left by whoever came before and did
+not come back for theirs. Every one is broken (snapped blades, lone hilts,
+rusted stubs) except one, which is whole, and is a fourth sword. Taking it
+wakes a roost in the cave roof.
+The way back is the top door. You come out of the bottom door still moving
+the way you went in, onto the lip with the lava past it, so the run into
+the top door has to be a short one and you have to stop on the lip.
+can kill you: the roost, the lava
+note: the original's portal joined the top and the very bottom of one
+screen. Here it joins the well's floor to a cave two floors up.
 
 ## 9. The scorpion's dock  [twist: the ferry]  floor 3
 A ferry docks at a bank a scorpion walks. It sees you on the ferry, comes
@@ -176,6 +187,8 @@ The exit is one way, into level 2.
 # Claude's to do before building
 # - A `tide` kind in the level format, in every level, as lifts and geysers
 #   are. Only today's tide room has one, built by hand.
+# - A `portal` kind in the level format (8a), the stumps' replacement, built
+#   after N3 with the forest's rework.
 # - A bench for 18: a throw at the top of a jet is allowed (it is not a
 #   somersault) but no room has asked for one, and whether the sword it
 #   leaves is a ledge you can reach is a number to measure first.
