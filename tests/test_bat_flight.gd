@@ -35,3 +35,44 @@ func test_facing_holds_through_a_zero_crossing() -> void:
 	var quarter := period_x * 0.25
 	var facing := BatFlight.facing_at(quarter, SPEED, RATIO, HALF, 1.0)
 	check(facing == 1.0, "a zero-velocity frame should keep the facing it was given, got %.1f" % facing)
+
+
+## Matt, 2026-10-25: bats flew into the walls and floors round their box.
+const BODY := Vector2(17.0, 17.0)
+const BOX := Rect2(0.0, 0.0, 112.0, 80.0)
+
+
+func test_a_box_in_open_air_is_left_alone() -> void:
+	var none: Array[Rect2] = []
+	var fitted := BatFlight.fitted_box(BOX, BODY, none)
+	check(fitted == BOX, "an open box changed: %s" % fitted)
+
+
+func test_a_floor_pulls_the_bottom_up_by_half_the_bat() -> void:
+	var floor_only: Array[Rect2] = [Rect2(-50.0, 80.0, 300.0, 16.0)]
+	var fitted := BatFlight.fitted_box(BOX, BODY, floor_only)
+	check(is_equal_approx(fitted.end.y, 80.0 - BODY.y), "bottom at %.1f" % fitted.end.y)
+	check(is_equal_approx(fitted.position.y, 0.0), "the open top moved to %.1f" % fitted.position.y)
+	check(is_equal_approx(fitted.size.x, BOX.size.x), "the open sides moved")
+
+
+func test_the_drawn_bat_never_enters_a_wall_it_touches() -> void:
+	var walls: Array[Rect2] = [
+		Rect2(-16.0, -16.0, 16.0, 120.0), Rect2(0.0, -16.0, 112.0, 16.0),
+		Rect2(112.0, -16.0, 16.0, 120.0), Rect2(0.0, 80.0, 112.0, 16.0),
+	]
+	var fitted := BatFlight.fitted_box(BOX, BODY, walls)
+	var t := 0.0
+	while t < 30.0:
+		var centre := fitted.get_center() + BatFlight.offset_at(t, SPEED, RATIO, fitted.size * 0.5)
+		var drawn := Rect2(centre - BODY, BODY * 2.0)
+		for w in walls:
+			check(not drawn.intersects(w), "at t=%.2f the bat at %s is inside %s" % [t, centre, w])
+		t += 0.13
+
+
+func test_a_box_narrower_than_the_bat_holds_it_still_on_that_axis() -> void:
+	var sides: Array[Rect2] = [Rect2(-16.0, 0.0, 16.0, 80.0), Rect2(24.0, 0.0, 16.0, 80.0)]
+	var fitted := BatFlight.fitted_box(Rect2(0.0, 0.0, 24.0, 80.0), BODY, sides)
+	check(is_zero_approx(fitted.size.x), "width %.1f" % fitted.size.x)
+	check(is_equal_approx(fitted.get_center().x, 12.0), "centre x %.1f" % fitted.get_center().x)
