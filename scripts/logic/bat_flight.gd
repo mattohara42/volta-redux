@@ -47,3 +47,38 @@ static func facing_at(
 	if is_zero_approx(vx):
 		return previous
 	return signf(vx)
+
+
+## The box a bat's centre roams, given the box the level drew for it. A side
+## of `box` that touches something solid is pulled in by `body_half`, so the
+## drawn bat stops at the wall, floor or ceiling instead of flying into it
+## (Matt, 2026-10-25). A side open to air is left alone: the bat may lean out
+## over it, as it always could. A box too small for the bat on an axis
+## collapses to its middle there, and the bat holds still on that axis.
+static func fitted_box(box: Rect2, body_half: Vector2, solids: Array[Rect2]) -> Rect2:
+	var left := box.position.x
+	var right := box.end.x
+	var top := box.position.y
+	var bottom := box.end.y
+	if _touches(Rect2(box.position.x - 1.0, box.position.y, 1.0, box.size.y), solids):
+		left += body_half.x
+	if _touches(Rect2(box.end.x, box.position.y, 1.0, box.size.y), solids):
+		right -= body_half.x
+	if _touches(Rect2(box.position.x, box.position.y - 1.0, box.size.x, 1.0), solids):
+		top += body_half.y
+	if _touches(Rect2(box.position.x, box.end.y, box.size.x, 1.0), solids):
+		bottom -= body_half.y
+	if right < left:
+		left = (left + right) * 0.5
+		right = left
+	if bottom < top:
+		top = (top + bottom) * 0.5
+		bottom = top
+	return Rect2(left, top, right - left, bottom - top)
+
+
+static func _touches(strip: Rect2, solids: Array[Rect2]) -> bool:
+	for s in solids:
+		if s.intersects(strip):
+			return true
+	return false

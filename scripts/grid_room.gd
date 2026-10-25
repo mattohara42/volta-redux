@@ -12,6 +12,9 @@ extends Bench
 ## the hand-written rooms use. A `[things]` line can set its own with `size=`.
 const SCORPION_SIZE := Vector2(30.0, 34.0)
 const BAT_SIZE := Vector2(20.0, 14.0)
+## Half the drawn bat, wingtip to wingtip, from its 34 px flap frames: what
+## must stay out of a wall the bat's box touches (`BatFlight.fitted_box`).
+const BAT_DRAWN_HALF := Vector2(17.0, 17.0)
 const ANT_SIZE := Vector2(22.0, 16.0)
 const EYEBALL_SIZE := Vector2(24.0, 24.0)
 ## How deep a floor plate sits in the floor it is set into, as the
@@ -179,7 +182,8 @@ func _build_things() -> void:
 		add_child(torch)
 	for t in level.of_kind("bat"):
 		var size := t.size("size", BAT_SIZE)
-		var bat := _add_bat(Rect2(t.rect.get_center() - size * 0.5, size), t.rect.size * 0.5)
+		var roam := BatFlight.fitted_box(t.rect, BAT_DRAWN_HALF, level.solids())
+		var bat := _add_bat(Rect2(roam.get_center() - size * 0.5, size), roam.size * 0.5)
 		if bat != null and t.flag("dormant"):
 			bat.start_dormant()
 
