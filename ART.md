@@ -870,6 +870,81 @@ mechanic in `GEMINI_NOTES.md` is for editing **our own** paintings.
 
 ## Open requests
 
+### The next three (2026-10-25, for Matt to paint in Gemini)
+
+Matt offered Gemini time while the held features were built. Three things
+coming soon need drawn art, and each uses a recipe that has landed before.
+
+**The outer wall, painted tall.** `BACKLOG.md`'s first entry: a tall level
+repeats the act's one-screen painting down the room, every other copy
+upside down, so zoomed out the moat hangs from the sky. This asks for one
+portrait painting of the whole wall, moat at the bottom and storm at the
+top, so the wall's 52 rows (832 px) need only one copy high. The
+three buttresses fall on both edges and the centre, so the mirror that
+repeats it across the room (`TileArt.draw_background_across`) seams on a
+buttress, as attempt 2 of the forest did on a trunk. The sky is lit from
+within so the storm's flashes have something to light. Expected back about
+768x1376, pixelated to 832 tall (about 464 wide). Save as
+`assets/art_raw/act1_wall_tall_bg.*`. Untested: whether Gemini holds a 9:16
+scene to a flat elevation as well as it held 16:9 ones.
+
+```
+Painted fantasy game art lit by fire and by electricity, in the style of hand-painted backgrounds from a hand-animated feature: visible brushwork, soft edges, real depth. Character and creature shapes read as a strong silhouette first, in the way of Mike Mignola's comic art, but rendered with full painterly surface and value, not flat black shapes. Every dark area of the painting is a coloured dark: cold violet-blue in stone and shadow, warm umber in wood and leather. Never use a neutral black or a neutral grey anywhere in the image, including in shadow. Forms are separated by value and by edge quality, hard edges where a shape matters, soft edges where it recedes, never a uniform ink outline.
+
+A tall painted background for a side-scrolling platformer: the full height of a castle's outer curtain wall at night, from the dark moat water at the very bottom of the canvas to the battlements and a stormy sky at the very top, in flat side view like a stage backdrop, camera perpendicular to the wall, with no vanishing point. It is NOT a three-quarter view, NOT a corner where two faces meet at an angle, and NOT seen from above or below. The canvas is portrait, taller than it is wide. The wall face runs flat and unbroken across the whole width of the canvas, divided into two identical bays by three tall buttresses: one buttress runs down the left edge of the canvas, one down the exact centre, and one down the right edge, each the same width, each running straight from the battlements to the waterline without a break. Going up the wall, from the bottom: a straight horizontal band of still, dark moat water along the bottom edge of the canvas; the wall's base, its stones big, damp and green with moss; the wall face rising through its middle, its masonry getting a little drier and more violet with height, with a narrow arrow slit glowing warm amber in each bay at three different heights, staggered so no two are level; then a row of square battlements along the top of the wall; and above them, filling the top of the canvas, a heavy storm sky of cold violet and slate-blue cloud. The storm sky is the point of the top of this painting: do not paint it as one flat tone, give it big rolling masses of cloud with paler edges, as if lit from within by distant lightning, but with no bolt of lightning drawn. Nothing in the painting looks like somewhere to stand: no walkways, no ledges, no stairs, no balconies, no doors, no bridges, no ladders, no scaffolding, and no towers standing in front of the wall. Large, simple shapes and few small details: big blocks of masonry and broad soft gradients. The whole painting stays dark and muted, a background meant to sit behind brighter platforms; the arrow slits are its only warm light and they stay small. Stone is cold blue-violet grey, damp and slightly green near the water; the darkest darks are deep violet-blue, never neutral black. No characters, no creatures, no fire, no torches, no flags, no text and no labels. The image is 1440 by 2560 pixels, aspect ratio 9:16.
+```
+
+**The portal's doors.** `LEVELS.md` (2026-10-25): the original's portal
+replaces the forest's stumps and is placeable in any level. Each door is a
+frame with a hole through it and a slab that shuts it, so the slab can move
+by transform (`ANIMATION.md`) and whatever shows in the open door can be a
+shader (`CLAUDE.md`: atmosphere is code). Three materials on one sheet, so
+the forest, the castle and the caverns (graveyard, beat 8a) get doors that
+are plainly the same thing. The hole is asked in magenta, which the key
+removes. Save as `assets/art_raw/kit_portals.*`.
+
+```
+Painted fantasy game art lit by fire and by electricity, in the style of hand-painted backgrounds from a hand-animated feature: visible brushwork, soft edges, real depth. Character and creature shapes read as a strong silhouette first, in the way of Mike Mignola's comic art, but rendered with full painterly surface and value, not flat black shapes. Every dark area of the painting is a coloured dark: cold violet-blue in stone and shadow, warm umber in wood and leather. Never use a neutral black or a neutral grey anywhere in the image, including in shadow. Forms are separated by value and by edge quality, hard edges where a shape matters, soft edges where it recedes, never a uniform ink outline.
+
+A sheet of nine separate pieces for a magical door that opens and shuts by itself, for a side-scrolling platformer, painted on a flat solid magenta (#FF00FF) backdrop, in a grid of three rows of three, with generous even spacing of plain magenta between every piece so each one can be cut apart on its own. Every piece is seen in flat side view, square to the camera like a stage flat, with no perspective and no vanishing point. It is NOT a three-quarter view and NOT seen from above or below. All nine are at the same scale, and each stops at its own outline, with magenta right up to its edge.
+
+The nine, in reading order. The top row is the door in a forest, the middle row the door in a castle, the bottom row the door in a cave of black volcanic rock.
+1. A huge old hollow tree stump, cut flat and level at its top and at its bottom, with a tall arched opening in its front as wide as half the stump, the opening's inside filled with plain flat magenta so it is a hole right through the piece. Taller than it is wide.
+2. The bark door that shuts that opening: one rounded slab of the same stump's bark, the exact shape and size of the arched opening in piece 1, with a ring of carved runes round its edge, the runes cut in and not glowing.
+3. A low ring of the same stump's roots that sits at the foot of piece 1, its top edge straight and level, four times as wide as it is tall.
+4. A tall narrow arched doorway in a castle wall: a frame of big dressed stones, cut flat and level at its bottom, its keystone carved with a single rune, the doorway's inside filled with plain flat magenta so it is a hole right through the piece. Taller than it is wide.
+5. The stone door that shuts that doorway: one slab of the same dressed stone, the exact shape and size of the arched opening in piece 4, with a ring of carved runes round its edge, the runes cut in and not glowing.
+6. A worn stone step that sits at the foot of piece 4, its top edge straight and level, four times as wide as it is tall.
+7. A tall narrow arched opening in black volcanic basalt, its frame rough columns of rock, cut flat and level at its bottom, the opening's inside filled with plain flat magenta so it is a hole right through the piece. Taller than it is wide.
+8. The basalt door that shuts that opening: one slab of the same rock, the exact shape and size of the arched opening in piece 7, with a ring of carved runes round its edge, the runes cut in and not glowing.
+9. A rough basalt step that sits at the foot of piece 7, its top edge straight and level, four times as wide as it is tall.
+
+The three opening shapes match: all three arches are the same width and the same height, so one magic light drawn later can fill any of them. Large, simple shapes and few small details: each piece reads at a glance as one clear silhouette with two or three values on it, because it will be shrunk to a few dozen pixels across. Thin strands, twigs and threads disappear at that size, so make every root and crack thick and few. Flat, even light on every piece, no cast shadows on the backdrop and no light source painted into the sheet. The stump's bark is cold grey-violet, never warm brown, because in this game warm brown wood means a sword can stick in it. Castle stone is cold blue-violet grey; the basalt is a deep blue-black violet with a faint cold sheen. The darkest darks are deep violet-blue, never neutral black. Nothing glowing, no light inside the openings, no swirl, no magic effects, no fire, nothing gold, nothing orange or red. No characters, no creatures, no ground, no sky, no text and no labels. The image is 2560 by 1440 pixels, aspect ratio 16:9.
+```
+
+**The sword graveyard** (`levels/act2_caverns.beats`, 8a: every sword broken
+but one). No gold anywhere on it, because the one whole sword is a pickup
+and is the game's own sprite. Save as `assets/art_raw/act2_kit_graveyard.*`.
+
+```
+Painted fantasy game art lit by fire and by electricity, in the style of hand-painted backgrounds from a hand-animated feature: visible brushwork, soft edges, real depth. Character and creature shapes read as a strong silhouette first, in the way of Mike Mignola's comic art, but rendered with full painterly surface and value, not flat black shapes. Every dark area of the painting is a coloured dark: cold violet-blue in stone and shadow, warm umber in wood and leather. Never use a neutral black or a neutral grey anywhere in the image, including in shadow. Forms are separated by value and by edge quality, hard edges where a shape matters, soft edges where it recedes, never a uniform ink outline.
+
+A sheet of nine separate pieces of a sword graveyard in a cave, the broken swords of adventurers who never came back for them, for a side-scrolling platformer, painted on a flat solid magenta (#FF00FF) backdrop, in a grid of three rows of three, with generous even spacing of plain magenta between every piece so each one can be cut apart on its own. Every piece is seen in flat side view, square to the camera like a stage flat, with no perspective and no vanishing point. It is NOT a three-quarter view and NOT seen from above or below. All nine are at the same scale, and each stops at its own outline, with magenta right up to its edge.
+
+Every sword on this sheet is a plain straight sword with a short crossguard, and every one of them is ruined: snapped, bent, notched or rusted. None of them is whole.
+1. A sword snapped off halfway down its blade, standing upright with its broken end driven into a small mound of rubble, taller than it is wide.
+2. A lone hilt and crossguard with only a short jagged stub of blade, lying flat on its side, wider than it is tall.
+3. A blade bent nearly double, leaning against a rock, about as wide as it is tall.
+4. Three broken swords stuck upright in a small cairn of stones at different angles, like grave markers, a little taller than it is wide.
+5. A heap of snapped blades and loose hilts, a low tangled pile, three times as wide as it is tall.
+6. A rusted blade with no hilt, notched like a saw along one edge, lying flat, four times as wide as it is tall.
+7. A round shield split in two, both halves lying flat on the ground, a broken sword across them, wider than it is tall.
+8. A rotten scabbard and a sword belt with its buckle, lying in a loose curl on the ground, wider than it is tall.
+9. A tall stalagmite with two snapped swords driven into it at chest height, their hilts sticking out, taller than it is wide.
+
+Large, simple shapes and few small details: each piece reads at a glance as one clear silhouette with two or three values on it, because it will be shrunk to a few dozen pixels across. Thin strands, straps and threads disappear at that size, so make every blade, strap and crack thick and few. Flat, even light on every piece, no cast shadows on the backdrop and no light source painted into the sheet. All the metal is old, dull and cold: dark iron grey-violet, with patches of dull rust in muted red-brown, never bright, never shining, never polished. There is no gold anywhere on this sheet, no gold hilts, no brass, no gems in the pommels, because in this game gold means something the player can pick up, and none of these can be. Rock is cold blue-violet grey; leather is a dark warm umber. The darkest darks are deep violet-blue, never neutral black. Nothing glowing, no fire, no lava, no bones, no skulls, no blood. No characters, no creatures, no sky, no text and no labels. The image is 2560 by 1440 pixels, aspect ratio 16:9.
+```
+
 ### The next sheets (2026-10-24, for Matt to paint in Gemini)
 
 Matt chose all four: a second kind of tree (the stand of six oaks reads as
