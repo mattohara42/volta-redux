@@ -29,6 +29,18 @@ extends Resource
 ## height. A hit above this line counts as "from above" regardless of side, per
 ## SPEC.md's "must be hit from behind or above".
 @export var scorpion_armor_top_fraction: float = 0.35
+## Ground speed while it hunts, px/s (`ScorpionHunt`). Faster than it walks, so
+## being seen changes things, and still half the hero's run, so being seen is
+## something you can run from.
+@export var scorpion_hunt_speed: float = 100.0
+## How far it sees, px: along its floor, and up or down from its feet. The
+## height is less than a storey (96 px) and more than a hop onto a step, so a
+## hero on its floor is seen and one on the floor above is not.
+@export var scorpion_sight: Vector2 = Vector2(160.0, 40.0)
+## Seconds of hunting without seeing the hero before it goes back to walking.
+## Longer than a jump over it, so a hero who leaps it is still being hunted
+## when he lands.
+@export var scorpion_lose_after: float = 1.2
 
 @export_group("Giant ant")
 ## Speed along the wall it is walking, px/s, the same on every leg of the loop:
