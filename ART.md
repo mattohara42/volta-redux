@@ -888,6 +888,21 @@ within so the storm's flashes have something to light. Expected back about
 `assets/art_raw/act1_wall_tall_bg.*`. Untested: whether Gemini holds a 9:16
 scene to a flat elevation as well as it held 16:9 ones.
 
+**Landed first attempt (2026-10-25)**, 768x1376: flat elevation, three
+buttresses, six slits, the storm lit from within (a small bolt crept into
+the sky despite the prompt; it survives pixelating as a pale streak).
+Buttress centres at x 51, 383 and 712, so it is cropped centre to centre
+and dimmed to the old wall painting's mean brightness (66):
+
+    tools/pixelate.py assets/art_raw/act1_wall_tall_bg.jpg assets/art/act1/wall_tall_bg_px.png --height 832 --crop 51,712 --dim 0.87
+
+400x832 at 24 colours, palette check passes. Only the outer wall uses it,
+through its own tile set (`assets/art/act1/wall_tiles.tres`, a copy of
+Act 1's with this painting and its six lit slits), because a one-screen
+room drawing an 832 px painting from the top would show only sky. **The
+flaw**: the sky mirrors at every seam too, so the clouds over each
+buttress fold into a symmetric blot. Shows zoomed out; Matt's call.
+
 ```
 Painted fantasy game art lit by fire and by electricity, in the style of hand-painted backgrounds from a hand-animated feature: visible brushwork, soft edges, real depth. Character and creature shapes read as a strong silhouette first, in the way of Mike Mignola's comic art, but rendered with full painterly surface and value, not flat black shapes. Every dark area of the painting is a coloured dark: cold violet-blue in stone and shadow, warm umber in wood and leather. Never use a neutral black or a neutral grey anywhere in the image, including in shadow. Forms are separated by value and by edge quality, hard edges where a shape matters, soft edges where it recedes, never a uniform ink outline.
 
