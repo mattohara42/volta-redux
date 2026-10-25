@@ -3,7 +3,7 @@
 > **Rewrite this file, never append.** State snapshot and pointers only. No
 > session narrative, that is what `git log` is for. Keep it under 150 lines.
 
-**Updated:** 2026-10-24 · **Phase:** 3 rebuilt, depth before breadth.
+**Updated:** 2026-10-25 · **Phase:** 3 rebuilt, depth before breadth.
 **Active milestone:** N3, the outer wall rebuilt from a beat sheet
 (`BUILD_PLAN.md`). Matt approved the sheet, `levels/act1_wall.beats`, on
 2026-10-13. N0 is done; N1 and N2 are built and wait only on Matt's play.
@@ -22,6 +22,11 @@ at the foot of `levels/act1_wall.beats` (*As built*). The pre-N3 wall is
 at a respawn, bats can sleep, lowercase anchors, WalkBack drops through
 slabs. **Next for Claude**: Matt's play notes. N3 is done when Matt and the
 kids play Act 1 from a new game and say it is better (G2 again).
+
+**Act 2's first sheet is drafted ahead of the gate** (Matt, 2026-10-25,
+overruling the R4-waits rule for planning only): `levels/act2_caverns.beats`,
+19 beats from the undercroft to the lair door. Nothing is built from it until
+Matt approves it, and its six questions (*Before building*) come first.
 
 **The foreground kit and the new trees and assets are good enough to go on
 with** (Matt, 2026-10-24, from the shots of the forest and the castle).
@@ -72,16 +77,18 @@ play: whether the fly-in (0.2 s) reads, and the punch and exit sizes.
    2). Better than before? That is G2 again, and closes N3. Read the *As
    built* notes in `levels/act1_wall.beats` first: each is a call to keep
    or overrule.
-2. **Play the N1 benches** (`bench_n1`, `bench_n1_found`, `bench_n1_combos`,
+2. **Mark up `levels/act2_caverns.beats`** and answer its six questions,
+   above all what lava does to a sword. Not a gate on N3.
+3. **Play the N1 benches** (`bench_n1`, `bench_n1_found`, `bench_n1_combos`,
    F2; the top left names the room) and say which combinations are worth
    building beats around. Closes N1.
-3. **Look at N2's after shots** (the PR) or play either Act 1 level: is a
+4. **Look at N2's after shots** (the PR) or play either Act 1 level: is a
    shot natural-looking? That closes N2. The back walls, torches and trunks
    are Claude's placements, easy to move in the level text.
-4. **Frame time on a real machine**: `tools/dev.sh frametime`, then with
+5. **Frame time on a real machine**: `tools/dev.sh frametime`, then with
    `res://scenes/rooms/act1_forest.tscn` and `act1_wall.tscn`: p95 under
    16.7 ms? Blocks R3's frame-rate half.
-5. **Older and still open**: R2's final quality (the flame, the sword, the
+6. **Older and still open**: R2's final quality (the flame, the sword, the
    doors, the ride); `RoomM7Sheet` consistent in treatment (closes M7); the
    unattended calls from 2026-10-05; M4's dragon pacing; a play log (`user://`,
    #136) when one is to hand. Two rulings wait for N1: faster ladder
