@@ -10,9 +10,10 @@ play is in `HANDOFF.md`'s open list. What is still open from them is below.
 
 ## Left over from R1 to G2
 
-- **A tall level needs its own background painting.** The act's one-screen
-  painting is repeated down a tall room, every other copy flipped, as a
-  stopgap; a castle five floors tall wants a painting made for it.
+- **A tall level needs its own background painting.** The outer wall has
+  one now (`ART.md`, *The next three*); the forest's was painted to mirror.
+  Any later tall level still repeats its act's one-screen painting down the
+  room, every other copy flipped.
 - **The respawn sword cap is an assumption, not Matt's words.** If the hand
   plus the swords stuck in walls would pass five on a death, the oldest stuck
   ones go, so dying never farms ledges (`RespawnRules`).
