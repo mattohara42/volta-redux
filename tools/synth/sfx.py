@@ -443,15 +443,15 @@ def amb_works():
 
 
 def amb_hall():
-    """Act 4: rain on the high windows, and thunder once, a long way off."""
+    """Act 4: rain on the high windows. The thunder is `Storm`'s, struck with
+    each flash (2026-10-24); a roll baked in here played out of step with it."""
     dur = 16.0
     rain = highpass(noise(dur, seed=120), 1800.0)
     rain = lowpass(rain, 7000.0) * 0.35
     rng = np.random.default_rng(121)
     drops = (rng.random(samples(dur)) > 0.9985).astype(float) * rng.uniform(0.2, 1.0, samples(dur))
     drops = bandpass(drops, 3500.0, q=1.5) * 0.8
-    thunder = lowpass(noise(5.0, seed=122), sweep(500.0, 80.0, 5.0)) * adsr(5.0, 0.4, 1.0, 0.5, 3.0) * 2.2
-    return _seamless(pad_to(mix(rain, drops, delayed(thunder, 6.0)), dur))
+    return _seamless(pad_to(mix(rain, drops), dur))
 
 
 def loop_lava():
