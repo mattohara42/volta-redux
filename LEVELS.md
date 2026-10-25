@@ -426,3 +426,15 @@ N0 to N3).
 5. **A found sword does not survive a death** (Matt, 2026-10-08). The hand
    goes back to what it held arriving in the room, and the sword lies where
    it was found again. Carried out of the room, it is yours.
+
+## Decisions (Matt, 2026-10-25)
+
+1. **The portal is the original's, and the stumps become it.** In the
+   original's third level a door at the top opens for a few seconds; run
+   into it and you come out of the very bottom level, still moving the same
+   way. A second later it opens at the bottom, and running into that takes
+   you back up. It is for getting somewhere you cannot otherwise reach, and
+   both ends are placed somewhere dangerous, so going and coming back are
+   each a risk. It replaces the one-way stump warp (decision 8 of
+   2026-09-28): the forest's two stumps are reworked to this rule after
+   Matt has played N3, and the portal is placeable in any level.

@@ -41,8 +41,6 @@ needed rather than optional, because the content is about to exist.
 - **The giant ant is placeable and in no level.** Act 3 is the obvious home:
   seven rooms with no creature but the generator. Check first what an ant does
   when it walks into an embedded sword.
-- **Two-way portals**, a new system still needing a yes (`LEVELS.md` decision
-  8 kept the one-shot stump warp). Lifts and geysers are placeable now.
 - **Spikes where lava cannot go**: teeth on top of the ledge you land on. The
   56 px jump cannot clear a bed on a 32 px step, so it wants a moving platform
   or a sword ledge to arrive on. Revisit when building a level.
