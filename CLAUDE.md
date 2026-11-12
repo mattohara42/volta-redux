@@ -108,8 +108,10 @@ design back toward the trace. `assets/reference/` is the part worth keeping.
 - If a requirement is ambiguous: for structural questions, ask. For small
   reversible details, pick the most reasonable option and record the assumption
   in the commit or PR.
-- **Open PRs ready for review, not as drafts**, and squash-merge them right away
-  rather than waiting to watch CI.
+- **Open PRs ready for review, not as drafts, and enable auto-merge (squash)**
+  rather than merging. GitHub merges the moment CI is green, nobody waits on
+  it, and a red PR stays open with its failure in view instead of landing on
+  `main` (#208). Do not merge by hand over a red or pending CI.
 
 ## House style
 

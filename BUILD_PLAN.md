@@ -307,6 +307,22 @@ where the sheet puts it, and Matt and the kids play Act 1 from a new game and
 say it is better. That reruns G2. Then the forest gets a density pass, and R4
 builds Acts 2 to 4 the same way, as fewer, denser levels.
 
+**Passed 2026-11-12, and with it G2.** Matt played Act 1 on the rebuilt wall:
+"much better than it was in earlier versions, but we need to keep evolving it."
+The three features held for the gate (the scorpion's hunt, the slash, the
+portal) merge now, and the forest's density pass is next.
+
+### N4: the forest rebuilt from a beat sheet
+The same method on level 1. The forest gets its own sheet
+(`levels/act1_forest.beats`): every screen a beat or cut, each idea given
+its four beats, two loops back to a brazier, a pocket or two, and the portal
+(#206) placed where going and coming back are each a risk. Kept: the oak,
+the river crossed in the branches, the nest, the culvert out.
+
+**Done when**: Matt has approved the sheet, route, walkback, tests and
+scenarios pass, every beat is shot where the sheet puts it, and Matt plays
+Act 1 from a new game and says the forest now matches the wall.
+
 ### R4: Acts 2 to 4 at full size
 Only after N3, and G2 passing on the rebuilt Act 1. Each act's existing rooms become sections of its levels; the
 dragon, the generator and Volta stay. Then M14, then M16.

@@ -22,6 +22,14 @@ upload URL for a large input), `GET /credits`. The key lives in the
 `SPRITE_FUSION_API_KEY` environment variable and **nowhere in this repo**: not
 in a file, a log, a URL, or anything that ships.
 
+**Where the key comes from**: signed in, *Account → API keys*,
+`https://www.spritefusion.com/account/api-keys`. A key's full value is shown
+once, at creation, so a lost key means a new one. **In a cloud session** the
+key is a network secret on the environment for `www.spritefusion.com`, and
+the proxy adds it to every request, so no variable holds it. Run the client
+with a placeholder, `SPRITE_FUSION_API_KEY=proxy-injected tools/sprite-fusion.py
+credits`, which is free and prints the balance.
+
 **The client is `tools/sprite-fusion.py`.** A generation is a dry run
 unless `--spend` is passed, since spending credits is the irreversible step
 here. Deliveries land untouched in `assets/art_raw/` as `NAME_<index>`, and
@@ -174,9 +182,22 @@ reads its pose holds from them.
   of it, two or three frames. Lower the threshold, or accept that the dive shows
   on bigger falls. `ANIMATION.md` has what else the threshold decides.
 
-## The slash (2026-10-25, waiting on the key)
+## The slash (2026-10-25, first delivery 2026-11-12)
 
-**One `animate`, 15 credits, not yet spent.** The slash (`SPEC.md`) is built
+**Spent 2026-11-12, 15 credits, not usable as delivered.** The request below
+returned `assets/art_raw/hero_slash_anim_0_sheet.png` (6 frames, 36 px). Frames
+0, 1 and 5 face right and read: the still, the blade forward at the hip, and
+a low follow-through. **Frames 2 to 4 turn him round**, back to the camera,
+for the raise, which is the prompt's first instruction broken. The blade also
+comes out **curved** in every frame after 0, where the sword is settled as
+straight, and the outline picks up 21 dark green pixels the still does not
+have. Nothing is wired in; the placeholder stands. Matt's call on the next
+15 credits: the same prompt again (it is a fresh roll), or one that drops
+the raise behind the head, which is the move that made it turn (a cut from
+the shoulder, forward and down, "side view only, his back never shows, the
+straight blade from the still").
+
+**The original plan, one `animate`.** The slash (`SPEC.md`) is built
 with a placeholder look: the hero holds his throw pose while the sword
 sprite sweeps through the strike by transform (`Slash`). The still already
 holds a sword in his hand, which is the one that never leaves it, so the M6
