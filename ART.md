@@ -960,6 +960,20 @@ Every sword on this sheet is a plain straight sword with a short crossguard, and
 Large, simple shapes and few small details: each piece reads at a glance as one clear silhouette with two or three values on it, because it will be shrunk to a few dozen pixels across. Thin strands, straps and threads disappear at that size, so make every blade, strap and crack thick and few. Flat, even light on every piece, no cast shadows on the backdrop and no light source painted into the sheet. All the metal is old, dull and cold: dark iron grey-violet, with patches of dull rust in muted red-brown, never bright, never shining, never polished. There is no gold anywhere on this sheet, no gold hilts, no brass, no gems in the pommels, because in this game gold means something the player can pick up, and none of these can be. Rock is cold blue-violet grey; leather is a dark warm umber. The darkest darks are deep violet-blue, never neutral black. Nothing glowing, no fire, no lava, no bones, no skulls, no blood. No characters, no creatures, no sky, no text and no labels. The image is 2560 by 1440 pixels, aspect ratio 16:9.
 ```
 
+**The graveyard sheet landed first attempt (2026-10-25)**
+(`act2_kit_graveyard.jpg`): nine pieces, no gold anywhere. Piece 1's sword
+reads nearer whole than snapped, the bent blade came back a curved sabre on
+its rock, and the split shield is warm brown wood, which says "a sword
+bites this" (`ART_DIRECTION.md`); it lies flat as dressing, so it stays
+unless play says otherwise. Keyed with no spill at `--tolerance 40` (its
+irons are violet), cut, and pixelated at one scale, 0.11, so a sword in
+the sheet is about 20 px against the thrown sword's 16. Nine mauve pixels
+of bled backdrop in the belt were recoloured from the leather round them.
+In `assets/art/act2/kit/grave_*.png`; nothing places them yet, because
+the caverns sheet is not approved. The heap and the cairn go muddy at
+this size, as thin blades do; the single blades, the shield and the
+stalagmite read.
+
 ### The next sheets (2026-10-24, for Matt to paint in Gemini)
 
 Matt chose all four: a second kind of tree (the stand of six oaks reads as
