@@ -34,8 +34,6 @@
 ##     scorpion range=96        a patrol; `dormant` asleep until you come near
 ##     bat                      flies about the rect it fills; `dormant` asleep
 ##                              at its middle until you come near (a roost)
-##     stump to=U               land on it, come up on stump U (one way)
-##     stump                    a stump that leads nowhere, or a warp's end
 ##     portal to=Q              a door you run into while it is open, coming
 ##                              out of door Q; the two take turns (`Portal`)
 ##     portal                   the other door of a pair
@@ -92,7 +90,7 @@ const DECOR := {
 	"D": "leaf_drift", "V": "ruin", "J": "hang_roots",
 }
 const KINDS: PackedStringArray = [
-	"gate", "switch", "plate", "scorpion", "bat", "stump", "lift", "geyser", "ant",
+	"gate", "switch", "plate", "scorpion", "bat", "lift", "geyser", "ant",
 	"eyeball", "slab", "sword", "sill", "cage", "portal",
 ]
 

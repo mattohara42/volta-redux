@@ -523,8 +523,8 @@ func _place_at_checkpoint(restore_swords: bool) -> void:
 	respawned.emit(global_position, death_config.respawn_freeze)
 
 
-## Put the hero's feet at `feet`, standing still, as a stump warp does
-## (`Stump`). The camera cuts rather than gliding across the level.
+## Put the hero's feet at `feet`, standing still, as the capture tool's
+## `--at` does. The camera cuts rather than gliding across the level.
 func warp_to(feet: Vector2) -> void:
 	global_position = feet - Vector2(0.0, world.hero_height * 0.5)
 	velocity = Vector2.ZERO

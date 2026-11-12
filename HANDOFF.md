@@ -38,8 +38,8 @@ sheet leans on it and nothing proves it yet.
 2. **Play the three merged features** and judge the dials (all in
    `config/`) and calls: the hunt's sight and instant turn (#203); the
    slash's reach and recovery, and whether it belongs outside `Sword`
-   (#210); the portal's 3 s open and 1 s shut, and whether `Stump`,
-   `StumpLanding` and `room_g2_stump` can be deleted (#206).
+   (#210); the portal's 3 s open and 1 s shut (#206). The stumps are
+   deleted (#215).
 3. **The slash's art, next 15 credits**: the first `animate` turned the hero
    round and curved the blade (`ART.md`, *The slash*). Same prompt again, or
    the reworded one there? The placeholder stands until then.
