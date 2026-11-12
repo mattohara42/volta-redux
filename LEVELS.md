@@ -437,4 +437,7 @@ N0 to N3).
    both ends are placed somewhere dangerous, so going and coming back are
    each a risk. It replaces the one-way stump warp (decision 8 of
    2026-09-28): the forest's two stumps are reworked to this rule after
-   Matt has played N3, and the portal is placeable in any level.
+   Matt has played N3, and the portal is placeable in any level. **Built
+   (2026-10-25, held until G2):** `portal to=Q` in a level's `[things]`,
+   each door open 3 s in turn with 1 s shut between (`config/hazards.tres`),
+   and you come out still moving (`Portal`).
