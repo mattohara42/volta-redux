@@ -3,79 +3,64 @@
 > **Rewrite this file, never append.** State snapshot and pointers only. No
 > session narrative, that is what `git log` is for. Keep it under 150 lines.
 
-**Updated:** 2026-10-25 (late) · **Phase:** 3 rebuilt, depth before breadth.
-**Active milestone:** N3, the outer wall rebuilt from a beat sheet
-(`BUILD_PLAN.md`). Matt approved the sheet, `levels/act1_wall.beats`, on
-2026-10-13. N0 is done; N1 and N2 are built and wait only on Matt's play.
-**N3 done-when:** route, walkback, tests and scenarios pass, every beat is
-shot where the sheet puts it, and Matt and the kids play Act 1 from a new
-game and say it is better (G2 again). R4 and M14 wait on that.
+**Updated:** 2026-11-12 · **Phase:** 3 rebuilt, depth before breadth.
+**G2 passed** on the rebuilt Act 1 (Matt, 2026-11-12: "much better ... but we
+need to keep evolving it"). N3 is done.
+**Active milestone:** N4, the forest rebuilt from a beat sheet
+(`BUILD_PLAN.md`; named this session from N3's "then the forest gets a
+density pass", so the name and done-when are Claude's, Matt to confirm).
+**N4 done-when:** Matt has approved `levels/act1_forest.beats`, route,
+walkback, tests and scenarios pass, every beat is shot where the sheet puts
+it, and Matt plays Act 1 and says the forest now matches the wall.
+
+## Where it is
+
+The three features held for G2 are on `main`: the scorpion hunts (#203), the
+slash (#210), the portal (#206, the forest's stumps are now portal doors).
+Each one's open calls are in its PR description and in *Blocked on Matt*.
+Merge rule changed: enable auto-merge, never merge over red (`CLAUDE.md`,
+#208).
 
 ## The next action
 
-**N3 is built and waits on Matt's play.** Every beat on the sheet is in
-`levels/act1_wall.level`; where the build departs from the sheet is at the
-foot of `levels/act1_wall.beats` (*As built*). `act1_wall_old` (F2) is the
-pre-N3 wall to compare. **Next for Claude**: Matt's play notes.
-
-**Three features are merged** (2026-11-12), each PR's open calls in its
-description:
-
-- **#203, the scorpion hunts** (`SPEC.md`, *The scorpion hunts*): sees you
-  ahead on its own floor, comes after you, waits at its floor's edge.
-  Dials in `config/enemies.tres`.
-- **#210, the slash** (K, gamepad B): free, short, armour turns it, the
-  bosses ignore it. Dials in `config/sword.tres`. Placeholder look until
-  its Sprite Fusion `animate` is run (`ART.md`, *The slash*).
-- **#206, the portal** (`LEVELS.md`, Decisions 2026-10-25): two doors
-  taking turns, the forest's stumps reworked to it, painted doors for
-  forest, castle and caverns. Dials in `config/hazards.tres`.
-
-All three change Act 1's feel, which is the point. The stumps they
-replaced are deleted, `room_g2_stump` with them.
-
-**Act 2's first sheet is drafted ahead of the gate**:
-`levels/act2_caverns.beats`. Nothing is built from it until Matt approves
-it; his answers to its questions are at its foot (*Decided*).
+**`levels/act1_forest.beats` is drafted** and waits on Matt's markup (four
+questions at its foot). Nothing is built from it until he approves it.
+While it waits, Claude can bench beat 16's move (a bounced throw coming
+home through a scorpion that turned to follow a somersault), since the
+sheet leans on it and nothing proves it yet.
 
 ## Blocked on Matt
 
-1. **Play Act 1 from a new game, with the kids** (the rebuilt wall is level
-   2). Better than before? That is G2 again, and closes N3. Read the *As
-   built* notes in `levels/act1_wall.beats` first. Blocks R4 and M14.
-2. **Play the three merged features** and judge their dials and the calls
-   in each PR (the hunt's sight and instant turn; the slash's reach and
-   recovery, and whether it belongs outside `Sword`; the portal's 3 s and
-   1 s).
-3. **Mark up `levels/act2_caverns.beats`.** Blocks building Act 2.
-4. **Put `SPRITE_FUSION_API_KEY` in the cloud environment** (environment
-   menu, Edit, Network secrets). Blocks the slash's animation in a cloud
-   session.
-5. **#208: auto-merge instead of merging at once.** #201 merged with a red
-   scenario because CI took 12 minutes and the rule is to merge straight
-   away. Scenarios now run one per core (#211), so CI should be nearer 5.
-   Changes a `CLAUDE.md` rule, so Matt's.
-6. **Play the N1 benches** (`bench_n1`, `bench_n1_found`,
-   `bench_n1_combos`, F2) and say which combinations are worth building
-   beats around. Closes N1. The found bench's bat now takes about 7 s to
-   find the stuck sword (#204).
-7. **Look at N2's after shots** or play either Act 1 level: is a shot
-   natural-looking? Closes N2.
-8. **Frame time on a real machine**: `tools/dev.sh frametime`, then with
+1. **Turn on auto-merge** (#208): repo Settings, General, *Allow
+   auto-merge*; and a branch rule on `main` requiring *Headless tests and
+   the capture scenarios*. Until then Claude waits for green and merges by
+   hand, which is the same rule done slower.
+2. **Play the three merged features** and judge the dials (all in
+   `config/`) and calls: the hunt's sight and instant turn (#203); the
+   slash's reach and recovery, and whether it belongs outside `Sword`
+   (#210); the portal's 3 s open and 1 s shut (#206). The stumps are
+   deleted (#215).
+3. **The slash's art, next 15 credits**: the first `animate` turned the hero
+   round and curved the blade (`ART.md`, *The slash*). Same prompt again, or
+   the reworded one there? The placeholder stands until then.
+4. **Mark up `levels/act1_forest.beats`.** Blocks building N4.
+   **And `levels/act2_caverns.beats`**, which blocks building Act 2 (R4).
+5. **Close N1 and N2**: play the N1 benches (F2) and say which combinations
+   are worth beats; say whether N2's look is natural. Both are inputs to
+   the forest sheet, so they are worth doing first.
+6. **Frame time on a real machine**: `tools/dev.sh frametime`, then with
    `act1_forest.tscn` and `act1_wall.tscn`: p95 under 16.7 ms? Blocks R3's
    frame-rate half.
-9. **Older and still open**: R2's final quality (the flame, the sword, the
-    doors, the ride); `RoomM7Sheet` consistent in treatment (closes M7); the
-    unattended calls from 2026-10-05; M4's dragon pacing; a play log
-    (`user://`, #136). Two rulings wait for N1: faster ladder climbing, and
-    a test build that lets you throw mid-somersault.
+7. **Older and still open**: R2's final quality (the flame, the sword, the
+   doors, the ride); `RoomM7Sheet` consistent in treatment (closes M7); the
+   unattended calls from 2026-10-05; M4's dragon pacing; a play log
+   (`user://`, #136). Two rulings that waited on N1: faster ladder
+   climbing, and a test build that lets you throw mid-somersault.
 
 **Matt's to judge while playing Act 1** (each built on his word, dials in
-`config/`): the forest rebuild (terraces, the drop to the nest, the oak's
-vine and boughs, the fronds over the hero's legs); the storm (rain density,
-how often, how bright; FLASHES in the pause menu turns it down); the cards
-and lettering; the death line's fly-in and punch; the tall wall painting
-(the sky's clouds fold into a symmetric blot at each mirror seam).
+`config/`): the forest's terraces, oak and fronds; the storm (FLASHES in the
+pause menu turns it down); the cards and lettering; the death line's fly-in;
+the tall wall painting's mirror seams.
 
 ## Traps that will bite again
 
@@ -93,7 +78,9 @@ time and fails to compile: go through a typed variable.
 **Never edit a tree a scenario run is reading**: each scenario starts its
 own Godot, so a mid-run edit mixes two versions. Use a `git worktree` per
 branch. **A branch cut before a fix** goes red on its push run and green on
-its PR run (the PR run tests the merge); merge `main` in.
+its PR run (the PR run tests the merge); merge `main` in. **Two branches
+that add scenarios at the same spot** conflict in `tools/scenarios_data.py`;
+keep both blocks.
 
 **`*.import` is gitignored**: an import setting set there holds on one
 machine only; loops live in the WAV (`smpl`) or in code (#120). **Godot's
@@ -110,26 +97,31 @@ speed** and lands about 140 px past the hero. **A bat's box is where it can
 kill you**, pulled in by half its body wherever it touches solid (#201): a
 sword or a throw line in a bat's reach needs a cell of air between box and
 wall. **A scorpion is only a sword fight in a tunnel**: the throw is flat at
-18 px and it is 34 px tall. **Walk-back's "exit out of reach" means the
-level is blocked**: its drawing is full height now.
+18 px and it is 34 px tall. **A scorpion that sees you hunts you** now: a
+beat that relied on its fixed range needs re-checking in play. **Walk-back's
+"exit out of reach" means the level is blocked**: its drawing is full height.
 
-**Sprite Fusion**: `style-reference` ignores `size`, `animate` starts on the
-input's pose, frames can boil (filmstrip first), an SSL EOF charges nothing.
-**Gemini sheets**: `key.py --spill-hue` eats purple-brown bark with the
-magenta; key a sheet with warm purples at `--tolerance 40` and no spill.
-**A test can pass while a texture is missing**: shoot the room after art.
-**A grid level's look is baked at load**: shoot it, headless draws nothing.
+**Sprite Fusion**: the key is a cloud network secret, so run the client as
+`SPRITE_FUSION_API_KEY=proxy-injected tools/sprite-fusion.py ...` (`ART.md`).
+`style-reference` ignores `size`, `animate` starts on the input's pose,
+frames can boil (filmstrip first), a big pose change can turn the figure
+round, an SSL EOF charges nothing. **Gemini sheets**: `key.py --spill-hue`
+eats purple-brown bark with the magenta; key a sheet with warm purples at
+`--tolerance 40` and no spill. **A test can pass while a texture is
+missing**: shoot the room after art. **A grid level's look is baked at
+load**: shoot it, headless draws nothing.
 
 ## Settled, do not relitigate
 
 **Pixel art.** **Straight sword, asymmetric hilt.** **M5 final quality.**
 **Moving jumps are somersaults; dives cost a recovery pause** (2026-09-28).
 **M4:** contact with any enemy kills; the dragon dies only to RECALLING.
-**G1:** passed. **Enemies killed since the brazier come back at a respawn**
-(2026-10-13). **N0:** passed. **`LEVELS.md`'s twelve questions**
-(2026-09-28). **R1's play half** (2026-10-07). **The slash** (2026-10-25):
-its own button, armour turns it, no boss damage. **The foreground kit, the
-new trees and assets** are good enough to go on with (2026-10-24).
+**G1, G2, N0, N3:** passed. **Enemies killed since the brazier come back at
+a respawn** (2026-10-13). **`LEVELS.md`'s twelve questions** (2026-09-28).
+**R1's play half** (2026-10-07). **The slash** (2026-10-25): its own button,
+armour turns it, no boss damage. **The portal is the original's** (2026-10-25).
+**Auto-merge on green** (2026-11-12). **The foreground kit, the new trees
+and assets** are good enough to go on with (2026-10-24).
 
 ## Pointers
 
@@ -137,5 +129,5 @@ new trees and assets** are good enough to go on with (2026-10-24).
 `ART_DIRECTION.md` how it looks · `ANIMATION.md` what moves ·
 `ART.md`/`GEMINI_NOTES.md` before any art · `assets/audio/README.md` sound ·
 `CLAUDE.md` how to work here · `README.md` running it · `BACKLOG.md` raised
-and not judged · `LEVELS.md` Matt's level vision, decided. Open issues:
-#208 (merge on green), #209 (scenarios by goal, not frame count).
+and not judged · `LEVELS.md` Matt's level vision, decided. Open issue: #209
+(scenarios by goal, not frame count).

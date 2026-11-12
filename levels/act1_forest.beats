@@ -1,0 +1,145 @@
+# The forest and the moat: Act 1, level 1
+# DRAFT by Claude for Matt to mark up (2026-11-12), for N4. Built only from
+# pieces that exist today, and the scorpion's hunt, the slash and the portal
+# that merged after G2. Nothing is built from it until Matt approves it.
+#
+# What the forest is today (shot 2026-11-12): the left half is one ground
+# floor under a canopy road, the right half one long hill with the nest on
+# top, and about a third of its twenty screens have no beat in them. The
+# wall teaches the sill, bats on ladders, the switch and the floor that holds
+# once, so this level leaves those alone and teaches the verb itself.
+#
+# Kept: the oak with its vine and boughs, the river crossed in the branches,
+# the island, the hollow log, the nest, the culvert under the wall. Cut: the
+# flat run between the island and the hill, and the hill's long bare slopes.
+# Sixteen beats, so the level gets shorter than today, not longer.
+ideas: throw and catch on the move, a sword in wood is a ledge, the cracked branch, the scorpion's back
+also: the portal, two beats here (see the foot)
+
+## 1. The clearing  [breather]  floor 1
+The forest edge at dawn. A brazier, a chest, nothing alive. Trees close in
+on the right, so the first thing you see past the light is wood.
+brazier: here
+
+## 2. The sleeper  [introduce: throw and catch on the move]  floor 1
+A scorpion asleep with its back to you, on open ground. Throw: it dies.
+Walk on while the sword is out and it comes home to where you are now,
+not to where you threw from. It only wakes if you walk up to it, so a
+bad first throw costs nothing.
+can kill you: the scorpion, once woken
+
+## 3. The oak  [introduce: a sword in wood is a ledge]  floors 1 to 3
+The great oak. The vine climbs its trunk to the second bough and stops.
+The third bough is a body's height above, over bare bark. A sword in the
+trunk is the step. A miss drops you to the second bough, not the ground.
+note: the vine and five boughs are today's; only the vine is shortened.
+
+## 4. Under the boughs  [introduce: the scorpion's back]  floor 1
+Past the oak's roots, a scorpion awake on a short patrol under the lowest
+bough. On the ground it sees you and hunts, armour first, and a level
+throw bounces. From the bough above it cannot see you: wait for it to
+pass under, drop in behind it, and throw into its back.
+can kill you: the scorpion
+note: depends on the hunt's sight (#203), "its own floor" being within 40 px.
+
+## 5. The shallows  [introduce: the cracked branch]  floor 1
+The river's edge. A cracked branch over shallow water with mud under it,
+no spikes. Stand on it and it shakes and drops you a short way into the
+mud. The rule is learned by being let off.
+
+## 6. The river  [develop: the cracked branch]  floors 1 to 2
+Branches over the spiked riverbed, sound and cracked mixed, no two gaps
+alike. A bat circles over the far half. Throw at it from a branch and
+keep going: the catch comes to the branch you are on now. Standing still
+to watch the throw is how a cracked branch takes you.
+can kill you: the bat, the riverbed
+note: develops throw and catch on the move too.
+
+## 7. The island  [introduce: the portal]  floors 1 to 4
+Mid river, a door in a stump that opens for three seconds, shuts, then its
+twin opens in the canopy above. Run in and you come out up there, still
+running. Both ends are safe here. Going back down is the same door.
+brazier: on the island
+loop: the canopy door brings you back to this brazier
+
+## 8. The hollow log  [combine: a sword in wood + the scorpion's back]  floor 2
+A fallen trunk across the far bank, hollow, with a scorpion in it. In the
+tunnel it is a sword fight, face to face. The answer is to climb over the
+log first and put a sword in its far end, go round to the near end, and
+recall: the sword comes home through its back.
+can kill you: the scorpion
+
+## 9. The canopy road  [develop: a sword in wood is a ledge]  floor 4
+Treetops over the river, the gaps between crowns too wide to jump, a
+trunk in each. A sword in the trunk is the midway step, and you recall it
+from the far crown. The stake is the riverbed below.
+can kill you: the riverbed, two bats
+
+## 10. The crown  [pocket]  floor 5
+Up the tallest tree, a fourth sword lying at the top. Reached by two
+swords in the bare trunk as steps, so you climb with one in hand and
+recall both from the top.
+note: twists the ledge (the step you left is in your way home), Matt's call.
+
+## 11. The hill's foot  [breather]  floor 1
+The canopy comes down to the ground at the start of the hill. A brazier,
+a chest, a view of the castle wall above the trees.
+brazier: here
+
+## 12. The terraces  [twist: the cracked branch]  floors 1 to 3
+The hill's face is terraces with cracked branches as the only steps
+between them. Until now you kept off them; here you must land on one and
+jump again before it goes, three in a row, each a different gap. Throw at
+the bat from the bottom terrace and climb: the catch finds you two
+terraces up.
+can kill you: one bat
+note: also twists throw and catch (the catch is above you).
+
+## 13. The nest  [twist: the scorpion's back]  floor 3
+Three scorpions on the hilltop. Each one that sees you comes to the edge
+of its floor and waits facing you, so walking up the hill never gives you
+a back. The answer that worked (drop in behind) has no bough to drop from.
+Go round.
+can kill you: three scorpions
+note: depends on the hunt's instant turn (#203). If a turn delay goes in,
+this beat gets easier.
+
+## 14. The branch over the nest  [combine: the cracked branch + the scorpion's back]  floors 3 to 4
+Round is a cracked branch from the hill's last oak, out over the nest. It
+drops you into the middle of the three, behind the one nearest. Throw
+before the others turn, then recall through the second.
+can kill you: two scorpions
+
+## 15. The door down  [develop: the portal]  floors 3 to 1
+Past the nest, a door that takes you down to the moat bank. It comes out
+beside a bat's circuit, so arriving is a risk, and the door back up comes
+out at the nest's edge, so returning is one too.
+loop: the door back up to the brazier at 11
+
+## 16. The moat bank  [combine: throw and catch on the move + the scorpion's back]  floor 1
+The bank under the castle wall, a scorpion hunting along it and the culvert
+mouth at the far end. A throw at its face bounces. Throw anyway, then
+somersault over it: it turns to face you on the far side, and the sword on
+its way home comes in through its back. The bat's circuit is above the
+somersault, so the jump has to be timed. The culvert is the way out, one way.
+can kill you: the scorpion, the bat
+
+# The count
+# Each idea and its four beats, for Matt to check at a glance.
+# - throw and catch on the move: 2, 6, 12, 16
+# - a sword in wood is a ledge: 3, 9, 10 (pocket), 8
+# - the cracked branch: 5, 6, 12, 14
+# - the scorpion's back: 4, 13, 8, 14 and 16 (develop is missing; 8 does
+#   the job but is a combine)
+# - the portal: 7, 15. Two beats, not four. Either give it a twist and a
+#   combine (a door that opens on a hunting scorpion; a sword thrown into a
+#   door) or keep it as the level's way round rather than one of its ideas.
+# - loops: 7 (canopy door to the island), 15 (moat door to the hill).
+#
+# Questions for Matt
+# 1. The portal: an idea with four beats, or the way round? (above)
+# 2. Beat 8 asks you to plan two moves ahead. Too much for level 1?
+# 3. Beat 16 needs a bounced throw to keep coming home, and a somersault
+#    over a 34 px scorpion. Neither is proved yet; Claude benches it first.
+# 4. A pocket on the low road too (the dragon's cage seen through the trees,
+#    as LEVELS.md wants it visible from Act 1)?
