@@ -23,9 +23,11 @@ Merge rule changed: enable auto-merge, never merge over red (`CLAUDE.md`,
 
 ## The next action
 
-**Draft `levels/act1_forest.beats`** for Matt to mark up, the way the wall's
-was drafted (`levels/act1_wall.beats` is the model, `SPEC.md` *How a level is
-built* the method). Nothing is built from it until he approves it.
+**`levels/act1_forest.beats` is drafted** and waits on Matt's markup (four
+questions at its foot). Nothing is built from it until he approves it.
+While it waits, Claude can bench beat 16's move (a bounced throw coming
+home through a scorpion that turned to follow a somersault), since the
+sheet leans on it and nothing proves it yet.
 
 ## Blocked on Matt
 
@@ -41,7 +43,8 @@ built* the method). Nothing is built from it until he approves it.
 3. **The slash's art, next 15 credits**: the first `animate` turned the hero
    round and curved the blade (`ART.md`, *The slash*). Same prompt again, or
    the reworded one there? The placeholder stands until then.
-4. **Mark up `levels/act2_caverns.beats`.** Blocks building Act 2 (R4).
+4. **Mark up `levels/act1_forest.beats`.** Blocks building N4.
+   **And `levels/act2_caverns.beats`**, which blocks building Act 2 (R4).
 5. **Close N1 and N2**: play the N1 benches (F2) and say which combinations
    are worth beats; say whether N2's look is natural. Both are inputs to
    the forest sheet, so they are worth doing first.
