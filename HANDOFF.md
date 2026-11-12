@@ -30,12 +30,9 @@ Matt's page (https://claude.ai/artifact/VznJakffciS7aC1PSZj6y3) and in
 
 **`levels/act1_forest.beats` is drafted** and waits on Matt's markup (four
 questions at its foot). Nothing is built from it until he approves it.
-While it waits, Claude can:
-
-1. **Fix the capture's settle** (N5 step 0, its own PR): it waits 12 frames
-   and the reveal takes 0.35 s. N4's beat shots need it too.
-2. **Bench beat 16's move** (a bounced throw coming home through a scorpion
-   that turned to follow a somersault): the sheet leans on it, unproved.
+While it waits, Claude can **bench beat 16's move** (a bounced throw
+coming home through a scorpion that turned to follow a somersault): the
+sheet leans on it, unproved. N5 step 0, the capture's settle, is done.
 
 ## Blocked on Matt
 
@@ -101,9 +98,11 @@ launch touches the save; `--script` never does**, because a tool's room is
 not `current_scene`, which is also why `shot` leaves the room tag blank.
 That is deliberate, not a bug to fix. **`capture --zoom` is relative to
 the 640x360 design**, so on the 1280x720 window it draws at twice the zoom.
-**A `shot` with no input, and every filmstrip's first frame, land
-mid-reveal**: dark two-pixel blocks over everything. Add `--input="-:40"`
-until N5 step 0 lands.
+**The capture lifts the room's reveal** after its 12-frame settle rather
+than wait it out: waiting moved every run's start by a render-speed amount
+and broke scenarios under load (#218). **The island scenario's jump comes
+out lower if the hero idles longer before it** (47 px at 12 frames, 32 px at
+25): unexplained, and a sign it rides on something it should not.
 
 **A ladder with nothing at its top makes the hero bob there**, and a jump
 pressed mid-bob does nothing. **A missed return falls with its homeward
