@@ -179,11 +179,6 @@ extends Resource
 ## blinks, per second.
 @export var backdrop_gear_spin: float = 0.15
 @export var backdrop_lamp_rate: float = 0.7
-## Act 4: how fast the rain runs, and the chance the storm flashes in any sixth
-## of a second. Rare on purpose: a flash is a lift of dull colours, never a
-## white, and a frequent one would be a strobe.
-@export var backdrop_rain_speed: float = 140.0
-@export_range(0.0, 0.1) var backdrop_flash_chance: float = 0.012
 
 @export_group("Motes")
 ## Dust hanging in a room's air, catching whatever light there is: how many
