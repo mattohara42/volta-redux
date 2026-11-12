@@ -39,30 +39,27 @@ While it waits, Claude can:
 
 ## Blocked on Matt
 
-1. **Turn on auto-merge** (#208): Settings, General, *Allow auto-merge*,
-   and a rule on `main` requiring *Headless tests and the capture
-   scenarios*. Until then Claude merges by hand on green.
-2. **Play the three merged features** and judge the dials (all in
+1. **Play the three merged features** and judge the dials (all in
    `config/`) and calls: the hunt's sight and instant turn (#203); the
    slash's reach and recovery, and whether it belongs outside `Sword`
    (#210); the portal's 3 s open and 1 s shut (#206).
-3. **The slash's art, next 15 credits**: the first `animate` turned the hero
+2. **The slash's art, next 15 credits**: the first `animate` turned the hero
    round and curved the blade (`ART.md`, *The slash*). Same prompt again, or
    the reworded one there? The placeholder stands until then.
-4. **Mark up `levels/act1_forest.beats`.** Blocks building N4. N5's support
+3. **Mark up `levels/act1_forest.beats`.** Blocks building N4. N5's support
    rule (every platform and climbable visibly held up) is free if it goes in
    first. **And `levels/act2_caverns.beats`**, which blocks Act 2 (R4).
-5. **N5's calls** (`BUILD_PLAN.md`, N5): whether N5 follows N4 (blocks N5);
+4. **N5's calls** (`BUILD_PLAN.md`, N5): whether N5 follows N4 (blocks N5);
    paint-over in Gemini or Claude's code mock first (blocks step 1); 30
    credits for the bank block (blocks step 3); whether the vine, the ladder
    and the trunk pass go ahead of N4 as small PRs, and the trunk's lean,
    about 6 to 8 px proposed (blocks those PRs).
-6. **Close N1**: play the N1 benches (F2) and say which combinations are
+5. **Close N1**: play the N1 benches (F2) and say which combinations are
    worth beats. An input to the forest sheet, so worth doing first.
-7. **Frame time on a real machine**: `tools/dev.sh frametime`, then with
+6. **Frame time on a real machine**: `tools/dev.sh frametime`, then with
    `act1_forest.tscn` and `act1_wall.tscn`: p95 under 16.7 ms? Blocks R3's
    frame-rate half.
-8. **Older and still open**: R2's final quality (the flame, the sword, the
+7. **Older and still open**: R2's final quality (the flame, the sword, the
    doors, the ride); `RoomM7Sheet` consistent in treatment (closes M7); the
    unattended calls from 2026-10-05; M4's dragon pacing; a play log
    (`user://`, #136). Two rulings that waited on N1: faster ladder
