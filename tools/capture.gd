@@ -40,10 +40,6 @@
 extends SceneTree
 
 const SETTLE_FRAMES := 12
-## A room arrives through a `Dissolve` reveal. The capture waits it out so no
-## shot or filmstrip frame lands mid-reveal, and gives up after this many
-## physics frames rather than hang on one that never clears.
-const REVEAL_WAIT_LIMIT := 120
 ## The phase name that means "hold nothing".
 const NOTHING_HELD := "-"
 
@@ -163,7 +159,11 @@ class CaptureAgent:
 		if _zoom > 0.0 or _centre.is_finite():
 			_pull_the_camera_back()
 		await _wait(SETTLE_FRAMES)
-		await _wait_out_the_reveal()
+		# A room arrives through a `Dissolve` reveal on the render clock, longer
+		# than the settle, so a shot would land mid-reveal. Lift it here rather
+		# than wait it out: waiting moved every scripted run's start, by an
+		# amount that depended on render speed, and broke scenarios under load.
+		_lift_the_reveal(get_tree().root)
 
 		var frames: Array[Image] = []
 		if _filmstrip_count > 0:
@@ -492,20 +492,12 @@ class CaptureAgent:
 					camera.top_level = true
 					camera.global_position = _centre
 
-	func _wait_out_the_reveal() -> void:
-		for i in REVEAL_WAIT_LIMIT:
-			if not _a_reveal_is_running(get_tree().root):
-				return
-			await get_tree().physics_frame
-		printerr("capture: the room's reveal did not clear in %d frames" % REVEAL_WAIT_LIMIT)
-
-	func _a_reveal_is_running(node: Node) -> bool:
+	func _lift_the_reveal(node: Node) -> void:
 		if node is Dissolve and (node as Dissolve).is_revealing():
-			return true
+			node.queue_free()
+			return
 		for child in node.get_children():
-			if _a_reveal_is_running(child):
-				return true
-		return false
+			_lift_the_reveal(child)
 
 	## Physics frames, not render frames. Rendering runs uncapped and faster than
 	## 60 Hz here, so counting drawn frames makes a scripted run travel a
