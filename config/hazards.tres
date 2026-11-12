@@ -22,3 +22,6 @@ tide_low_time = 2.4
 tide_rise_time = 1.0
 tide_high_time = 1.6
 tide_fall_time = 1.0
+portal_open_time = 3.0
+portal_gap_time = 1.0
+portal_swing_time = 0.25

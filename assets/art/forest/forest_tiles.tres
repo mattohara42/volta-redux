@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ActTiles" load_steps=26 format=3]
+[gd_resource type="Resource" script_class="ActTiles" load_steps=28 format=3]
 
 [ext_resource type="Script" path="res://scripts/act_tiles.gd" id="1"]
 [ext_resource type="Texture2D" path="res://assets/art/forest/forest_bg_px.png" id="bg"]
@@ -26,6 +26,9 @@
 [ext_resource type="Texture2D" path="res://assets/art/forest/props/root_0.png" id="root0"]
 [ext_resource type="Texture2D" path="res://assets/art/forest/props/root_1.png" id="root1"]
 [ext_resource type="Texture2D" path="res://assets/art/forest/props/root_2.png" id="root2"]
+[ext_resource type="Texture2D" path="res://assets/art/portal/portal_stump_frame.png" id="portal_frame"]
+[ext_resource type="Texture2D" path="res://assets/art/portal/portal_stump_slab.png" id="portal_slab"]
+
 [resource]
 script = ExtResource("1")
 background = ExtResource("bg")
@@ -42,3 +45,6 @@ edge_dark = Color(0.141, 0.078, 0.165, 1)
 interior_dark = Color(0.208, 0.122, 0.212, 1)
 tuft_tiles = Array[Texture2D]([ExtResource("tuft0"), ExtResource("tuft1"), ExtResource("tuft2")])
 root_tiles = Array[Texture2D]([ExtResource("root0"), ExtResource("root1"), ExtResource("root2")])
+portal_frame = ExtResource("portal_frame")
+portal_slab = ExtResource("portal_slab")
+portal_hole = Rect2(42, 22, 25, 48)

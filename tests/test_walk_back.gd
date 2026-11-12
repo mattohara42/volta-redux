@@ -119,6 +119,18 @@ func test_a_sword_thrown_from_a_ladder_is_a_ledge() -> void:
 	check(WalkBack.check(layout, _moves()).exit_reached, "from the ladder's top, one does")
 
 
+## A portal pair between the lower level and the upper one is a way back up,
+## and, unlike a stump, it runs both ways.
+func test_a_portal_pair_is_a_way_back_both_ways() -> void:
+	var step := MOVEMENT.jump_height + 40.0
+	var layout := _stepped(step)
+	check(not WalkBack.check(layout, _moves()).stranded.is_empty(), "without it, the drop strands you")
+	layout.portals = [Vector2(500.0, FLOOR), Vector2(100.0, FLOOR - step)]
+	check_eq(WalkBack.check(layout, _moves()).stranded.size(), 0, "the door below takes you back up")
+	layout.portals = [Vector2(100.0, FLOOR - step), Vector2(500.0, FLOOR)]
+	check_eq(WalkBack.check(layout, _moves()).stranded.size(), 0, "whichever door opens first")
+
+
 ## A stump on the lower level that puts you back on the upper one is the way
 ## home a drop needs; the warp only runs one way, so it is no way down.
 func test_a_stump_warp_is_a_way_back_one_way() -> void:
