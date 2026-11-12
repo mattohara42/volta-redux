@@ -323,6 +323,63 @@ the river crossed in the branches, the nest, the culvert out.
 scenarios pass, every beat is shot where the sheet puts it, and Matt plays
 Act 1 from a new game and says the forest now matches the wall.
 
+### N5: the look of a level (proposed 2026-11-12, Matt to confirm)
+Matt, 2026-11-12: the levels look "blocky, awkward, amateurish, unpolished"
+beside the Sprite Fusion characters, and "the ladders, vines and trees look
+too straight, flat, blocky, unnatural". That answers N2's done-when: not
+natural. Shot from a real build, the cause is that the characters are drawn
+and the levels are computed. Every visible edge is a 16 px collision edge
+with no corner or end art (`TileArt.draw_edges`); the earth tile is
+per-pixel noise (151 colours in 256 px) that averages to a flat slab; the
+painted backdrop is drawn at world coordinates, so it has no parallax, and
+is mirrored across and down; trunks are opaque rectangular crops, stacked
+and flipped; the vine tile is two solid rails; pixelated paintings, crisp
+sprites and flat fills share the play layer; nothing lights the route; and
+platforms float. The case with pictures is Matt's page
+(https://claude.ai/artifact/VznJakffciS7aC1PSZj6y3, private), and the
+evidence is `assets/art_raw/_experiments/look_*.png`.
+
+The method: keep the grid for play and stop drawing it. Collision does not
+change, so no test moves. Four rules go to `ART_DIRECTION.md` once Matt
+agrees them: soft means far (pixelated paintings only behind the play
+layer); art may cross the collision edge, never the surface you stand on;
+every platform and every climbable has a visible support; the route is the
+brightest band on every screen. Each step is shot before and after.
+
+0. The capture settles past the room's reveal (a small PR on its own; N4's
+   beat shots need it too).
+1. An art target: one screen finished by any means. Matt's Gemini
+   paint-over of the opening screen (the prompt is on the page) beside a
+   code-only version on a branch. It settles which steps matter most and
+   what geometry the art needs from the layout.
+2. Depth: `Parallax2D` layers, losing contrast toward a fog colour going
+   back, a near-black foreground, no mirroring down.
+3. Edges off the grid: a dual grid per material, fifteen pieces lit from
+   above. Hypothesis to test for 30 credits: one 64 px Sprite Fusion bank
+   block, cut into the pieces, so they agree.
+4. Materials with forms: clustered earth and bark instead of noise.
+5. Landmarks as set pieces: the oak, the river, the nest, the culvert. A
+   drawn trunk kit (bends, a fork, a collar per bough), assembled along a
+   curve through the bough roots.
+6. Light and colour: a light per screen on the route, one palette per act
+   for environment art, the vine off cyan.
+
+Three parts need no other decision, and two were tested and reverted on
+2026-11-12. The vine drawn in code as a four-pixel stem wandering up to 3 px
+inside its cell, with leaves at uneven gaps in moss green, reads as a plant;
+whether it still reads as climbable is Matt's to play. Trunks drawn a row at
+a time through a 40% taper and a 10 to 16 px lean read as trees from a
+distance and as bent rubber up close, because the bark slides instead of
+turning: the code pass wants about 6 to 8 px, and the trees that matter want
+the drawn kit. The castle ladder wants a gap you see the wall through, umber
+rails lit on one side, a cast shadow and brackets.
+
+**Done when**: Matt points at the art target and says that is the game; the
+forest is shot before and after against it; route, walkback, tests and
+scenarios still pass; frame time is no worse; and Matt plays Act 1 and says
+the forest now matches the characters. The caverns take the method when R4
+builds them, and the wall last.
+
 ### R4: Acts 2 to 4 at full size
 Only after N3, and G2 passing on the rebuilt Act 1. Each act's existing rooms become sections of its levels; the
 dragon, the generator and Volta stay. Then M14, then M16.
