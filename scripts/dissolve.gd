@@ -49,6 +49,11 @@ static func _make(parent: Node, from: float, to: float, seconds: float, layer: i
 	return dissolve
 
 
+## True while this is a reveal still clearing, so a capture can wait it out.
+func is_revealing() -> bool:
+	return _to <= 0.0
+
+
 func _process(delta: float) -> void:
 	_clock += delta
 	var t := clampf(_clock / _seconds, 0.0, 1.0)
