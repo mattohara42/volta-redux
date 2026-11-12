@@ -352,21 +352,6 @@ func _add_dragon(rect: Rect2, breath_offset: Vector2, breath_size: Vector2) -> D
 	return dragon
 
 
-## A stump (`Stump`): wood you stand on, and, if `to` is set, a warp that
-## puts the hero's feet there when they land on its top. One way.
-func _add_stump(rect: Rect2, to: Variant = null) -> Stump:
-	_add_wood(rect, false)
-	var stump := Stump.new()
-	stump.rect = rect
-	stump.to = to
-	stump.position = rect.get_center()
-	add_child(stump)
-	if to != null:
-		_walk.warps.append(rect)
-		_walk.warp_to.append(to as Vector2)
-	return stump
-
-
 ## A pair of portal doors (`Portal`). `first` opens first. Walk-back counts
 ## the pair as a way both ways, since each door takes you to the other.
 func _add_portal(first: Rect2, second: Rect2) -> Portal:

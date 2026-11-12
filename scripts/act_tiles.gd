@@ -37,8 +37,6 @@ extends Resource
 ## A slab that gives way, cropped so its top row is the surface. Null keeps a
 ## grid level's falling slab drawn in code, as it was before this slot.
 @export var crumble_tile: Texture2D = null
-## A stump (`Stump`), whole, at its rect's size. Null keeps it drawn in code.
-@export var stump_texture: Texture2D = null
 ## A portal door (`Portal`): its frame, the slab that shuts it, and where the
 ## opening is in the frame, art px. The opening's foot stands on the door's
 ## floor. Null keeps the door drawn in code.

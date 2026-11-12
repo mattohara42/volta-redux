@@ -155,7 +155,6 @@ func test_every_portal_leads_to_a_portal_the_hero_fits() -> void:
 			var target := level.thing(String(t.params["to"]))
 			check(target != null and target.kind == "portal", "door %s leads to a door" % t.anchor)
 	check_eq(pairs, 2, "the forest's two stumps are two portals")
-	check(level.of_kind("stump").is_empty(), "and no stump warps are left")
 
 
 ## N0: the forest drew the castle painting's lit windows into its dark, because

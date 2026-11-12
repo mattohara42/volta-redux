@@ -57,10 +57,6 @@ class Layout:
 	var ferry_travel: Array[Vector2] = []
 	## A geyser's shaft: its bottom is the vent, its top as high as it throws.
 	var geysers: Array[Rect2] = []
-	## A stump warp: landing on the top of `warps[i]` puts the hero's feet at
-	## `warp_to[i]`. One way, so it only ever joins the first to the second.
-	var warps: Array[Rect2] = []
-	var warp_to: Array[Vector2] = []
 	## Portal doors, in pairs: the feet of each door, first then second. Each
 	## takes you to the other, so a pair joins the floors under them both ways.
 	var portals: Array[Vector2] = []
@@ -290,7 +286,6 @@ static func _moves_between(
 	_ladders(edges, surfaces, ladders)
 	_ferries(edges, surfaces, layout, moves)
 	_geysers(edges, surfaces, floors, layout, moves)
-	_warps(edges, surfaces, layout)
 	_portals(edges, surfaces, layout)
 	_slab_drops(edges, surfaces, layout, moves)
 	return edges
@@ -372,18 +367,6 @@ static func _ladders(edges: Array[PackedInt32Array], surfaces: Array[Rect2], lad
 			for b in served:
 				if a != b:
 					_link(edges, a, b)
-
-
-## A stump warp joins any surface on the stump's top to the one under where it
-## puts you, that way only.
-static func _warps(edges: Array[PackedInt32Array], surfaces: Array[Rect2], layout: Layout) -> void:
-	for w in layout.warps.size():
-		var stump := layout.warps[w]
-		var to := _surface_under(surfaces, layout.warp_to[w])
-		for i in surfaces.size():
-			var s := surfaces[i]
-			if absf(s.position.y - stump.position.y) <= 0.5 and s.position.x < stump.end.x and s.end.x > stump.position.x:
-				_link(edges, i, to)
 
 
 ## A portal pair joins the floor under one door to the floor under the other,

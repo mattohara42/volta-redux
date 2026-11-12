@@ -165,17 +165,6 @@ func _build_things() -> void:
 		var scorpion := _add_scorpion(Rect2(base - Vector2(size.x * 0.5, size.y), size), t.number("range", 0.0))
 		if scorpion != null and t.flag("dormant"):
 			scorpion.start_dormant()
-	for t in level.of_kind("stump"):
-		var to: Variant = null
-		if t.params.has("to"):
-			var target := level.thing(String(t.params["to"]))
-			if target != null and target.kind == "stump":
-				to = Vector2(target.rect.get_center().x, target.rect.position.y)
-			else:
-				push_error("%s: stump '%s' leads to no stump ('%s')" % [level_file, t.anchor, t.params["to"]])
-		var stump := _add_stump(t.rect, to)
-		if _tiles != null and _tiles.stump_texture != null:
-			stump.art = _tiles.stump_texture
 	for t in level.of_kind("portal"):
 		if not t.params.has("to"):
 			continue
