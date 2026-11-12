@@ -350,6 +350,38 @@ SCENARIOS: list[dict] = [
 		],
 	},
 	{
+		# SPEC.md, *The scorpion hunts*: the hero waits 145 px short of the
+		# scorpion's range, which its walk never reaches but its sight (160)
+		# does. Walking back toward him, it sees him, leaves its range and
+		# comes after him.
+		"name": "A scorpion that sees you comes after you",
+		"scene": "res://scenes/rooms/room_m4_enemies.tscn",
+		"out": "room_m4_scorpion_hunts.png",
+		"input": "move_right:18;-:360",
+		"zoom": 1.0,
+		"centre": (200, 300),
+		"checks": [
+			{"type": "contains_regex", "pattern": r"capture: [1-9][0-9]* death",
+				"message": "the scorpion should have left its range and caught a hero it could see"},
+		],
+	},
+	{
+		# The same wait from the brazier, 200 px short: past its sight, so it
+		# never sees him, and walks its range.
+		"name": "A scorpion does not hunt a hero out of its sight",
+		"scene": "res://scenes/rooms/room_m4_enemies.tscn",
+		"out": "room_m4_scorpion_unseen.png",
+		"input": "-:330",
+		"zoom": 1.0,
+		"centre": (200, 300),
+		"checks": [
+			{"type": "contains", "pattern": "capture: no deaths",
+				"message": "a hero out of its sight should never have been hunted"},
+			{"type": "contains_regex", "pattern": r"scorpion alive at \((2[4-9][0-9]|[34][0-9][0-9])\.",
+				"message": "a scorpion that saw nobody should still be inside its range"},
+		],
+	},
+	{
 		"name": "Screenshot the dragon's arena",
 		"scene": "res://scenes/rooms/room_m4_dragon.tscn",
 		"out": "room_m4_dragon.png",
