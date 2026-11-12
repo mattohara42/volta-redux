@@ -174,6 +174,27 @@ reads its pose holds from them.
   of it, two or three frames. Lower the threshold, or accept that the dive shows
   on bigger falls. `ANIMATION.md` has what else the threshold decides.
 
+## The slash (2026-10-25, waiting on the key)
+
+**One `animate`, 15 credits, not yet spent.** The slash (`SPEC.md`) is built
+with a placeholder look: the hero holds his throw pose while the sword
+sprite sweeps through the strike by transform (`Slash`). The still already
+holds a sword in his hand, which is the one that never leaves it, so the M6
+recipe applies: `animate` from the idle still, no pose step. Frame 0 will
+be the still (`GEMINI_NOTES.md`), so the strike is frames 1 onward. The
+strike is live for 0.12 s and recovers for 0.3 (`config/sword.tres`), so a
+sheet of 6 gives two frames of strike and the rest for the follow-through
+and recovery. Needs `SPRITE_FUSION_API_KEY` set in the environment, as below.
+
+```
+tools/sprite-fusion.py animate --name hero_slash_anim --frames 6 --input assets/art/hero/hero_idle_px.png --prompt "Sword slash, facing right the whole time, feet planted: the warrior raises the sword in his hand high behind his head, then cuts it down hard in a wide arc in front of him to below his waist, and holds the low follow-through for a moment before drawing it back. He keeps hold of the sword the whole time; it never leaves his hand. The arc is big and clear." --spend
+```
+
+When it lands: frames into `assets/art/hero/hero_slash_sheet.png`, a
+`slash` state in `scenes/hero_sprite.tscn`, and `Locomotion` gains a SLASH
+state the hero reads instead of borrowing the throw pose. `Slash`'s blade
+sprite goes, since the drawn sword is the cut.
+
 ## M7: the enemy sheet (2026-09-28)
 
 **12 requests, 120 credits, and the balance is now 0.** Four creatures, each a

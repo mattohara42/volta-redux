@@ -4,7 +4,7 @@
 extends CanvasLayer
 
 const LEGEND: PackedStringArray = [
-	"A/D move   Space jump   J throw   hold J recall   W/S ladders",
+	"A/D move   Space jump   J throw   hold J recall   K slash   W/S ladders",
 	"Tab preset   [ ] hero size   R respawn   F1 hide   F2 bench",
 ]
 
