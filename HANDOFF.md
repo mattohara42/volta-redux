@@ -7,60 +7,70 @@
 **G2 passed** on the rebuilt Act 1 (Matt, 2026-11-12: "much better ... but we
 need to keep evolving it"). N3 is done.
 **Active milestone:** N4, the forest rebuilt from a beat sheet
-(`BUILD_PLAN.md`; named this session from N3's "then the forest gets a
-density pass", so the name and done-when are Claude's, Matt to confirm).
+(`BUILD_PLAN.md`; named by Claude, Matt to confirm).
 **N4 done-when:** Matt has approved `levels/act1_forest.beats`, route,
 walkback, tests and scenarios pass, every beat is shot where the sheet puts
 it, and Matt plays Act 1 and says the forest now matches the wall.
+**Proposed next:** N5, the look of a level (`BUILD_PLAN.md`, Matt to confirm).
 
 ## Where it is
 
 The three features held for G2 are on `main`: the scorpion hunts (#203), the
-slash (#210), the portal (#206, the forest's stumps are now portal doors).
-Each one's open calls are in its PR description and in *Blocked on Matt*.
-Merge rule changed: enable auto-merge, never merge over red (`CLAUDE.md`,
-#208).
+slash (#210), the portal (#206). Their open calls are in *Blocked on Matt*.
+Merge rule: enable auto-merge, never merge over red (`CLAUDE.md`, #208).
+
+**The look is reviewed.** Matt, 2026-11-12: the levels look "blocky,
+awkward, amateurish, unpolished" beside the characters; ladders, vines and
+trees "too straight, flat, blocky, unnatural". So N2's look is not natural.
+Cause, plan and two tested experiments: N5 in `BUILD_PLAN.md`, pictures on
+Matt's page (https://claude.ai/artifact/VznJakffciS7aC1PSZj6y3) and in
+`assets/art_raw/_experiments/look_*.png`.
 
 ## The next action
 
 **`levels/act1_forest.beats` is drafted** and waits on Matt's markup (four
 questions at its foot). Nothing is built from it until he approves it.
-While it waits, Claude can bench beat 16's move (a bounced throw coming
-home through a scorpion that turned to follow a somersault), since the
-sheet leans on it and nothing proves it yet.
+While it waits, Claude can:
+
+1. **Fix the capture's settle** (N5 step 0, its own PR): it waits 12 frames
+   and the reveal takes 0.35 s. N4's beat shots need it too.
+2. **Bench beat 16's move** (a bounced throw coming home through a scorpion
+   that turned to follow a somersault): the sheet leans on it, unproved.
 
 ## Blocked on Matt
 
-1. **Turn on auto-merge** (#208): repo Settings, General, *Allow
-   auto-merge*; and a branch rule on `main` requiring *Headless tests and
-   the capture scenarios*. Until then Claude waits for green and merges by
-   hand, which is the same rule done slower.
+1. **Turn on auto-merge** (#208): Settings, General, *Allow auto-merge*,
+   and a rule on `main` requiring *Headless tests and the capture
+   scenarios*. Until then Claude merges by hand on green.
 2. **Play the three merged features** and judge the dials (all in
    `config/`) and calls: the hunt's sight and instant turn (#203); the
    slash's reach and recovery, and whether it belongs outside `Sword`
-   (#210); the portal's 3 s open and 1 s shut (#206). The stumps are
-   deleted (#215).
+   (#210); the portal's 3 s open and 1 s shut (#206).
 3. **The slash's art, next 15 credits**: the first `animate` turned the hero
    round and curved the blade (`ART.md`, *The slash*). Same prompt again, or
    the reworded one there? The placeholder stands until then.
-4. **Mark up `levels/act1_forest.beats`.** Blocks building N4.
-   **And `levels/act2_caverns.beats`**, which blocks building Act 2 (R4).
-5. **Close N1 and N2**: play the N1 benches (F2) and say which combinations
-   are worth beats; say whether N2's look is natural. Both are inputs to
-   the forest sheet, so they are worth doing first.
-6. **Frame time on a real machine**: `tools/dev.sh frametime`, then with
+4. **Mark up `levels/act1_forest.beats`.** Blocks building N4. N5's support
+   rule (every platform and climbable visibly held up) is free if it goes in
+   first. **And `levels/act2_caverns.beats`**, which blocks Act 2 (R4).
+5. **N5's calls** (`BUILD_PLAN.md`, N5): whether N5 follows N4 (blocks N5);
+   paint-over in Gemini or Claude's code mock first (blocks step 1); 30
+   credits for the bank block (blocks step 3); whether the vine, the ladder
+   and the trunk pass go ahead of N4 as small PRs, and the trunk's lean,
+   about 6 to 8 px proposed (blocks those PRs).
+6. **Close N1**: play the N1 benches (F2) and say which combinations are
+   worth beats. An input to the forest sheet, so worth doing first.
+7. **Frame time on a real machine**: `tools/dev.sh frametime`, then with
    `act1_forest.tscn` and `act1_wall.tscn`: p95 under 16.7 ms? Blocks R3's
    frame-rate half.
-7. **Older and still open**: R2's final quality (the flame, the sword, the
+8. **Older and still open**: R2's final quality (the flame, the sword, the
    doors, the ride); `RoomM7Sheet` consistent in treatment (closes M7); the
    unattended calls from 2026-10-05; M4's dragon pacing; a play log
    (`user://`, #136). Two rulings that waited on N1: faster ladder
    climbing, and a test build that lets you throw mid-somersault.
 
-**Matt's to judge while playing Act 1** (each built on his word, dials in
-`config/`): the forest's terraces, oak and fronds; the storm (FLASHES in the
-pause menu turns it down); the cards and lettering; the death line's fly-in;
-the tall wall painting's mirror seams.
+**Matt's to judge while playing Act 1** (dials in `config/`): the forest's
+fronds; the storm (FLASHES in the pause menu); the cards and lettering; the
+death line's fly-in; the tall wall painting's mirror seams.
 
 ## Traps that will bite again
 
@@ -90,6 +100,9 @@ launch touches the save; `--script` never does**, because a tool's room is
 not `current_scene`, which is also why `shot` leaves the room tag blank.
 That is deliberate, not a bug to fix. **`capture --zoom` is relative to
 the 640x360 design**, so on the 1280x720 window it draws at twice the zoom.
+**A `shot` with no input, and every filmstrip's first frame, land
+mid-reveal**: dark two-pixel blocks over everything. Add `--input="-:40"`
+until N5 step 0 lands.
 
 **A ladder with nothing at its top makes the hero bob there**, and a jump
 pressed mid-bob does nothing. **A missed return falls with its homeward
@@ -100,6 +113,8 @@ wall. **A scorpion is only a sword fight in a tunnel**: the throw is flat at
 18 px and it is 34 px tall. **A scorpion that sees you hunts you** now: a
 beat that relied on its fixed range needs re-checking in play. **Walk-back's
 "exit out of reach" means the level is blocked**: its drawing is full height.
+**The forest's trunks are decoration, not solid**, and its boughs are solid:
+a trunk's art can change freely, but it must still meet its boughs.
 
 **Sprite Fusion**: the key is a cloud network secret, so run the client as
 `SPRITE_FUSION_API_KEY=proxy-injected tools/sprite-fusion.py ...` (`ART.md`).
@@ -120,8 +135,9 @@ load**: shoot it, headless draws nothing.
 a respawn** (2026-10-13). **`LEVELS.md`'s twelve questions** (2026-09-28).
 **R1's play half** (2026-10-07). **The slash** (2026-10-25): its own button,
 armour turns it, no boss damage. **The portal is the original's** (2026-10-25).
-**Auto-merge on green** (2026-11-12). **The foreground kit, the new trees
-and assets** are good enough to go on with (2026-10-24).
+**Auto-merge on green** (2026-11-12). **The foreground kit and assets** are
+good enough to go on with (2026-10-24); Matt reopened the trees on
+2026-11-12 (N5).
 
 ## Pointers
 

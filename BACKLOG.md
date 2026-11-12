@@ -129,6 +129,13 @@ needed rather than optional, because the content is about to exist.
   Anything reading `current_scene` (the debug overlay's room tag) is blank in
   its shots; a movie-writer launch shows it. Shots may differ from play in
   other ways that read the scene the same way.
+- **The light field dithers the act's ambient one channel at a time.** Act
+  1's ambient is (0.76, 0.72, 0.90) on 8 bands, so each channel sits at a
+  different fraction between bands and gets its own sparse dot pattern: a
+  one-pixel lattice on mid-tones (a 17% swing on a mid green, in a test) and
+  2 or 3 levels in 255 in real darks. Dithering only the light above the
+  ambient would clear it wherever no light reaches. Not yet seen on a real
+  mid-tone, so low priority (found in N5's review).
 - **Two backdrop styles nothing draws.** Since every act was painted,
   `Backdrop`'s Works and Hall styles (Acts 3 and 4) are drawn by no room;
   only Cavern is, behind the ride out. Keep them as fallbacks or delete them.
