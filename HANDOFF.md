@@ -85,7 +85,11 @@ time and fails to compile: go through a typed variable.
 **Never edit a tree a scenario run is reading**: each scenario starts its
 own Godot, so a mid-run edit mixes two versions. Use a `git worktree` per
 branch. **A branch cut before a fix** goes red on its push run and green on
-its PR run (the PR run tests the merge); merge `main` in. **Two branches
+its PR run (the PR run tests the merge); merge `main` in. **Auto-merge only
+takes while a required check is still pending**: once CI is green GitHub
+refuses it, so enable it right after opening the PR. A PR whose state reads
+`unstable` rather than `blocked` with CI running means `main` requires no
+check. **Two branches
 that add scenarios at the same spot** conflict in `tools/scenarios_data.py`;
 keep both blocks.
 
