@@ -174,6 +174,27 @@ reads its pose holds from them.
   of it, two or three frames. Lower the threshold, or accept that the dive shows
   on bigger falls. `ANIMATION.md` has what else the threshold decides.
 
+## The slash (2026-10-25, waiting on the key)
+
+**One `animate`, 15 credits, not yet spent.** The slash (`SPEC.md`) is built
+with a placeholder look: the hero holds his throw pose while the sword
+sprite sweeps through the strike by transform (`Slash`). The still already
+holds a sword in his hand, which is the one that never leaves it, so the M6
+recipe applies: `animate` from the idle still, no pose step. Frame 0 will
+be the still (`GEMINI_NOTES.md`), so the strike is frames 1 onward. The
+strike is live for 0.12 s and recovers for 0.3 (`config/sword.tres`), so a
+sheet of 6 gives two frames of strike and the rest for the follow-through
+and recovery. Needs `SPRITE_FUSION_API_KEY` set in the environment, as below.
+
+```
+tools/sprite-fusion.py animate --name hero_slash_anim --frames 6 --input assets/art/hero/hero_idle_px.png --prompt "Sword slash, facing right the whole time, feet planted: the warrior raises the sword in his hand high behind his head, then cuts it down hard in a wide arc in front of him to below his waist, and holds the low follow-through for a moment before drawing it back. He keeps hold of the sword the whole time; it never leaves his hand. The arc is big and clear." --spend
+```
+
+When it lands: frames into `assets/art/hero/hero_slash_sheet.png`, a
+`slash` state in `scenes/hero_sprite.tscn`, and `Locomotion` gains a SLASH
+state the hero reads instead of borrowing the throw pose. `Slash`'s blade
+sprite goes, since the drawn sword is the cut.
+
 ## M7: the enemy sheet (2026-09-28)
 
 **12 requests, 120 credits, and the balance is now 0.** Four creatures, each a
@@ -974,6 +995,20 @@ Every sword on this sheet is a plain straight sword with a short crossguard, and
 
 Large, simple shapes and few small details: each piece reads at a glance as one clear silhouette with two or three values on it, because it will be shrunk to a few dozen pixels across. Thin strands, straps and threads disappear at that size, so make every blade, strap and crack thick and few. Flat, even light on every piece, no cast shadows on the backdrop and no light source painted into the sheet. All the metal is old, dull and cold: dark iron grey-violet, with patches of dull rust in muted red-brown, never bright, never shining, never polished. There is no gold anywhere on this sheet, no gold hilts, no brass, no gems in the pommels, because in this game gold means something the player can pick up, and none of these can be. Rock is cold blue-violet grey; leather is a dark warm umber. The darkest darks are deep violet-blue, never neutral black. Nothing glowing, no fire, no lava, no bones, no skulls, no blood. No characters, no creatures, no sky, no text and no labels. The image is 2560 by 1440 pixels, aspect ratio 16:9.
 ```
+
+**The graveyard sheet landed first attempt (2026-10-25)**
+(`act2_kit_graveyard.jpg`): nine pieces, no gold anywhere. Piece 1's sword
+reads nearer whole than snapped, the bent blade came back a curved sabre on
+its rock, and the split shield is warm brown wood, which says "a sword
+bites this" (`ART_DIRECTION.md`); it lies flat as dressing, so it stays
+unless play says otherwise. Keyed with no spill at `--tolerance 40` (its
+irons are violet), cut, and pixelated at one scale, 0.11, so a sword in
+the sheet is about 20 px against the thrown sword's 16. Nine mauve pixels
+of bled backdrop in the belt were recoloured from the leather round them.
+In `assets/art/act2/kit/grave_*.png`; nothing places them yet, because
+the caverns sheet is not approved. The heap and the cairn go muddy at
+this size, as thin blades do; the single blades, the shield and the
+stalagmite read.
 
 ### The next sheets (2026-10-24, for Matt to paint in Gemini)
 

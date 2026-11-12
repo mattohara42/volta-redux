@@ -350,6 +350,72 @@ SCENARIOS: list[dict] = [
 		],
 	},
 	{
+		# SPEC.md, the slash (Matt, 2026-10-25): run up behind the scorpion as
+		# it walks away and cut it. Free: the hand still holds three.
+		"name": "Slash a scorpion in the back",
+		"scene": "res://scenes/rooms/room_m4_enemies.tscn",
+		"out": "room_m4_slash_back.png",
+		"input": "debug_toggle_overlay:1;move_right:78;slash:2;-:30",
+		"zoom": 3.0,
+		"centre": (310, 290),
+		"checks": [
+			{"type": "not_contains", "pattern": "scorpion alive",
+				"message": "a slash into the scorpion's back should have killed it"},
+			{"type": "contains", "pattern": "3 sword(s) held",
+				"message": "the slash should not have spent a throwing sword"},
+			{"type": "contains", "pattern": "capture: no deaths",
+				"message": "the hero should not have died cutting it from behind"},
+		],
+	},
+	{
+		# Meet it head on and cut its face from 18 px, inside the 22 px reach:
+		# the armour turns the slash as it bounces a throw.
+		"name": "A slash at a scorpion's face is turned",
+		"scene": "res://scenes/rooms/room_m4_enemies.tscn",
+		"out": "room_m4_slash_face.png",
+		"input": "debug_toggle_overlay:1;-:150;move_right:64;slash:2;-:2",
+		"zoom": 3.0,
+		"centre": (290, 290),
+		"checks": [
+			{"type": "contains", "pattern": "scorpion alive",
+				"message": "the armour should have turned a slash at the scorpion's face"},
+			{"type": "player_position", "min_x": 262.0,
+				"message": "the hero should have been within reach of its face when he cut"},
+		],
+	},
+	{
+		# SPEC.md, *The scorpion hunts*: the hero waits 145 px short of the
+		# scorpion's range, which its walk never reaches but its sight (160)
+		# does. Walking back toward him, it sees him, leaves its range and
+		# comes after him.
+		"name": "A scorpion that sees you comes after you",
+		"scene": "res://scenes/rooms/room_m4_enemies.tscn",
+		"out": "room_m4_scorpion_hunts.png",
+		"input": "move_right:18;-:360",
+		"zoom": 1.0,
+		"centre": (200, 300),
+		"checks": [
+			{"type": "contains_regex", "pattern": r"capture: [1-9][0-9]* death",
+				"message": "the scorpion should have left its range and caught a hero it could see"},
+		],
+	},
+	{
+		# The same wait from the brazier, 200 px short: past its sight, so it
+		# never sees him, and walks its range.
+		"name": "A scorpion does not hunt a hero out of its sight",
+		"scene": "res://scenes/rooms/room_m4_enemies.tscn",
+		"out": "room_m4_scorpion_unseen.png",
+		"input": "-:330",
+		"zoom": 1.0,
+		"centre": (200, 300),
+		"checks": [
+			{"type": "contains", "pattern": "capture: no deaths",
+				"message": "a hero out of its sight should never have been hunted"},
+			{"type": "contains_regex", "pattern": r"scorpion alive at \((2[4-9][0-9]|[34][0-9][0-9])\.",
+				"message": "a scorpion that saw nobody should still be inside its range"},
+		],
+	},
+	{
 		"name": "Screenshot the dragon's arena",
 		"scene": "res://scenes/rooms/room_m4_dragon.tscn",
 		"out": "room_m4_dragon.png",

@@ -129,12 +129,9 @@ needed rather than optional, because the content is about to exist.
   Anything reading `current_scene` (the debug overlay's room tag) is blank in
   its shots; a movie-writer launch shows it. Shots may differ from play in
   other ways that read the scene the same way.
-- **Two storms in Act 4.** `amb_hall` bakes a distant thunder roll into
-  its loop at 6 s, which now plays out of step with the real strikes
-  (`Storm`); and `backdrop_hall.gdshader` still draws its own rain and
-  flash, unused since Act 4 got a painted background (`backdrop = 0`).
-  Re-render `amb_hall` without its thunder, and drop the hall backdrop's
-  rain and flash or the whole Hall style if nothing will use it.
+- **Two backdrop styles nothing draws.** Since every act was painted,
+  `Backdrop`'s Works and Hall styles (Acts 3 and 4) are drawn by no room;
+  only Cavern is, behind the ride out. Keep them as fallbacks or delete them.
 
 ## Deferred from v1 deliberately
 

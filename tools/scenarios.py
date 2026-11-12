@@ -18,15 +18,23 @@ than aborting, so one bad number does not hide the other nineteen"). CI's
 old per-step arrangement stopped at the first failing scenario and never
 even wrote the screenshots for the ones after it; this fixes that too.
 
+Runs several at once, one Godot process each, as many as the machine has
+cores (`SCENARIO_JOBS` overrides it; 1 runs them one by one). Safe because
+capture.gd counts every phase in physics frames, not wall time, so a busy
+machine runs a scenario slower but never differently. Results print in the
+list's order whatever order they finish in.
+
 Usage: tools/scenarios.py GODOT_BINARY [name-filter]
 """
 from __future__ import annotations
 
+import os
 import platform
 import re
 import shutil
 import subprocess
 import sys
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
@@ -127,19 +135,27 @@ def main() -> int:
 		print("scenarios: no scenario name matches %r" % name_filter, file=sys.stderr)
 		return 2
 
+	jobs = int(os.environ.get("SCENARIO_JOBS", os.cpu_count() or 1))
 	failed = 0
-	for scenario in scenarios:
-		failures = _run_scenario(godot, scenario)
-		if failures:
-			failed += 1
-			print("FAIL  %s" % scenario["name"])
-			for message in failures:
-				print("        %s" % message)
-		else:
-			print("ok    %s" % scenario["name"])
+	with ThreadPoolExecutor(max_workers=max(jobs, 1)) as pool:
+		results = pool.map(lambda scenario: _run_scenario(godot, scenario), scenarios)
+		for scenario, failures in zip(scenarios, results):
+			failed += _report(scenario, failures)
 
 	print("%d scenarios, %d failed" % (len(scenarios), failed))
 	return 1 if failed else 0
+
+
+def _report(scenario: dict, failures: list[str]) -> int:
+	"""Prints one scenario's result, and returns 1 if it failed."""
+	if failures:
+		print("FAIL  %s" % scenario["name"])
+		for message in failures:
+			print("        %s" % message)
+	else:
+		print("ok    %s" % scenario["name"])
+	sys.stdout.flush()
+	return 1 if failures else 0
 
 
 if __name__ == "__main__":

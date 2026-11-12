@@ -93,6 +93,8 @@ var _throw_cooldown := 0.0
 ## same button, so this is what separates the two.
 var _throw_held := 0.0
 var _recall_fired := false
+## The sword that never leaves his hand (`Slash`), set up in `_ready`.
+var _slash := Slash.new()
 
 ## Set by a jump taken while moving, cleared on landing or on grabbing a ladder.
 ## While it holds the throw button does nothing (`Locomotion.can_throw`).
@@ -185,6 +187,8 @@ func _ready() -> void:
 		if anim_player != null and anim_player.has_animation("catch"):
 			_catch_pose_duration = anim_player.get_animation("catch").length
 	_apply_hero_size(world.hero_height)
+	_slash.setup(sword_config)
+	add_child(_slash)
 	# A faint rim of firelight that goes where the hero goes, so the thing you
 	# steer is never lost in a room's dark (`LightField`).
 	add_child(LightSource.point(ATMOSPHERE.light_hero_radius, Palette.FIRE_CORE, ATMOSPHERE.light_hero_strength))
@@ -221,6 +225,7 @@ func _physics_process(delta: float) -> void:
 	_throw_timer = maxf(_throw_timer - delta, 0.0)
 	_catch_timer = maxf(_catch_timer - delta, 0.0)
 	_step_throw_button(delta)
+	_step_slash()
 
 	_coyote_timer = JumpGate.coyote_next(on_floor, _coyote_timer, config.coyote_time, delta)
 	_buffer_timer = JumpGate.buffer_next(
@@ -355,6 +360,22 @@ func _step_throw_button(delta: float) -> void:
 		_recall_embedded()
 
 
+## The slash, on its own button so the throw and its hold-to-recall are
+## untouched. Free and always there; `Slash` owns its reach and recovery.
+## Until the hero has a slash animation he holds the throw pose while the
+## blade sweeps.
+func _step_slash() -> void:
+	if not Input.is_action_just_pressed("slash"):
+		return
+	if not _slash.ready_to_slash(_somersaulting, _recovery_timer > 0.0):
+		return
+	_slash.strike(facing, world.hero_width * 0.5)
+	_throw_timer = maxf(_throw_timer, sword_config.slash_active + sword_config.slash_recovery)
+	if sword_config.throw_sound != null:
+		_sound.stream = sword_config.throw_sound
+		_sound.play()
+
+
 ## Shouts at every sword on screen. Only the embedded ones answer, which keeps
 ## the decision about which sword comes back inside the machine that owns it.
 func _recall_embedded() -> void:
@@ -376,6 +397,7 @@ func die(cause: DeathMessages.Cause = DeathMessages.Cause.ANY) -> void:
 		return
 	_dead = true
 	last_cause = cause
+	_slash.cancel()
 	_death_elapsed = 0.0
 	velocity = Vector2.ZERO
 	climbing = false

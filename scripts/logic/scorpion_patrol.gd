@@ -6,6 +6,10 @@
 ## the way `PlatformFerry` does: a patrol does not wait to be boarded, it just
 ## turns round, so the walk is a plain triangle wave over the range the room
 ## gave it.
+##
+## Since the scorpion hunts (`ScorpionHunt`), this is the walk it makes when it
+## has seen nobody: what the levels' tests measure a patrol's span by. The
+## running scorpion steps `ScorpionHunt` instead, which walks the same range.
 class_name ScorpionPatrol
 
 
