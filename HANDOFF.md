@@ -28,11 +28,13 @@ Matt's page (https://claude.ai/artifact/VznJakffciS7aC1PSZj6y3) and in
 
 ## The next action
 
-**`levels/act1_forest.beats` is drafted** and waits on Matt's markup (four
-questions at its foot). Nothing is built from it until he approves it.
-While it waits, Claude can **bench beat 16's move** (a bounced throw
-coming home through a scorpion that turned to follow a somersault): the
-sheet leans on it, unproved. N5 step 0, the capture's settle, is done.
+**`levels/act1_forest.beats` waits on Matt's approval as a whole.** His
+four answers are in (2026-11-12, at its foot): the portal is the way round,
+beat 8 stays, beat 16 is rewritten, and pocket 4a shows the caged dragon.
+Beat 16's move is benched (`bench_n4_moat`, two scenarios): it works, with
+a window of about 6 frames for the jump and 5 for the throw. Whether that
+is too tight for level 1 is Matt's to play. Nothing is built until he
+approves the sheet.
 
 ## Blocked on Matt
 
@@ -43,7 +45,8 @@ sheet leans on it, unproved. N5 step 0, the capture's settle, is done.
 2. **The slash's art, next 15 credits**: the first `animate` turned the hero
    round and curved the blade (`ART.md`, *The slash*). Same prompt again, or
    the reworded one there? The placeholder stands until then.
-3. **Mark up `levels/act1_forest.beats`.** Blocks building N4. N5's support
+3. **Approve `levels/act1_forest.beats`**, and play `bench_n4_moat` to
+   judge beat 16's window. Blocks building N4. N5's support
    rule (every platform and climbable visibly held up) is free if it goes in
    first. **And `levels/act2_caverns.beats`**, which blocks Act 2 (R4).
 4. **N5's calls** (`BUILD_PLAN.md`, N5): whether N5 follows N4 (blocks N5);

@@ -2003,4 +2003,36 @@ SCENARIOS: list[dict] = [
 				"message": "the hero should be on the plinth, through the castle gate"},
 		],
 	},
+	{
+		# N4's beat 16 (`levels/act1_forest.beats`): a throw into a scorpion's
+		# armour is lost, so throw the other way, somersault over it as it
+		# hunts you, and the sword coming home takes it in the back. The jump
+		# works from frame 127 to 132 with the throw at 86: this is 129.
+		"name": "N4 bench: throw away, somersault over the hunting scorpion, and the sword comes home through its back",
+		"scene": "res://scenes/rooms/bench_n4_moat.tscn",
+		"out": "bench_n4_moat.png",
+		"input": "-:86;move_left:1;throw:4;-:38;move_right,jump:20;move_right:10;-:40",
+		"zoom": 1.0,
+		"centre": (400, 240),
+		"checks": [
+			{"type": "contains", "pattern": "capture: no deaths",
+				"message": "the somersault should clear the scorpion and land the hero safe"},
+			{"type": "not_contains", "pattern": "scorpion alive",
+				"message": "the returning sword should have killed the scorpion from behind"},
+		],
+	},
+	{
+		# The same move jumped five frames late: the hero lands, the landing
+		# pause holds him, and the scorpion that turned to follow arrives first.
+		"name": "N4 bench: the same somersault jumped late is caught before the sword is home",
+		"scene": "res://scenes/rooms/bench_n4_moat.tscn",
+		"out": "bench_n4_moat_late.png",
+		"input": "-:86;move_left:1;throw:4;-:43;move_right,jump:20;move_right:10;-:40",
+		"zoom": 1.0,
+		"centre": (400, 240),
+		"checks": [
+			{"type": "contains_regex", "pattern": r"capture: [1-9]\d* death",
+				"message": "a late somersault should be caught by the scorpion"},
+		],
+	},
 ]
